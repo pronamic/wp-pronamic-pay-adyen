@@ -208,7 +208,7 @@ class Pronamic_WP_Pay_Gateways_Adyen_Adyen {
 			Pronamic_Gateways_Adyen_Parameters::SESSION_VALIDITY   => Pronamic_WP_Util::format_date( DATE_ATOM, $this->get_session_validity() ),
 			Pronamic_Gateways_Adyen_Parameters::MERCHANT_SIGNATURE => $this->get_signature(),
 			Pronamic_Gateways_Adyen_Parameters::SHOPPER_EMAIL      => $this->get_shopper_email(),
-			Pronamic_Gateways_Adyen_Parameters::SHOPPER_REFERENCE  => $this->get_shopper_reference()
+			Pronamic_Gateways_Adyen_Parameters::SHOPPER_REFERENCE  => $this->get_shopper_reference(),
 		) );
 	}
 }

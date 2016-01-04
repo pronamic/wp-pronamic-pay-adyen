@@ -12,12 +12,16 @@ module.exports = function( grunt ) {
 		// PHP Code Sniffer
 		phpcs: {
 			application: {
-				dir: [ './' ],
+				src: [
+					'**/*.php',
+					'!node_modules/**',
+					'!vendor/**'
+				]
 			},
 			options: {
+				bin: 'vendor/bin/phpcs',
 				standard: 'phpcs.ruleset.xml',
-				extensions: 'php',
-				ignore: 'node_modules'
+				showSniffCodes: true
 			}
 		},
 
@@ -28,20 +32,21 @@ module.exports = function( grunt ) {
 					'-lf': null
 				}
 			},
-			all: [ '**/*.php' ]
+			all: [ 'src/**/*.php' ]
 		},
 
 		// PHP Mess Detector
 		phpmd: {
 			application: {
-				dir: '.'
+				dir: 'src'
 			},
 			options: {
+				bin: 'vendor/bin/phpmd',
 				exclude: 'node_modules',
 				reportFormat: 'xml',
 				rulesets: 'phpmd.ruleset.xml'
 			}
-		},
+		}
 	} );
 
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );

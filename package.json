@@ -33,9 +33,9 @@
   "homepage": "http://www.wp-pay.org/gateways/adyen/",
   "devDependencies": {
     "grunt": "~0.4.2",
-    "grunt-phplint": "0.0.6",
+    "grunt-phplint": "0.0.8",
     "grunt-phpmd": "^0.1.0",
     "grunt-phpcs": "^0.4.0",
-    "grunt-contrib-jshint": "^0.11.3"
+    "grunt-contrib-jshint": "^0.12.0"
   }
 }

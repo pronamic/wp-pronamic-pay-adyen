@@ -5,6 +5,7 @@
  * Description:
  * Copyright: Copyright (c) 2005 - 2014
  * Company: Pronamic
+ *
  * @author Remco Tolsma
  * @version 1.0.0
  * @see https://github.com/adyenpayments/php/blob/master/generatepaymentform.php

@@ -36,6 +36,6 @@
     "grunt-phplint": "0.0.8",
     "grunt-phpmd": "^0.1.0",
     "grunt-phpcs": "^0.4.0",
-    "grunt-contrib-jshint": "^0.12.0"
+    "grunt-contrib-jshint": "^1.0.0"
   }
 }

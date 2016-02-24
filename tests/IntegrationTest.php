@@ -13,11 +13,6 @@ class Pronamic_WP_Pay_Gateways_Adyen_IntegrationTest extends PHPUnit_Framework_T
 	public function test_config() {
 		$integration = new Pronamic_WP_Pay_Gateways_Adyen_Integration();
 
-		$expected = 'Pronamic_WP_Pay_Gateways_Adyen_Gateway';
-
-		$class = $integration->get_gateway_class();
-
-		$this->assertEquals( $expected, $class );
-		$this->assertTrue( class_exists( $class ) );
+		$this->assertEquals( 'adyen', $integration->id );
 	}
 }

@@ -44,22 +44,22 @@ class Pronamic_WP_Pay_Gateways_Adyen_Gateway extends Pronamic_WP_Pay_Gateway {
 	/**
 	 * Start
 	 *
-	 * @param Pronamic_Pay_PaymentDataInterface $data
+	 * @param Pronamic_Pay_Payment $payment
 	 * @see Pronamic_WP_Pay_Gateway::start()
 	 */
-	public function start( Pronamic_Pay_PaymentDataInterface $data, Pronamic_Pay_Payment $payment, $payment_method = null ) {
-		$payment->set_transaction_id( md5( time() . $data->get_order_id() ) );
+	public function start( Pronamic_Pay_Payment $payment ) {
+		$payment->set_transaction_id( md5( time() . $payment->get_order_id() ) );
 		$payment->set_action_url( $this->client->get_payment_server_url() );
 
-		$this->client->set_merchant_reference( $data->get_order_id() );
-		$this->client->set_payment_amount( $data->get_amount() );
-		$this->client->set_currency_code( $data->get_currency() );
+		$this->client->set_merchant_reference( $payment->get_order_id() );
+		$this->client->set_payment_amount( $payment->get_amount() );
+		$this->client->set_currency_code( $payment->get_currency() );
 		$this->client->set_ship_before_date( new DateTime( '+5 days' ) );
-		$this->client->set_shopper_locale( $data->get_language_and_country() );
-		$this->client->set_order_data( $data->get_description() );
+		$this->client->set_shopper_locale( $payment->get_locale() );
+		$this->client->set_order_data( $payment->get_description() );
 		$this->client->set_session_validity( new DateTime( '+1 hour' ) );
-		$this->client->set_shopper_reference( $data->get_email() );
-		$this->client->set_shopper_email( $data->get_email() );
+		$this->client->set_shopper_reference( $payment->get_email() );
+		$this->client->set_shopper_email( $payment->get_email() );
 	}
 
 	/////////////////////////////////////////////////

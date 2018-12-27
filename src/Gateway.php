@@ -37,19 +37,15 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @param Pronamic_WP_Pay_GatewayConfig $config
 	 */
-	public function __construct( Pronamic_WP_Pay_GatewayConfig $config ) {
+	public function __construct( Config $config ) {
 		parent::__construct( $config );
 
-		$this->set_method( self::METHOD_HTML_FORM );
+		$this->set_method( self::METHOD_HTTP_REDIRECT );
 		$this->set_has_feedback( true );
 		$this->set_amount_minimum( 0.01 );
 		$this->set_slug( self::SLUG );
 
 		$this->client = new Adyen();
-		$this->client->set_payment_server_url( $config->getPaymentServerUrl() );
-		$this->client->set_skin_code( $config->get_buckaroo_skin_code() );
-		$this->client->set_merchant_account( $config->get_buckaroo_merchant_account() );
-		$this->client->set_shared_secret( $config->get_buckaroo_shared_secret() );
 	}
 
 	/////////////////////////////////////////////////
@@ -60,19 +56,65 @@ class Gateway extends Core_Gateway {
 	 * @param Pronamic_Pay_Payment $payment
 	 * @see Pronamic_WP_Pay_Gateway::start()
 	 */
-	public function start( Pronamic_Pay_Payment $payment ) {
-		$payment->set_transaction_id( md5( time() . $payment->get_order_id() ) );
-		$payment->set_action_url( $this->client->get_payment_server_url() );
+	public function start( Payment $payment ) {
+		$url = 'https://checkout-test.adyen.com/v40/paymentMethods';
 
-		$this->client->set_merchant_reference( $payment->get_order_id() );
-		$this->client->set_payment_amount( $payment->get_amount() );
-		$this->client->set_currency_code( $payment->get_currency() );
-		$this->client->set_ship_before_date( new DateTime( '+5 days' ) );
-		$this->client->set_shopper_locale( $payment->get_locale() );
-		$this->client->set_order_data( $payment->get_description() );
-		$this->client->set_session_validity( new DateTime( '+1 hour' ) );
-		$this->client->set_shopper_reference( $payment->get_email() );
-		$this->client->set_shopper_email( $payment->get_email() );
+		$data = (object) array(
+			'merchantAccount'       => $this->config->merchant_account,
+			'allowedPaymentMethods' => array(
+				// 'ideal',
+			),
+		);
+
+		$response = wp_remote_post( $url, array(
+			'headers' => array(
+				'X-API-key'    => $this->config->api_key,
+				'Content-Type' => 'application/json',
+			),
+			'body'    => wp_json_encode( $data ),
+		) );
+
+		$body = wp_remote_retrieve_body( $response );
+
+		$result = json_decode( $body );
+
+		$payment_methods = $result->paymentMethods;
+		$payment_method  = reset( $payment_methods );
+
+		$url = 'https://checkout-test.adyen.com/v40/payments';
+
+		$data = (object) array(
+			'amount'          => (object) array(
+				'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
+				'value'    => $payment->get_total_amount()->get_cents(),
+			),
+			'reference'       => $payment->get_id(),
+			'paymentMethod'   => (object) array(
+				'type' => 'ideal',
+			),
+			'returnUrl'       => $payment->get_return_url(),
+			'merchantAccount' => $this->config->merchant_account,
+		);
+
+		$response = wp_remote_post( $url, array(
+			'headers' => array(
+				'X-API-key'    => $this->config->api_key,
+				'Content-Type' => 'application/json',
+			),
+			'body'    => wp_json_encode( $data ),
+		) );
+
+		if ( '200' !== strval( wp_remote_retrieve_response_code( $response ) ) ) {
+			return;
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+
+		$result = json_decode( $body );
+
+		if ( isset( $result->redirect, $result->redirect->url ) ) {
+			$payment->set_action_url( $result->redirect->url );
+		}
 	}
 
 	/////////////////////////////////////////////////

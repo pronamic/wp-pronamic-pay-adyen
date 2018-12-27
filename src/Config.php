@@ -1,6 +1,6 @@
 <?php
 /**
- * Adyen
+ * Config
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2018 Pronamic
@@ -10,14 +10,27 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Core\GatewayConfig;
+
 /**
- * Adyen
+ * Config
  *
  * @author  Remco Tolsma
  * @version 2.0.0
- * @since   1.0.0
- * @link    https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
+ * @since   2.0.0
  */
-class Adyen {
+class Config extends GatewayConfig {
+	/**
+	 * API Key.
+	 *
+	 * @var string
+	 */
+	public $api_key;
 
+	/**
+	 * Merchant Account.
+	 *
+	 * @var string
+	 */
+	public $merchant_account;
 }

@@ -1,15 +1,28 @@
 <?php
+/**
+ * Gateway
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Gateways\Adyen
+ */
+
+namespace Pronamic\WordPress\Pay\Gateways\Adyen;
+
+use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
+use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
- * Title: Adyen gateway
- * Description:
- * Copyright: Copyright (c) 2005 - 2016
- * Company: Pronamic
+ * Gateway
  *
- * @author Remco Tolsma
- * @version 1.0.0
+ * @author  Remco Tolsma
+ * @version 2.0.0
+ * @since   1.0.0
+ * @link    https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  */
-class Pronamic_WP_Pay_Gateways_Adyen_Gateway extends Pronamic_WP_Pay_Gateway {
+class Gateway extends Core_Gateway {
 	/**
 	 * Slug of this gateway
 	 *
@@ -27,12 +40,12 @@ class Pronamic_WP_Pay_Gateways_Adyen_Gateway extends Pronamic_WP_Pay_Gateway {
 	public function __construct( Pronamic_WP_Pay_GatewayConfig $config ) {
 		parent::__construct( $config );
 
-		$this->set_method( Pronamic_WP_Pay_Gateway::METHOD_HTML_FORM );
+		$this->set_method( self::METHOD_HTML_FORM );
 		$this->set_has_feedback( true );
 		$this->set_amount_minimum( 0.01 );
 		$this->set_slug( self::SLUG );
 
-		$this->client = new Pronamic_Gateways_Adyen_Adyen();
+		$this->client = new Adyen();
 		$this->client->set_payment_server_url( $config->getPaymentServerUrl() );
 		$this->client->set_skin_code( $config->get_buckaroo_skin_code() );
 		$this->client->set_merchant_account( $config->get_buckaroo_merchant_account() );

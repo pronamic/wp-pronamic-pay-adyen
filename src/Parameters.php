@@ -1,15 +1,23 @@
 <?php
+/**
+ * Parameters
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Gateways\Adyen
+ */
+
+namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Title: Adyen parameters constants
- * Description:
- * Copyright: Copyright (c) 2005 - 2016
- * Company: Pronamic
+ * Parameters
  *
- * @author Remco Tolsma
- * @version 1.0.0
+ * @author  Remco Tolsma
+ * @version 2.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Gateways_Adyen_Parameters {
+class Parameters {
 	/**
 	 * Indicator for the 'merchantReference' parameter
 	 *

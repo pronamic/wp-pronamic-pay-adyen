@@ -24,30 +24,32 @@
 		"source": "https://github.com/wp-pay-gateways/adyen"
 	},
 	"autoload": {
-		"classmap": ["src/"]
+		"psr-4": {
+			"Pronamic\\WordPress\\Pay\\Gateways\\Adyen\\": "src/"
+		}
+	},
+	"config": {
+		"platform": {
+			"php": "5.3.3"
+		}
 	},
 	"require": {
-		"php": ">=5.2.4",
-		"xrstf/composer-php52": "1.*",
-		"wp-pay/core": "dev-develop as 1.3.1"
+		"php": "^5.3",
+		"justinrainbow/json-schema": "^5.2",
+		"pronamic/wp-money": "^1.2",
+		"wp-pay-gateways/common": "^2.0",
+		"wp-pay/core": "^2.1"
 	},
 	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+		"php-coveralls/php-coveralls": "^1.0",
+		"phpcompatibility/php-compatibility": "^9.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.0",
 		"phpmd/phpmd": "^2.2.3",
-		"satooshi/php-coveralls": "^0.7.1",
-		"squizlabs/php_codesniffer": "^2.2.0",
-		"wp-coding-standards/wpcs": "0.8.0",
-		"wp-cli/wp-cli": "^0.21.1"
-	},
-	"scripts": {
-		"post-install-cmd": [
-			"xrstf\\Composer52\\Generator::onPostInstallCmd"
-		],
-		"post-update-cmd": [
-			"xrstf\\Composer52\\Generator::onPostInstallCmd"
-		],
-		"post-autoload-dump": [
-			"xrstf\\Composer52\\Generator::onPostInstallCmd",
-			"bin/install-wpcs"
-		]
+		"phpunit/phpunit": "^4.5",
+		"roots/wordpress": "^5.0",
+		"squizlabs/php_codesniffer": "^2.7",
+		"wp-coding-standards/wpcs": "^1.1",
+		"wp-phpunit/wp-phpunit": "^5.0"
 	}
 }

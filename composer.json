@@ -37,7 +37,6 @@
 		"php": "^5.3",
 		"justinrainbow/json-schema": "^5.2",
 		"pronamic/wp-money": "^1.2",
-		"wp-pay-gateways/common": "^2.0",
 		"wp-pay/core": "^2.1"
 	},
 	"require-dev": {

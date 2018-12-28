@@ -43,6 +43,13 @@ class PaymentMethodType {
 	const DOTPAT = 'dotpay';
 
 	/**
+	 * Constant for the 'GiroPay' payment method type.
+	 *
+	 * @var string
+	 */
+	const GIROPAY = 'giropay';
+
+	/**
 	 * Constant for the 'ideal' payment method type.
 	 *
 	 * @var string
@@ -50,9 +57,30 @@ class PaymentMethodType {
 	const IDEAL = 'ideal';
 
 	/**
-	 * Constant for the 'sepadirectdebit' payment method type.
+	 * Constant for the 'klarna' payment method type.
+	 *
+	 * @var string
+	 */
+	const KLARNA = 'klarna';
+
+	/**
+	 * Constant for the 'Multibanco' payment method type.
+	 *
+	 * @var string
+	 */
+	const MULTIBANCO = 'multibanco';
+
+	/**
+	 * Constant for the 'SEPA Direct Debit' payment method type.
 	 *
 	 * @var string
 	 */
 	const SEPA_DIRECT_DEBIT = 'sepadirectdebit';
+
+	/**
+	 * Constant for the 'UnionPay' payment method type.
+	 *
+	 * @var string
+	 */
+	const UNIONPAY = 'unionpay';
 }

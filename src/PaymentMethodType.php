@@ -40,7 +40,7 @@ class PaymentMethodType {
 	 *
 	 * @var string
 	 */
-	const DOTPAT = 'dotpay';
+	const DOTPAY = 'dotpay';
 
 	/**
 	 * Constant for the 'GiroPay' payment method type.

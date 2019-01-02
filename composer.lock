@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08f0c8d9c908f0c57958f98194298455",
+    "content-hash": "f028c060cd6a71884fcc4751a0c70a30",
     "packages": [
         {
             "name": "composer/installers",
@@ -317,68 +317,6 @@
             ],
             "description": "Tries to split an address line into street name, house number and other additional information like building, apartment information etc.",
             "time": "2018-03-05T10:46:06+00:00"
-        },
-        {
-            "name": "wp-pay-gateways/common",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wp-pay-gateways/common.git",
-                "reference": "8962ef28149d5c7b24a0f3e1b3f99515ec8aa0aa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wp-pay-gateways/common/zipball/8962ef28149d5c7b24a0f3e1b3f99515ec8aa0aa",
-                "reference": "8962ef28149d5c7b24a0f3e1b3f99515ec8aa0aa",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3",
-                "wp-pay/core": "^2.0"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^1.0",
-                "phpmd/phpmd": "^2.2.3",
-                "phpunit/phpunit": "^4.5",
-                "squizlabs/php_codesniffer": "^2.7",
-                "wimg/php-compatibility": "^9.0",
-                "wp-coding-standards/wpcs": "^1.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Pronamic\\WordPress\\Pay\\Gateways\\Common\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Remco Tolsma",
-                    "email": "info@remcotolsma.nl",
-                    "homepage": "http://www.remcotolsma.nl/",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Pronamic",
-                    "email": "info@pronamic.eu",
-                    "homepage": "http://www.pronamic.eu/",
-                    "role": "Company"
-                }
-            ],
-            "description": "Common driver for the WordPress payment processing library.",
-            "homepage": "http://www.wp-pay.org/gateways/common/",
-            "keywords": [
-                "common",
-                "gateway",
-                "pay",
-                "pronamic",
-                "wordpress",
-                "wp"
-            ],
-            "time": "2018-12-11T13:55:57+00:00"
         },
         {
             "name": "wp-pay/core",
@@ -772,16 +710,16 @@
         },
         {
             "name": "phpcompatibility/php-compatibility",
-            "version": "9.1.0",
+            "version": "9.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCompatibility/PHPCompatibility.git",
-                "reference": "a898db5410e365eeb658c63a76bd08d211769321"
+                "reference": "2b63c5d284ab8857f7b1d5c240ddb507a6b2293c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/a898db5410e365eeb658c63a76bd08d211769321",
-                "reference": "a898db5410e365eeb658c63a76bd08d211769321",
+                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/2b63c5d284ab8857f7b1d5c240ddb507a6b2293c",
+                "reference": "2b63c5d284ab8857f7b1d5c240ddb507a6b2293c",
                 "shasum": ""
             },
             "require": {
@@ -826,7 +764,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-12-16T19:16:39+00:00"
+            "time": "2018-12-30T23:16:27+00:00"
         },
         {
             "name": "phpcompatibility/phpcompatibility-paragonie",

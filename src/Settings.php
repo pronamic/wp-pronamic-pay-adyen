@@ -56,8 +56,8 @@ class Settings extends GatewaySettings {
 			'section'  => 'adyen',
 			'meta_key' => '_pronamic_gateway_adyen_api_key',
 			'title'    => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
-			'type'     => 'text',
-			'classes'  => array( 'regular-text', 'code' ),
+			'type'     => 'textarea',
+			'classes'  => array( 'code' ),
 			'methods'  => array( 'adyen' ),
 			'tooltip'  => __( 'API key as mentioned in the payment provider dashboard', 'pronamic_ideal' ),
 		);

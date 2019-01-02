@@ -3,7 +3,7 @@
 	"description": "Adyen driver for the WordPress payment processing library.",
 	"keywords": ["wordpress", "wp", "pay", "adyen", "gateway", "pronamic"],
 	"homepage": "http://www.wp-pay.org/gateways/adyen/",
-	"license": "GPL",
+	"license": "GPL-3.0-or-later",
 	"authors": [
 		{
 			"name": "Pronamic",

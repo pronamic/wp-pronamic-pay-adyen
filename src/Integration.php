@@ -23,7 +23,11 @@ class Integration extends AbstractIntegration {
 	public function __construct() {
 		$this->id         = 'adyen';
 		$this->name       = 'Adyen';
-		$this->url        = 'http://www.adyen.com/';
+		$this->url        = 'https://www.adyen.com/';
+		$this->dashboard_url = array(
+			__( 'test', 'pronamic_ideal' ) => 'https://ca-test.adyen.com/ca/ca/login.shtml',
+			__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
+		);
 		$this->provider   = 'adyen';
 	}
 

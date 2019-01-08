@@ -1,5 +1,7 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Gateways\Adyen;
+
 /**
  * Title: Adyen - Integration test
  * Description:
@@ -9,10 +11,15 @@
  * @author Remco Tolsma
  * @version 1.0.0
  */
-class Pronamic_WP_Pay_Gateways_Adyen_IntegrationTest extends PHPUnit_Framework_TestCase {
+class IntegrationTest extends \PHPUnit_Framework_TestCase {
 	public function test_config() {
-		$integration = new Pronamic_WP_Pay_Gateways_Adyen_Integration();
+		$integration = new Integration();
 
-		$this->assertEquals( 'adyen', $integration->id );
+		$expected = __NAMESPACE__ . '\ConfigFactory';
+
+		$class = $integration->get_config_factory_class();
+
+		$this->assertEquals( $expected, $class );
+		$this->assertTrue( class_exists( $class ) );
 	}
 }

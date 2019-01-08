@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f028c060cd6a71884fcc4751a0c70a30",
+    "content-hash": "a24c04f2ac4100c25d2245906428b461",
     "packages": [
         {
             "name": "composer/installers",
@@ -320,16 +320,16 @@
         },
         {
             "name": "wp-pay/core",
-            "version": "2.1.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-pay/core.git",
-                "reference": "23234d25a573dc9cd24bad3e513155acf642aaa5"
+                "reference": "fd9c1849710475f96c3d115f5efbd1e776187eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-pay/core/zipball/23234d25a573dc9cd24bad3e513155acf642aaa5",
-                "reference": "23234d25a573dc9cd24bad3e513155acf642aaa5",
+                "url": "https://api.github.com/repos/wp-pay/core/zipball/fd9c1849710475f96c3d115f5efbd1e776187eba",
+                "reference": "fd9c1849710475f96c3d115f5efbd1e776187eba",
                 "shasum": ""
             },
             "require": {
@@ -341,11 +341,11 @@
             },
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
-                "johnpbloch/wordpress": "^5.0",
                 "php-coveralls/php-coveralls": "^1.0",
                 "phpcompatibility/phpcompatibility-wp": "^2.0",
                 "phpmd/phpmd": "^2.4",
                 "phpunit/phpunit": "^4.5",
+                "roots/wordpress": "^5.0",
                 "squizlabs/php_codesniffer": "^2.9",
                 "wimg/php-compatibility": "^9.0",
                 "wp-coding-standards/wpcs": "^1.2",
@@ -358,6 +358,7 @@
                 },
                 "files": [
                     "includes/functions.php",
+                    "includes/wp-compatibility.php",
                     "includes/xmlseclibs/xmlseclibs-ing.php"
                 ]
             },
@@ -389,7 +390,7 @@
                 "wordpress",
                 "wp"
             ],
-            "time": "2018-12-19T14:09:32+00:00"
+            "time": "2019-01-07T18:28:57+00:00"
         }
     ],
     "packages-dev": [
@@ -606,6 +607,7 @@
                 "rest",
                 "web service"
             ],
+            "abandoned": "guzzlehttp/guzzle",
             "time": "2015-03-18T18:23:50+00:00"
         },
         {
@@ -1477,7 +1479,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/WordPress/WordPress/zipball/5.0.2",
-                "reference": null,
+                "reference": "5.0.2",
                 "shasum": null
             },
             "require": {
@@ -2476,9 +2478,18 @@
             "time": "2018-12-07T10:16:54+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "2.1",
+            "alias_normalized": "2.1.0.0",
+            "version": "dev-develop",
+            "package": "wp-pay/core"
+        }
+    ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "wp-pay/core": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -48,6 +48,14 @@ module.exports = function( grunt ) {
 				reportFormat: 'xml',
 				rulesets: 'phpmd.ruleset.xml'
 			}
+		},
+
+		// PHPUnit
+		phpunit: {
+			options: {
+				bin: 'vendor/bin/phpunit'
+			},
+			application: {},
 		}
 	} );
 

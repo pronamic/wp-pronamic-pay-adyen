@@ -13,6 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
+use Pronamic\WordPress\Pay\Plugin;
 
 /**
  * Gateway
@@ -30,12 +31,10 @@ class Gateway extends Core_Gateway {
 	 */
 	const SLUG = 'adyen';
 
-	/////////////////////////////////////////////////
-
 	/**
 	 * Constructs and initializes an InternetKassa gateway
 	 *
-	 * @param Pronamic_WP_Pay_GatewayConfig $config
+	 * @param Config $config Config.
 	 */
 	public function __construct( Config $config ) {
 		parent::__construct( $config );
@@ -48,13 +47,12 @@ class Gateway extends Core_Gateway {
 		$this->client = new Adyen();
 	}
 
-	/////////////////////////////////////////////////
-
 	/**
 	 * Start
 	 *
-	 * @param Pronamic_Pay_Payment $payment
-	 * @see Pronamic_WP_Pay_Gateway::start()
+	 * @param Payment $payment Payment.
+	 *
+	 * @see Plugin::start()
 	 */
 	public function start( Payment $payment ) {
 		$url = 'https://checkout-test.adyen.com/v40/paymentMethods';
@@ -66,13 +64,16 @@ class Gateway extends Core_Gateway {
 			),
 		);
 
-		$response = wp_remote_post( $url, array(
-			'headers' => array(
-				'X-API-key'    => $this->config->api_key,
-				'Content-Type' => 'application/json',
-			),
-			'body'    => wp_json_encode( $data ),
-		) );
+		$response = wp_remote_post(
+			$url,
+			array(
+				'headers' => array(
+					'X-API-key'    => $this->config->api_key,
+					'Content-Type' => 'application/json',
+				),
+				'body'    => wp_json_encode( $data ),
+			)
+		);
 
 		$body = wp_remote_retrieve_body( $response );
 
@@ -96,13 +97,16 @@ class Gateway extends Core_Gateway {
 			'merchantAccount' => $this->config->merchant_account,
 		);
 
-		$response = wp_remote_post( $url, array(
-			'headers' => array(
-				'X-API-key'    => $this->config->api_key,
-				'Content-Type' => 'application/json',
-			),
-			'body'    => wp_json_encode( $data ),
-		) );
+		$response = wp_remote_post(
+			$url,
+			array(
+				'headers' => array(
+					'X-API-key'    => $this->config->api_key,
+					'Content-Type' => 'application/json',
+				),
+				'body'    => wp_json_encode( $data ),
+			)
+		);
 
 		if ( '200' !== strval( wp_remote_retrieve_response_code( $response ) ) ) {
 			return;
@@ -116,8 +120,6 @@ class Gateway extends Core_Gateway {
 			$payment->set_action_url( $result->redirect->url );
 		}
 	}
-
-	/////////////////////////////////////////////////
 
 	/**
 	 * Get output HTML

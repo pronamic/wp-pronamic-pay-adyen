@@ -20,15 +20,18 @@ use Pronamic\WordPress\Pay\Gateways\Common\AbstractIntegration;
  * @since   1.0.0
  */
 class Integration extends AbstractIntegration {
+	/**
+	 * Integration constructor.
+	 */
 	public function __construct() {
-		$this->id         = 'adyen';
-		$this->name       = 'Adyen';
-		$this->url        = 'https://www.adyen.com/';
+		$this->id            = 'adyen';
+		$this->name          = 'Adyen';
+		$this->provider      = 'adyen';
+		$this->url           = 'https://www.adyen.com/';
 		$this->dashboard_url = array(
 			__( 'test', 'pronamic_ideal' ) => 'https://ca-test.adyen.com/ca/ca/login.shtml',
 			__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
 		);
-		$this->provider   = 'adyen';
 	}
 
 	/**

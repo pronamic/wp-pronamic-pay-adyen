@@ -6,7 +6,23 @@
 
 		<exclude name="Squiz.Commenting" />
 
+		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_key"/>
+		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_query"/>
+
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+
+		<exclude name="WordPress.Security.SafeRedirect.wp_redirect_wp_redirect"/>
+
 		<exclude name="WordPress.VIP.RestrictedFunctions.file_get_contents" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_remote_get" />
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar">
+		<exclude-pattern>/src/Gateway.php</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_putenv">
+		<exclude-pattern>tests/bootstrap.php</exclude-pattern>
 	</rule>
 </ruleset>

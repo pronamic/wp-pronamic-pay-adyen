@@ -16,8 +16,8 @@ use Pronamic\WordPress\Pay\Core\GatewaySettings;
  * Settings
  *
  * @author  Remco Tolsma
- * @version 2.0.0
- * @since   2.0.0
+ * @version 1.0.0
+ * @since   1.0.0
  */
 class Settings extends GatewaySettings {
 	/**
@@ -60,6 +60,18 @@ class Settings extends GatewaySettings {
 			'classes'  => array( 'code' ),
 			'methods'  => array( 'adyen' ),
 			'tooltip'  => __( 'API key as mentioned in the payment provider dashboard', 'pronamic_ideal' ),
+		);
+
+		// Live API URL prefix.
+		$fields[] = array(
+			'filter'   => FILTER_SANITIZE_STRING,
+			'section'  => 'adyen',
+			'meta_key' => '_pronamic_gateway_adyen_live_url_prefix',
+			'title'    => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
+			'type'     => 'text',
+			'classes'  => array( 'regular-text', 'code' ),
+			'methods'  => array( 'adyen' ),
+			'tooltip'  => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard', 'pronamic_ideal' ),
 		);
 
 		// Merchant Account.

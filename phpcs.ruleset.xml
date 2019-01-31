@@ -19,6 +19,7 @@
 	</rule>
 
 	<rule ref="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar">
+		<exclude-pattern>/src/Client.php</exclude-pattern>
 		<exclude-pattern>/src/Gateway.php</exclude-pattern>
 	</rule>
 

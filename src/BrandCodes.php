@@ -16,11 +16,11 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
  * Brand codes
  *
  * @author  Remco Tolsma
- * @version 2.0.0
- * @since   2.0.0
+ * @version 1.0.0
+ * @since   1.0.0
  * @link https://docs.adyen.com/developers/classic-integration/directory-lookup#DirectoryLookup-Step2:Displaylocalpaymentmethods
  */
-class BrandCode {
+class BrandCodes {
 	/**
 	 * Constant for the iDEAL brand code.
 	 *

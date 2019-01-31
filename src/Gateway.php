@@ -19,20 +19,20 @@ use Pronamic\WordPress\Pay\Plugin;
  * Gateway
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 1.0.0
  * @since   1.0.0
  * @link    https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  */
 class Gateway extends Core_Gateway {
 	/**
-	 * Slug of this gateway
+	 * Slug of this gateway.
 	 *
 	 * @var string
 	 */
 	const SLUG = 'adyen';
 
 	/**
-	 * Constructs and initializes an InternetKassa gateway
+	 * Constructs and initializes an Adyen gateway.
 	 *
 	 * @param Config $config Config.
 	 */
@@ -40,93 +40,155 @@ class Gateway extends Core_Gateway {
 		parent::__construct( $config );
 
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
-		$this->set_has_feedback( true );
-		$this->set_amount_minimum( 0.01 );
 		$this->set_slug( self::SLUG );
 
-		$this->client = new Adyen();
+		$this->client = new Client( $config->api_key, $config->api_live_url_prefix );
+		$this->client->set_merchant_account( $config->merchant_account );
+		$this->client->set_mode( $config->mode );
 	}
 
 	/**
-	 * Start
+	 * Start.
 	 *
 	 * @param Payment $payment Payment.
 	 *
 	 * @see Plugin::start()
 	 */
 	public function start( Payment $payment ) {
-		$url = 'https://checkout-test.adyen.com/v40/paymentMethods';
+		// Payment request.
+		$request = new PaymentRequest();
 
-		$data = (object) array(
-			'merchantAccount'       => $this->config->merchant_account,
-			'allowedPaymentMethods' => array(
-				// 'ideal',
-			),
+		$request->merchant_account = $this->config->merchant_account;
+		$request->return_url       = $payment->get_return_url();
+		$request->reference        = $payment->get_id();
+
+		// Amount.
+		$request->currency     = $payment->get_total_amount()->get_currency()->get_alphabetic_code();
+		$request->amount_value = $payment->get_total_amount()->get_cents(); // @todo Money +get_minor_units().
+
+		// Payment method. Take leap of faith for unknown payment method types.
+		$request->payment_method = array(
+			'type' => PaymentMethodType::transform( $payment->get_method(), $payment->get_method() ),
 		);
 
-		$response = wp_remote_post(
-			$url,
-			array(
-				'headers' => array(
-					'X-API-key'    => $this->config->api_key,
-					'Content-Type' => 'application/json',
-				),
-				'body'    => wp_json_encode( $data ),
-			)
-		);
+		switch ( $payment->get_method() ) {
+			case PaymentMethods::IDEAL:
+				$request->payment_method['issuer'] = $payment->get_issuer();
 
-		$body = wp_remote_retrieve_body( $response );
+				break;
+		}
 
-		$result = json_decode( $body );
+		// Shopper.
+		$request->shopper_statement = $payment->get_description();
 
-		$payment_methods = $result->paymentMethods;
-		$payment_method  = reset( $payment_methods );
+		if ( null !== $payment->get_customer() ) {
+			$request->shopper_ip               = $payment->get_customer()->get_ip_address();
+			$request->shopper_gender           = $payment->get_customer()->get_gender();
+			$request->shopper_locale           = $payment->get_customer()->get_locale();
+			$request->shopper_reference        = $payment->get_customer()->get_user_id();
+			$request->shopper_telephone_number = $payment->get_customer()->get_phone();
 
-		$url = 'https://checkout-test.adyen.com/v40/payments';
+			if ( null !== $payment->get_customer()->get_name() ) {
+				$request->shopper_first_name = $payment->get_customer()->get_name()->get_first_name();
+				$request->shopper_name_infix = $payment->get_customer()->get_name()->get_middle_name();
+				$request->shopper_last_name  = $payment->get_customer()->get_name()->get_last_name();
+			}
+		}
 
-		$data = (object) array(
-			'amount'          => (object) array(
-				'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
-				'value'    => $payment->get_total_amount()->get_cents(),
-			),
-			'reference'       => $payment->get_id(),
-			'paymentMethod'   => (object) array(
-				'type' => 'ideal',
-			),
-			'returnUrl'       => $payment->get_return_url(),
-			'merchantAccount' => $this->config->merchant_account,
-		);
+		// Create payment.
+		$result = $this->client->create_payment( $request );
 
-		$response = wp_remote_post(
-			$url,
-			array(
-				'headers' => array(
-					'X-API-key'    => $this->config->api_key,
-					'Content-Type' => 'application/json',
-				),
-				'body'    => wp_json_encode( $data ),
-			)
-		);
+		if ( ! $result ) {
+			$this->error = $this->client->get_error();
 
-		if ( '200' !== strval( wp_remote_retrieve_response_code( $response ) ) ) {
 			return;
 		}
 
-		$body = wp_remote_retrieve_body( $response );
+		// Set transaction ID.
+		if ( isset( $result->pspReference ) ) {
+			$payment->set_transaction_id( $result->pspReference );
+		}
 
-		$result = json_decode( $body );
-
-		if ( isset( $result->redirect, $result->redirect->url ) ) {
+		// Set redirect URL.
+		if ( isset( $result->redirect->url ) ) {
 			$payment->set_action_url( $result->redirect->url );
 		}
 	}
 
 	/**
-	 * Get output HTML
+	 * Update status of the specified payment.
 	 *
-	 * @see Pronamic_WP_Pay_Gateway::get_output_html()
+	 * @param Payment $payment Payment.
+	 *
+	 * @return void
 	 */
-	public function get_output_html() {
-		return $this->client->get_html_fields();
+	public function update_status( Payment $payment ) {
+		if ( ! filter_has_var( INPUT_GET, 'payload' ) ) {
+			return;
+		}
+
+		$payload = filter_input( INPUT_GET, 'payload', FILTER_SANITIZE_STRING );
+
+		$payment_details = $this->client->get_payment_details( $payload );
+
+		if ( ! $payment_details ) {
+			$payment->set_status( Core_Statuses::FAILURE );
+
+			$this->error = $this->client->get_error();
+
+			return;
+		}
+
+		$payment->set_status( Statuses::transform( $payment_details->resultCode ) );
+
+		if ( isset( $payment_details->pspReference ) ) {
+			$payment->set_transaction_id( $payment_details->pspReference );
+		}
+	}
+
+	/**
+	 * Is payment method required to start transaction?
+	 *
+	 * @see Core_Gateway::payment_method_is_required()
+	 */
+	public function payment_method_is_required() {
+		return true;
+	}
+
+	/**
+	 * Get supported payment methods
+	 *
+	 * @see Core_Gateway::get_supported_payment_methods()
+	 */
+	public function get_supported_payment_methods() {
+		return array(
+			PaymentMethods::IDEAL,
+			PaymentMethods::SOFORT,
+		);
+	}
+
+	/**
+	 * Get issuers.
+	 *
+	 * @see Pronamic_WP_Pay_Gateway::get_issuers()
+	 */
+	public function get_issuers() {
+		$groups = array();
+
+		$payment_method = PaymentMethodType::transform( PaymentMethods::IDEAL );
+
+		$result = $this->client->get_issuers( $payment_method );
+
+		if ( ! $result ) {
+			$this->error = $this->client->get_error();
+
+			return $groups;
+		}
+
+		$groups[] = array(
+			'options' => $result,
+		);
+
+		return $groups;
 	}
 }

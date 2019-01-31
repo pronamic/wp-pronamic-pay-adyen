@@ -16,8 +16,8 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
  * Payment method type
  *
  * @author  Remco Tolsma
- * @version 2.0.0
- * @since   2.0.0
+ * @version 1.0.0
+ * @since   1.0.0
  * @link https://docs.adyen.com/developers/classic-integration/directory-lookup#DirectoryLookup-Step2:Displaylocalpaymentmethods
  */
 class PaymentMethodType {
@@ -71,6 +71,13 @@ class PaymentMethodType {
 	const MULTIBANCO = 'multibanco';
 
 	/**
+	 * Constant for the 'PayPal' payment method type.
+	 *
+	 * @var string
+	 */
+	const PAYPAL = 'paypal';
+
+	/**
 	 * Constant for the 'SEPA Direct Debit' payment method type.
 	 *
 	 * @var string
@@ -83,4 +90,37 @@ class PaymentMethodType {
 	 * @var string
 	 */
 	const UNIONPAY = 'unionpay';
+
+	/**
+	 * Map payment methods to brand codes.
+	 *
+	 * @var array
+	 */
+	private static $map = array(
+		PaymentMethods::DIRECT_DEBIT => self::SEPA_DIRECT_DEBIT,
+		PaymentMethods::GIROPAY      => self::GIROPAY,
+		PaymentMethods::IDEAL        => self::IDEAL,
+		PaymentMethods::PAYPAL       => self::PAYPAL,
+		PaymentMethods::SOFORT       => self::DIRECT_EBANKING,
+	);
+
+	/**
+	 * Transform WordPress payment method to Adyen brand code.
+	 *
+	 * @param string|null $payment_method Payment method.
+	 * @param mixed       $default        Default payment method.
+	 *
+	 * @return string|null
+	 */
+	public static function transform( $payment_method, $default = null ) {
+		if ( ! is_scalar( $payment_method ) ) {
+			return null;
+		}
+
+		if ( isset( self::$map[ $payment_method ] ) ) {
+			return self::$map[ $payment_method ];
+		}
+
+		return $default;
+	}
 }

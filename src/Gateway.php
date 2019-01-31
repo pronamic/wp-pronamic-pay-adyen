@@ -33,6 +33,13 @@ class Gateway extends Core_Gateway {
 	const SLUG = 'adyen';
 
 	/**
+	 * Client.
+	 *
+	 * @var Client
+	 */
+	protected $client;
+
+	/**
 	 * Constructs and initializes an Adyen gateway.
 	 *
 	 * @param Config $config Config.
@@ -163,7 +170,18 @@ class Gateway extends Core_Gateway {
 	 */
 	public function get_supported_payment_methods() {
 		return array(
+//			PaymentMethods::BANCONTACT,                 // 422 903 - Internal error.
+//			PaymentMethods::BANK_TRANSFER,              // 422 903 - Internal error.
+//			PaymentMethods::BELFIUS,                    // 422 903 - Internal error.
+//			PaymentMethods::BITCOIN,                    // Ongeldig verzoek.
+//			PaymentMethods::CREDIT_CARD,                // 422 903 - Internal error.
+//			PaymentMethods::DIRECT_DEBIT,               // 422 14_004 - Missing payment method details: sepa.ibanNumber, sepa.ownerName.
+//			PaymentMethods::DIRECT_DEBIT_BANCONTACT,
+//			PaymentMethods::DIRECT_DEBIT_IDEAL,
+//			PaymentMethods::DIRECT_DEBIT_SOFORT,
+//			PaymentMethods::GIROPAY,
 			PaymentMethods::IDEAL,
+//			PaymentMethods::PAYPAL,                     // Betaalmethode niet beschikbaar.
 			PaymentMethods::SOFORT,
 		);
 	}

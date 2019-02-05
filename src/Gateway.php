@@ -13,6 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Plugin;
 
@@ -56,6 +57,23 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
+	 * Get supported payment methods
+	 *
+	 * @see Core_Gateway::get_supported_payment_methods()
+	 */
+	public function get_supported_payment_methods() {
+		return array(
+			PaymentMethods::BANCONTACT,
+			PaymentMethods::CREDIT_CARD,
+			PaymentMethods::DIRECT_DEBIT,
+			PaymentMethods::GIROPAY,
+			PaymentMethods::IDEAL,
+			PaymentMethods::MAESTRO,
+			PaymentMethods::SOFORT,
+		);
+	}
+
+	/**
 	 * Start.
 	 *
 	 * @param Payment $payment Payment.
@@ -69,14 +87,19 @@ class Gateway extends Core_Gateway {
 		$request->merchant_account = $this->config->merchant_account;
 		$request->return_url       = $payment->get_return_url();
 		$request->reference        = $payment->get_id();
+		$request->origin_url       = home_url();
+		$request->sdk_version      = '1.6.3';
+		$request->channel          = 'Web';
 
 		// Amount.
 		$request->currency     = $payment->get_total_amount()->get_currency()->get_alphabetic_code();
 		$request->amount_value = $payment->get_total_amount()->get_cents(); // @todo Money +get_minor_units().
 
 		// Payment method. Take leap of faith for unknown payment method types.
+		$adyen_method = PaymentMethodType::transform( $payment->get_method(), $payment->get_method() );
+
 		$request->payment_method = array(
-			'type' => PaymentMethodType::transform( $payment->get_method(), $payment->get_method() ),
+			'type' => $adyen_method,
 		);
 
 		switch ( $payment->get_method() ) {
@@ -85,6 +108,17 @@ class Gateway extends Core_Gateway {
 
 				break;
 		}
+
+		// Country.
+		$locale = get_locale();
+
+		if ( null !== $payment->get_customer() ) {
+			$locale = $payment->get_customer()->get_locale();
+		}
+
+		$locale = explode( '_', $locale );
+
+		$request->country_code = strtoupper( substr( $locale[1], 0, 2 ) );
 
 		// Shopper.
 		$request->shopper_statement = $payment->get_description();
@@ -103,13 +137,75 @@ class Gateway extends Core_Gateway {
 			}
 		}
 
-		// Create payment.
-		$result = $this->client->create_payment( $request );
+		// Create payment or payment session.
+		switch ( $payment->get_method() ) {
+			case PaymentMethods::IDEAL:
+			case PaymentMethods::SOFORT:
+				// API integration.
+				$result = $this->client->create_payment( $request );
+
+				break;
+			default:
+				// Web SDK integration.
+				$allowed_methods = array( $adyen_method );
+
+				// Add all available payment methods if no payment method is given.
+				if ( empty( $adyen_method ) ) {
+					$allowed_methods = array();
+
+					foreach ( $this->get_available_payment_methods() as $method ) {
+						$allowed_methods[] = PaymentMethodType::transform( $method );
+					}
+				}
+
+				// Set allowed payment methods.
+				$request->allowed_payment_methods = $allowed_methods;
+
+				// Create payment session.
+				$result = $this->client->create_payment_session( $request );
+		}
 
 		if ( ! $result ) {
 			$this->error = $this->client->get_error();
 
 			return;
+		}
+
+		if ( isset( $result->paymentSession ) ) {
+			// No cache.
+			Util::no_cache();
+
+			$redirect_message = '<div id="pronamic-pay-checkout"></div><div style="clear:both;"></div>';
+
+			include Plugin::$dirname . '/views/redirect-message.php';
+
+			?>
+
+			<script type="text/javascript" src="https://checkoutshopper-test.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.1.6.3.min.js"></script>
+
+			<script type="text/javascript">
+			// Initiate the Adyen Checkout form.
+			var checkout = chckt.checkout(
+				'<?php echo $result->paymentSession; ?>',
+				'#pronamic-pay-checkout',
+				{ context: '<?php echo( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ); ?>' }
+			);
+
+			// Redirect once payment completes.
+			chckt.hooks.beforeComplete = function ( node, paymentData ) {
+				if ( "undefined" !== paymentData.payload ) {
+					console.log( paymentData );
+
+					window.location.href = '<?php echo $payment->get_return_url(); ?>&payload=' + encodeURIComponent( paymentData.payload );
+
+					return false;
+				}
+			};
+			</script>
+
+			<?php
+
+			exit;
 		}
 
 		// Set transaction ID.
@@ -131,15 +227,29 @@ class Gateway extends Core_Gateway {
 	 * @return void
 	 */
 	public function update_status( Payment $payment ) {
-		if ( ! filter_has_var( INPUT_GET, 'payload' ) ) {
-			return;
+		$status = null;
+
+		if ( filter_has_var( INPUT_GET, 'payload' ) ) {
+			$payload = filter_input( INPUT_GET, 'payload' );
+
+			switch ( $payment->get_method() ) {
+				case PaymentMethods::IDEAL:
+				case PaymentMethods::SOFORT:
+					$result = $this->client->get_payment_details( $payload );
+
+					break;
+				default:
+					$result = $this->client->get_payment_result( $payload );
+			}
+
+			if ( $result ) {
+				$status = Statuses::transform( $result->resultCode );
+
+				$psp_reference = $result->pspReference;
+			}
 		}
 
-		$payload = filter_input( INPUT_GET, 'payload', FILTER_SANITIZE_STRING );
-
-		$payment_details = $this->client->get_payment_details( $payload );
-
-		if ( ! $payment_details ) {
+		if ( empty( $status ) ) {
 			$payment->set_status( Core_Statuses::FAILURE );
 
 			$this->error = $this->client->get_error();
@@ -147,7 +257,12 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
-		$payment->set_status( Statuses::transform( $payment_details->resultCode ) );
+		$payment->set_status( $status );
+
+		if ( isset( $psp_reference ) ) {
+			$payment->set_transaction_id( $psp_reference );
+		}
+	}
 
 		if ( isset( $payment_details->pspReference ) ) {
 			$payment->set_transaction_id( $payment_details->pspReference );
@@ -155,35 +270,34 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
-	 * Is payment method required to start transaction?
+	 * Get available payment methods.
 	 *
-	 * @see Core_Gateway::payment_method_is_required()
+	 * @see Core_Gateway::get_available_payment_methods()
 	 */
-	public function payment_method_is_required() {
-		return true;
-	}
+	public function get_available_payment_methods() {
+		$payment_methods = array();
 
-	/**
-	 * Get supported payment methods
-	 *
-	 * @see Core_Gateway::get_supported_payment_methods()
-	 */
-	public function get_supported_payment_methods() {
-		return array(
-//			PaymentMethods::BANCONTACT,                 // 422 903 - Internal error.
-//			PaymentMethods::BANK_TRANSFER,              // 422 903 - Internal error.
-//			PaymentMethods::BELFIUS,                    // 422 903 - Internal error.
-//			PaymentMethods::BITCOIN,                    // Ongeldig verzoek.
-//			PaymentMethods::CREDIT_CARD,                // 422 903 - Internal error.
-//			PaymentMethods::DIRECT_DEBIT,               // 422 14_004 - Missing payment method details: sepa.ibanNumber, sepa.ownerName.
-//			PaymentMethods::DIRECT_DEBIT_BANCONTACT,
-//			PaymentMethods::DIRECT_DEBIT_IDEAL,
-//			PaymentMethods::DIRECT_DEBIT_SOFORT,
-//			PaymentMethods::GIROPAY,
-			PaymentMethods::IDEAL,
-//			PaymentMethods::PAYPAL,                     // Betaalmethode niet beschikbaar.
-			PaymentMethods::SOFORT,
-		);
+		// Get active payment methods for Adyen account.
+		$methods = $this->client->get_payment_methods();
+
+		if ( ! $methods ) {
+			$this->error = $this->client->get_error();
+
+			return $payment_methods;
+		}
+
+		// Transform to WordPress payment methods.
+		foreach ( $methods as $method => $details ) {
+			$payment_method = PaymentMethodType::transform_gateway_method( $method );
+
+			if ( $payment_method ) {
+				$payment_methods[] = $payment_method;
+			}
+		}
+
+		$payment_methods = array_unique( $payment_methods );
+
+		return $payment_methods;
 	}
 
 	/**

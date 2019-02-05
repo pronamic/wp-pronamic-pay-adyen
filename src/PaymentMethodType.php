@@ -24,9 +24,39 @@ class PaymentMethodType {
 	/**
 	 * Constant for the 'scheme' payment method type.
 	 *
+	 * @link https://docs.adyen.com/developers/development-resources/test-cards/test-card-numbers
+	 *
 	 * @var string
 	 */
 	const SCHEME = 'scheme';
+
+	/**
+	 * Constant for the 'afterpay_default' payment method type.
+	 *
+	 * @var string
+	 */
+	const AFTERPAY = 'afterpay_default';
+
+	/**
+	 * Constant for the 'alipay' payment method type.
+	 *
+	 * @var string
+	 */
+	const ALIPAY = 'alipay';
+
+	/**
+	 * Constant for the 'bcmc' payment method type.
+	 *
+	 * @var string
+	 */
+	const BANCONTACT = 'bcmc';
+
+	/**
+	 * Constant for the 'sepadirectdebit' payment method type.
+	 *
+	 * @var string
+	 */
+	const DIRECT_DEBIT = 'sepadirectdebit';
 
 	/**
 	 * Constant for the 'directEbanking' payment method type.
@@ -64,6 +94,13 @@ class PaymentMethodType {
 	const KLARNA = 'klarna';
 
 	/**
+	 * Constant for the 'maestro' payment method type.
+	 *
+	 * @var string
+	 */
+	const MAESTRO = 'maestro';
+
+	/**
 	 * Constant for the 'Multibanco' payment method type.
 	 *
 	 * @var string
@@ -97,11 +134,17 @@ class PaymentMethodType {
 	 * @var array
 	 */
 	private static $map = array(
-		PaymentMethods::DIRECT_DEBIT => self::SEPA_DIRECT_DEBIT,
-		PaymentMethods::GIROPAY      => self::GIROPAY,
-		PaymentMethods::IDEAL        => self::IDEAL,
-		PaymentMethods::PAYPAL       => self::PAYPAL,
-		PaymentMethods::SOFORT       => self::DIRECT_EBANKING,
+		PaymentMethods::AFTERPAY         => self::AFTERPAY,
+		PaymentMethods::ALIPAY           => self::ALIPAY,
+		PaymentMethods::BANCONTACT       => self::BANCONTACT,
+		PaymentMethods::CREDIT_CARD      => self::SCHEME,
+		PaymentMethods::DIRECT_DEBIT     => self::SEPA_DIRECT_DEBIT,
+		PaymentMethods::GIROPAY          => self::GIROPAY,
+		PaymentMethods::IDEAL            => self::IDEAL,
+		PaymentMethods::KLARNA_PAY_LATER => self::KLARNA,
+		PaymentMethods::MAESTRO          => self::MAESTRO,
+		PaymentMethods::PAYPAL           => self::PAYPAL,
+		PaymentMethods::SOFORT           => self::DIRECT_EBANKING,
 	);
 
 	/**
@@ -122,5 +165,26 @@ class PaymentMethodType {
 		}
 
 		return $default;
+	}
+
+	/**
+	 * Transform Adyen method to WordPress payment method.
+	 *
+	 * @param string $method Adyen method.
+	 *
+	 * @return string
+	 */
+	public static function transform_gateway_method( $method ) {
+		if ( ! is_scalar( $method ) ) {
+			return null;
+		}
+
+		$payment_method = array_search( $method, self::$map, true );
+
+		if ( ! $payment_method ) {
+			return null;
+		}
+
+		return $payment_method;
 	}
 }

@@ -24,6 +24,16 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  */
 class PaymentRequest {
 	/**
+	 * Allowed payment methods.
+	 *
+	 * List of payments methods to be presented to the shopper. To refer to payment methods,
+	 * use their brandCode from https://docs.adyen.com/developers/payment-methods/payment-methods-overview
+	 *
+	 * @var array
+	 */
+	public $allowed_payment_methods;
+
+	/**
 	 * The transaction amount needs to be represented in minor units according to the table below.
 	 *
 	 * Some currencies do not have decimal points, such as JPY, and some have 3 decimal points, such as BHD.
@@ -34,6 +44,26 @@ class PaymentRequest {
 	 * @var int
 	 */
 	public $amount_value;
+
+	/**
+	 * Channel.
+	 *
+	 * The platform where a payment transaction takes place. This field is optional for filtering out
+	 * payment methods that are only available on specific platforms. If this value is not set,
+	 * then we will try to infer it from the sdkVersion or token.
+	 *
+	 * Possible values: Android, iOS, Web.
+	 *
+	 * @var string
+	 */
+	public $channel;
+
+	/**
+	 * Country code (ISO 3166-1 alpha-2).
+	 *
+	 * @var string
+	 */
+	public $country_code;
 
 	/**
 	 * Currency code.
@@ -50,6 +80,16 @@ class PaymentRequest {
 	 * @var string
 	 */
 	public $merchant_account;
+
+	/**
+	 * Origin URL.
+	 *
+	 * Required for the Web integration. Set this parameter to the
+	 * origin URL of the page that you are loading the SDK from.
+	 *
+	 * @var string
+	 */
+	public $origin_url;
 
 	/**
 	 * The collection that contains the type of the payment method and its
@@ -75,6 +115,13 @@ class PaymentRequest {
 	 * @var string
 	 */
 	public $return_url;
+
+	/**
+	 * SDK version.
+	 *
+	 * @var string
+	 */
+	public $sdk_version;
 
 	/**
 	 * The shopper IP.
@@ -147,25 +194,30 @@ class PaymentRequest {
 	 */
 	public function get_array() {
 		$array = array(
-			'amount'           => array(
+			'amount'                => array(
 				'currency' => $this->currency,
 				'value'    => $this->amount_value,
 			),
-			'merchantAccount'  => $this->merchant_account,
-			'paymentMethod'    => $this->payment_method,
-			'reference'        => $this->reference,
-			'returnUrl'        => $this->return_url,
-			'shopperIp'        => $this->shopper_ip,
-			'shopperName'      => array(
+			'allowedPaymentMethods' => $this->allowed_payment_methods,
+			'channel'               => $this->channel,
+			'countryCode'           => $this->country_code,
+			'merchantAccount'       => $this->merchant_account,
+			'origin'                => $this->origin_url,
+			'paymentMethod'         => $this->payment_method,
+			'reference'             => $this->reference,
+			'returnUrl'             => $this->return_url,
+			'sdkVersion'            => $this->sdk_version,
+			'shopperIp'             => $this->shopper_ip,
+			'shopperName'           => array(
 				'firstName' => $this->shopper_first_name,
 				'gender'    => $this->shopper_gender,
 				'infix'     => $this->shopper_name_infix,
 				'lastName'  => $this->shopper_last_name,
 			),
-			'shopperLocale'    => $this->shopper_locale,
-			'shopperReference' => $this->shopper_reference,
-			'shopperStatement' => $this->shopper_statement,
-			'telephoneNumber'  => $this->shopper_telephone_number,
+			'shopperLocale'         => $this->shopper_locale,
+			'shopperReference'      => $this->shopper_reference,
+			'shopperStatement'      => $this->shopper_statement,
+			'telephoneNumber'       => $this->shopper_telephone_number,
 		);
 
 		/*

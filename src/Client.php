@@ -200,6 +200,18 @@ class Client {
 	}
 
 	/**
+	 * Create payment session.
+	 *
+	 * @param PaymentRequest $request Payment request.
+	 *
+	 * @return bool|object
+	 */
+	public function create_payment_session( PaymentRequest $request ) {
+
+		return $this->send_request( 'paymentSession', 'POST', $request->get_array(), 200 );
+	}
+
+	/**
 	 * Get payments.
 	 *
 	 * @return bool|object
@@ -227,6 +239,25 @@ class Client {
 		);
 
 		return $this->send_request( 'payments/details', 'POST', $data );
+	}
+
+	/**
+	 * Get payment result.
+	 *
+	 * @param string $payload Payload to get payment details for.
+	 *
+	 * @return bool|object
+	 */
+	public function get_payment_result( $payload ) {
+		if ( empty( $payload ) ) {
+			return false;
+		}
+
+		$data = array(
+			'payload' => $payload,
+		);
+
+		return $this->send_request( 'payments/result', 'POST', $data );
 	}
 
 	/**

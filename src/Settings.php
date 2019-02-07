@@ -40,6 +40,16 @@ class Settings extends GatewaySettings {
 			'methods' => array( 'adyen' ),
 		);
 
+		// Transaction feedback.
+		$sections['adyen_feedback'] = array(
+			'title'       => __( 'Transaction feedback', 'pronamic_ideal' ),
+			'methods'     => array( 'adyen' ),
+			'description' => __(
+				'The URLs below need to be copied to the payment provider dashboard to receive automatic transaction status updates.',
+				'pronamic_ideal'
+			),
+		);
+
 		return $sections;
 	}
 
@@ -84,6 +94,39 @@ class Settings extends GatewaySettings {
 			'classes'  => array( 'regular-text', 'code' ),
 			'methods'  => array( 'adyen' ),
 			'tooltip'  => __( 'The merchant account identifier, with which you want to process the transaction', 'pronamic_ideal' ),
+		);
+
+		// Transaction feedback.
+		$fields[] = array(
+			'section' => 'adyen',
+			'methods' => array( 'adyen' ),
+			'title'   => __( 'Transaction feedback', 'pronamic_ideal' ),
+			'type'    => 'description',
+			'html'    => sprintf(
+				'<span class="dashicons dashicons-warning"></span> %s',
+				__(
+					'Receiving payment status updates needs additional configuration, if not yet completed.',
+					'pronamic_ideal'
+				)
+			),
+		);
+
+		// Webhook URL.
+		$fields[] = array(
+			'section'  => 'adyen_feedback',
+			'title'    => __( 'Webhook URL', 'pronamic_ideal' ),
+			'type'     => 'text',
+			'classes'  => array( 'large-text', 'code' ),
+			'value'    => add_query_arg( 'adyen_webhook', '', home_url( '/' ) ),
+			'readonly' => true,
+			'tooltip'  => sprintf(
+				/* translators: %s: Adyen */
+				__(
+					'Copy the Webhook URL to the %s dashboard to receive automatic transaction status updates.',
+					'pronamic_ideal'
+				),
+				__( 'Adyen', 'pronamic_ideal' )
+			),
 		);
 
 		return $fields;

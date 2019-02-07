@@ -227,28 +227,35 @@ class Gateway extends Core_Gateway {
 	 * @return void
 	 */
 	public function update_status( Payment $payment ) {
-		$status = null;
+		// Maybe process stored webhook notification.
+		$this->maybe_handle_notification( $payment );
 
-		if ( filter_has_var( INPUT_GET, 'payload' ) ) {
-			$payload = filter_input( INPUT_GET, 'payload' );
-
-			switch ( $payment->get_method() ) {
-				case PaymentMethods::IDEAL:
-				case PaymentMethods::SOFORT:
-					$result = $this->client->get_payment_details( $payload );
-
-					break;
-				default:
-					$result = $this->client->get_payment_result( $payload );
-			}
-
-			if ( $result ) {
-				$status = Statuses::transform( $result->resultCode );
-
-				$psp_reference = $result->pspReference;
-			}
+		// Process payload on return.
+		if ( ! filter_has_var( INPUT_GET, 'payload' ) ) {
+			return;
 		}
 
+		$status = null;
+
+		$payload = filter_input( INPUT_GET, 'payload', FILTER_SANITIZE_STRING );
+
+		switch ( $payment->get_method() ) {
+			case PaymentMethods::IDEAL:
+			case PaymentMethods::SOFORT:
+				$result = $this->client->get_payment_details( $payload );
+
+				break;
+			default:
+				$result = $this->client->get_payment_result( $payload );
+		}
+
+		if ( $result ) {
+			$status = Statuses::transform( $result->resultCode );
+
+			$psp_reference = $result->pspReference;
+		}
+
+		// Handle errors.
 		if ( empty( $status ) ) {
 			$payment->set_status( Core_Statuses::FAILURE );
 
@@ -257,15 +264,72 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
+		// Update status.
 		$payment->set_status( $status );
 
+		// Update transaction ID.
 		if ( isset( $psp_reference ) ) {
 			$payment->set_transaction_id( $psp_reference );
 		}
+	}
 
-		if ( isset( $payment_details->pspReference ) ) {
-			$payment->set_transaction_id( $payment_details->pspReference );
+	/**
+	 * Maybe handle notification.
+	 *
+	 * @param Payment $payment      Payment.
+	 */
+	public function maybe_handle_notification( Payment $payment ) {
+		$notification = $payment->get_meta( 'adyen_notification' );
+
+		if ( empty( $notification ) ) {
+			return;
 		}
+
+		$notification = json_decode( $notification );
+
+		if ( ! is_object( $notification ) ) {
+			return;
+		}
+
+		switch ( $notification->eventCode ) {
+			case EventCodes::AUTHORIZATION:
+				$this->handle_authorization_event( $payment, $notification );
+
+				break;
+		}
+
+		$payment->set_meta( 'adyen_notification', null );
+	}
+
+	/**
+	 * Handle authorization event.
+	 *
+	 * @param Payment $payment      Payment.
+	 * @param object  $notification Notification.
+	 */
+	public function handle_authorization_event( Payment $payment, $notification ) {
+		if ( ! is_object( $notification ) ) {
+			return;
+		}
+
+		$success = $notification->success;
+
+		if ( 'true' === $success ) {
+			$status = Core_Statuses::SUCCESS;
+		} else {
+			$status = Core_Statuses::FAILURE;
+
+			// Add note.
+			$note = sprintf(
+				/* translators: %s: failure reason message */
+				__( 'Failure reason: %s.', 'pronamic_ideal' ),
+				esc_html( $notification->reason )
+			);
+
+			$payment->add_note( $note );
+		}
+
+		$payment->set_status( $status );
 	}
 
 	/**

@@ -262,7 +262,6 @@ class Gateway extends Core_Gateway {
 		if ( isset( $psp_reference ) ) {
 			$payment->set_transaction_id( $psp_reference );
 		}
-	}
 
 		if ( isset( $payment_details->pspReference ) ) {
 			$payment->set_transaction_id( $payment_details->pspReference );

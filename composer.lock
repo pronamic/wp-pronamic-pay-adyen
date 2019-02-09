@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a24c04f2ac4100c25d2245906428b461",
+    "content-hash": "07e0f1e54a32d9e0368d9d374366585c",
     "packages": [
         {
             "name": "composer/installers",
@@ -324,12 +324,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-pay/core.git",
-                "reference": "ec7ecdcaa8fecf3331cd9727dee2e745bec2d599"
+                "reference": "30e61fe094b336c7e689b90e8314b0aee459c06a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-pay/core/zipball/ec7ecdcaa8fecf3331cd9727dee2e745bec2d599",
-                "reference": "ec7ecdcaa8fecf3331cd9727dee2e745bec2d599",
+                "url": "https://api.github.com/repos/wp-pay/core/zipball/30e61fe094b336c7e689b90e8314b0aee459c06a",
+                "reference": "30e61fe094b336c7e689b90e8314b0aee459c06a",
                 "shasum": ""
             },
             "require": {
@@ -389,7 +389,7 @@
                 "wordpress",
                 "wp"
             ],
-            "time": "2019-01-24T12:54:55+00:00"
+            "time": "2019-02-08T09:12:42+00:00"
         }
     ],
     "packages-dev": [
@@ -1478,7 +1478,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/WordPress/WordPress/zipball/5.0.3",
-                "reference": null,
+                "reference": "5.0.3",
                 "shasum": null
             },
             "require": {

@@ -186,7 +186,7 @@ class Gateway extends Core_Gateway {
 			<script type="text/javascript">
 			// Initiate the Adyen Checkout form.
 			var checkout = chckt.checkout(
-				'<?php echo $result->paymentSession; ?>',
+				'<?php echo esc_html( $result->paymentSession ); ?>',
 				'#pronamic-pay-checkout',
 				{ context: '<?php echo( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ); ?>' }
 			);
@@ -194,9 +194,7 @@ class Gateway extends Core_Gateway {
 			// Redirect once payment completes.
 			chckt.hooks.beforeComplete = function ( node, paymentData ) {
 				if ( "undefined" !== paymentData.payload ) {
-					console.log( paymentData );
-
-					window.location.href = '<?php echo $payment->get_return_url(); ?>&payload=' + encodeURIComponent( paymentData.payload );
+					window.location.href = '<?php echo esc_url( $payment->get_return_url() ); ?>&payload=' + encodeURIComponent( paymentData.payload );
 
 					return false;
 				}

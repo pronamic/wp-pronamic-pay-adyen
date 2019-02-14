@@ -93,7 +93,7 @@ class Gateway extends Core_Gateway {
 
 		// Amount.
 		$request->currency     = $payment->get_total_amount()->get_currency()->get_alphabetic_code();
-		$request->amount_value = $payment->get_total_amount()->get_cents(); // @todo Money +get_minor_units().
+		$request->amount_value = $payment->get_total_amount()->get_minor_units();
 
 		// Payment method. Take leap of faith for unknown payment method types.
 		$adyen_method = PaymentMethodType::transform( $payment->get_method(), $payment->get_method() );

@@ -248,7 +248,7 @@ class Gateway extends Core_Gateway {
 		}
 
 		if ( $result ) {
-			$status = Statuses::transform( $result->resultCode );
+			$status = ResultCode::transform( $result->resultCode );
 
 			$psp_reference = $result->pspReference;
 		}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Statuses
+ * Result code.
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2019 Pronamic
@@ -13,7 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 
 /**
- * Title: Adyen statuses constants.
+ * Title: Adyen result code constants.
  * Description:
  * Copyright: 2005-2019 Pronamic
  * Company: Pronamic
@@ -24,7 +24,7 @@ use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
  *
  * @link https://docs.adyen.com/developers/checkout/payment-result-codes
  */
-class Statuses {
+class ResultCode {
 	/**
 	 * Authorized.
 	 *

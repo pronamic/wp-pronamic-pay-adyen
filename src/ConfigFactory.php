@@ -34,6 +34,8 @@ class ConfigFactory extends GatewayConfigFactory {
 		$config->api_key             = $this->get_meta( $post_id, 'adyen_api_key' );
 		$config->api_live_url_prefix = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
 		$config->merchant_account    = $this->get_meta( $post_id, 'adyen_merchant_account' );
+		$config->webhook_username    = $this->get_meta( $post_id, 'adyen_webhook_username' );
+		$config->webhook_password    = $this->get_meta( $post_id, 'adyen_webhook_password' );
 
 		return $config;
 	}

@@ -21,6 +21,20 @@ use Pronamic\WordPress\Pay\Core\GatewaySettings;
  */
 class Settings extends GatewaySettings {
 	/**
+	 * Webhook username meta key.
+	 *
+	 * @var string
+	 */
+	const WEBHOOK_USERNAME_META_KEY = '_pronamic_gateway_adyen_webhook_username';
+
+	/**
+	 * Webhook password meta key.
+	 *
+	 * @var string
+	 */
+	const WEBHOOK_PASSWORD_META_KEY = '_pronamic_gateway_adyen_webhook_password';
+
+	/**
 	 * Constructs and initialize settings.
 	 */
 	public function __construct() {
@@ -44,9 +58,16 @@ class Settings extends GatewaySettings {
 		$sections['adyen_feedback'] = array(
 			'title'       => __( 'Transaction feedback', 'pronamic_ideal' ),
 			'methods'     => array( 'adyen' ),
-			'description' => __(
-				'The URLs below need to be copied to the payment provider dashboard to receive automatic transaction status updates.',
-				'pronamic_ideal'
+			'description' => sprintf(
+				'%s %s',
+				__(
+					'The URLs below need to be copied to the payment provider dashboard to receive automatic transaction status updates.',
+					'pronamic_ideal'
+				),
+				__(
+					'Set the user name and password below and in the webhook authentication settings in the Adyen dashboard for increased security (recommended).',
+					'pronamic_ideal'
+				)
 			),
 		);
 
@@ -129,6 +150,61 @@ class Settings extends GatewaySettings {
 			),
 		);
 
+		// Webhook authentication username.
+		$fields[] = array(
+			'filter'   => FILTER_SANITIZE_STRING,
+			'section'  => 'adyen_feedback',
+			'meta_key' => self::WEBHOOK_USERNAME_META_KEY,
+			'title'    => _x( 'User Name', 'adyen', 'pronamic_ideal' ),
+			'type'     => 'text',
+			'classes'  => array( 'regular-text', 'code' ),
+			'methods'  => array( 'adyen' ),
+			'tooltip'  => __(
+				'The webhook authentication user name, as mentioned at <strong>Account » Server communication</strong> in the Adyen dashboard',
+				'pronamic_ideal'
+			),
+		);
+
+		// Webhook authentication password.
+		$fields[] = array(
+			'filter'   => FILTER_SANITIZE_STRING,
+			'section'  => 'adyen_feedback',
+			'meta_key' => self::WEBHOOK_PASSWORD_META_KEY,
+			'title'    => _x( 'Password', 'adyen', 'pronamic_ideal' ),
+			'type'     => 'text',
+			'classes'  => array( 'regular-text', 'code' ),
+			'methods'  => array( 'adyen' ),
+			'tooltip'  => __(
+				'The webhook authentication password, as mentioned at <strong>Account » Server communication</strong> in the Adyen dashboard',
+				'pronamic_ideal'
+			),
+		);
+
 		return $fields;
+	}
+
+	/**
+	 * Save post.
+	 *
+	 * @param array $data Data to save.
+	 *
+	 * @return array
+	 */
+	public function save_post( $data ) {
+		// Trim settings.
+		$fields = array(
+			self::WEBHOOK_USERNAME_META_KEY,
+			self::WEBHOOK_PASSWORD_META_KEY,
+		);
+
+		foreach ( $fields as $field ) {
+			if ( ! isset( $data[ $field ] ) ) {
+				continue;
+			}
+
+			$data[ $field ] = trim( $data[ $field ] );
+		}
+
+		return $data;
 	}
 }

@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Exception;
+use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Plugin;
 
 /**
@@ -51,6 +52,10 @@ class WebhookListener {
 				continue;
 			}
 
+			if ( ! self::authenticate( $payment->get_config_id() ) ) {
+				exit;
+			}
+
 			// Store notification.
 			$payment->set_meta( 'adyen_notification', wp_json_encode( $notification ) );
 
@@ -85,5 +90,48 @@ class WebhookListener {
 				'notificationResponse' => '[accepted]',
 			)
 		);
+	}
+
+	/**
+	 * Check authentication or request HTTP Basic auth.
+	 *
+	 * @param int $config_id Config ID.
+	 *
+	 * @return bool
+	 */
+	public static function authenticate( $config_id ) {
+		// Check if gateway exists.
+		$gateway = Plugin::get_gateway( $config_id );
+
+		if ( ! $gateway ) {
+			return true;
+		}
+
+		// Check empty webhook authentication settings.
+		$config_factory = new ConfigFactory();
+
+		$config = $config_factory->get_config( $config_id );
+
+		if ( empty( $config->webhook_username ) && empty( $config->webhook_password ) ) {
+			return true;
+		}
+
+		// Validate authentication.
+		$user     = Server::get( 'PHP_AUTH_USER' );
+		$password = Server::get( 'PHP_AUTH_PW' );
+
+		if ( null !== $user && null !== $password && $config->webhook_username === $user && $config->webhook_password === $password ) {
+			return true;
+		}
+
+		// Send HTTP Basic authentication headers.
+		$realm = __( 'Pronamic Pay Adyen webhook', 'pronamic_ideal' );
+
+		header( 'WWW-Authenticate: Basic realm="' . esc_html( $realm ) . '"' );
+		header( 'HTTP/1.0 401 Unauthorized' );
+
+		echo 'Unauthorized';
+
+		exit;
 	}
 }

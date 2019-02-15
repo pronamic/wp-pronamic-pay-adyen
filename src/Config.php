@@ -40,4 +40,18 @@ class Config extends GatewayConfig {
 	 * @var string
 	 */
 	public $merchant_account;
+
+	/**
+	 * Webhook username.
+	 *
+	 * @var string
+	 */
+	public $webhook_username;
+
+	/**
+	 * Webhook password.
+	 *
+	 * @var string
+	 */
+	public $webhook_password;
 }

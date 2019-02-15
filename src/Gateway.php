@@ -194,7 +194,7 @@ class Gateway extends Core_Gateway {
 			// Redirect once payment completes.
 			chckt.hooks.beforeComplete = function ( node, paymentData ) {
 				if ( "undefined" !== paymentData.payload ) {
-					window.location.href = '<?php echo esc_url( $payment->get_return_url() ); ?>&payload=' + encodeURIComponent( paymentData.payload );
+					window.location.href = '<?php echo $payment->get_return_url(); ?>&payload=' + encodeURIComponent( paymentData.payload );
 
 					return false;
 				}

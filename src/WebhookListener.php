@@ -95,7 +95,7 @@ class WebhookListener {
 	/**
 	 * Check authentication or request HTTP Basic auth.
 	 *
-	 * @param int $config_id Config ID.
+	 * @param string $config_id Config ID.
 	 *
 	 * @return bool
 	 */

@@ -28,14 +28,14 @@ class Client {
 	 *
 	 * @var string
 	 */
-	const API_URL_TEST = 'https://checkout-test.adyen.com/v40/';
+	const API_URL_TEST = 'https://checkout-test.adyen.com/v41/';
 
 	/**
 	 * API endpoint live URL suffix.
 	 *
 	 * @var string
 	 */
-	const API_URL_LIVE_SUFFIX = '-checkout-live.adyenpayments.com/checkout';
+	const API_URL_LIVE = 'https://%s-checkout-live.adyenpayments.com/checkout/v41/';
 
 	/**
 	 * Mode.
@@ -120,11 +120,7 @@ class Client {
 			return self::API_URL_TEST;
 		}
 
-		return sprintf(
-			'https://%1$s%2$s',
-			$this->api_live_url_prefix,
-			self::API_URL_LIVE_SUFFIX
-		);
+		return sprintf( self::API_URL_LIVE, $this->api_live_url_prefix );
 	}
 
 	/**

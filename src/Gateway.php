@@ -290,7 +290,7 @@ class Gateway extends Core_Gateway {
 		}
 
 		switch ( $notification->eventCode ) {
-			case EventCodes::AUTHORIZATION:
+			case EventCode::AUTHORIZATION:
 				$this->handle_authorization_event( $payment, $notification );
 
 				break;

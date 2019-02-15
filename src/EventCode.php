@@ -1,6 +1,6 @@
 <?php
 /**
- * Event Codes.
+ * Event code.
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2019 Pronamic
@@ -19,7 +19,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  *
  * @link https://docs.adyen.com/developers/development-resources/notifications/event-codes
  */
-class EventCodes {
+class EventCode {
 	/**
 	 * Indicator for the 'AUTHORIZATION' event code.
 	 *

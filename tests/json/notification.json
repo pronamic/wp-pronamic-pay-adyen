@@ -1,0 +1,36 @@
+{
+    "live" : "false",
+    "notificationItems" : [
+        {
+            "NotificationRequestItem" : {
+
+                "additionalData" : {
+                    "authCode" : "58747",
+                    "cardSummary" : "1111",
+                    "expiryDate" : "8/2018"
+                },
+    
+                "amount" : {
+                    "value" : 500,
+                    "currency" : "EUR"
+                 },
+                 
+                "pspReference" : "9313547924770610",
+                "eventCode" : "AUTHORISATION",
+                "eventDate" : "2018-01-01T01:02:01.111+02:00",
+                "merchantAccountCode" : "TestMerchant",
+                
+                "operations" : [
+                    "CANCEL",
+                    "CAPTURE",
+                    "REFUND"
+                ],
+                
+                "merchantReference" : "YourMerchantReference1",
+                "paymentMethod" : "visa",
+                "reason" : "58747:1111:12/2012",
+                "success" : "true"
+            }
+        }
+    ]
+}

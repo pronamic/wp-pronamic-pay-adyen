@@ -188,11 +188,163 @@ class PaymentRequest {
 	public $shopper_telephone_number;
 
 	/**
-	 * Get array of this Adyen payment request object.
+	 * Construct a payment request object.
 	 *
-	 * @return array
+	 * @param Amount        $amount           The amount information for the transaction.
+	 * @param string        $merchant_account The merchant account identifier, with which you want to process the transaction
+	 * @param PaymentMethod $payment_method   The collection that contains the type of the payment method and its specific information (e.g. idealIssuer).
+	 * @param string        $reference        The reference to uniquely identify a payment.
+	 * @param string        $return_url       The URL to return to.
 	 */
-	public function get_array() {
+	public function __construct( Amount $amount, $merchant_account, PaymentMethod $payment_method, $reference, $return_url ) {
+		$this->set_amount( $amount );
+		$this->set_merchant_account( $merchant_account );
+		$this->set_payment_method( $payment_method );
+		$this->set_reference( $reference );
+		$this->set_return_url( $return_url );
+	}
+
+	/**
+	 * Get amount.
+	 *
+	 * @return Amount
+	 */
+	public function get_amount() {
+		return $this->amount;
+	}
+
+	/**
+	 * Set amount.
+	 *
+	 * @param Amount $amount Amount.
+	 */
+	public function set_amount( Amount $amount ) {
+		$this->amount = $amount;
+	}
+
+	/**
+	 * Get merchant account.
+	 *
+	 * @return string
+	 */
+	public function get_merchant_account() {
+		return $this->merchant_account;
+	}
+
+	/**
+	 * Set merchant account.
+	 *
+	 * @param string $merchant_account Merchant account.
+	 */
+	public function set_merchant_account( $merchant_account ) {
+		$this->merchant_account = $merchant_account;
+	}
+
+	/**
+	 * Get payment method.
+	 *
+	 * @return PaymentMethod
+	 */
+	public function get_payment_method() {
+		return $this->payment_method;
+	}
+
+	/**
+	 * Set payment method.
+	 *
+	 * @param PaymentMethod $payment_method Payment method.
+	 */
+	public function set_payment_method( PaymentMethod $payment_method ) {
+		$this->payment_method = $payment_method;
+	}
+
+	/**
+	 * Get reference.
+	 *
+	 * @return string
+	 */
+	public function get_reference() {
+		return $this->reference;
+	}
+
+	/**
+	 * Set reference.
+	 *
+	 * @param string $reference Reference.
+	 */
+	public function set_reference( $reference ) {
+		$this->reference = $reference;
+	}
+
+	/**
+	 * Get return URL.
+	 *
+	 * @return string
+	 */
+	public function get_return_url() {
+		return $this->return_url;
+	}
+
+	/**
+	 * Set return URL.
+	 *
+	 * @param string $return_url Return URL.
+	 */
+	public function set_return_url( $return_url ) {
+		$this->return_url = $return_url;
+	}
+
+	/**
+	 * Get shopper name.
+	 *
+	 * @return ShopperName|null
+	 */
+	public function get_shopper_name() {
+		return $this->shopper_name;
+	}
+
+	/**
+	 * Set shopper name.
+	 *
+	 * @param ShopperName|null $shopper_name Shopper name.
+	 */
+	public function set_shopper_name( ShopperName $shopper_name = null ) {
+		$this->shopper_name = $shopper_name;
+	}
+
+	/**
+	 * Get JSON.
+	 *
+	 * @return object
+	 */
+	public function get_json() {
+		$object = (object) array();
+
+		// Amount.
+		$object->amount = $this->get_amount()->get_json();
+
+		// Merchant account.
+		$object->merchantAccount = $this->get_merchant_account();
+
+		// Payment method.
+		$object->paymentMethod = $this->get_payment_method()->get_json();
+
+		// Reference.
+		$object->reference = $this->get_reference();
+
+		// Return URL.
+		$object->returnUrl = $this->get_return_url();
+
+		// Shopper name.
+		$shopper_name = $this->get_shopper_name();
+
+		if ( null !== $shopper_name ) {
+			$object->shopperName = $shopper_name->get_json();
+		}
+
+		// Return object.
+		return $object;
+
 		$array = array(
 			'amount'                => array(
 				'currency' => $this->currency,

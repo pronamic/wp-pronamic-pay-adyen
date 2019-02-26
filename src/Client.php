@@ -287,9 +287,9 @@ class Client {
 				return false;
 			}
 
-			foreach ( $method['details']['issuer']['items'] as $issuer ) {
-				$id   = Security::filter( $issuer['id'] );
-				$name = Security::filter( $issuer['name'] );
+			foreach ( $method['details']['issuer']->items as $issuer ) {
+				$id   = Security::filter( $issuer->id );
+				$name = Security::filter( $issuer->name );
 
 				$issuers[ $id ] = $name;
 			}
@@ -325,18 +325,17 @@ class Client {
 				$name = Security::filter( $payment_method->name );
 
 				$method = array(
-					'name' => $name,
+					'name'    => $name,
+					'details' => array(),
 				);
 
 				if ( isset( $payment_method->details ) ) {
-					$details = json_decode( wp_json_encode( $payment_method->details ), true );
-
-					foreach ( $details as $detail ) {
-						$key = $detail['key'];
+					foreach ( $payment_method->details as $detail ) {
+						$key = $detail->key;
 
 						$method['details'][ $key ] = $detail;
 
-						unset( $method['details'][ $key ]['key'] );
+						unset( $method['details'][ $key ]->key );
 					}
 				}
 

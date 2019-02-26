@@ -36,7 +36,7 @@ class Amount {
 	 * Construct amount.
 	 *
 	 * @param string $currency Currency.
-	 * @param int    $value    Value
+	 * @param int    $value    Value.
 	 */
 	public function __construct( $currency, $value ) {
 		$this->currency = $currency;
@@ -69,7 +69,7 @@ class Amount {
 	public function get_json() {
 		return (object) array(
 			'currency' => $this->get_currency(),
-			'value'    => $this->get_avalue(),
+			'value'    => $this->get_value(),
 		);
 	}
 }

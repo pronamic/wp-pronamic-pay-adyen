@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use InvalidArgumentException;
+
 /**
  * Notification request
  *
@@ -48,10 +50,19 @@ class NotificationRequest {
 	}
 
 	/**
+	 * Live.
+	 *
+	 * @return boolean True if live, false otherwise.
+	 */
+	public function is_live() {
+		return $this->live;
+	}
+
+	/**
 	 * Create notification request from object.
 	 *
 	 * @param object $object Object.
-	 * @return OrderAnnounceResponse
+	 * @return NotificationRequest
 	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
@@ -70,11 +81,15 @@ class NotificationRequest {
 		$items = array();
 
 		foreach ( $object->notificationItems as $o ) {
-			$items[] = NotificationRequestItem::from_object( $o );
+			if ( ! isset( $o->NotificationRequestItem ) ) {
+				throw new InvalidArgumentException( 'Object must contain `NotificationRequestItem` property.' );
+			}
+
+			$items[] = NotificationRequestItem::from_object( $o->NotificationRequestItem );
 		}
 
 		return new self(
-			filter_var( $object->redirectUrl, FILTER_VALIDATE_BOOLEAN ),
+			filter_var( $object->live, FILTER_VALIDATE_BOOLEAN ),
 			$items
 		);
 	}

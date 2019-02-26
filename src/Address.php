@@ -54,6 +54,13 @@ class Address {
 	private $state_or_province;
 
 	/**
+	 * Street.
+	 *
+	 * @var string|null
+	 */
+	private $street;
+
+	/**
 	 * Construct address.
 	 *
 	 * @param string $country Country.

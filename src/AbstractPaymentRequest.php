@@ -58,6 +58,13 @@ abstract class AbstractPaymentRequest {
 	private $country_code;
 
 	/**
+	 * The address where the purchased goods should be delivered
+	 *
+	 * @var Address|null
+	 */
+	private $delivery_address;
+
+	/**
 	 * Line items regarding the payment.
 	 *
 	 * @var LineItems
@@ -216,6 +223,24 @@ abstract class AbstractPaymentRequest {
 	 */
 	public function set_country_code( $country_code ) {
 		$this->country_code = $country_code;
+	}
+
+	/**
+	 * Get delivery address.
+	 *
+	 * @return Address|null
+	 */
+	public function get_delivery_address() {
+		return $this->delivery_address;
+	}
+
+	/**
+	 * Set delivery address.
+	 *
+	 * @param Address|null $delivery_address Delivery address.
+	 */
+	public function set_delivery_address( Address $delivery_address = null ) {
+		$this->delivery_address = $delivery_address;
 	}
 
 	/**

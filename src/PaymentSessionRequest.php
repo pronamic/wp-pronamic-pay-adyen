@@ -63,6 +63,24 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	}
 
 	/**
+	 * Get allowed payment methods.
+	 *
+	 * @return array
+	 */
+	public function get_allowed_payment_methods() {
+		return $this->allowed_payment_methods;
+	}
+
+	/**
+	 * Set allowed payment methods.
+	 *
+	 * @param array $allowed_payment_methods Allowed payment methods.
+	 */
+	public function set_allowed_payment_methods( $allowed_payment_methods ) {
+		$this->allowed_payment_methods = $allowed_payment_methods;
+	}
+
+	/**
 	 * Get origin.
 	 *
 	 * @return string

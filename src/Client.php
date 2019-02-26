@@ -128,12 +128,12 @@ class Client {
 	 *
 	 * @param string $end_point              Requested endpoint.
 	 * @param string $method                 HTTP method to use.
-	 * @param array  $data                   Request data.
+	 * @param object $data                   Request data.
 	 * @param int    $expected_response_code Expected response code.
 	 *
 	 * @return bool|object
 	 */
-	private function send_request( $end_point, $method = 'GET', array $data = array(), $expected_response_code = 200 ) {
+	private function send_request( $end_point, $method = 'GET', $data = null, $expected_response_code = 200 ) {
 		// Request.
 		$url = $this->get_api_url() . $end_point;
 
@@ -192,19 +192,19 @@ class Client {
 	 * @return bool|object
 	 */
 	public function create_payment( PaymentRequest $request ) {
-		return $this->send_request( 'payments/', 'POST', $request->get_array(), 200 );
+		return $this->send_request( 'payments/', 'POST', $request->get_json(), 200 );
 	}
 
 	/**
 	 * Create payment session.
 	 *
-	 * @param PaymentRequest $request Payment request.
+	 * @param PaymentSessionRequest $request Payment session request.
 	 *
 	 * @return bool|object
 	 */
-	public function create_payment_session( PaymentRequest $request ) {
+	public function create_payment_session( PaymentSessionRequest $request ) {
 
-		return $this->send_request( 'paymentSession', 'POST', $request->get_array(), 200 );
+		return $this->send_request( 'paymentSession', 'POST', $request->get_json(), 200 );
 	}
 
 	/**

@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use stdClass;
+
 /**
  * Payment method
  *
@@ -17,7 +19,23 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * @version 2.1.0
  * @since   2.0.2
  */
-class PaymentMethod {
+class PaymentMethod extends stdClass {
+	/**
+	 * Type.
+	 *
+	 * @var string
+	 */
+	public $type;
+
+	/**
+	 * Construct a payment method.
+	 *
+	 * @param string $type Adyen payment method type.
+	 */
+	public function __construct( $type ) {
+		$this->type = $type;
+	}
+
 	/**
 	 * Get JSON.
 	 *

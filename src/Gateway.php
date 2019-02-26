@@ -81,30 +81,23 @@ class Gateway extends Core_Gateway {
 	 * @see Plugin::start()
 	 */
 	public function start( Payment $payment ) {
-		// Payment request.
-		$request = new PaymentRequest();
-
-		$request->merchant_account = $this->config->merchant_account;
-		$request->return_url       = $payment->get_return_url();
-		$request->reference        = $payment->get_id();
-		$request->origin_url       = home_url();
-		$request->sdk_version      = '1.6.3';
-		$request->channel          = 'Web';
-
 		// Amount.
-		$request->currency     = $payment->get_total_amount()->get_currency()->get_alphabetic_code();
-		$request->amount_value = $payment->get_total_amount()->get_minor_units();
-
-		// Payment method. Take leap of faith for unknown payment method types.
-		$adyen_method = PaymentMethodType::transform( $payment->get_method(), $payment->get_method() );
-
-		$request->payment_method = array(
-			'type' => $adyen_method,
+		$amount = new Amount(
+			$payment->get_total_amount()->get_currency()->get_alphabetic_code(),
+			$payment->get_total_amount()->get_minor_units()
 		);
+
+		// Payment method. Take leap of faith for unknown payment methods.
+		$type = PaymentMethodType::transform(
+			$payment->get_method(),
+			$payment->get_method()
+		);
+
+		$payment_method = new PaymentMethod( $type );
 
 		switch ( $payment->get_method() ) {
 			case PaymentMethods::IDEAL:
-				$request->payment_method['issuer'] = $payment->get_issuer();
+				$payment_method->issuer = $payment->get_issuer();
 
 				break;
 		}
@@ -118,39 +111,42 @@ class Gateway extends Core_Gateway {
 
 		$locale = explode( '_', $locale );
 
-		$request->country_code = strtoupper( substr( $locale[1], 0, 2 ) );
+		$country_code = strtoupper( substr( $locale[1], 0, 2 ) );
 
-		// Shopper.
-		$request->shopper_statement = $payment->get_description();
-
-		if ( null !== $payment->get_customer() ) {
-			$request->shopper_ip               = $payment->get_customer()->get_ip_address();
-			$request->shopper_gender           = $payment->get_customer()->get_gender();
-			$request->shopper_locale           = $payment->get_customer()->get_locale();
-			$request->shopper_reference        = $payment->get_customer()->get_user_id();
-			$request->shopper_telephone_number = $payment->get_customer()->get_phone();
-
-			if ( null !== $payment->get_customer()->get_name() ) {
-				$request->shopper_first_name = $payment->get_customer()->get_name()->get_first_name();
-				$request->shopper_name_infix = $payment->get_customer()->get_name()->get_middle_name();
-				$request->shopper_last_name  = $payment->get_customer()->get_name()->get_last_name();
-			}
-		}
-
-		// Create payment or payment session.
+		// Create payment or payment session request.
 		switch ( $payment->get_method() ) {
 			case PaymentMethods::IDEAL:
 			case PaymentMethods::SOFORT:
 				// API integration.
-				$result = $this->client->create_payment( $request );
+				$request = new PaymentRequest(
+					$amount,
+					$this->config->merchant_account,
+					$payment->get_id(),
+					$payment->get_return_url(),
+					$payment_method
+				);
+
+				$request->set_country_code( $country_code );
 
 				break;
 			default:
 				// Web SDK integration.
-				$allowed_methods = array( $adyen_method );
+				$request = new PaymentSessionRequest(
+					$amount,
+					$this->config->merchant_account,
+					$payment->get_id(),
+					$payment->get_return_url(),
+					$country_code
+				);
+
+				$request->set_origin( home_url() );
+				$request->set_sdk_version( '1.6.3' );
+
+				// Set allowed payment methods.
+				$allowed_methods = array( $type );
 
 				// Add all available payment methods if no payment method is given.
-				if ( empty( $adyen_method ) ) {
+				if ( empty( $type ) ) {
 					$allowed_methods = array();
 
 					foreach ( $this->get_available_payment_methods() as $method ) {
@@ -158,9 +154,42 @@ class Gateway extends Core_Gateway {
 					}
 				}
 
-				// Set allowed payment methods.
-				$request->allowed_payment_methods = $allowed_methods;
+				$request->set_allowed_payment_methods( $allowed_methods );
+		}
 
+		// Channel.
+		$request->set_channel( 'Web' );
+
+		// Shopper.
+		$request->set_shopper_statement( $payment->get_description() );
+
+		if ( null !== $payment->get_customer() ) {
+			$request->set_shopper_ip( $payment->get_customer()->get_ip_address() );
+			$request->set_shopper_statement( $payment->get_customer()->get_gender() );
+			$request->set_shopper_locale( $payment->get_customer()->get_locale() );
+			$request->set_shopper_reference( $payment->get_customer()->get_user_id() );
+			$request->set_telephone_number( $payment->get_customer()->get_phone() );
+
+			if ( null !== $payment->get_customer()->get_name() ) {
+				$shopper_name = new ShopperName(
+					$payment->get_customer()->get_name()->get_first_name(),
+					$payment->get_customer()->get_name()->get_middle_name(),
+					$payment->get_customer()->get_name()->get_last_name()
+				);
+
+				$request->set_shopper_name( $shopper_name );
+			}
+		}
+
+		// Create payment or payment session.
+		switch ( $payment->get_method() ) {
+			case PaymentMethods::IDEAL:
+			case PaymentMethods::SOFORT:
+				// Create payment.
+				$result = $this->client->create_payment( $request );
+
+				break;
+			default:
 				// Create payment session.
 				$result = $this->client->create_payment_session( $request );
 		}

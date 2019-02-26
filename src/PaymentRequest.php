@@ -32,13 +32,6 @@ class PaymentRequest extends AbstractPaymentRequest {
 	private $payment_method;
 
 	/**
-	 * The shopper's telephone number.
-	 *
-	 * @var string
-	 */
-	public $shopper_telephone_number;
-
-	/**
 	 * Construct a payment request object.
 	 *
 	 * @param Amount        $amount           The amount information for the transaction.

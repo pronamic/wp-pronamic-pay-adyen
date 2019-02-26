@@ -181,10 +181,54 @@ class Gateway extends Core_Gateway {
 			}
 		}
 
+		// Lines.
+		$lines = $payment->get_lines();
+
+		if ( null !== $lines ) {
+			$line_items = $request->new_items();
+
+			$i = 1;
+
+			foreach ( $lines as $line ) {
+				/* translators: %s: item index */
+				$name = sprintf( __( 'Item %s', 'pronamic_ideal' ), $i ++ );
+
+				if ( null !== $line->get_name() && '' !== $line->get_name() ) {
+					$name = $line->get_name();
+				}
+
+				$item = $line_items->new_item(
+					DataHelper::shorten( $name, 50 ),
+					$line->get_quantity(),
+					// The amount in cents, including VAT, of the item each, see below for more details.
+					AmountTransformer::transform( $line->get_unit_price() ),
+					$line->get_type()
+				);
+
+				$item->set_id( $line->get_id() );
+
+				// Description.
+				$description = $line->get_description();
+
+				if ( null !== $description ) {
+					$description = DataHelper::shorten( $description, 100 );
+				}
+
+				$item->set_description( $description );
+
+				$tax_amount = $line->get_unit_price()->get_tax_amount();
+
+				if ( null !== $tax_amount ) {
+					// The VAT of the item each, see below for more details.
+					$item->set_tax( AmountTransformer::transform( $tax_amount ) );
+				}
+			}
+		}
+
 		// Create payment or payment session.
 		if ( $request instanceof PaymentRequest ) {
 			$result = $this->client->create_payment( $request );
-		} elseif ( $request instanceof PaymentSessionRequest ) {
+		} else {
 			$result = $this->client->create_payment_session( $request );
 		}
 

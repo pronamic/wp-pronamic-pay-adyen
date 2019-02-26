@@ -123,4 +123,5 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 
 		// Return object.
 		return $object;
+	}
 }

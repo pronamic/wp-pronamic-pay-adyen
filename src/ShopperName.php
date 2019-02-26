@@ -54,9 +54,9 @@ class ShopperName {
 	 * @param string $gender     Gender.
 	 */
 	public function __construct( $first_name, $last_name, $gender ) {
-		$this->set_first_name( $first_name ):
-		$this->set_last_name( $last_name ):
-		$this->set_gender( $gender ):
+		$this->set_first_name( $first_name );
+		$this->set_last_name( $last_name );
+		$this->set_gender( $gender );
 	}
 
 	/**

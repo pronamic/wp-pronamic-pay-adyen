@@ -58,6 +58,13 @@ abstract class AbstractPaymentRequest {
 	private $country_code;
 
 	/**
+	 * Line items regarding the payment.
+	 *
+	 * @var LineItems
+	 */
+	private $line_items;
+
+	/**
 	 * The merchant account identifier, with which you want to process the transaction.
 	 *
 	 * @var string
@@ -209,6 +216,35 @@ abstract class AbstractPaymentRequest {
 	 */
 	public function set_country_code( $country_code ) {
 		$this->country_code = $country_code;
+	}
+
+	/**
+	 * Get line items.
+	 *
+	 * @return LineItems
+	 */
+	public function get_line_items() {
+		return $this->line_items;
+	}
+
+	/**
+	 * Set line items.
+	 *
+	 * @param LineItems $line_items Line items.
+	 */
+	public function set_line_items( $line_items ) {
+		$this->line_items = $line_items;
+	}
+
+	/**
+	 * Create and set new line items.
+	 *
+	 * @return LineItems
+	 */
+	public function new_items() {
+		$this->line_items = new LineItems();
+
+		return $this->line_items;
 	}
 
 	/**

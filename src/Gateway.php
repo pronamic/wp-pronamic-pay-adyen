@@ -172,36 +172,22 @@ class Gateway extends Core_Gateway {
 		}
 
 		if ( isset( $result->paymentSession ) ) {
+			wp_register_script(
+				'pronamic-pay-adyen-checkout',
+				'https://checkoutshopper-test.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.1.6.3.min.js',
+				array(),
+				'1.6.3',
+				false
+			);
+
 			// No cache.
 			Util::no_cache();
 
-			$redirect_message = '<div id="pronamic-pay-checkout"></div><div style="clear:both;"></div>';
+			$payment_session = $result->paymentSession;
 
-			include Plugin::$dirname . '/views/redirect-message.php';
+			$context = ( self::MODE_TEST === $this->config->mode ? 'test' : 'live' );
 
-			?>
-
-			<script type="text/javascript" src="https://checkoutshopper-test.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.1.6.3.min.js"></script>
-
-			<script type="text/javascript">
-			// Initiate the Adyen Checkout form.
-			var checkout = chckt.checkout(
-				'<?php echo esc_html( $result->paymentSession ); ?>',
-				'#pronamic-pay-checkout',
-				{ context: '<?php echo( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ); ?>' }
-			);
-
-			// Redirect once payment completes.
-			chckt.hooks.beforeComplete = function ( node, paymentData ) {
-				if ( "undefined" !== paymentData.payload ) {
-					window.location.href = '<?php echo $payment->get_return_url(); ?>&payload=' + encodeURIComponent( paymentData.payload );
-
-					return false;
-				}
-			};
-			</script>
-
-			<?php
+			require __DIR__ . '/../views/checkout.php';
 
 			exit;
 		}

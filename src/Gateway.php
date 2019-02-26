@@ -184,7 +184,7 @@ class Gateway extends Core_Gateway {
 		// Create payment or payment session.
 		if ( $request instanceof PaymentRequest ) {
 			$result = $this->client->create_payment( $request );
-		} elseif ( $request instanceof PaymentSessionRequest ) {
+		} else {
 			$result = $this->client->create_payment_session( $request );
 		}
 

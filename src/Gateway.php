@@ -182,24 +182,20 @@ class Gateway extends Core_Gateway {
 		}
 
 		// Create payment or payment session.
-		switch ( $payment->get_method() ) {
-			case PaymentMethods::IDEAL:
-			case PaymentMethods::SOFORT:
-				// Create payment.
-				$result = $this->client->create_payment( $request );
-
-				break;
-			default:
-				// Create payment session.
-				$result = $this->client->create_payment_session( $request );
+		if ( $request instanceof PaymentRequest ) {
+			$result = $this->client->create_payment( $request );
+		} elseif ( $request instanceof PaymentSessionRequest ) {
+			$result = $this->client->create_payment_session( $request );
 		}
 
+		// Handle errors.
 		if ( ! $result ) {
 			$this->error = $this->client->get_error();
 
 			return;
 		}
 
+		// Load checkout view for payment sessions.
 		if ( isset( $result->paymentSession ) ) {
 			wp_register_script(
 				'pronamic-pay-adyen-checkout',

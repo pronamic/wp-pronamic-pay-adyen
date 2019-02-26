@@ -126,10 +126,10 @@ class Client {
 	/**
 	 * Send request with the specified action and parameters
 	 *
-	 * @param string $end_point              Requested endpoint.
-	 * @param string $method                 HTTP method to use.
-	 * @param object $data                   Request data.
-	 * @param int    $expected_response_code Expected response code.
+	 * @param string       $end_point              Requested endpoint.
+	 * @param string       $method                 HTTP method to use.
+	 * @param array|object $data                   Request data.
+	 * @param int          $expected_response_code Expected response code.
 	 *
 	 * @return bool|object
 	 */

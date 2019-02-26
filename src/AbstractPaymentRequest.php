@@ -82,7 +82,7 @@ abstract class AbstractPaymentRequest {
 	private $return_url;
 
 	/**
-	 * The shopper's IP address. 
+	 * The shopper's IP address.
 	 *
 	 * @var string|null
 	 */
@@ -128,7 +128,7 @@ abstract class AbstractPaymentRequest {
 	 * Construct a payment request object.
 	 *
 	 * @param Amount $amount           The amount information for the transaction.
-	 * @param string $merchant_account The merchant account identifier, with which you want to process the transaction
+	 * @param string $merchant_account The merchant account identifier, with which you want to process the transaction.
 	 * @param string $reference        The reference to uniquely identify a payment.
 	 * @param string $return_url       The URL to return to.
 	 */
@@ -295,9 +295,9 @@ abstract class AbstractPaymentRequest {
 	/**
 	 * Set shopper locale.
 	 *
-	 * @param string|null $shopper_ip Shopper locale.
+	 * @param string|null $shopper_locale Shopper locale.
 	 */
-	public function set_shopper_ip( $shopper_locale ) {
+	public function set_shopper_locale( $shopper_locale ) {
 		$this->shopper_locale = $shopper_locale;
 	}
 

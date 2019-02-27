@@ -65,7 +65,7 @@ class NotificationRequestItem {
 	private $operations;
 
 	/**
-	 * A reference to uniquely identify the payment. 
+	 * A reference to uniquely identify the payment.
 	 *
 	 * @var string
 	 */
@@ -295,7 +295,7 @@ class NotificationRequestItem {
 		}
 
 		if ( ! is_array( $object->operations ) ) {
-			throw new InvalidArgumentException( 'Object property `operations` must be an array.' );			
+			throw new InvalidArgumentException( 'Object property `operations` must be an array.' );
 		}
 
 		$item = new self();

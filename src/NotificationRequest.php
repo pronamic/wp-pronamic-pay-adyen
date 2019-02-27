@@ -84,7 +84,7 @@ class NotificationRequest {
 		}
 
 		if ( ! is_array( $object->notificationItems ) ) {
-			throw new InvalidArgumentException( 'Object property `notificationItems` must be an array.' );			
+			throw new InvalidArgumentException( 'Object property `notificationItems` must be an array.' );
 		}
 
 		$items = array();

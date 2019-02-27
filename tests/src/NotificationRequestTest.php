@@ -40,11 +40,14 @@ class NotificationRequestTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( 'AUTHORISATION', $item->get_event_code() );
 		$this->assertEquals( '2018-01-01T01:02:01+02:00', $item->get_event_date()->format( DATE_W3C ) );
 		$this->assertEquals( 'TestMerchant', $item->get_merchant_account_code() );
-		$this->assertEquals( array(
-			'CANCEL',
-			'CAPTURE',
-			'REFUND',
-		), $item->get_operations() );
+		$this->assertEquals(
+			array(
+				'CANCEL',
+				'CAPTURE',
+				'REFUND',
+			),
+			$item->get_operations()
+		);
 		$this->assertEquals( 'YourMerchantReference1', $item->get_merchant_reference() );
 		$this->assertEquals( 'visa', $item->get_payment_method() );
 		$this->assertTrue( $item->is_success() );

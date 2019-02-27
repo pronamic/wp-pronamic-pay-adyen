@@ -72,4 +72,26 @@ class Amount {
 			'value'    => $this->get_value(),
 		);
 	}
+
+	/**
+	 * Create amount from object.
+	 *
+	 * @param object $object Object.
+	 * @return Amount
+	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
+	 */
+	public static function from_object( $object ) {
+		if ( ! isset( $object->currency ) ) {
+			throw new InvalidArgumentException( 'Object must contain `currency` property.' );
+		}
+
+		if ( ! isset( $object->value ) ) {
+			throw new InvalidArgumentException( 'Object must contain `value` property.' );
+		}
+
+		return new self(
+			$object->currency,
+			$object->value
+		);
+	}
 }

@@ -59,6 +59,15 @@ class NotificationRequest {
 	}
 
 	/**
+	 * Get items.
+	 *
+	 * @return array
+	 */
+	public function get_items() {
+		return $this->items;
+	}
+
+	/**
 	 * Create notification request from object.
 	 *
 	 * @param object $object Object.

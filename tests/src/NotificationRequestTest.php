@@ -29,5 +29,24 @@ class NotificationRequestTest extends \PHPUnit_Framework_TestCase {
 		$notification_request = NotificationRequest::from_object( $data );
 
 		$this->assertFalse( $notification_request->is_live() );
+
+		$items = $notification_request->get_items();
+
+		$this->assertCount( 1, $items );
+
+		$item = array_pop( $items );
+
+		$this->assertEquals( '9313547924770610', $item->get_psp_reference() );
+		$this->assertEquals( 'AUTHORISATION', $item->get_event_code() );
+		$this->assertEquals( '2018-01-01T01:02:01+02:00', $item->get_event_date()->format( DATE_W3C ) );
+		$this->assertEquals( 'TestMerchant', $item->get_merchant_account_code() );
+		$this->assertEquals( array(
+			'CANCEL',
+			'CAPTURE',
+			'REFUND',
+		), $item->get_operations() );
+		$this->assertEquals( 'YourMerchantReference1', $item->get_merchant_reference() );
+		$this->assertEquals( 'visa', $item->get_payment_method() );
+		$this->assertTrue( $item->is_success() );
 	}
 }

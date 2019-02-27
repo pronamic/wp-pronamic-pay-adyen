@@ -38,7 +38,7 @@ class NotificationsController {
 	 * @link https://developer.wordpress.org/reference/hooks/rest_api_init/
 	 */
 	public function rest_api_init() {
-		register_rest_route( 'pronamic-pay/v1', '/adyen/notifications', array(
+		register_rest_route( 'adyen/v1', '/notifications', array(
 			'methods'  => 'POST',
 			'callback' => array( $this, 'rest_api_adyen_notifications' ),
 		) );

@@ -127,7 +127,7 @@ class NotificationRequestItem {
 	/**
 	 * Get event code.
 	 *
-	 * @return Amount
+	 * @return string
 	 */
 	public function get_event_code() {
 		return $this->event_code;
@@ -163,7 +163,7 @@ class NotificationRequestItem {
 	/**
 	 * Get merchant account code.
 	 *
-	 * @return DateTime
+	 * @return string
 	 */
 	public function get_merchant_account_code() {
 		return $this->merchant_account_code;
@@ -199,7 +199,7 @@ class NotificationRequestItem {
 	/**
 	 * Get operations.
 	 *
-	 * @return array
+	 * @return string
 	 */
 	public function get_merchant_reference() {
 		return $this->merchant_reference;

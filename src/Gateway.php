@@ -34,6 +34,15 @@ class Gateway extends Core_Gateway {
 	const SLUG = 'adyen';
 
 	/**
+	 * Web SDK version.
+	 *
+	 * @link https://docs.adyen.com/developers/checkout/web-sdk/release-notes-web-sdk
+	 *
+	 * @var string
+	 */
+	const SDK_VERSION = '1.9.2';
+
+	/**
 	 * Client.
 	 *
 	 * @var Client
@@ -140,7 +149,7 @@ class Gateway extends Core_Gateway {
 				);
 
 				$request->set_origin( home_url() );
-				$request->set_sdk_version( '1.6.3' );
+				$request->set_sdk_version( self::SDK_VERSION );
 
 				// Set allowed payment methods.
 				$allowed_methods = array( $type );
@@ -241,11 +250,17 @@ class Gateway extends Core_Gateway {
 
 		// Load checkout view for payment sessions.
 		if ( isset( $result->paymentSession ) ) {
+			$url = sprintf(
+				'https://checkoutshopper-%s.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.%s.min.js',
+				( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ),
+				self::SDK_VERSION
+			);
+
 			wp_register_script(
 				'pronamic-pay-adyen-checkout',
-				'https://checkoutshopper-test.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.1.6.3.min.js',
+				$url,
 				array(),
-				'1.6.3',
+				self::SDK_VERSION,
 				false
 			);
 

@@ -496,6 +496,11 @@ abstract class AbstractPaymentRequest {
 			$object->countryCode = $this->country_code;
 		}
 
+		// Delivery address.
+		if ( null !== $this->delivery_address ) {
+			$object->deliveryAddress = $this->delivery_address->get_json();
+		}
+
 		// Line items.
 		if ( null !== $this->line_items ) {
 			$object->lineItems = $this->line_items->get_json();

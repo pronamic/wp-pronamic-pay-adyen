@@ -213,6 +213,23 @@ class Gateway extends Core_Gateway {
 			$billing_address->set_postal_code( $address->get_postal_code() );
 			$billing_address->set_state_or_province( $address->get_region() );
 			$billing_address->set_street( $address->get_street_name() );
+
+			$request->set_billing_address( $billing_address );
+		}
+
+		// Delivery address.
+		if ( null !== $payment->get_shipping_address() ) {
+			$address = $payment->get_shipping_address();
+
+			$delivery_address = new Address( $address->get_country_code() );
+
+			$delivery_address->set_city( $address->get_city() );
+			$delivery_address->set_house_number_or_name( sprintf( '%s %s', $address->get_house_number(), $address->get_house_number_addition() ) );
+			$delivery_address->set_postal_code( $address->get_postal_code() );
+			$delivery_address->set_state_or_province( $address->get_region() );
+			$delivery_address->set_street( $address->get_street_name() );
+
+			$request->set_delivery_address( $delivery_address );
 		}
 
 		// Lines.

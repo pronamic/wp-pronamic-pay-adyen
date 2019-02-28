@@ -41,8 +41,8 @@ class NotificationRequest {
 	/**
 	 * Construct notification request.
 	 *
-	 * @param boolean $live  Informs about the origin of the notification.
-	 * @param array   $items A container object for the details included in the notification.
+	 * @param boolean                   $live  Informs about the origin of the notification.
+	 * @param NotificationRequestItem[] $items A container object for the details included in the notification.
 	 */
 	public function __construct( $live, $items ) {
 		$this->live  = $live;
@@ -61,7 +61,7 @@ class NotificationRequest {
 	/**
 	 * Get items.
 	 *
-	 * @return array
+	 * @return NotificationRequestItem[]
 	 */
 	public function get_items() {
 		return $this->items;

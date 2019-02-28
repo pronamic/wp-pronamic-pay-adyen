@@ -355,8 +355,6 @@ class Gateway extends Core_Gateway {
 
 		require __DIR__ . '/../views/checkout.php';
 
-		$payment->set_meta( 'adyen_checkout', null );
-
 		exit;
 	}
 

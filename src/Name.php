@@ -1,6 +1,6 @@
 <?php
 /**
- * Shopper name
+ * Name
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2019 Pronamic
@@ -11,13 +11,15 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Shopper name
+ * Name
+ *
+ * @link https://docs.adyen.com/developers/api-reference/common-api/name
  *
  * @author  Remco Tolsma
  * @version 2.1.0
  * @since   2.0.2
  */
-class ShopperName {
+class Name {
 	/**
 	 * First name.
 	 *

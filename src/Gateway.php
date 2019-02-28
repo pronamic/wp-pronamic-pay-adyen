@@ -187,7 +187,7 @@ class Gateway extends Core_Gateway {
 
 			// Shopper name.
 			if ( null !== $customer->get_name() ) {
-				$shopper_name = new ShopperName(
+				$shopper_name = new Name(
 					$customer->get_name()->get_first_name(),
 					$customer->get_name()->get_last_name(),
 					GenderTransformer::transform( $customer->get_gender() )

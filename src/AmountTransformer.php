@@ -28,11 +28,11 @@ class AmountTransformer {
 	 * @return Amount
 	 */
 	public static function transform( Money $money ) {
-		$money = new Amount(
+		$amount = new Amount(
 			strval( $money->get_currency()->get_alphabetic_code() ),
 			intval( $money->get_minor_units() )
 		);
 
-		return $money;
+		return $amount;
 	}
 }

@@ -299,9 +299,7 @@ class Client {
 	}
 
 	/**
-	 * Get payment methods
-	 *
-	 * @param string $recurring_type Recurring type.
+	 * Get payment methods.
 	 *
 	 * @return array|bool
 	 */

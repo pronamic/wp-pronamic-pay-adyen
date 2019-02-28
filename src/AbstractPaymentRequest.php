@@ -112,7 +112,7 @@ abstract class AbstractPaymentRequest {
 	/**
 	 * The shopper's full name and gender (if specified)
 	 *
-	 * @var ShopperName|null
+	 * @var Name|null
 	 */
 	private $shopper_name;
 
@@ -365,7 +365,7 @@ abstract class AbstractPaymentRequest {
 	/**
 	 * Get shopper name.
 	 *
-	 * @return ShopperName|null
+	 * @return Name|null
 	 */
 	public function get_shopper_name() {
 		return $this->shopper_name;
@@ -374,9 +374,9 @@ abstract class AbstractPaymentRequest {
 	/**
 	 * Set shopper name.
 	 *
-	 * @param ShopperName|null $shopper_name Shopper name.
+	 * @param Name|null $shopper_name Shopper name.
 	 */
-	public function set_shopper_name( ShopperName $shopper_name = null ) {
+	public function set_shopper_name( Name $shopper_name = null ) {
 		$this->shopper_name = $shopper_name;
 	}
 

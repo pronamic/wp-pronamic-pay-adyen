@@ -15,9 +15,11 @@ use InvalidArgumentException;
 /**
  * Amount
  *
+ * @link https://docs.adyen.com/developers/api-reference/common-api/amount
+ *
  * @author  Remco Tolsma
- * @version 2.1.0
- * @since   2.0.2
+ * @version 1.0.0
+ * @since   1.0.0
  */
 class Amount {
 	/**

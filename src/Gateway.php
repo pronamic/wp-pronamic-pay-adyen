@@ -173,17 +173,20 @@ class Gateway extends Core_Gateway {
 		$request->set_shopper_statement( $payment->get_description() );
 
 		if ( null !== $payment->get_customer() ) {
-			$request->set_shopper_ip( $payment->get_customer()->get_ip_address() );
-			$request->set_shopper_statement( $payment->get_customer()->get_gender() );
-			$request->set_shopper_locale( $payment->get_customer()->get_locale() );
-			$request->set_shopper_reference( $payment->get_customer()->get_user_id() );
-			$request->set_telephone_number( $payment->get_customer()->get_phone() );
+			$customer = $payment->get_customer();
 
-			if ( null !== $payment->get_customer()->get_name() ) {
+			$request->set_shopper_ip( $customer->get_ip_address() );
+			$request->set_shopper_statement( $customer->get_gender() );
+			$request->set_shopper_locale( $customer->get_locale() );
+			$request->set_shopper_reference( $customer->get_user_id() );
+			$request->set_telephone_number( $customer->get_phone() );
+
+			// Shopper name.
+			if ( null !== $customer->get_name() ) {
 				$shopper_name = new ShopperName(
-					$payment->get_customer()->get_name()->get_first_name(),
-					$payment->get_customer()->get_name()->get_middle_name(),
-					$payment->get_customer()->get_name()->get_last_name()
+					$customer->get_name()->get_first_name(),
+					$customer->get_name()->get_last_name(),
+					GenderTransformer::transform( $customer->get_gender() )
 				);
 
 				$request->set_shopper_name( $shopper_name );

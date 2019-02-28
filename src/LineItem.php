@@ -203,7 +203,7 @@ class LineItem {
 	/**
 	 * Get tax category.
 	 *
-	 * @return int|null
+	 * @return int|string
 	 */
 	public function get_tax_category() {
 		return $this->tax_category;
@@ -212,7 +212,7 @@ class LineItem {
 	/**
 	 * Set tax category.
 	 *
-	 * @param int|null $tax_category Tax category.
+	 * @param int|string $tax_category Tax category.
 	 */
 	public function set_tax_category( $tax_category ) {
 		$this->tax_category = $tax_category;

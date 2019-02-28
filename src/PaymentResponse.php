@@ -88,7 +88,7 @@ class PaymentResponse {
 	private $refusal_reason_code;
 
 	/**
-	 * The result of the payment. 
+	 * The result of the payment.
 	 *
 	 * @var string
 	 */

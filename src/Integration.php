@@ -33,16 +33,10 @@ class Integration extends AbstractIntegration {
 			__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
 		);
 
-		/**
-		 * Webhook listener function.
-		 *
-		 * @var callable $webhook_listener_function
-		 */
-		$webhook_listener_function = array( __NAMESPACE__ . '\WebhookListener', 'listen' );
+		// Notifications.
+		$notifications = new NotificationsController();
 
-		if ( ! has_action( 'wp_loaded', $webhook_listener_function ) ) {
-			add_action( 'wp_loaded', $webhook_listener_function );
-		}
+		$notifications->setup();
 	}
 
 	/**

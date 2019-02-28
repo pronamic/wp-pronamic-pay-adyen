@@ -63,6 +63,10 @@ class Gateway extends Core_Gateway {
 		$this->client = new Client( $config->api_key, $config->api_live_url_prefix );
 		$this->client->set_merchant_account( $config->merchant_account );
 		$this->client->set_mode( $config->mode );
+
+		$this->supports = array(
+			'payment_redirect',
+		);
 	}
 
 	/**
@@ -265,32 +269,15 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
-		// Load checkout view for payment sessions.
+		// Set checkout meta for Web SDK redirect.
 		if ( isset( $result->paymentSession ) ) {
-			$url = sprintf(
-				'https://checkoutshopper-%s.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.%s.min.js',
-				( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ),
-				self::SDK_VERSION
+			$payment->set_meta(
+				'adyen_checkout',
+				array(
+					'sdk_version' => self::SDK_VERSION,
+					'payload'     => $result->paymentSession,
+				)
 			);
-
-			wp_register_script(
-				'pronamic-pay-adyen-checkout',
-				$url,
-				array(),
-				self::SDK_VERSION,
-				false
-			);
-
-			// No cache.
-			Util::no_cache();
-
-			$payment_session = $result->paymentSession;
-
-			$context = ( self::MODE_TEST === $this->config->mode ? 'test' : 'live' );
-
-			require __DIR__ . '/../views/checkout.php';
-
-			exit;
 		}
 
 		// Set transaction ID.
@@ -298,10 +285,60 @@ class Gateway extends Core_Gateway {
 			$payment->set_transaction_id( $result->pspReference );
 		}
 
-		// Set redirect URL.
+		// Set action URL.
+		$action_url = add_query_arg(
+			array(
+				'payment_redirect' => $payment->get_id(),
+				'key'              => $payment->key,
+			),
+			home_url( '/' )
+		);
+
 		if ( isset( $result->redirect->url ) ) {
-			$payment->set_action_url( $result->redirect->url );
+			$action_url = $result->redirect->url;
 		}
+
+		$payment->set_action_url( $action_url );
+	}
+
+	/**
+	 * Payment redirect.
+	 *
+	 * @param Payment $payment Payment.
+	 *
+	 * @return void
+	 */
+	public function payment_redirect( Payment $payment ) {
+		$checkout = $payment->get_meta( 'adyen_checkout' );
+
+		if ( empty( $checkout ) ) {
+			return;
+		}
+
+		$url = sprintf(
+			'https://checkoutshopper-%s.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.%s.min.js',
+			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+			$checkout['sdk_version']
+		);
+
+		wp_register_script(
+			'pronamic-pay-adyen-checkout',
+			$url,
+			array(),
+			$checkout['sdk_version'],
+			false
+		);
+
+		// No cache.
+		Util::no_cache();
+
+		$context = ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' );
+
+		require __DIR__ . '/../views/checkout.php';
+
+		$payment->set_meta( 'adyen_checkout', null );
+
+		exit;
 	}
 
 	/**

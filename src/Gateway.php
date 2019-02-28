@@ -188,6 +188,24 @@ class Gateway extends Core_Gateway {
 
 				$request->set_shopper_name( $shopper_name );
 			}
+
+			// Date of birth.
+			if ( null !== $customer->get_birth_date() ) {
+				$request->set_date_of_birth( $customer->get_birth_date()->format( 'YYYY-MM-DD' ) );
+			}
+		}
+
+		// Billing address.
+		if ( null !== $payment->get_billing_address() ) {
+			$address = $payment->get_billing_address();
+
+			$billing_address = new Address( $address->get_country_code() );
+
+			$billing_address->set_city( $address->get_city() );
+			$billing_address->set_house_number_or_name( sprintf( '%s %s', $address->get_house_number(), $address->get_house_number_addition() ) );
+			$billing_address->set_postal_code( $address->get_postal_code() );
+			$billing_address->set_state_or_province( $address->get_region() );
+			$billing_address->set_street( $address->get_street_name() );
 		}
 
 		// Lines.
@@ -199,37 +217,33 @@ class Gateway extends Core_Gateway {
 			$i = 1;
 
 			foreach ( $lines as $line ) {
-				/* translators: %s: item index */
-				$name = sprintf( __( 'Item %s', 'pronamic_ideal' ), $i ++ );
+				// Description.
+				$description = $line->get_description();
 
-				if ( null !== $line->get_name() && '' !== $line->get_name() ) {
-					$name = $line->get_name();
+				// Use line item name as fallback for description.
+				if ( null === $description ) {
+					/* translators: %s: item index */
+					$description = sprintf( __( 'Item %s', 'pronamic_ideal' ), $i ++ );
+
+					if ( null !== $line->get_name() && '' !== $line->get_name() ) {
+						$description = $line->get_name();
+					}
 				}
 
 				$item = $line_items->new_item(
-					DataHelper::shorten( $name, 50 ),
+					$description,
 					$line->get_quantity(),
-					// The amount in cents, including VAT, of the item each, see below for more details.
-					AmountTransformer::transform( $line->get_unit_price() ),
-					$line->get_type()
+					$line->get_total_amount()->get_including_tax()->get_minor_units()
 				);
 
 				$item->set_id( $line->get_id() );
 
-				// Description.
-				$description = $line->get_description();
-
-				if ( null !== $description ) {
-					$description = DataHelper::shorten( $description, 100 );
-				}
-
-				$item->set_description( $description );
-
+				// Tax amount.
 				$tax_amount = $line->get_unit_price()->get_tax_amount();
 
 				if ( null !== $tax_amount ) {
-					// The VAT of the item each, see below for more details.
-					$item->set_tax( AmountTransformer::transform( $tax_amount ) );
+					$item->set_tax_amount( $line->get_total_amount()->get_tax_amount()->get_minor_units() );
+					$item->set_tax_percentage( (int) $line->get_total_amount()->get_tax_percentage() * 100 );
 				}
 			}
 		}

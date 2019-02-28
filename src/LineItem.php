@@ -21,18 +21,18 @@ use InvalidArgumentException;
  */
 class LineItem {
 	/**
-	 * Item id.
+	 * Amount excluding tax.
 	 *
-	 * @var string|null
+	 * @var int|null
 	 */
-	private $id;
+	private $amount_excluding_tax;
 
 	/**
-	 * Item name (required).
+	 * Amount including tax.
 	 *
-	 * @var string
+	 * @var int|null
 	 */
-	private $name;
+	private $amount_including_tax;
 
 	/**
 	 * Description.
@@ -42,55 +42,108 @@ class LineItem {
 	private $description;
 
 	/**
-	 * Quantity (required).
+	 * Item id.
 	 *
-	 * @var int
+	 * @var string|null
+	 */
+	private $id;
+
+	/**
+	 * Quantity.
+	 *
+	 * @var int|null
 	 */
 	private $quantity;
 
 	/**
-	 * Amount (required).
-	 *
-	 * @var Amount
-	 */
-	private $amount;
-
-	/**
-	 * Tax.
-	 *
-	 * @var Amount|null
-	 */
-	private $tax;
-
-	/**
-	 * Category; physical or digital (required).
-	 *
-	 * @var string
-	 */
-	private $category;
-
-	/**
-	 * VAT category.
+	 * Tax amount.
 	 *
 	 * @var int|null
 	 */
-	private $vat_category;
+	private $tax_amount;
+
+	/**
+	 * Tax category (high, low, none, zero).
+	 *
+	 * @var string|null
+	 */
+	private $tax_category;
+
+	/**
+	 * Tax percentage.
+	 *
+	 * @var int|null
+	 */
+	private $tax_percentage;
 
 	/**
 	 * Construct line item.
 	 *
-	 * @param string $name     Name.
-	 * @param int    $quantity Quantity.
-	 * @param Amount $amount   Amount.
-	 * @param string $category Category.
+	 * @param string $description          Name.
+	 * @param int    $quantity             Quantity.
+	 * @param int    $amount_including_tax Amount (including tax).
 	 *
 	 * @throws InvalidArgumentException Throws invalid argument exception when arguments are invalid.
 	 */
-	public function __construct( $name, $quantity, Amount $amount, $category ) {
-		$this->set_name( $name );
-		$this->quantity = $quantity;
-		$this->amount   = $amount;
-		$this->set_category( $category );
+	public function __construct( $description, $quantity, $amount_including_tax ) {
+		$this->set_description( $description );
+		$this->set_quantity( $quantity );
+		$this->set_amount_including_tax( $amount_including_tax );
+	}
+
+	/**
+	 * Get amount excluding tax.
+	 *
+	 * @return int
+	 */
+	public function get_amount_excluding_tax() {
+		return $this->amount_excluding_tax;
+	}
+
+	/**
+	 * Set amount excluding tax.
+	 *
+	 * @param int $amount_excluding_tax Amount excluding tax.
+	 */
+	public function set_amount_excluding_tax( $amount_excluding_tax = null ) {
+		$this->amount_excluding_tax = $amount_excluding_tax;
+	}
+
+	/**
+	 * Get amount excluding tax.
+	 *
+	 * @return int
+	 */
+	public function get_amount_including_tax() {
+		return $this->amount_including_tax;
+	}
+
+	/**
+	 * Set amount including tax.
+	 *
+	 * @param int $amount_including_tax Amount excluding tax.
+	 */
+	public function set_amount_including_tax( $amount_including_tax = null ) {
+		$this->amount_including_tax = $amount_including_tax;
+	}
+
+	/**
+	 * Get item description.
+	 *
+	 * @return string|null
+	 */
+	public function get_description() {
+		return $this->description;
+	}
+
+	/**
+	 * Set item description.
+	 *
+	 * @param string|null $description Description.
+	 * @throws InvalidArgumentException Throws invalid argument exception when value does not apply to format `AN..max 100`.
+	 */
+	public function set_description( $description = null ) {
+		$this->description = $description;
 	}
 
 	/**
@@ -112,50 +165,6 @@ class LineItem {
 	}
 
 	/**
-	 * Get item name.
-	 *
-	 * @return string
-	 */
-	public function get_name() {
-		return $this->name;
-	}
-
-	/**
-	 * Set item name.
-	 *
-	 * @param string $name Name.
-	 * @throws InvalidArgumentException Throws invalid argument exception when value does not apply to format `AN..max 50`.
-	 */
-	public function set_name( $name ) {
-		DataHelper::validate_an( $name, 50 );
-
-		$this->name = $name;
-	}
-
-	/**
-	 * Get item description.
-	 *
-	 * @return string|null
-	 */
-	public function get_description() {
-		return $this->description;
-	}
-
-	/**
-	 * Set item description.
-	 *
-	 * @param string|null $description Description.
-	 * @throws InvalidArgumentException Throws invalid argument exception when value does not apply to format `AN..max 100`.
-	 */
-	public function set_description( $description ) {
-		if ( null !== $description ) {
-			DataHelper::validate_an( $description, 100 );
-		}
-
-		$this->description = $description;
-	}
-
-	/**
 	 * Get quantity.
 	 *
 	 * @return int
@@ -165,69 +174,66 @@ class LineItem {
 	}
 
 	/**
-	 * Get amount.
+	 * Get quantity.
 	 *
-	 * @return Amount
+	 * @param int $quantity Quantity.
 	 */
-	public function get_amount() {
-		return $this->amount;
+	public function set_quantity( $quantity = null ) {
+		$this->quantity = $quantity;
 	}
 
 	/**
-	 * Get tax.
-	 *
-	 * @return Amount|null
-	 */
-	public function get_tax() {
-		return $this->tax;
-	}
-
-	/**
-	 * Set tax.
-	 *
-	 * @param Amount|null $tax Tax.
-	 */
-	public function set_tax( Amount $tax = null ) {
-		$this->tax = $tax;
-	}
-
-	/**
-	 * Get category.
-	 *
-	 * @return string
-	 */
-	public function get_category() {
-		return $this->category;
-	}
-
-	/**
-	 * Set category.
-	 *
-	 * @param string $category Product category: PHYSICAL or DIGITAL.
-	 * @throws InvalidArgumentException Throws invalid argument exception when value does not apply to format `AN..max 8`.
-	 */
-	public function set_category( $category ) {
-		DataHelper::validate_an( $category, 8 );
-
-		$this->category = $category;
-	}
-
-	/**
-	 * Get VAT category.
+	 * Get tax amount.
 	 *
 	 * @return int|null
 	 */
-	public function get_vat_category() {
-		return $this->vat_category;
+	public function get_tax_amount() {
+		return $this->tax_amount;
 	}
 
 	/**
-	 * Set VAT category.
+	 * Set tax amount.
 	 *
-	 * @param int|null $vat_category VAT category.
+	 * @param int|null $tax_amount Tax amount.
 	 */
-	public function set_vat_category( $vat_category ) {
-		$this->vat_category = $vat_category;
+	public function set_tax_amount( $tax_amount = null ) {
+		$this->tax_amount = $tax_amount;
+	}
+
+	/**
+	 * Get tax category.
+	 *
+	 * @return int|null
+	 */
+	public function get_tax_category() {
+		return $this->tax_category;
+	}
+
+	/**
+	 * Set tax category.
+	 *
+	 * @param int|null $tax_category Tax category.
+	 */
+	public function set_tax_category( $tax_category ) {
+		$this->tax_category = $tax_category;
+	}
+
+	/**
+	 * Get tax percentage.
+	 *
+	 * @return int|null
+	 */
+	public function get_tax_percentage() {
+		return $this->tax_percentage;
+	}
+
+	/**
+	 * Set tax percentage.
+	 *
+	 * @param int|null $tax_percentage Tax percentage.
+	 */
+	public function set_tax_percentage( $tax_percentage ) {
+		$this->tax_percentage = $tax_percentage;
 	}
 
 	/**
@@ -238,27 +244,36 @@ class LineItem {
 	public function get_json() {
 		$object = (object) array();
 
-		if ( null !== $this->id ) {
-			$object->id = $this->id;
+		if ( null !== $this->amount_excluding_tax ) {
+			$object->amountExcludingTax = $this->amount_excluding_tax;
 		}
 
-		$object->name = $this->name;
+		if ( null !== $this->amount_including_tax ) {
+			$object->amountIncludingTax = $this->amount_including_tax;
+		}
 
 		if ( null !== $this->description ) {
 			$object->description = $this->description;
 		}
 
-		$object->quantity = $this->quantity;
-		$object->amount   = $this->amount->get_json();
-
-		if ( null !== $this->tax ) {
-			$object->tax = $this->tax->get_json();
+		if ( null !== $this->id ) {
+			$object->id = $this->id;
 		}
 
-		$object->category = $this->category;
+		if ( null !== $this->quantity ) {
+			$object->quantity = $this->quantity;
+		}
 
-		if ( null !== $this->vat_category ) {
-			$object->vatCategory = $this->vat_category;
+		if ( null !== $this->tax_amount ) {
+			$object->taxAmount = $this->tax_amount;
+		}
+
+		if ( null !== $this->tax_category ) {
+			$object->taxCategory = $this->tax_category;
+		}
+
+		if ( null !== $this->tax_percentage ) {
+			$object->taxPercentage = $this->tax_percentage;
 		}
 
 		return $object;

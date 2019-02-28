@@ -30,7 +30,7 @@ class LineItems {
 	/**
 	 * Construct line items.
 	 *
-	 * @param array $items Line items.
+	 * @param LineItem[] $items Line items.
 	 */
 	public function __construct( $items = null ) {
 		if ( is_array( $items ) ) {
@@ -43,17 +43,16 @@ class LineItems {
 	/**
 	 * Create and add new line item.
 	 *
-	 * @param string $name     Name.
-	 * @param int    $quantity Quantity.
-	 * @param Amount $amount   Amount.
-	 * @param string $category Category.
+	 * @param string $description          Name.
+	 * @param int    $quantity             Quantity.
+	 * @param int    $amount_including_tax Amount (including tax).
 	 *
 	 * @return LineItem
 	 *
 	 * @throws InvalidArgumentException Throws invalid argument exception when arguments are invalid.
 	 */
-	public function new_item( $name, $quantity, Amount $amount, $category ) {
-		$item = new LineItem( $name, $quantity, $amount, $category );
+	public function new_item( $description, $quantity, $amount_including_tax ) {
+		$item = new LineItem( $description, $quantity, $amount_including_tax );
 
 		$this->add_item( $item );
 

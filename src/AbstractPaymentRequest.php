@@ -58,6 +58,13 @@ abstract class AbstractPaymentRequest {
 	private $country_code;
 
 	/**
+	 * Date of birth.
+	 *
+	 * @var string
+	 */
+	private $date_of_birth;
+
+	/**
 	 * The address where the purchased goods should be delivered
 	 *
 	 * @var Address|null
@@ -223,6 +230,24 @@ abstract class AbstractPaymentRequest {
 	 */
 	public function set_country_code( $country_code ) {
 		$this->country_code = $country_code;
+	}
+
+	/**
+	 * Get date of birth.
+	 *
+	 * @return string
+	 */
+	public function get_date_of_birth() {
+		return $this->date_of_birth;
+	}
+
+	/**
+	 * Set date of birth.
+	 *
+	 * @param string|null $date_of_birth Date of birth.
+	 */
+	public function set_date_of_birth( $date_of_birth ) {
+		$this->date_of_birth = $date_of_birth;
 	}
 
 	/**
@@ -458,6 +483,11 @@ abstract class AbstractPaymentRequest {
 		// Country code.
 		if ( null !== $this->country_code ) {
 			$object->countryCode = $this->country_code;
+		}
+
+		// Line items.
+		if ( null !== $this->line_items ) {
+			$object->lineItems = $this->line_items->get_json();
 		}
 
 		// Merchant account.

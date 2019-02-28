@@ -86,6 +86,8 @@ class NotificationsController {
 			// Authorization.
 			if ( EventCode::AUTHORIZATION === $item->get_event_code() ) {
 				$payment->set_status( $item->is_success() ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE );
+
+				$payment->save();
 			}
 		}
 

@@ -63,10 +63,6 @@ class Gateway extends Core_Gateway {
 		$this->client = new Client( $config->api_key, $config->api_live_url_prefix );
 		$this->client->set_merchant_account( $config->merchant_account );
 		$this->client->set_mode( $config->mode );
-
-		$this->supports = array(
-			'payment_redirect',
-		);
 	}
 
 	/**

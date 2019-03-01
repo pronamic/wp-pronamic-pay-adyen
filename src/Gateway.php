@@ -202,33 +202,21 @@ class Gateway extends Core_Gateway {
 		}
 
 		// Billing address.
-		if ( null !== $payment->get_billing_address() ) {
-			$address = $payment->get_billing_address();
+		$billing_address = $payment->get_billing_address();
 
-			$billing_address = new Address( $address->get_country_code() );
+		if ( null !== $billing_address ) {
+			$address = AddressTransformer::transform( $billing_address );
 
-			$billing_address->set_city( $address->get_city() );
-			$billing_address->set_house_number_or_name( $address->get_house_number() );
-			$billing_address->set_postal_code( $address->get_postal_code() );
-			$billing_address->set_state_or_province( $address->get_region() );
-			$billing_address->set_street( $address->get_street_name() );
-
-			$request->set_billing_address( $billing_address );
+			$request->set_billing_address( $address );
 		}
 
 		// Delivery address.
-		if ( null !== $payment->get_shipping_address() ) {
-			$address = $payment->get_shipping_address();
+		$shipping_address = $payment->get_shipping_address();
 
-			$delivery_address = new Address( $address->get_country_code() );
+		if ( null !== $shipping_address ) {
+			$address = AddressTransformer::transform( $shipping_address );
 
-			$delivery_address->set_city( $address->get_city() );
-			$delivery_address->set_house_number_or_name( sprintf( '%s %s', $address->get_house_number(), $address->get_house_number_addition() ) );
-			$delivery_address->set_postal_code( $address->get_postal_code() );
-			$delivery_address->set_state_or_province( $address->get_region() );
-			$delivery_address->set_street( $address->get_street_name() );
-
-			$request->set_delivery_address( $delivery_address );
+			$request->set_delivery_address( $address );
 		}
 
 		// Lines.

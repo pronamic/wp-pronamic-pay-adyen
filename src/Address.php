@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use InvalidArgumentException;
+
 /**
  * Address
  *
@@ -65,10 +67,114 @@ class Address {
 	/**
 	 * Construct address.
 	 *
-	 * @param string $country Country.
+	 * @param string $country              Country.
+	 * @param string $street               Street.
+	 * @param string $house_number_or_name House number or name.
+	 * @param string $postal_code          Postal code.
+	 * @param string $city                 City.
+	 * @param string $state_or_province    State or province.
+	 *
+	 * @throws InvalidArgumentException Throws invalid argument exception when Adyen address requirements are not met.
 	 */
-	public function __construct( $country ) {
-		$this->set_country( $country );
+	public function __construct( $country, $street = null, $house_number_or_name = null, $postal_code = null, $city = null, $state_or_province = null ) {
+		/*
+		 * The two-character country code of the address.
+		 *
+		 * The permitted country codes are defined in ISO-3166-1 alpha-2 (e.g. 'NL').
+		 */
+		if ( 2 !== strlen( $country ) ) {
+			throw new InvalidArgumentException(
+				sprintf(
+					'Given country `%s` not ISO 3166-1 alpha-2 value.',
+					$country
+				)
+			);
+		}
+
+		/*
+		 * The name of the street.
+		 *
+		 * > The house number should not be included in this field; it should be separately provided via houseNumberOrName.
+		 *
+		 * Required if either `houseNumberOrName`, `city`, `postalCode`, or `stateOrProvince` are provided.
+		 */
+		if ( empty( $street ) && ! empty( array_filter( array( $house_number_or_name, $city, $postal_code, $state_or_province ) ) ) ) {
+			throw new InvalidArgumentException(
+				'The name of the street is required if either `houseNumberOrName`, `city`, `postalCode`, or `stateOrProvince` are provided.'
+			);
+		}
+
+		/*
+		 * The postal code.
+		 *
+		 * A maximum of five (5) digits for an address in the USA, or a maximum of ten (10) characters for an address in all other countries.
+		 *
+		 * Required if either `houseNumberOrName`, `street`, `city`, or `stateOrProvince` are provided.
+		 */
+		if ( empty( $postal_code ) && ! empty( array_filter( array( $house_number_or_name, $street, $city, $state_or_province ) ) ) ) {
+			throw new InvalidArgumentException(
+				'The postal code is required if either `houseNumberOrName`, `street`, `city`, or `stateOrProvince` are provided.'
+			);
+		}
+
+		if ( ! empty( $postal_code ) ) {
+			$max = ( 'US' === $country ) ? 5 : 10;
+
+			if ( strlen( $postal_code ) > $max ) {
+				throw new InvalidArgumentException(
+					sprintf(
+						'Given postal code `%s` is longer then `%d` digits.',
+						$postal_code,
+						$max
+					)
+				);
+			}
+		}
+
+		/*
+		 * The name of the city.
+		 *
+		 * Required if either `houseNumberOrName`, `street`, `postalCode`, or `stateOrProvince` are provided.
+		 */
+		if ( empty( $city ) && ! empty( array_filter( array( $house_number_or_name, $street, $postal_code, $state_or_province ) ) ) ) {
+			throw new InvalidArgumentException(
+				'The name of the city is required if either `houseNumberOrName`, `street`, `postalCode`, or `stateOrProvince` are provided.'
+			);
+		}
+
+		/*
+		 * Two (2) characters for an address in the USA or Canada, or a maximum of three (3) characters for an address in all other countries.
+		 *
+		 * Required for an address in the USA or Canada if either `houseNumberOrName`, `street`, `city`, or `postalCode` are provided.
+		 */
+		if ( empty( $state_or_province ) && in_array( $country, array( 'CA', 'US' ), true ) && ! empty( array_filter( array( $house_number_or_name, $street, $city, $postal_code ) ) ) ) {
+			throw new InvalidArgumentException(
+				'State or province is required for an address in the USA or Canada if either `houseNumberOrName`, `street`, `city`, or `postalCode` are provided.'
+			);
+		}
+
+		if ( ! empty( $state_or_province ) ) {
+			$max = in_array( $country, array( 'CA', 'US' ), true ) ? 2 : 3;
+
+			if ( strlen( $state_or_province ) > $max ) {
+				throw new InvalidArgumentException(
+					sprintf(
+						'Given state or province `%s` is longer then `%d` digits.',
+						$state_or_province,
+						$max
+					)
+				);
+			}
+		}
+
+		// Ok.
+		$this->country              = $country;
+		$this->street               = $street;
+		$this->house_number_or_name = $house_number_or_name;
+		$this->postal_code          = $postal_code;
+		$this->city                 = $city;
+		$this->state_or_province    = $state_or_province;
+
 	}
 
 	/**
@@ -81,30 +187,12 @@ class Address {
 	}
 
 	/**
-	 * Set city.
-	 *
-	 * @param string|null $city City.
-	 */
-	public function set_city( $city ) {
-		$this->city = $city;
-	}
-
-	/**
 	 * Get country.
 	 *
 	 * @return string
 	 */
 	public function get_country() {
 		return $this->country;
-	}
-
-	/**
-	 * Set country.
-	 *
-	 * @param string $country Country.
-	 */
-	public function set_country( $country ) {
-		$this->country = $country;
 	}
 
 	/**
@@ -117,30 +205,12 @@ class Address {
 	}
 
 	/**
-	 * Set house number or name.
-	 *
-	 * @param string|null $house_number_or_name House number or name.
-	 */
-	public function set_house_number_or_name( $house_number_or_name ) {
-		$this->house_number_or_name = $house_number_or_name;
-	}
-
-	/**
 	 * Get postal code.
 	 *
 	 * @return string|null
 	 */
 	public function get_postal_code() {
 		return $this->postal_code;
-	}
-
-	/**
-	 * Set postal code.
-	 *
-	 * @param string|null $ostal_code Postal code.
-	 */
-	public function set_postal_code( $postal_code ) {
-		$this->postal_code = $postal_code;
 	}
 
 	/**
@@ -153,30 +223,12 @@ class Address {
 	}
 
 	/**
-	 * Set state or province.
-	 *
-	 * @param string|null $state_or_province State or province.
-	 */
-	public function set_state_or_province( $state_or_province ) {
-		$this->state_or_province = $state_or_province;
-	}
-
-	/**
 	 * Get street.
 	 *
 	 * @return string|null
 	 */
 	public function get_street() {
 		return $this->street;
-	}
-
-	/**
-	 * Set street.
-	 *
-	 * @param string|null $street Street.
-	 */
-	public function set_street( $street ) {
-		$this->street = $street;
 	}
 
 	/**

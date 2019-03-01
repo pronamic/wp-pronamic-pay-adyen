@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Exception;
 use InvalidArgumentException;
 
 /**
@@ -21,7 +22,7 @@ use InvalidArgumentException;
  * @version 1.0.0
  * @since   1.0.0
  */
-class ServiceException {
+class ServiceException extends Exception {
 	/**
 	 * The HTTP response status code.
 	 *
@@ -35,13 +36,6 @@ class ServiceException {
 	 * @var string
 	 */
 	private $error_code;
-
-	/**
-	 * The message, a short explanation of the issue.
-	 *
-	 * @var string
-	 */
-	private $message;
 
 	/**
 	 * The type of error that was encountered.
@@ -59,9 +53,10 @@ class ServiceException {
 	 * @param string $error_type Error type.
 	 */
 	public function __construct( $status, $error_code, $message, $error_type ) {
+		parent::__construct( $message, $error_code );
+
 		$this->status     = $status;
 		$this->error_code = $error_code;
-		$this->message    = $message;
 		$this->error_type = $error_type;
 	}
 
@@ -89,7 +84,7 @@ class ServiceException {
 	 * @return string
 	 */
 	public function get_message() {
-		return $this->message;
+		return $this->getMessage();
 	}
 
 	/**

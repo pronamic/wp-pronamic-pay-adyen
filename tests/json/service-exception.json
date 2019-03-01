@@ -1,0 +1,6 @@
+{
+  "status": 422,
+  "errorCode": "174",
+  "message": "Unable to decrypt data",
+  "errorType": "validation"
+}

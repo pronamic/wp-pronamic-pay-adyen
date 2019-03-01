@@ -203,7 +203,6 @@ class Client {
 	 * @return bool|object
 	 */
 	public function create_payment_session( PaymentSessionRequest $request ) {
-
 		return $this->send_request( 'paymentSession', 'POST', $request->get_json(), 200 );
 	}
 

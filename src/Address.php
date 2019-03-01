@@ -174,7 +174,6 @@ class Address {
 		$this->postal_code          = $postal_code;
 		$this->city                 = $city;
 		$this->state_or_province    = $state_or_province;
-
 	}
 
 	/**

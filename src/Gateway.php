@@ -304,13 +304,7 @@ class Gateway extends Core_Gateway {
 		}
 
 		// Set action URL.
-		$action_url = add_query_arg(
-			array(
-				'payment_redirect' => $payment->get_id(),
-				'key'              => $payment->key,
-			),
-			home_url( '/' )
-		);
+		$action_url = $payment->get_pay_redirect_url();
 
 		if ( isset( $result->redirect->url ) ) {
 			$action_url = $result->redirect->url;

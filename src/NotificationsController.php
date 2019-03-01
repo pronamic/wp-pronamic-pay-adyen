@@ -39,7 +39,7 @@ class NotificationsController {
 	 */
 	public function rest_api_init() {
 		register_rest_route(
-			'adyen/v1',
+			'pronamic-pay/adyen/v1',
 			'/notifications',
 			array(
 				'methods'  => 'POST',

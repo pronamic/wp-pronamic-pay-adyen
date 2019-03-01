@@ -98,7 +98,9 @@ class Address {
 		 *
 		 * Required if either `houseNumberOrName`, `city`, `postalCode`, or `stateOrProvince` are provided.
 		 */
-		if ( empty( $street ) && ! empty( array_filter( array( $house_number_or_name, $city, $postal_code, $state_or_province ) ) ) ) {
+		$fields = array_filter( array( $house_number_or_name, $city, $postal_code, $state_or_province ) );
+
+		if ( empty( $street ) && ! empty( $fields ) ) {
 			throw new InvalidArgumentException(
 				'The name of the street is required if either `houseNumberOrName`, `city`, `postalCode`, or `stateOrProvince` are provided.'
 			);
@@ -111,7 +113,9 @@ class Address {
 		 *
 		 * Required if either `houseNumberOrName`, `street`, `city`, or `stateOrProvince` are provided.
 		 */
-		if ( empty( $postal_code ) && ! empty( array_filter( array( $house_number_or_name, $street, $city, $state_or_province ) ) ) ) {
+		$fields = array_filter( array( $house_number_or_name, $street, $city, $state_or_province ) );
+
+		if ( empty( $postal_code ) && ! empty( $fields ) ) {
 			throw new InvalidArgumentException(
 				'The postal code is required if either `houseNumberOrName`, `street`, `city`, or `stateOrProvince` are provided.'
 			);
@@ -136,7 +140,9 @@ class Address {
 		 *
 		 * Required if either `houseNumberOrName`, `street`, `postalCode`, or `stateOrProvince` are provided.
 		 */
-		if ( empty( $city ) && ! empty( array_filter( array( $house_number_or_name, $street, $postal_code, $state_or_province ) ) ) ) {
+		$fields = array_filter( array( $house_number_or_name, $street, $postal_code, $state_or_province ) );
+
+		if ( empty( $city ) && ! empty( $fields ) ) {
 			throw new InvalidArgumentException(
 				'The name of the city is required if either `houseNumberOrName`, `street`, `postalCode`, or `stateOrProvince` are provided.'
 			);
@@ -147,7 +153,9 @@ class Address {
 		 *
 		 * Required for an address in the USA or Canada if either `houseNumberOrName`, `street`, `city`, or `postalCode` are provided.
 		 */
-		if ( empty( $state_or_province ) && in_array( $country, array( 'CA', 'US' ), true ) && ! empty( array_filter( array( $house_number_or_name, $street, $city, $postal_code ) ) ) ) {
+		$fields = array_filter( array( $house_number_or_name, $street, $city, $postal_code ) );
+
+		if ( empty( $state_or_province ) && in_array( $country, array( 'CA', 'US' ), true ) && ! empty( $fields ) ) {
 			throw new InvalidArgumentException(
 				'State or province is required for an address in the USA or Canada if either `houseNumberOrName`, `street`, `city`, or `postalCode` are provided.'
 			);

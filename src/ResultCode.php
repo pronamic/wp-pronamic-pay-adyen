@@ -1,6 +1,6 @@
 <?php
 /**
- * Result code.
+ * Result code
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2019 Pronamic
@@ -13,16 +13,13 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 
 /**
- * Title: Adyen result code constants.
- * Description:
- * Copyright: 2005-2019 Pronamic
- * Company: Pronamic
+ * Result code
+ *
+ * @link https://docs.adyen.com/developers/checkout/payment-result-codes
  *
  * @author  Reüel van der Steege
  * @version 1.0.0
  * @since   1.0.0
- *
- * @link https://docs.adyen.com/developers/checkout/payment-result-codes
  */
 class ResultCode {
 	/**

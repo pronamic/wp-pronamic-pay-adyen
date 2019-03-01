@@ -15,10 +15,11 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 /**
  * Payment method type
  *
+ * @link https://docs.adyen.com/developers/classic-integration/directory-lookup#DirectoryLookup-Step2:Displaylocalpaymentmethods
+ *
  * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
- * @link https://docs.adyen.com/developers/classic-integration/directory-lookup#DirectoryLookup-Step2:Displaylocalpaymentmethods
  */
 class PaymentMethodType {
 	/**

@@ -11,10 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Title: Adyen payment request
- * Description:
- * Copyright: 2005-2019 Pronamic
- * Company: Pronamic
+ * Payment request
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v40/payments
  *

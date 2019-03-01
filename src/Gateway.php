@@ -167,7 +167,7 @@ class Gateway extends Core_Gateway {
 		}
 
 		// Channel.
-		$request->set_channel( 'Web' );
+		$request->set_channel( Channel::WEB );
 
 		// Shopper.
 		$request->set_shopper_statement( $payment->get_description() );

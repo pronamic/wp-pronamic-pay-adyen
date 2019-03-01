@@ -209,7 +209,7 @@ class Gateway extends Core_Gateway {
 			$billing_address = new Address( $address->get_country_code() );
 
 			$billing_address->set_city( $address->get_city() );
-			$billing_address->set_house_number_or_name( sprintf( '%s %s', $address->get_house_number(), $address->get_house_number_addition() ) );
+			$billing_address->set_house_number_or_name( $address->get_house_number() );
 			$billing_address->set_postal_code( $address->get_postal_code() );
 			$billing_address->set_state_or_province( $address->get_region() );
 			$billing_address->set_street( $address->get_street_name() );

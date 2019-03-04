@@ -39,7 +39,6 @@ class PaymentRequestTransformer {
 
 			$request->set_shopper_ip( $customer->get_ip_address() );
 			$request->set_shopper_locale( $customer->get_locale() );
-			$request->set_shopper_reference( $customer->get_user_id() );
 			$request->set_telephone_number( $customer->get_phone() );
 
 			// Shopper name.

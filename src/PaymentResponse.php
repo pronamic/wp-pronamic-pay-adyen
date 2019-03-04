@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use InvalidArgumentException;
+
 /**
  * Payment response
  *

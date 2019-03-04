@@ -53,7 +53,7 @@ class ServiceException extends Exception {
 	 * @param string $error_type Error type.
 	 */
 	public function __construct( $status, $error_code, $message, $error_type ) {
-		parent::__construct( $message, $error_code );
+		parent::__construct( $message, intval( $error_code ) );
 
 		$this->status     = $status;
 		$this->error_code = $error_code;

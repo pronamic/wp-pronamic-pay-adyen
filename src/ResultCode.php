@@ -77,7 +77,7 @@ class ResultCode {
 	 *
 	 * @var string
 	 */
-	const REDIRECT_SHOPPER = 'redirectShopper';
+	const REDIRECT_SHOPPER = 'RedirectShopper';
 
 	/**
 	 * Refused.

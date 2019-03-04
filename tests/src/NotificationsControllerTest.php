@@ -39,7 +39,7 @@ class NotificationsControllerTest extends \WP_UnitTestCase {
 	public function test_controller() {
 		$json = file_get_contents( __DIR__ . '/../json/notification.json', true );
 
-		$request = new WP_REST_Request( 'POST', '/adyen/v1/notifications' );
+		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/notifications' );
 
 		$request->set_header( 'Content-Type', 'application/json' );
 		$request->set_body( $json );
@@ -65,7 +65,7 @@ class NotificationsControllerTest extends \WP_UnitTestCase {
 	public function test_invalid_notification() {
 		$json = file_get_contents( __DIR__ . '/../json/invalid-notification.json', true );
 
-		$request = new WP_REST_Request( 'POST', '/adyen/v1/notifications' );
+		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/notifications' );
 
 		$request->set_header( 'Content-Type', 'application/json' );
 		$request->set_body( $json );

@@ -104,6 +104,15 @@ class PaymentResponse {
 	}
 
 	/**
+	 * Get result code.
+	 *
+	 * @return string
+	 */
+	public function get_result_code() {
+		return $this->result_code;
+	}
+
+	/**
 	 * Get PSP reference.
 	 *
 	 * @return string|null

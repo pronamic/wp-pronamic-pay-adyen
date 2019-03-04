@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use InvalidArgumentException;
+
 /**
  * Redirect information
  *
@@ -23,7 +25,7 @@ class RedirectInformation {
 	/**
 	 * When the redirect URL must be accessed via POST, use this data to post to the redirect URL.
 	 *
-	 * @var object
+	 * @var object|null
 	 */
 	private $data;
 
@@ -46,12 +48,10 @@ class RedirectInformation {
 	/**
 	 * Construct redirect information.
 	 *
-	 * @param object $data   Data.
 	 * @param string $method Method.
 	 * @param string $url    URL.
 	 */
-	public function __construct( $data, $method, $url ) {
-		$this->data   = $data;
+	public function __construct( $method, $url ) {
 		$this->method = $method;
 		$this->url    = $url;
 	}
@@ -59,10 +59,19 @@ class RedirectInformation {
 	/**
 	 * Get data.
 	 *
-	 * @return object
+	 * @return object|null
 	 */
 	public function get_data() {
 		return $this->data;
+	}
+
+	/**
+	 * Set data.
+	 *
+	 * @param object|null $data Data.
+	 */
+	public function set_data( $data ) {
+		$this->data = $data;
 	}
 
 	/**
@@ -91,10 +100,6 @@ class RedirectInformation {
 	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
-		if ( ! isset( $object->data ) ) {
-			throw new InvalidArgumentException( 'Object must contain `data` property.' );
-		}
-
 		if ( ! isset( $object->method ) ) {
 			throw new InvalidArgumentException( 'Object must contain `method` property.' );
 		}
@@ -103,10 +108,15 @@ class RedirectInformation {
 			throw new InvalidArgumentException( 'Object must contain `url` property.' );
 		}
 
-		return new self(
-			$object->data,
+		$redirect = new self(
 			$object->method,
 			$object->url
 		);
+
+		if ( isset( $object->data ) ) {
+			$redirect->set_data( $object->data );
+		}
+
+		return $redirect;
 	}
 }

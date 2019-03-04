@@ -24,17 +24,41 @@ class AddressTransformer {
 	 * Transform WordPress Pay address to Adyen address.
 	 *
 	 * @param Pay_Address $address WordPress Pay address to convert.
-	 * @return Address
+	 * @return Address|null
 	 */
 	public static function transform( Pay_Address $address ) {
-		$address = new Address(
-			$address->get_country_code(),
-			$address->get_street_name(),
-			$address->get_house_number(),
-			$address->get_postal_code(),
-			$address->get_city(),
-			$address->get_region()
-		);
+		$country = $address->get_country();
+
+		if ( null === $country ) {
+			return null;
+		}
+
+		$country_code = $country->get_code();
+
+		if ( null === $country_code ) {
+			return null;
+		}
+
+		$state_or_province = null;
+
+		$region = $address->get_region();
+
+		if ( null !== $region ) {
+			$state_or_province = $region->get_code();
+		}
+
+		try {
+			$address = new Address(
+				$country_code,
+				$address->get_street_name(),
+				strval( $address->get_house_number() ),
+				$address->get_postal_code(),
+				$address->get_city(),
+				$state_or_province
+			);
+		} catch ( InvalidArgumentException $exception ) {
+			return null;
+		}
 
 		return $address;
 	}

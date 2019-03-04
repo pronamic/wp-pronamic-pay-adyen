@@ -26,8 +26,11 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals( PaymentMethodType::IDEAL, $payment_method->get_type() );
 
-		$this->assertEquals( (object) array(
-			'type' => PaymentMethodType::IDEAL,
-		), $payment_method->get_json() );
+		$this->assertEquals(
+			(object) array(
+				'type' => PaymentMethodType::IDEAL,
+			),
+			$payment_method->get_json()
+		);
 	}
 }

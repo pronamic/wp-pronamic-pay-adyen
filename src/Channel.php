@@ -23,21 +23,21 @@ use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
  */
 class Channel {
 	/**
-	 * iOS.
+	 * Channel iOS.
 	 *
 	 * @var string
 	 */
 	const IOS = 'iOS';
 
 	/**
-	 * Android.
+	 * Channel Android.
 	 *
 	 * @var string
 	 */
 	const ANDROID = 'Android';
 
 	/**
-	 * Web.
+	 * Channel web.
 	 *
 	 * @var string
 	 */

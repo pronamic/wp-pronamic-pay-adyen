@@ -101,7 +101,7 @@ class NotificationsController {
 		foreach ( $notification_request->get_items() as $item ) {
 			$payment = get_pronamic_payment( $item->get_merchant_reference() );
 
-			if ( empty( $payment ) ) {
+			if ( null === $payment ) {
 				continue;
 			}
 

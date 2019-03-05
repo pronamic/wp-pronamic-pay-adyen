@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use stdClass;
+
 /**
  * Amount test
  *
@@ -28,5 +30,50 @@ class AmountTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals( 'EUR', $amount->get_currency() );
 		$this->assertEquals( 12375, $amount->get_value() );
+	}
+
+	/**
+	 * Test from object.
+	 *
+	 * @dataProvider provider_from_object
+	 *
+	 * @param object $object Object to create Amount from.
+	 */
+	public function test_from_object( $object ) {
+		if ( ! isset( $object->currency, $object->value ) ) {
+			$this->setExpectedException( 'InvalidArgumentException' );
+		}
+
+		$amount = Amount::from_object( $object );
+
+		self::assertEquals( 'EUR', $amount->get_currency() );
+		self::assertEquals( 12375, $amount->get_value() );
+	}
+
+	/**
+	 * Provider for test from object.
+	 *
+	 * @return array
+	 */
+	public function provider_from_object() {
+		$data = array();
+
+		// No currency, no value.
+		$data[] = array( new stdClass() );
+
+		// Currency only.
+		$object           = new stdClass();
+		$object->currency = 'EUR';
+
+		$data[] = array( $object );
+
+		// Currency and value.
+		$object           = new stdClass();
+		$object->currency = 'EUR';
+		$object->value    = 12375;
+
+		$data[] = array( $object );
+
+		return $data;
 	}
 }

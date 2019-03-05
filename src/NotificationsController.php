@@ -103,14 +103,15 @@ class NotificationsController {
 				continue;
 			}
 
-			// Store notification.
-			$payment->set_meta( 'adyen_notification', $json );
-
 			// Add note.
 			$note = sprintf(
-				/* translators: %s: Adyen */
-				__( 'Webhook requested by %s.', 'pronamic_ideal' ),
-				__( 'Adyen', 'pronamic_ideal' )
+				'<p>%1$s</p><pre>%2$s</pre>',
+				sprintf(
+					/* translators: %s: payment provider name */
+					__( 'Webhook requested by %s.', 'pronamic_ideal' ),
+					__( 'Adyen', 'pronamic_ideal' )
+				),
+				wp_json_encode( $item->get_json(), JSON_PRETTY_PRINT )
 			);
 
 			$payment->add_note( $note );

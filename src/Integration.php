@@ -79,7 +79,7 @@ class Integration extends AbstractIntegration {
 	public function admin_init() {
 		add_settings_section(
 			'pronamic_pay_adyen_notification_authentication',
-			__( 'Adyen Notifiction Authentication', 'pronamic_ideal' ),
+			__( 'Adyen Notification Authentication', 'pronamic_ideal' ),
 			'__return_false',
 			'pronamic_pay'
 		);

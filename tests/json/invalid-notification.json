@@ -1,3 +1,10 @@
 {
-    "abcd" : "false"
+	"live": "false",
+	"notificationItems": [
+		{
+			"NotificationRequestItem": {
+				"abcd": false
+			}
+		}
+	]
 }

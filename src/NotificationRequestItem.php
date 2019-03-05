@@ -12,6 +12,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use DateTime;
 use InvalidArgumentException;
+use Pronamic\WordPress\Pay\Core\Util;
 
 /**
  * Notification request item
@@ -248,6 +249,33 @@ class NotificationRequestItem {
 	 */
 	public function set_success( $success ) {
 		$this->success = $success;
+	}
+
+	/**
+	 * Get JSON.
+	 *
+	 * @return object|null
+	 */
+	public function get_json() {
+		$data = array(
+			'amount'              => $this->get_amount(),
+			'pspReference'        => $this->get_psp_reference(),
+			'eventCode'           => $this->get_event_code(),
+			'eventDate'           => $this->get_event_date(),
+			'merchantAccountCode' => $this->get_merchant_account_code(),
+			'operations'          => $this->get_operations(),
+			'merchantReference'   => $this->get_merchant_reference(),
+			'paymentMethod'       => $this->get_payment_method(),
+			'success'             => Util::boolean_to_string( $this->is_success() ),
+		);
+
+		$data = array_filter( $data );
+
+		if ( empty( $data ) ) {
+			return null;
+		}
+
+		return (object) $data;
 	}
 
 	/**

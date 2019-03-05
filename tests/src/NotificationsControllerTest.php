@@ -90,6 +90,25 @@ class NotificationsControllerTest extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Test invalid notification request.
+	 *
+	 * @link https://torquemag.io/2017/01/testing-api-endpoints/
+	 * @link https://github.com/WordPress/wordpress-develop/blob/5.1.0/tests/phpunit/tests/rest-api/rest-blocks-controller.php#L127-L136
+	 */
+	public function test_invalid_notification_request() {
+		$json = file_get_contents( __DIR__ . '/../json/invalid-notification-request.json', true );
+
+		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/notifications' );
+
+		$request->set_header( 'Content-Type', 'application/json' );
+		$request->set_body( $json );
+
+		$response = rest_do_request( $request );
+
+		$this->assertEquals( 500, $response->get_status() );
+	}
+
+	/**
 	 * Test invalid notification.
 	 *
 	 * @link https://torquemag.io/2017/01/testing-api-endpoints/

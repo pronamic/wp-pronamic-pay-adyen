@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Core\Statuses;
+use Pronamic\WordPress\Pay\Payments\Payment;
 use WP_REST_Request;
 
 /**
@@ -87,6 +89,37 @@ class NotificationsControllerTest extends \WP_UnitTestCase {
 			),
 			$response->get_data()
 		);
+	}
+
+	/**
+	 * Test invalid notification.
+	 *
+	 * @link https://torquemag.io/2017/01/testing-api-endpoints/
+	 * @link https://github.com/WordPress/wordpress-develop/blob/5.1.0/tests/phpunit/tests/rest-api/rest-blocks-controller.php#L127-L136
+	 */
+	public function test_valid_notification() {
+		$json = file_get_contents( __DIR__ . '/../json/notification.json', true );
+
+		// Create payment.
+		$payment = new Payment();
+		$payment->save();
+
+		$payment_id = $payment->get_id();
+
+		$json = str_replace( 'YourMerchantReference1', $payment_id, $json );
+
+		// REST request.
+		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/notifications' );
+
+		$request->set_header( 'Content-Type', 'application/json' );
+		$request->set_body( $json );
+
+		$response = rest_do_request( $request );
+
+		$payment = get_pronamic_payment( $payment_id );
+
+		$this->assertEquals( 200, $response->get_status() );
+		$this->assertEquals( Statuses::SUCCESS, $payment->get_status() );
 	}
 
 	/**

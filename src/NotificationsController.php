@@ -12,6 +12,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use InvalidArgumentException;
 use Pronamic\WordPress\Pay\Core\Statuses as PaymentStatus;
+use Pronamic\WordPress\Pay\Core\Server;
 use WP_Error;
 use WP_REST_Request;
 
@@ -49,10 +50,36 @@ class NotificationsController {
 			self::REST_ROUTE_NAMESPACE,
 			'/notifications',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'rest_api_adyen_notifications' ),
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'rest_api_adyen_notifications' ),
+				'permission_callback' => array( $this, 'rest_api_adyen_permissions_check' ),
 			)
 		);
+	}
+
+	/**
+	 * REST API Adyen permissions check.
+	 *
+	 * @link https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/#permissions-callback
+	 *
+	 * @param WP_REST_Request $request Request.
+	 */
+	public function rest_api_adyen_permissions_check( WP_REST_Request $request ) {
+		$username = get_option( 'pronamic_pay_adyen_notification_authentication_username' );
+		$password = get_option( 'pronamic_pay_adyen_notification_authentication_password' );
+
+		if ( empty( $username ) && empty( $password ) ) {
+			return true;
+		}
+
+		$username_input = Server::get( 'PHP_AUTH_USER' );	
+		$password_input = Server::get( 'PHP_AUTH_PW' );
+
+		if ( $username === $username_input && $password === $password_input ) {
+			return true;
+		}
+
+		return new WP_Error( 'rest_forbidden_context', __( 'Sorry, you are not allowed to post Adyen notifications.' ), array( 'status' => rest_authorization_required_code() ) );
 	}
 
 	/**

@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Pay\Gateways\Common\AbstractIntegration;
+use Pronamic\WordPress\Pay\Util as Pay_Util;
 
 /**
  * Integration
@@ -37,6 +38,127 @@ class Integration extends AbstractIntegration {
 		$notifications = new NotificationsController();
 
 		$notifications->setup();
+
+		// Settings.
+		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+	}
+
+	/**
+	 * Initialize.
+	 */
+	public function init() {
+		/*
+		 * Authentication - User Name
+		 */
+		register_setting(
+			'pronamic_pay',
+			'pronamic_pay_adyen_notification_authentication_username',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+
+		/*
+		 * Authentication - Password
+		 */
+		register_setting(
+			'pronamic_pay',
+			'pronamic_pay_adyen_notification_authentication_password',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+	}
+
+	/**
+	 * Admin initialize.
+	 */
+	public function admin_init() {
+		add_settings_section(
+			'pronamic_pay_adyen_notification_authentication',
+			__( 'Adyen Notifiction Authentication', 'pronamic_ideal' ),
+			'__return_false',
+			'pronamic_pay'
+		);
+
+		add_settings_field(
+			'pronamic_pay_adyen_notification_authentication_username',
+			__( 'User Name', 'pronamic_ideal' ),
+			array( __CLASS__, 'input_element' ),
+			'pronamic_pay',
+			'pronamic_pay_adyen_notification_authentication',
+			array(
+				'label_for' => 'pronamic_pay_adyen_notification_authentication_username',
+			)
+		);
+
+		add_settings_field(
+			'pronamic_pay_adyen_notification_authentication_password',
+			__( 'Password', 'pronamic_ideal' ),
+			array( __CLASS__, 'input_element' ),
+			'pronamic_pay',
+			'pronamic_pay_adyen_notification_authentication',
+			array(
+				'label_for' => 'pronamic_pay_adyen_notification_authentication_password',
+			)
+		);
+	}
+
+	/**
+	 * Input text.
+	 *
+	 * @param array $args Arguments.
+	 */
+	public static function input_element( $args ) {
+		$defaults = array(
+			'type'        => 'text',
+			'classes'     => 'regular-text',
+			'description' => '',
+			'options'     => array(),
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$name  = $args['label_for'];
+		$value = get_option( $name );
+
+		$atts = array(
+			'name'  => $name,
+			'id'    => $name,
+			'type'  => $args['type'],
+			'class' => $args['classes'],
+			'value' => $value,
+		);
+
+		switch ( $args['type'] ) {
+			case 'select':
+				printf(
+					'<select %1$s />%2$s</select>',
+					// @codingStandardsIgnoreStart
+					Pay_Util::array_to_html_attributes( $atts ),
+					Pay_Util::select_options_grouped( $args['options'], $value )
+				// @codingStandardsIgnoreEnd
+				);
+
+				break;
+			default:
+				printf(
+					'<input %1$s />',
+					// @codingStandardsIgnoreStart
+					Pay_Util::array_to_html_attributes( $atts )
+					// @codingStandardsIgnoreEnd
+				);
+		}
+
+		if ( ! empty( $args['description'] ) ) {
+			printf(
+				'<p class="description">%s</p>',
+				esc_html( $args['description'] )
+			);
+		}
 	}
 
 	/**

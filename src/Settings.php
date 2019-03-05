@@ -150,7 +150,7 @@ class Settings extends GatewaySettings {
 			),
 		);
 
-		// Webhook authentication username.
+		// Webhook authentication settings.
 		$fields[] = array(
 			'section' => 'adyen_feedback',
 			'methods' => array( 'adyen' ),

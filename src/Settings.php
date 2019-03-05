@@ -152,31 +152,19 @@ class Settings extends GatewaySettings {
 
 		// Webhook authentication username.
 		$fields[] = array(
-			'filter'   => FILTER_SANITIZE_STRING,
-			'section'  => 'adyen_feedback',
-			'meta_key' => self::WEBHOOK_USERNAME_META_KEY,
-			'title'    => _x( 'User Name', 'adyen', 'pronamic_ideal' ),
-			'type'     => 'text',
-			'classes'  => array( 'regular-text', 'code' ),
-			'methods'  => array( 'adyen' ),
-			'tooltip'  => __(
-				'The webhook authentication user name, as mentioned at <strong>Account » Server communication</strong> in the Adyen dashboard',
-				'pronamic_ideal'
-			),
-		);
-
-		// Webhook authentication password.
-		$fields[] = array(
-			'filter'   => FILTER_SANITIZE_STRING,
-			'section'  => 'adyen_feedback',
-			'meta_key' => self::WEBHOOK_PASSWORD_META_KEY,
-			'title'    => _x( 'Password', 'adyen', 'pronamic_ideal' ),
-			'type'     => 'text',
-			'classes'  => array( 'regular-text', 'code' ),
-			'methods'  => array( 'adyen' ),
-			'tooltip'  => __(
-				'The webhook authentication password, as mentioned at <strong>Account » Server communication</strong> in the Adyen dashboard',
-				'pronamic_ideal'
+			'section' => 'adyen_feedback',
+			'methods' => array( 'adyen' ),
+			'title'   => __( 'Authentication', 'pronamic_ideal' ),
+			'type'    => 'description',
+			'html'    => sprintf(
+				'For webhook authentication settings, please visit <a href="%2$s" title="Settings">%1$s settings</a>.',
+				__( 'Pronamic Pay', 'pronamic_ideal' ),
+				$url = add_query_arg(
+					array(
+						'page' => 'pronamic_pay_settings',
+					),
+					admin_url( 'admin.php' )
+				)
 			),
 		);
 

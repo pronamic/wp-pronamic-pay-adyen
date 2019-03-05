@@ -12,7 +12,6 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use InvalidArgumentException;
 use Pronamic\WordPress\Pay\Core\Statuses as PaymentStatus;
-use Pronamic\WordPress\Pay\Core\Server;
 use WP_Error;
 use WP_REST_Request;
 
@@ -72,10 +71,9 @@ class NotificationsController {
 			return true;
 		}
 
-		$username_input = Server::get( 'PHP_AUTH_USER' );	
-		$password_input = Server::get( 'PHP_AUTH_PW' );
+		$authorization = $request->get_header( 'Authorization' );
 
-		if ( $username === $username_input && $password === $password_input ) {
+		if ( 'Basic ' . base64_encode( $username . ':' . $password ) === $authorization ) {
 			return true;
 		}
 

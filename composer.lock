@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ceab84456c18e51ddb3ba13d2384861",
+    "content-hash": "5d07eddb5aa134cf5bbbf236cfcceae5",
     "packages": [
         {
             "name": "composer/installers",
@@ -236,34 +236,34 @@
         },
         {
             "name": "pronamic/wp-money",
-            "version": "1.2.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pronamic/wp-money.git",
-                "reference": "28b508d7ae573728c3104b183d124e80e549963c"
+                "reference": "9a0e035093b48839d3583dc9c85003b070a2d5a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pronamic/wp-money/zipball/28b508d7ae573728c3104b183d124e80e549963c",
-                "reference": "28b508d7ae573728c3104b183d124e80e549963c",
+                "url": "https://api.github.com/repos/pronamic/wp-money/zipball/9a0e035093b48839d3583dc9c85003b070a2d5a6",
+                "reference": "9a0e035093b48839d3583dc9c85003b070a2d5a6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3"
             },
             "require-dev": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
-                "johnpbloch/wordpress": "^5.0",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.5",
                 "koodimonni-language/de_de": "*",
                 "koodimonni-language/fr_fr": "*",
                 "koodimonni-language/nl_nl": "*",
                 "php-coveralls/php-coveralls": "^1.1",
+                "phpcompatibility/php-compatibility": "^9.1",
                 "phpcompatibility/phpcompatibility-wp": "^2.0",
                 "phpmd/phpmd": "^2.4",
                 "phpunit/phpunit": "^4.8",
+                "roots/wordpress": "^5.0",
                 "squizlabs/php_codesniffer": "^2.9",
                 "vlucas/phpdotenv": "^2.0",
-                "wimg/php-compatibility": "^9.0",
                 "wp-coding-standards/wpcs": "^1.2",
                 "wp-phpunit/wp-phpunit": "^5.0"
             },
@@ -277,7 +277,8 @@
             "license": [
                 "GPL-3.0-or-later"
             ],
-            "time": "2018-12-10T18:41:41+00:00"
+            "description": "WordPress Money library.",
+            "time": "2019-02-28T15:50:09+00:00"
         },
         {
             "name": "viison/address-splitter",
@@ -1479,7 +1480,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/WordPress/WordPress/zipball/5.1",
-                "reference": "5.1"
+                "reference": "5.1",
+                "shasum": null
             },
             "require": {
                 "php": ">=5.3.2",
@@ -2479,6 +2481,12 @@
     ],
     "aliases": [
         {
+            "alias": "1.3",
+            "alias_normalized": "1.3.0.0",
+            "version": "dev-develop",
+            "package": "pronamic/wp-money"
+        },
+        {
             "alias": "2.1",
             "alias_normalized": "2.1.0.0",
             "version": "dev-develop",
@@ -2487,6 +2495,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "pronamic/wp-money": 20,
         "wp-pay/core": 20
     },
     "prefer-stable": false,

@@ -5,7 +5,7 @@
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2019 Pronamic
  * @license   GPL-3.0-or-later
- * @package   Pronamic\WordPress\Pay\Gateways\OmniKassa2
+ * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;

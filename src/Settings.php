@@ -21,20 +21,6 @@ use Pronamic\WordPress\Pay\Core\GatewaySettings;
  */
 class Settings extends GatewaySettings {
 	/**
-	 * Webhook username meta key.
-	 *
-	 * @var string
-	 */
-	const WEBHOOK_USERNAME_META_KEY = '_pronamic_gateway_adyen_webhook_username';
-
-	/**
-	 * Webhook password meta key.
-	 *
-	 * @var string
-	 */
-	const WEBHOOK_PASSWORD_META_KEY = '_pronamic_gateway_adyen_webhook_password';
-
-	/**
 	 * Constructs and initialize settings.
 	 */
 	public function __construct() {
@@ -169,30 +155,5 @@ class Settings extends GatewaySettings {
 		);
 
 		return $fields;
-	}
-
-	/**
-	 * Save post.
-	 *
-	 * @param array $data Data to save.
-	 *
-	 * @return array
-	 */
-	public function save_post( $data ) {
-		// Trim settings.
-		$fields = array(
-			self::WEBHOOK_USERNAME_META_KEY,
-			self::WEBHOOK_PASSWORD_META_KEY,
-		);
-
-		foreach ( $fields as $field ) {
-			if ( ! isset( $data[ $field ] ) ) {
-				continue;
-			}
-
-			$data[ $field ] = trim( $data[ $field ] );
-		}
-
-		return $data;
 	}
 }

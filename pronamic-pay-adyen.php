@@ -23,8 +23,11 @@
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
 
-add_filter( 'pronamic_pay_gateways', function( $gateways ) {
-	$gateways[] = '\Pronamic\WordPress\Pay\Gateways\Adyen\Integration';
+add_filter(
+	'pronamic_pay_gateways',
+	function( $gateways ) {
+		$gateways[] = '\Pronamic\WordPress\Pay\Gateways\Adyen\Integration';
 
-	return $gateways;
-} );
+		return $gateways;
+	}
+);

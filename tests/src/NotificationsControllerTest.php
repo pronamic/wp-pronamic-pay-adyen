@@ -59,7 +59,7 @@ class NotificationsControllerTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Test controller.
+	 * Test controller authentication.
 	 *
 	 * @link https://torquemag.io/2017/01/testing-api-endpoints/
 	 * @link https://github.com/WordPress/wordpress-develop/blob/5.1.0/tests/phpunit/tests/rest-api/rest-blocks-controller.php#L127-L136
@@ -92,7 +92,31 @@ class NotificationsControllerTest extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Test invalid notification.
+	 * Test controller unauthorized.
+	 *
+	 * @link https://torquemag.io/2017/01/testing-api-endpoints/
+	 * @link https://github.com/WordPress/wordpress-develop/blob/5.1.0/tests/phpunit/tests/rest-api/rest-blocks-controller.php#L127-L136
+	 */
+	public function test_controller_unauthorized() {
+		$json = file_get_contents( __DIR__ . '/../json/notification.json', true );
+
+		$username = 'username';
+
+		update_option( 'pronamic_pay_adyen_notification_authentication_username', $username );
+
+		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/notifications' );
+
+		$request->set_header( 'Content-Type', 'application/json' );
+		$request->set_header( 'Authorization', 'Basic ' . base64_encode( $username ) );
+		$request->set_body( $json );
+
+		$response = rest_do_request( $request );
+
+		$this->assertEquals( rest_authorization_required_code(), $response->get_status() );
+	}
+
+	/**
+	 * Test valid notification.
 	 *
 	 * @link https://torquemag.io/2017/01/testing-api-endpoints/
 	 * @link https://github.com/WordPress/wordpress-develop/blob/5.1.0/tests/phpunit/tests/rest-api/rest-blocks-controller.php#L127-L136

@@ -298,46 +298,6 @@ class NotificationRequestItem {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		if ( ! isset( $object->amount ) ) {
-			throw new InvalidArgumentException( 'Object must contain `amount` property.' );
-		}
-
-		if ( ! isset( $object->pspReference ) ) {
-			throw new InvalidArgumentException( 'Object must contain `pspReference` property.' );
-		}
-
-		if ( ! isset( $object->eventCode ) ) {
-			throw new InvalidArgumentException( 'Object must contain `eventCode` property.' );
-		}
-
-		if ( ! isset( $object->eventDate ) ) {
-			throw new InvalidArgumentException( 'Object must contain `eventDate` property.' );
-		}
-
-		if ( ! isset( $object->merchantAccountCode ) ) {
-			throw new InvalidArgumentException( 'Object must contain `merchantAccountCode` property.' );
-		}
-
-		if ( ! isset( $object->operations ) ) {
-			throw new InvalidArgumentException( 'Object must contain `operations` property.' );
-		}
-
-		if ( ! isset( $object->merchantReference ) ) {
-			throw new InvalidArgumentException( 'Object must contain `merchantReference` property.' );
-		}
-
-		if ( ! isset( $object->paymentMethod ) ) {
-			throw new InvalidArgumentException( 'Object must contain `paymentMethod` property.' );
-		}
-
-		if ( ! isset( $object->success ) ) {
-			throw new InvalidArgumentException( 'Object must contain `success` property.' );
-		}
-
-		if ( ! is_array( $object->operations ) ) {
-			throw new InvalidArgumentException( 'Object property `operations` must be an array.' );
-		}
-
 		$item = new self();
 
 		$item->set_amount( Amount::from_object( $object->amount ) );

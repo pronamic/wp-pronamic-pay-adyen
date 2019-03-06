@@ -3,10 +3,6 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Adyen amount.",
 	"type": "object",
-	"required": [
-		"currency",
-		"value"
-	],
 	"properties": {
 		"currency": {
 			"type": "string",
@@ -18,5 +14,9 @@
 			"type": "integer",
 			"description": "The payable amount that can be charged for the transaction."
 		}
-	}
+	},
+	"required": [
+		"currency",
+		"value"
+	]
 }

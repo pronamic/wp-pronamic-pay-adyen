@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use InvalidArgumentException;
 use Pronamic\WordPress\Pay\Address as Pay_Address;
 
 /**

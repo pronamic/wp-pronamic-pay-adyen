@@ -83,7 +83,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
 	 * Get origin.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_origin() {
 		return $this->origin;
@@ -92,7 +92,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
 	 * Set origin.
 	 *
-	 * @param string $origin Origin.
+	 * @param string|null $origin Origin.
 	 */
 	public function set_origin( $origin ) {
 		$this->origin = $origin;

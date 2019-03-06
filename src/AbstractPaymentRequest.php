@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use DateTime;
 use InvalidArgumentException;
 
 /**
@@ -62,7 +63,7 @@ abstract class AbstractPaymentRequest {
 	/**
 	 * Date of birth.
 	 *
-	 * @var string
+	 * @var DateTime|null
 	 */
 	private $date_of_birth;
 
@@ -246,7 +247,7 @@ abstract class AbstractPaymentRequest {
 	/**
 	 * Get date of birth.
 	 *
-	 * @return string
+	 * @return DateTime|null
 	 */
 	public function get_date_of_birth() {
 		return $this->date_of_birth;
@@ -255,9 +256,9 @@ abstract class AbstractPaymentRequest {
 	/**
 	 * Set date of birth.
 	 *
-	 * @param string|null $date_of_birth Date of birth.
+	 * @param DateTime|null $date_of_birth Date of birth.
 	 */
-	public function set_date_of_birth( $date_of_birth ) {
+	public function set_date_of_birth( DateTime $date_of_birth = null ) {
 		$this->date_of_birth = $date_of_birth;
 	}
 
@@ -494,6 +495,11 @@ abstract class AbstractPaymentRequest {
 		// Country code.
 		if ( null !== $this->country_code ) {
 			$object->countryCode = $this->country_code;
+		}
+
+		// Date of birth.
+		if ( null !== $this->date_of_birth ) {
+			$object->dateOfBirth = $this->date_of_birth->format( 'Y-m-d' );
 		}
 
 		// Delivery address.

@@ -157,7 +157,7 @@ class PaymentResponse {
 	 *
 	 * @param object $object Object.
 	 * @return PaymentResponse
-	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
+	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
 		$validator = new Validator();

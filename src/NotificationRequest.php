@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use InvalidArgumentException;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;

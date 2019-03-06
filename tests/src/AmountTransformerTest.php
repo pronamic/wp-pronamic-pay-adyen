@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Money\Currency;
 use Pronamic\WordPress\Money\Money;
 
 /**
@@ -32,5 +33,16 @@ class AmountTransformerTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals( 'EUR', $amount->get_currency() );
 		$this->assertEquals( 7599, $amount->get_value() );
+	}
+
+	/**
+	 * Test invalid currency.
+	 */
+	public function test_invalid_currency() {
+		$money = new Money( 123.45, new Currency() );
+
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$amount = AmountTransformer::transform( $money );
 	}
 }

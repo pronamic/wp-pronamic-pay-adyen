@@ -10,8 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use stdClass;
-
 /**
  * Amount test
  *
@@ -30,6 +28,24 @@ class AmountTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals( 'EUR', $amount->get_currency() );
 		$this->assertEquals( 12375, $amount->get_value() );
+	}
+
+	/**
+	 * Test invalid currency.
+	 */
+	public function test_invalid_currency() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$amount = new Amount( 'TE', 12375 );
+	}
+
+	/**
+	 * Test invalid value.
+	 */
+	public function test_invalid_value() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$amount = new Amount( 'EUR', 123.75 );
 	}
 
 	/**
@@ -56,24 +72,21 @@ class AmountTest extends \PHPUnit_Framework_TestCase {
 	 * @return array
 	 */
 	public function provider_from_object() {
-		$data = array();
-
-		// No currency, no value.
-		$data[] = array( new stdClass() );
-
-		// Currency only.
-		$object           = new stdClass();
-		$object->currency = 'EUR';
-
-		$data[] = array( $object );
-
-		// Currency and value.
-		$object           = new stdClass();
-		$object->currency = 'EUR';
-		$object->value    = 12375;
-
-		$data[] = array( $object );
-
-		return $data;
+		return array(
+			array(
+				(object) array(),
+			),
+			array(
+				(object) array(
+					'currency' => 'EUR',
+				),
+			),
+			array(
+				(object) array(
+					'currency' => 'EUR',
+					'value'    => 12375,
+				),
+			),
+		);
 	}
 }

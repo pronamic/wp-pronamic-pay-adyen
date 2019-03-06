@@ -1,0 +1,25 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/payment-response.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen payment response.",
+	"type": "object",
+	"properties": {
+		"resultCode": {
+			"type": "string",
+			"description": "The result of the payment.",
+			"enum": ["Authorised", "Refused", "RedirectShopper", "Received", "Cancelled", "Pending", "Error"]
+		},
+		"pspReference": {
+			"type": "string",
+			"description": "Adyen's 16-character string reference associated with the transaction/request. This value is globally unique; quote it when communicating with us about this request.",
+			"minLength": 16,
+			"maxLength": 16
+		},
+		"redirect": {
+			"$ref": "redirect.json"
+		}
+	},
+	"required": [
+		"resultCode"
+	]
+}

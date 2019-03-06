@@ -10,7 +10,9 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use InvalidArgumentException;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
 
 /**
  * Redirect information
@@ -97,16 +99,18 @@ class RedirectInformation {
 	 *
 	 * @param object $object Object.
 	 * @return RedirectInformation
-	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
+	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
-		if ( ! isset( $object->method ) ) {
-			throw new InvalidArgumentException( 'Object must contain `method` property.' );
-		}
+		$validator = new Validator();
 
-		if ( ! isset( $object->url ) ) {
-			throw new InvalidArgumentException( 'Object must contain `url` property.' );
-		}
+		$validator->validate(
+			$object,
+			(object) array(
+				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/redirect.json' ),
+			),
+			Constraint::CHECK_MODE_EXCEPTIONS
+		);
 
 		$redirect = new self(
 			$object->method,

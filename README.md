@@ -2,7 +2,7 @@
 
 **Adyen driver for the WordPress payment processing library.**
 
-[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+[![Built with Grunt](https://gruntjs.com/cdn/builtwith.svg)](http://gruntjs.com/)
 
 ## Adyen Notifications (webhooks)
 

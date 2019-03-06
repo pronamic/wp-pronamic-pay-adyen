@@ -42,7 +42,7 @@ class GenderTransformerTest extends \PHPUnit_Framework_TestCase {
 		return array(
 			array( Pay_Gender::FEMALE, Gender::FEMALE ),
 			array( Pay_Gender::MALE, Gender::MALE ),
-			array( Pay_Gender::OTHER, Gender::UNKNOWN),
+			array( Pay_Gender::OTHER, Gender::UNKNOWN ),
 			array( 'not existing result code', Gender::UNKNOWN ),
 			array( null, Gender::UNKNOWN ),
 		);

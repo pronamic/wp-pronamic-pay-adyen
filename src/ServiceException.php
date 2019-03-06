@@ -11,7 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Exception;
-use InvalidArgumentException;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
 
 /**
  * Service exception
@@ -101,24 +103,18 @@ class ServiceException extends Exception {
 	 *
 	 * @param object $object Object.
 	 * @return ServiceException
-	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
+	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
 	public static function from_object( $object ) {
-		if ( ! isset( $object->status ) ) {
-			throw new InvalidArgumentException( 'Object must contain `status` property.' );
-		}
+		$validator = new Validator();
 
-		if ( ! isset( $object->errorCode ) ) {
-			throw new InvalidArgumentException( 'Object must contain `errorCode` property.' );
-		}
-
-		if ( ! isset( $object->message ) ) {
-			throw new InvalidArgumentException( 'Object must contain `message` property.' );
-		}
-
-		if ( ! isset( $object->errorType ) ) {
-			throw new InvalidArgumentException( 'Object must contain `errorType` property.' );
-		}
+		$validator->validate(
+			$object,
+			(object) array(
+				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/service-exception.json' ),
+			),
+			Constraint::CHECK_MODE_EXCEPTIONS
+		);
 
 		return new self(
 			$object->status,

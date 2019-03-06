@@ -10,7 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use InvalidArgumentException;
+use JsonSchema\Exception\ValidationException;
 use Pronamic\WordPress\Pay\Core\Statuses as PaymentStatus;
 use WP_Error;
 use WP_REST_Request;
@@ -92,7 +92,7 @@ class NotificationsController {
 
 		try {
 			$notification_request = NotificationRequest::from_object( $data );
-		} catch ( InvalidArgumentException $e ) {
+		} catch ( ValidationException $e ) {
 			return new WP_Error( 'adyen_invalid_notification', __( 'Cannot parse JSON notification.' ), array( 'status' => 500 ) );
 		}
 

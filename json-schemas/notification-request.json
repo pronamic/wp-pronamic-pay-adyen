@@ -1,0 +1,20 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/notification-request.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen notification request.",
+	"type": "object",
+	"required": [
+		"live",
+		"notificationItems"
+	],
+	"properties": {
+		"live": {
+			"type": "string",
+			"description": "Informs about the origin of the notification."
+		},
+		"notificationItems": {
+			"type": "array",
+			"description": "A container object for the details included in the notification."
+		}
+	}
+}

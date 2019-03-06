@@ -11,7 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use DateTime;
-use InvalidArgumentException;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
 use Pronamic\WordPress\Pay\Core\Util;
 
 /**
@@ -283,9 +285,19 @@ class NotificationRequestItem {
 	 *
 	 * @param object $object Object.
 	 * @return NotificationRequestItem
-	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
+	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
 	public static function from_object( $object ) {
+		$validator = new Validator();
+
+		$validator->validate(
+			$object,
+			(object) array(
+				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/notification-request-item.json' ),
+			),
+			Constraint::CHECK_MODE_EXCEPTIONS
+		);
+
 		if ( ! isset( $object->amount ) ) {
 			throw new InvalidArgumentException( 'Object must contain `amount` property.' );
 		}

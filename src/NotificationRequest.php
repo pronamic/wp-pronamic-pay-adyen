@@ -10,7 +10,9 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use InvalidArgumentException;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
 
 /**
  * Notification request
@@ -72,20 +74,18 @@ class NotificationRequest {
 	 *
 	 * @param object $object Object.
 	 * @return NotificationRequest
-	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
+	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
 	public static function from_object( $object ) {
-		if ( ! isset( $object->live ) ) {
-			throw new InvalidArgumentException( 'Object must contain `live` property.' );
-		}
+		$validator = new Validator();
 
-		if ( ! isset( $object->notificationItems ) ) {
-			throw new InvalidArgumentException( 'Object must contain `notificationItems` property.' );
-		}
-
-		if ( ! is_array( $object->notificationItems ) ) {
-			throw new InvalidArgumentException( 'Object property `notificationItems` must be an array.' );
-		}
+		$validator->validate(
+			$object,
+			(object) array(
+				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/notification-request.json' ),
+			),
+			Constraint::CHECK_MODE_EXCEPTIONS
+		);
 
 		$items = array();
 

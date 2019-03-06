@@ -41,7 +41,7 @@ class AmountTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function test_from_object( $object ) {
 		if ( ! isset( $object->currency, $object->value ) ) {
-			$this->setExpectedException( 'InvalidArgumentException' );
+			$this->setExpectedException( 'JsonSchema\Exception\ValidationException' );
 		}
 
 		$amount = Amount::from_object( $object );

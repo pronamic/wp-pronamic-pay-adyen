@@ -10,10 +10,12 @@
 	"properties": {
 		"currency": {
 			"type": "string",
-			"description": "The three-character ISO currency code."
+			"description": "The three-character ISO currency code.",
+			"minLength": 3,
+			"maxLength": 3
 		},
 		"value": {
-			"type": "number",
+			"type": "integer",
 			"description": "The payable amount that can be charged for the transaction."
 		}
 	}

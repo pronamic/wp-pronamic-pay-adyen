@@ -29,8 +29,8 @@ class AmountTransformer {
 	 */
 	public static function transform( Money $money ) {
 		$amount = new Amount(
-			strval( $money->get_currency()->get_alphabetic_code() ),
-			intval( $money->get_minor_units() )
+			$money->get_currency()->get_alphabetic_code(),
+			$money->get_minor_units()
 		);
 
 		return $amount;

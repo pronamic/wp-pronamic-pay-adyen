@@ -11,6 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use InvalidArgumentException;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
 
 /**
  * Amount
@@ -41,8 +44,28 @@ class Amount {
 	 *
 	 * @param string $currency Currency.
 	 * @param int    $value    Value.
+	 *
+	 * @throws InvalidArgumentException Throws invalid argument exception when Adyen amount requirements are not met.
 	 */
 	public function __construct( $currency, $value ) {
+		if ( 3 !== strlen( $currency ) ) {
+			throw new InvalidArgumentException(
+				sprintf(
+					'Given currency `%s` not a three-character ISO currency code.',
+					$currency
+				)
+			);
+		}
+
+		if ( ! is_int( $value ) ) {
+			throw new InvalidArgumentException(
+				sprintf(
+					'Given value `%s` is not an integer.',
+					$value
+				)
+			);
+		}
+
 		$this->currency = $currency;
 		$this->value    = $value;
 	}
@@ -82,16 +105,18 @@ class Amount {
 	 *
 	 * @param object $object Object.
 	 * @return Amount
-	 * @throws InvalidArgumentException Throws invalid argument exception when object does not contains the required properties.
+	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
-		if ( ! isset( $object->currency ) ) {
-			throw new InvalidArgumentException( 'Object must contain `currency` property.' );
-		}
+		$validator = new Validator();
 
-		if ( ! isset( $object->value ) ) {
-			throw new InvalidArgumentException( 'Object must contain `value` property.' );
-		}
+		$validator->validate(
+			$object,
+			(object) array(
+				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/amount.json' ),
+			),
+			Constraint::CHECK_MODE_EXCEPTIONS
+		);
 
 		return new self(
 			$object->currency,

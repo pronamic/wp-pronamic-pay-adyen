@@ -10,7 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Pay\Address as Pay_Address;
+use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
  * Payment request transformer

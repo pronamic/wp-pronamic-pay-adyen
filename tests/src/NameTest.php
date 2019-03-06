@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use JsonSchema\Validator;
+
 /**
  * Name test
  *
@@ -30,5 +32,29 @@ class NameTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( 'Doe', $name->get_last_name() );
 		$this->assertEquals( Gender::MALE, $name->get_gender() );
 		$this->assertNull( $name->get_infix() );
+
+		$name->set_infix( 'infix' );
+
+		$this->assertEquals( 'infix', $name->get_infix() );
+	}
+
+	/**
+	 * Test JSON.
+	 */
+	public function test_json() {
+		$name = new Name( 'John', 'Doe', Gender::MALE );
+
+		$object = $name->get_json();
+
+		$validator = new Validator();
+
+		$validator->validate(
+			$object,
+			(object) array(
+				'$ref' => 'file://' . realpath( __DIR__ . '/../../json-schemas/name.json' ),
+			)
+		);
+
+		$this->assertTrue( $validator->isValid() );
 	}
 }

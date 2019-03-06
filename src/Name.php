@@ -112,6 +112,15 @@ class Name {
 	 * @param string|null $infix Infix.
 	 */
 	public function set_infix( $infix ) {
+		if ( null !== $infix && mb_strlen( $infix ) > 20 ) {
+			throw new InvalidArgumentException(
+				sprintf(
+					'Given infix `%s` is longer then 20 characters.',
+					$infix
+				)
+			);
+		}
+
 		$this->infix = $infix;
 	}
 

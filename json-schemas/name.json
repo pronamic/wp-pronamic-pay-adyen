@@ -1,0 +1,30 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/name.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen name.",
+	"type": "object",
+	"properties": {
+		"firstName": {
+			"type": "string",
+			"description": "A person's first name."
+		},
+		"gender": {
+			"type": "string",
+			"enum": ["MALE", "FEMALE", "UNKNOWN"]
+		},
+		"infix": {
+			"type": "string",
+			"description": "A person name's infix, if applicable.",
+			"maxLength": 20
+		},
+		"lastName": {
+			"type": "string",
+			"description": "A person's last name."
+		}
+	},
+	"required": [
+		"firstName",
+		"gender",
+		"lastName"
+	]
+}

@@ -39,6 +39,17 @@ class NameTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test invalid infix.
+	 */
+	public function test_invalid_infix() {
+		$name = new Name( 'John', 'Doe', Gender::MALE );
+
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$name->set_infix( '12345678901234567890test' );
+	}
+
+	/**
 	 * Test JSON.
 	 */
 	public function test_json() {

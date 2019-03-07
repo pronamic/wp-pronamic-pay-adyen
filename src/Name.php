@@ -112,6 +112,7 @@ class Name {
 	 * Set infix.
 	 *
 	 * @param string|null $infix Infix.
+	 * @throws InvalidArgumentException Throws invalid argument exception when infix is longer then 20 characters.
 	 */
 	public function set_infix( $infix ) {
 		if ( null !== $infix && mb_strlen( $infix ) > 20 ) {

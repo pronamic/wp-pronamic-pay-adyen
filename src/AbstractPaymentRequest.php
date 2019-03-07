@@ -230,6 +230,7 @@ abstract class AbstractPaymentRequest {
 	 * Set country code.
 	 *
 	 * @param string|null $country_code Country code.
+	 * @throws InvalidArgumentException Throws invalid argument exception when country code is not 2 characters.
 	 */
 	public function set_country_code( $country_code ) {
 		if ( null !== $country_code && 2 !== strlen( $country_code ) ) {

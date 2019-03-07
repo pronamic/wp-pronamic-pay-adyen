@@ -25,6 +25,8 @@ class GenderTransformerTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test transform.
 	 *
+	 * @param string $pay_gender            WordPress pay gender value.
+	 * @param string $expected_adyen_gender Expected Adyen gender value after transformation.
 	 * @dataProvider transform_provider
 	 */
 	public function test_transform( $pay_gender, $expected_adyen_gender ) {

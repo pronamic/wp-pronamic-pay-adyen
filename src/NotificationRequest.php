@@ -75,7 +75,7 @@ class NotificationRequest {
 	 *
 	 * @param object $object Object.
 	 * @return NotificationRequest
-	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
+	 * @throws InvalidArgumentException Throws JSON schema validation exception when JSON is invalid.
 	 */
 	public static function from_object( $object ) {
 		$validator = new Validator();

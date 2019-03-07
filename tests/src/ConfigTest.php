@@ -35,10 +35,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals( 'JPERWpuRAAvAj4mU', $config->get_api_key() );
 		$this->assertEquals( 'Test', $config->get_merchant_account() );
-		$this->assertEquals( 'https://checkout-test.adyen.com/v41/', $config->get_api_url() );
+		$this->assertEquals( 'https://checkout-test.adyen.com/v41/paymentMethods', $config->get_api_url( 'paymentMethods' ) );
 
 		$config->mode = Core_Gateway::MODE_LIVE;
 
-		$this->assertEquals( 'https://1797a841fbb37ca7-AdyenDemo-checkout-live.adyenpayments.com/checkout/v41/', $config->get_api_url() );
+		$this->assertEquals( 'https://1797a841fbb37ca7-AdyenDemo-checkout-live.adyenpayments.com/checkout/v41/paymentMethods', $config->get_api_url( 'paymentMethods' ) );
 	}
 }

@@ -23,14 +23,21 @@ class PaymentMethodTypeTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test transform.
 	 *
+	 * @param string $adyen_payment_method_type Adyen payment method type.
+	 * @param string $expected_payment_method   Expectd WordPress payment method.
 	 * @dataProvider payment_method_type_matrix_provider
 	 */
-	public function test_transform( $payment_method_type, $expected ) {
-		$payment_method = PaymentMethodType::transform_gateway_method( $payment_method_type );
+	public function test_transform( $adyen_payment_method_type, $expected_payment_method ) {
+		$payment_method = PaymentMethodType::transform_gateway_method( $adyen_payment_method_type );
 
-		$this->assertEquals( $expected, $payment_method );
+		$this->assertEquals( $expected_payment_method, $payment_method );
 	}
 
+	/**
+	 * Transform test provider.
+	 *
+	 * @return array
+	 */
 	public function payment_method_type_matrix_provider() {
 		return array(
 			array( PaymentMethodType::AFTERPAY, PaymentMethods::AFTERPAY ),

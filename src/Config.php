@@ -63,13 +63,14 @@ class Config extends GatewayConfig {
 	/**
 	 * Get API URL.
 	 *
+	 * @param string $method API method.
 	 * @return string
 	 */
-	public function get_api_url() {
+	public function get_api_url( $method ) {
 		if ( Core_Gateway::MODE_TEST === $this->mode ) {
-			return Endpoint::API_URL_TEST;
+			return sprintf( Endpoint::API_URL_TEST, $method );
 		}
 
-		return sprintf( Endpoint::API_URL_LIVE, $this->api_live_url_prefix );
+		return sprintf( Endpoint::API_URL_LIVE, $this->api_live_url_prefix, $method );
 	}
 }

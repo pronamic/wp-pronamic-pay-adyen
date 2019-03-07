@@ -21,26 +21,14 @@
 	<rule ref="PHPCompatibilityWP"/>
 
 	<rule ref="WordPress">
-		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
-
-		<exclude name="Squiz.Commenting" />
-
 		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_key"/>
-		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_query"/>
 
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
 
-        <exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
 
 		<exclude name="WordPress.Security.SafeRedirect.wp_redirect_wp_redirect"/>
-
-		<exclude name="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents" />
-	</rule>
-
-	<rule ref="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar">
-		<exclude-pattern>/src/Client.php</exclude-pattern>
-		<exclude-pattern>/src/Gateway.php</exclude-pattern>
 	</rule>
 
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_putenv">

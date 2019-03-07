@@ -58,21 +58,20 @@ class Client {
 	/**
 	 * Send request with the specified action and parameters
 	 *
-	 * @param string       $end_point              Requested endpoint.
-	 * @param string       $method                 HTTP method to use.
-	 * @param array|object $data                   Request data.
-	 * @param int          $expected_response_code Expected response code.
+	 * @param string $api_method     Adyen API method.
+	 * @param string $request_method HTTP method to use.
+	 * @param object $data           Request data.
 	 *
-	 * @return bool|object
+	 * @return object
 	 */
-	private function send_request( $end_point, $method = 'GET', $data = null, $expected_response_code = 200 ) {
+	private function send_request( $api_method, $request_method = 'GET', $data ) {
 		// Request.
-		$url = $this->config->get_api_url() . $end_point;
+		$url = $this->config->get_api_url( $api_method );
 
 		$response = wp_remote_request(
 			$url,
 			array(
-				'method'  => $method,
+				'method'  => $request_method,
 				'headers' => array(
 					'X-API-key'    => $this->config->get_api_key(),
 					'Content-Type' => 'application/json',

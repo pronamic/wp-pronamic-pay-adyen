@@ -25,12 +25,12 @@ class Endpoint {
 	 *
 	 * @var string
 	 */
-	const API_URL_TEST = 'https://checkout-test.adyen.com/v41/';
+	const API_URL_TEST = 'https://checkout-test.adyen.com/v41/%s';
 
 	/**
 	 * API endpoint live URL.
 	 *
 	 * @var string
 	 */
-	const API_URL_LIVE = 'https://%s-checkout-live.adyenpayments.com/checkout/v41/';
+	const API_URL_LIVE = 'https://%s-checkout-live.adyenpayments.com/checkout/v41/%s';
 }

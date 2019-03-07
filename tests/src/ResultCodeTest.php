@@ -21,14 +21,21 @@ class ResultCodeTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test transform.
 	 *
+	 * @param string $adyen_result_code       Adyen result code.
+	 * @param string $expected_payment_status Expected WordPess payment status.
 	 * @dataProvider result_code_matrix_provider
 	 */
-	public function test_transform( $adyen_result_code, $expected ) {
+	public function test_transform( $adyen_result_code, $expected_payment_status ) {
 		$status = ResultCode::transform( $adyen_result_code );
 
-		$this->assertEquals( $expected, $status );
+		$this->assertEquals( $expected_payment_status, $status );
 	}
 
+	/**
+	 * Transform test provider.
+	 *
+	 * @return array
+	 */
 	public function result_code_matrix_provider() {
 		return array(
 			array( ResultCode::AUTHORIZED, \Pronamic\WordPress\Pay\Core\Statuses::SUCCESS ),

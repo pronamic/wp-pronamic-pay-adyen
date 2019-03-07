@@ -82,6 +82,13 @@ class Client {
 			);
 		}
 
+		// Error.
+		if ( isset( $data->error ) ) {
+			$error = Error::from_object( $data->error );
+
+			throw $error;
+		}
+
 		// Adyen error.
 		if ( isset( $data->errorCode, $data->message ) ) {
 			$message = sprintf(

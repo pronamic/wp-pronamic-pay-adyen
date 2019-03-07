@@ -23,14 +23,31 @@ use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
  */
 class ClientTest extends \PHPUnit_Framework_TestCase {
 	/**
-	 * Test client.
+	 * Test decode exception.
 	 */
-	public function test_client() {
+	public function test_decode_exception() {
 		$config = new Config();
 
-		$config->mode = Core_Gateway::MODE_TEST;
+		$client = new Client( $config );
+
+		$this->setExpectedException( 'Exception' );
+
+		$payment_methods = $client->get_payment_methods();
+	}
+
+	/**
+	 * Test error.
+	 */
+	public function test_error() {
+		$config = new Config();
+
+		$config->mode             = Core_Gateway::MODE_TEST;
+		$config->api_key          = 'JPERWpuRAAvAj4mU';
+		$config->merchant_account = 'Test';
 
 		$client = new Client( $config );
+
+		$this->setExpectedException( __NAMESPACE__ . '\Error' );
 
 		$payment_methods = $client->get_payment_methods();
 	}

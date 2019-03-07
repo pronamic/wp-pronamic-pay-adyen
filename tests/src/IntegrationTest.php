@@ -10,8 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Pay\Gender as Pay_Gender;
-
 /**
  * Integration test
  *
@@ -32,5 +30,22 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals( $expected, $class );
 		$this->assertTrue( class_exists( $class ) );
+	}
+
+	/**
+	 * Test integration settings.
+	 */
+	public function test_integration_settings() {
+		$integration = new Integration();
+
+		$expected = __NAMESPACE__ . '\Settings';
+
+		$class = $integration->get_settings_class();
+
+		$this->assertEquals( $expected, $class );
+
+		$settings = $integration->get_settings();
+
+		$this->assertInternalType( 'array', $settings );
 	}
 }

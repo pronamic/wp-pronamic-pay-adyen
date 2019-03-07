@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Exception;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\XML\Security;
 use WP_Error;
@@ -31,13 +32,6 @@ class Client {
 	private $config;
 
 	/**
-	 * Error
-	 *
-	 * @var WP_Error
-	 */
-	private $error;
-
-	/**
 	 * Constructs and initializes an Adyen client object.
 	 *
 	 * @param Config $config Adyen config.
@@ -47,20 +41,12 @@ class Client {
 	}
 
 	/**
-	 * Error
-	 *
-	 * @return WP_Error
-	 */
-	public function get_error() {
-		return $this->error;
-	}
-
-	/**
 	 * Send request with the specified action and parameters
 	 *
 	 * @param string $method Adyen API method.
 	 * @param object $data   Request data.
 	 * @return object
+	 * @throws Exception Throws exception when error occurs.
 	 */
 	private function send_request( $method, $data ) {
 		// Request.
@@ -78,15 +64,22 @@ class Client {
 			)
 		);
 
+		if ( $response instanceof WP_Error ) {
+			throw new Exception( $response->get_error_message() );
+		}
+
 		// Body.
 		$body = wp_remote_retrieve_body( $response );
 
 		$data = json_decode( $body );
 
 		if ( ! is_object( $data ) ) {
-			$this->error = new WP_Error( 'adyen_error', 'Could not parse response.' );
+			$code = wp_remote_retrieve_response_code( $response );
 
-			return false;
+			throw new Exception(
+				sprintf( 'Could not JSON decode Adyen response to an object (HTTP Status Code: %s).', $code ),
+				$code
+			);
 		}
 
 		// Adyen error.

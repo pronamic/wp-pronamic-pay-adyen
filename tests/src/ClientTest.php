@@ -147,4 +147,62 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->assertCount( 8, $payment_methods );
 	}
+
+	/**
+	 * Test create payment.
+	 */
+	public function test_create_payment() {
+		$config = new Config();
+
+		$config->mode = Core_Gateway::MODE_TEST;
+
+		$client = new Client( $config );
+
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/payments', __DIR__ . '/../http/checkout-test-adyen-com-v41-payments-ok.http' );
+
+		$payment_method         = new PaymentMethod( PaymentMethodType::IDEAL );
+		$payment_method->issuer = '1121';
+
+		$payment_request = new PaymentRequest(
+			new Amount( 'EUR', 1000 ),
+			'YOUR_MERCHANT_ACCOUNT',
+			'Your order number',
+			'https://your-company.com/...',
+			$payment_method
+		);
+
+		$payment_response = $client->create_payment( $payment_request );
+
+		$this->assertInstanceOf( __NAMESPACE__ . '\PaymentResponse', $payment_response );
+		$this->assertEquals( ResultCode::REDIRECT_SHOPPER, $payment_response->get_result_code() );
+		$this->assertEquals( 'GET', $payment_response->get_redirect()->get_method() );
+	}
+
+	/**
+	 * Test create payment session.
+	 */
+	public function test_create_payment_session() {
+		$config = new Config();
+
+		$config->mode = Core_Gateway::MODE_TEST;
+
+		$client = new Client( $config );
+
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentSession', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentSession-ok.http' );
+
+		$amount = new Amount( 'EUR', 1000 );
+
+		$payment_request = new PaymentSessionRequest(
+			$amount,
+			'YOUR_MERCHANT_ACCOUNT',
+			'Your order number',
+			'https://your-company.com/...',
+			'NL'
+		);
+
+		$payment_response = $client->create_payment_session( $payment_request );
+
+		$this->assertInstanceOf( __NAMESPACE__ . '\PaymentSessionResponse', $payment_response );
+		$this->assertStringStartsWith( 'eyJjaGVja291dHNob3BwZXJCYXNlVXJs', $payment_response->get_payment_session() );
+	}
 }

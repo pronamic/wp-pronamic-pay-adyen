@@ -7,4 +7,4 @@ Connection: close
 Transfer-Encoding: chunked
 Content-Type: application/json;charset=UTF-8
 
-{"pspReference":"8515519499286780","resultCode":"Authorised","merchantReference":"773","paymentMethod":"ideal","shopperLocale":"nl_NL"}"
+{"pspReference":"8515519499286780","resultCode":"Authorised","merchantReference":"773","paymentMethod":"ideal","shopperLocale":"nl_NL"}

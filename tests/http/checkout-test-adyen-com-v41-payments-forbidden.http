@@ -5,4 +5,4 @@ Connection: close
 Transfer-Encoding: chunked
 Content-Type: application/json;charset=ISO-8859-1
 
-{"error":{"code":403,"message":"Forbidden","requested URI":"\/checkout\/\/v41\/payments\/"}}"
+{"error":{"code":403,"message":"Forbidden","requested URI":"\/checkout\/\/v41\/payments\/"}}

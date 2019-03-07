@@ -7,4 +7,4 @@ Connection: close
 Transfer-Encoding: chunked
 Content-Type: application/json;charset=UTF-8
 
-{"status":422,"errorCode":"14_030","message":"Return URL is missing.","errorType":"validation"}"
+{"status":422,"errorCode":"14_030","message":"Return URL is missing.","errorType":"validation"}

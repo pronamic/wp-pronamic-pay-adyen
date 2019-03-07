@@ -7,4 +7,4 @@ Connection: close
 Transfer-Encoding: chunked
 Content-Type: application/json;charset=UTF-8
 
-{"status":422,"errorCode":"14_006","message":"paymentMethod object has not been provided in the request","errorType":"validation"}"
+{"status":422,"errorCode":"14_006","message":"paymentMethod object has not been provided in the request","errorType":"validation"}

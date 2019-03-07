@@ -7,4 +7,4 @@ Connection: close
 Transfer-Encoding: chunked
 Content-Type: application/json;charset=UTF-8
 
-{"status":403,"errorCode":"901","message":"Invalid Merchant Account","errorType":"security"}"
+{"status":403,"errorCode":"901","message":"Invalid Merchant Account","errorType":"security"}

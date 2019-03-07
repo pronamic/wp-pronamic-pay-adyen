@@ -60,9 +60,7 @@ class Gateway extends Core_Gateway {
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
 		$this->set_slug( self::SLUG );
 
-		$this->client = new Client( $config->api_key, $config->api_live_url_prefix );
-		$this->client->set_merchant_account( $config->merchant_account );
-		$this->client->set_mode( $config->mode );
+		$this->client = new Client( $config );
 	}
 
 	/**

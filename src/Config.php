@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\GatewayConfig;
 
 /**
@@ -40,4 +41,35 @@ class Config extends GatewayConfig {
 	 * @var string
 	 */
 	public $merchant_account;
+
+	/**
+	 * Get API key.
+	 *
+	 * @return string
+	 */
+	public function get_api_key() {
+		return $this->api_key;
+	}
+
+	/**
+	 * Get merchant account.
+	 *
+	 * @return string
+	 */
+	public function get_merchant_account() {
+		return $this->merchant_account;
+	}
+
+	/**
+	 * Get API URL.
+	 *
+	 * @return string
+	 */
+	public function get_api_url() {
+		if ( Core_Gateway::MODE_TEST === $this->mode ) {
+			return Endpoint::API_URL_TEST;
+		}
+
+		return sprintf( Endpoint::API_URL_LIVE, $this->api_live_url_prefix );
+	}
 }

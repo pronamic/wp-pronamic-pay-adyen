@@ -24,46 +24,11 @@ use WP_Error;
  */
 class Client {
 	/**
-	 * API endpoint test URL.
+	 * Config.
 	 *
-	 * @var string
+	 * @var Config
 	 */
-	const API_URL_TEST = 'https://checkout-test.adyen.com/v41/';
-
-	/**
-	 * API endpoint live URL suffix.
-	 *
-	 * @var string
-	 */
-	const API_URL_LIVE = 'https://%s-checkout-live.adyenpayments.com/checkout/v41/';
-
-	/**
-	 * Mode.
-	 *
-	 * @var string
-	 */
-	private $mode;
-
-	/**
-	 * API Key.
-	 *
-	 * @var string
-	 */
-	private $api_key;
-
-	/**
-	 * API Live URL Prefix.
-	 *
-	 * @var string
-	 */
-	private $api_live_url_prefix;
-
-	/**
-	 * Merchant Account.
-	 *
-	 * @var string
-	 */
-	private $merchant_account;
+	private $config;
 
 	/**
 	 * Error
@@ -75,30 +40,10 @@ class Client {
 	/**
 	 * Constructs and initializes an Adyen client object.
 	 *
-	 * @param string $api_key             Adyen API key.
-	 * @param string $api_live_url_prefix Adyen API live URL prefix.
+	 * @param Config $config Adyen config.
 	 */
-	public function __construct( $api_key, $api_live_url_prefix ) {
-		$this->api_key             = $api_key;
-		$this->api_live_url_prefix = $api_live_url_prefix;
-	}
-
-	/**
-	 * Set mode.
-	 *
-	 * @param string $mode Mode.
-	 */
-	public function set_mode( $mode ) {
-		$this->mode = $mode;
-	}
-
-	/**
-	 * Set merchant account.
-	 *
-	 * @param string $merchant_account Merchant account.
-	 */
-	public function set_merchant_account( $merchant_account ) {
-		$this->merchant_account = $merchant_account;
+	public function __construct( Config $config ) {
+		$this->config = $config;
 	}
 
 	/**
@@ -108,19 +53,6 @@ class Client {
 	 */
 	public function get_error() {
 		return $this->error;
-	}
-
-	/**
-	 * Get API URL for current mode.
-	 *
-	 * @return string
-	 */
-	public function get_api_url() {
-		if ( Core_Gateway::MODE_TEST === $this->mode ) {
-			return self::API_URL_TEST;
-		}
-
-		return sprintf( self::API_URL_LIVE, $this->api_live_url_prefix );
 	}
 
 	/**
@@ -135,14 +67,14 @@ class Client {
 	 */
 	private function send_request( $end_point, $method = 'GET', $data = null, $expected_response_code = 200 ) {
 		// Request.
-		$url = $this->get_api_url() . $end_point;
+		$url = $this->config->get_api_url() . $end_point;
 
 		$response = wp_remote_request(
 			$url,
 			array(
 				'method'  => $method,
 				'headers' => array(
-					'X-API-key'    => $this->api_key,
+					'X-API-key'    => $this->config->get_api_key(),
 					'Content-Type' => 'application/json',
 				),
 				'body'    => wp_json_encode( $data ),
@@ -304,7 +236,7 @@ class Client {
 	 */
 	public function get_payment_methods() {
 		$data = array(
-			'merchantAccount'       => $this->merchant_account,
+			'merchantAccount'       => $this->config->get_merchant_account(),
 			'allowedPaymentMethods' => array(),
 		);
 

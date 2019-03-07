@@ -139,15 +139,6 @@ class Client {
 	}
 
 	/**
-	 * Get payments.
-	 *
-	 * @return bool|object
-	 */
-	public function get_payments() {
-		return $this->send_request( 'payments/', 'GET' );
-	}
-
-	/**
 	 * Get payment details.
 	 *
 	 * @param string $payload Payload to get payment details for.

@@ -89,18 +89,11 @@ class Client {
 			throw $error;
 		}
 
-		// Adyen error.
-		if ( isset( $data->errorCode, $data->message ) ) {
-			$message = sprintf(
-				'%1$s %2$s - %3$s',
-				$data->status,
-				$data->errorCode,
-				$data->message
-			);
+		// Service Exception.
+		if ( isset( $data->status, $data->errorCode, $data->message, $data->errorType ) ) {
+			$service_exception = ServiceException::from_object( $data );
 
-			$this->error = new WP_Error( 'adyen_error', $message, $data->errorCode );
-
-			return false;
+			throw $service_exception;
 		}
 
 		return $data;
@@ -221,7 +214,7 @@ class Client {
 			'allowedPaymentMethods' => array(),
 		);
 
-		$response = $this->send_request( 'paymentMethods/', $data );
+		$response = $this->send_request( 'paymentMethods', $data );
 
 		if ( false === $response ) {
 			return false;

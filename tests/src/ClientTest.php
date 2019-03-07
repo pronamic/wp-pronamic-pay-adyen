@@ -115,6 +115,23 @@ class ClientTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test get payment methods service exception.
+	 */
+	public function test_get_payment_methods_service_exception() {
+		$config = new Config();
+
+		$config->mode = Core_Gateway::MODE_TEST;
+
+		$client = new Client( $config );
+
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-forbidden-901.http' );
+
+		$this->setExpectedException( __NAMESPACE__ . '\ServiceException' );
+
+		$payment_methods = $client->get_payment_methods();
+	}
+
+	/**
 	 * Test get payment methods.
 	 */
 	public function test_get_payment_methods() {
@@ -124,7 +141,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods/', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-ok.http' );
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-ok.http' );
 
 		$payment_methods = $client->get_payment_methods();
 

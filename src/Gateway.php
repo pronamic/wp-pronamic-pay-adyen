@@ -298,37 +298,6 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
-	 * Handle authorization event.
-	 *
-	 * @param Payment $payment      Payment.
-	 * @param object  $notification Notification.
-	 */
-	public function handle_authorization_event( Payment $payment, $notification ) {
-		if ( ! is_object( $notification ) ) {
-			return;
-		}
-
-		$success = $notification->success;
-
-		if ( 'true' === $success ) {
-			$status = Core_Statuses::SUCCESS;
-		} else {
-			$status = Core_Statuses::FAILURE;
-
-			// Add note.
-			$note = sprintf(
-				/* translators: %s: failure reason message */
-				__( 'Failure reason: %s.', 'pronamic_ideal' ),
-				esc_html( $notification->reason )
-			);
-
-			$payment->add_note( $note );
-		}
-
-		$payment->set_status( $status );
-	}
-
-	/**
 	 * Get available payment methods.
 	 *
 	 * @see Core_Gateway::get_available_payment_methods()

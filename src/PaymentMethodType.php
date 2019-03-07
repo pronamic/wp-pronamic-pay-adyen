@@ -152,27 +152,20 @@ class PaymentMethodType {
 	 * Transform WordPress payment method to Adyen brand code.
 	 *
 	 * @param string|null $payment_method Payment method.
-	 * @param mixed       $default        Default payment method.
-	 *
 	 * @return string|null
 	 */
-	public static function transform( $payment_method, $default = null ) {
-		if ( ! is_scalar( $payment_method ) ) {
-			return null;
-		}
-
+	public static function transform( $payment_method ) {
 		if ( isset( self::$map[ $payment_method ] ) ) {
 			return self::$map[ $payment_method ];
 		}
 
-		return $default;
+		return null;
 	}
 
 	/**
 	 * Transform Adyen method to WordPress payment method.
 	 *
 	 * @param string $method Adyen method.
-	 *
 	 * @return string
 	 */
 	public static function transform_gateway_method( $method ) {

@@ -89,25 +89,10 @@ class Gateway extends Core_Gateway {
 	 */
 	public function start( Payment $payment ) {
 		// Amount.
-		$amount = new Amount(
-			$payment->get_total_amount()->get_currency()->get_alphabetic_code(),
-			$payment->get_total_amount()->get_minor_units()
-		);
+		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment method. Take leap of faith for unknown payment methods.
-		$type = PaymentMethodType::transform(
-			$payment->get_method(),
-			$payment->get_method()
-		);
-
-		$payment_method = new PaymentMethod( $type );
-
-		switch ( $payment->get_method() ) {
-			case PaymentMethods::IDEAL:
-				$payment_method->issuer = $payment->get_issuer();
-
-				break;
-		}
+		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
 
 		// Country.
 		$locale = get_locale();
@@ -124,86 +109,65 @@ class Gateway extends Core_Gateway {
 		switch ( $payment->get_method() ) {
 			case PaymentMethods::IDEAL:
 			case PaymentMethods::SOFORT:
+				$payment_method = new PaymentMethod( $payment_method_type );
+
+				switch ( $payment->get_method() ) {
+					case PaymentMethods::IDEAL:
+						$payment_method->issuer = $payment->get_issuer();
+
+						break;
+				}
+
 				// API integration.
-				$request = new PaymentRequest(
+				$payment_request = new PaymentRequest(
 					$amount,
-					$this->config->merchant_account,
+					$this->config->get_merchant_account(),
 					$payment->get_id(),
 					$payment->get_return_url(),
 					$payment_method
 				);
 
-				$request->set_country_code( $country_code );
+				$payment_request->set_country_code( $country_code );
+
+				$payment_request = PaymentRequestTransformer::transform( $payment, $payment_request );
+
+				$payment_response = $this->client->create_payment( $payment_request );
+
+				$payment->set_transaction_id( $payment_response->get_psp_reference() );
+
+				$redirect = $payment_response->get_redirect();
+
+				if ( null !== $redirect ) {
+					$payment->set_action_url( $redirect->get_url() );
+				}
 
 				break;
 			default:
 				// Web SDK integration.
-				$request = new PaymentSessionRequest(
+				$payment_session_request = new PaymentSessionRequest(
 					$amount,
-					$this->config->merchant_account,
+					$this->config->get_merchant_account(),
 					$payment->get_id(),
 					$payment->get_return_url(),
 					$country_code
 				);
 
-				$request->set_origin( home_url() );
-				$request->set_sdk_version( self::SDK_VERSION );
+				$payment_session_request = PaymentRequestTransformer::transform( $payment, $payment_session_request );
 
-				// Set allowed payment methods.
-				$allowed_methods = array( $type );
+				$payment_session_request->set_origin( home_url() );
+				$payment_session_request->set_sdk_version( self::SDK_VERSION );
 
-				// Add all available payment methods if no payment method is given.
-				if ( empty( $type ) ) {
-					$allowed_methods = array();
-
-					foreach ( $this->get_available_payment_methods() as $method ) {
-						$allowed_methods[] = PaymentMethodType::transform( $method );
-					}
+				if ( null !== $payment_method_type ) {
+					$payment_session_request->set_allowed_payment_methods( array( $payment_method_type ) );
 				}
 
-				$request->set_allowed_payment_methods( $allowed_methods );
+				$payment_session_response = $this->client->create_payment_session( $payment_session_request );
+
+				$payment->set_action_url( $payment->get_pay_redirect_url() );
+
+				$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
+				$payment->set_meta( 'adyen_payment_session', $payment_session_response->get_payment_session() );
 		}
-
-		$request = PaymentRequestTransformer::transform( $payment, $request );
-
-		// Create payment or payment session.
-		if ( $request instanceof PaymentRequest ) {
-			$result = $this->client->create_payment( $request );
-		} else {
-			$result = $this->client->create_payment_session( $request );
-		}
-
-		// Handle errors.
-		if ( ! $result ) {
-			$this->error = $this->client->get_error();
-
-			return;
-		}
-
-		// Set checkout meta for Web SDK redirect.
-		if ( isset( $result->paymentSession ) ) {
-			$payment->set_meta(
-				'adyen_checkout',
-				array(
-					'sdk_version' => self::SDK_VERSION,
-					'payload'     => $result->paymentSession,
-				)
-			);
-		}
-
-		// Set transaction ID.
-		if ( isset( $result->pspReference ) ) {
-			$payment->set_transaction_id( $result->pspReference );
-		}
-
-		// Set action URL.
-		$action_url = $payment->get_pay_redirect_url();
-
-		if ( isset( $result->redirect->url ) ) {
-			$action_url = $result->redirect->url;
-		}
-
-		$payment->set_action_url( $action_url );
 	}
 
 	/**
@@ -214,30 +178,40 @@ class Gateway extends Core_Gateway {
 	 * @return void
 	 */
 	public function payment_redirect( Payment $payment ) {
-		$checkout = $payment->get_meta( 'adyen_checkout' );
+		$sdk_version     = $payment->get_meta( 'adyen_sdk_version' );
+		$payment_session = $payment->get_meta( 'adyen_payment_session' );
 
-		if ( empty( $checkout ) ) {
+		if ( empty( $sdk_version ) || empty( $payment_session ) ) {
 			return;
 		}
 
 		$url = sprintf(
 			'https://checkoutshopper-%s.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.%s.min.js',
 			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			$checkout['sdk_version']
+			$sdk_version
 		);
 
 		wp_register_script(
 			'pronamic-pay-adyen-checkout',
 			$url,
 			array(),
-			$checkout['sdk_version'],
+			$sdk_version,
 			false
+		);
+
+		wp_localize_script(
+			'pronamic-pay-adyen-checkout',
+			'pronamicPayAdyenCheckout',
+			array(
+				'paymentSession' => $payment_session,
+				'configObject'   => array(
+					'context' => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+				),
+			)
 		);
 
 		// No cache.
 		Util::no_cache();
-
-		$context = ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' );
 
 		require __DIR__ . '/../views/checkout.php';
 

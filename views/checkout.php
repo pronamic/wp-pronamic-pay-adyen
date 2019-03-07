@@ -37,9 +37,9 @@
 	<script type="text/javascript">
 		// Initiate the Adyen Checkout form.
 		var checkout = chckt.checkout(
-			'<?php echo esc_html( $checkout['payload'] ); ?>',
+			pronamicPayAdyenCheckout.paymentSession,
 			'#pronamic-pay-checkout',
-			{ context: '<?php echo esc_html( $context ); ?>' }
+			pronamicPayAdyenCheckout.configObject
 		);
 
 		// Redirect once payment completes.

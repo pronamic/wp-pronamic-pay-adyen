@@ -35,20 +35,46 @@
 	</body>
 
 	<script type="text/javascript">
-		// Initiate the Adyen Checkout form.
+		<?php
+
+		/**
+		 * Initiate the Adyen Checkout form.
+		 *
+		 * @link https://docs.adyen.com/developers/checkout/web-sdk
+		 */
+
+		?>
 		var checkout = chckt.checkout(
 			pronamicPayAdyenCheckout.paymentSession,
 			'#pronamic-pay-checkout',
 			pronamicPayAdyenCheckout.configObject
 		);
 
-		// Redirect once payment completes.
-		chckt.hooks.beforeComplete = function ( node, paymentData ) {
-			if ( "undefined" !== paymentData.payload ) {
-				window.location.href = "<?php echo esc_url_raw( $payment->get_return_url() ); ?>&payload=" + encodeURIComponent( paymentData.payload );
+		<?php
 
-				return false;
+		/**
+		 * Redirect once payment completes.
+		 *
+		 * @link https://docs.adyen.com/developers/checkout/web-sdk/customization/logic#beforecomplete
+		 * @link https://developer.mozilla.org/en-US/docs/Web/API/URL
+		 * @link https://caniuse.com/#search=URL
+		 * @link https://stackoverflow.com/questions/486896/adding-a-parameter-to-the-url-with-javascript
+		 * @link https://stackoverflow.com/questions/503093/how-do-i-redirect-to-another-webpage
+		 */
+
+		?>
+		chckt.hooks.beforeComplete = function( node, paymentData ) {
+			if ( ! paymentData.payload ) {
+				return;
 			}
+
+			var url = new URL( pronamicPayAdyenCheckout.paymentReturnUrl );
+
+			url.searchParams.append( 'payload', paymentData.payload );
+
+			window.location.replace( url );
+
+			return false;
 		};
 	</script>
 </html>

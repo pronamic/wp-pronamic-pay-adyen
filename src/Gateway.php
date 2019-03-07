@@ -203,8 +203,9 @@ class Gateway extends Core_Gateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			array(
-				'paymentSession' => $payment_session,
-				'configObject'   => array(
+				'paymentReturnUrl' => $payment->get_return_url(),
+				'paymentSession'   => $payment_session,
+				'configObject'     => array(
 					'context' => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
 				),
 			)

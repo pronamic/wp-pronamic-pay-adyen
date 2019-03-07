@@ -254,9 +254,6 @@ class Gateway extends Core_Gateway {
 	 * @return void
 	 */
 	public function update_status( Payment $payment ) {
-		// Maybe process stored webhook notification.
-		$this->maybe_handle_notification( $payment );
-
 		// Process payload on return.
 		if ( ! filter_has_var( INPUT_GET, 'payload' ) ) {
 			return;
@@ -298,34 +295,6 @@ class Gateway extends Core_Gateway {
 		if ( isset( $psp_reference ) ) {
 			$payment->set_transaction_id( $psp_reference );
 		}
-	}
-
-	/**
-	 * Maybe handle notification.
-	 *
-	 * @param Payment $payment      Payment.
-	 */
-	public function maybe_handle_notification( Payment $payment ) {
-		$notification = $payment->get_meta( 'adyen_notification' );
-
-		if ( empty( $notification ) ) {
-			return;
-		}
-
-		$notification = json_decode( $notification );
-
-		if ( ! is_object( $notification ) ) {
-			return;
-		}
-
-		switch ( $notification->eventCode ) {
-			case EventCode::AUTHORIZATION:
-				$this->handle_authorization_event( $payment, $notification );
-
-				break;
-		}
-
-		$payment->set_meta( 'adyen_notification', null );
 	}
 
 	/**

@@ -73,12 +73,23 @@ class Client {
 
 		$data = json_decode( $body );
 
+		// JSON error.
+		$json_error = json_last_error();
+
+		if ( JSON_ERROR_NONE !== $json_error ) {
+			throw new Exception(
+				json_last_error_msg(),
+				$json_error
+			);
+		}
+
+		// Object.
 		if ( ! is_object( $data ) ) {
 			$code = wp_remote_retrieve_response_code( $response );
 
 			throw new Exception(
 				sprintf( 'Could not JSON decode Adyen response to an object (HTTP Status Code: %s).', $code ),
-				$code
+				intval( $code )
 			);
 		}
 

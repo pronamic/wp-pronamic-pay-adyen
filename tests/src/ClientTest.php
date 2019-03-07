@@ -62,7 +62,7 @@ class ClientTest extends WP_UnitTestCase {
 	 * @param false|array|WP_Error $preempt Whether to preempt an HTTP request's return value. Default false.
 	 * @param array                $r       HTTP request arguments.
 	 * @param string               $url     The request URL.
-	 * @return string
+	 * @return array
 	 */
 	public function pre_http_request( $preempt, $r, $url ) {
 		if ( ! isset( $this->mock_http_responses[ $url ] ) ) {

@@ -58,20 +58,18 @@ class Client {
 	/**
 	 * Send request with the specified action and parameters
 	 *
-	 * @param string $api_method     Adyen API method.
-	 * @param string $request_method HTTP method to use.
-	 * @param object $data           Request data.
-	 *
+	 * @param string $method Adyen API method.
+	 * @param object $data   Request data.
 	 * @return object
 	 */
-	private function send_request( $api_method, $request_method = 'GET', $data ) {
+	private function send_request( $method, $data ) {
 		// Request.
-		$url = $this->config->get_api_url( $api_method );
+		$url = $this->config->get_api_url( $method );
 
 		$response = wp_remote_request(
 			$url,
 			array(
-				'method'  => $request_method,
+				'method'  => 'POST',
 				'headers' => array(
 					'X-API-key'    => $this->config->get_api_key(),
 					'Content-Type' => 'application/json',
@@ -79,13 +77,6 @@ class Client {
 				'body'    => wp_json_encode( $data ),
 			)
 		);
-
-		// Response code.
-		$response_code = wp_remote_retrieve_response_code( $response );
-
-		if ( $expected_response_code != $response_code ) { // WPCS: loose comparison ok.
-			$this->error = new WP_Error( 'adyen_error', 'Unexpected response code.' );
-		}
 
 		// Body.
 		$body = wp_remote_retrieve_body( $response );
@@ -123,7 +114,7 @@ class Client {
 	 * @return bool|object
 	 */
 	public function create_payment( PaymentRequest $request ) {
-		return $this->send_request( 'payments/', 'POST', $request->get_json(), 200 );
+		return $this->send_request( 'payments/', $request->get_json() );
 	}
 
 	/**
@@ -134,7 +125,7 @@ class Client {
 	 * @return bool|object
 	 */
 	public function create_payment_session( PaymentSessionRequest $request ) {
-		return $this->send_request( 'paymentSession', 'POST', $request->get_json(), 200 );
+		return $this->send_request( 'paymentSession', $request->get_json() );
 	}
 
 	/**
@@ -155,7 +146,7 @@ class Client {
 			),
 		);
 
-		return $this->send_request( 'payments/details', 'POST', $data );
+		return $this->send_request( 'payments/details', $data );
 	}
 
 	/**
@@ -174,7 +165,7 @@ class Client {
 			'payload' => $payload,
 		);
 
-		return $this->send_request( 'payments/result', 'POST', $data );
+		return $this->send_request( 'payments/result', $data );
 	}
 
 	/**
@@ -230,7 +221,7 @@ class Client {
 			'allowedPaymentMethods' => array(),
 		);
 
-		$response = $this->send_request( 'paymentMethods/', 'POST', $data );
+		$response = $this->send_request( 'paymentMethods/', $data );
 
 		if ( false === $response ) {
 			return false;

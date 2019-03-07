@@ -33,7 +33,7 @@ class Error extends Exception {
 	/**
 	 * Construct error.
 	 *
-	 * @param string $code          Code.
+	 * @param int    $code          Code.
 	 * @param string $message       Message.
 	 * @param string $requested_uri Requested URI.
 	 */

@@ -117,5 +117,8 @@ class PaymentRequestTransformer {
 				}
 			}
 		}
+
+		// Return request.
+		return $request;
 	}
 }

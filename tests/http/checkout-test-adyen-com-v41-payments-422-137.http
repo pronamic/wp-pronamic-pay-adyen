@@ -1,0 +1,10 @@
+HTTP/1.1 422 Unprocessable Entity
+Date: Thu, 07 Mar 2019 09:07:46 GMT
+Server: Apache
+Set-Cookie: JSESSIONID=D6145E326065D29C421F4536E30FB871.test103e; Path=/checkout; Secure; HttpOnly
+pspReference: 8815519496664218
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json;charset=UTF-8
+
+{"status":422,"errorCode":"137","message":"Invalid amount specified","errorType":"validation"}"

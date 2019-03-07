@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Date: Thu, 07 Mar 2019 09:12:36 GMT
+Server: Apache
+Set-Cookie: JSESSIONID=F3CD901B3F41742AAC05E8E0CC3526F6.test103e; Path=/checkout; Secure; HttpOnly
+pspReference: 8815519499564282
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json;charset=UTF-8
+
+{"pspReference":"8515519499286780","resultCode":"Authorised","merchantReference":"773","paymentMethod":"ideal","shopperLocale":"nl_NL"}"

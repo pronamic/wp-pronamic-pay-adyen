@@ -1,0 +1,10 @@
+HTTP/1.1 422 Unprocessable Entity
+Date: Thu, 07 Mar 2019 09:06:33 GMT
+Server: Apache
+Set-Cookie: JSESSIONID=FD7754136A55EF4AEB8A13D50F650ABD.test103e; Path=/checkout; Secure; HttpOnly
+pspReference: 8815519495934133
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json;charset=UTF-8
+
+{"status":422,"errorCode":"14_030","message":"Return URL is missing.","errorType":"validation"}"

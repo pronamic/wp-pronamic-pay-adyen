@@ -13,11 +13,11 @@ jobs:
   include:
     - php: 7.3
       env: WP_VERSION=^5.0 COVERAGE=1 PHPCS=1
-    - php: 7.3
+    - php: 7.2
       env: WP_VERSION=^4.9
-    - php: 7.3
+    - php: 7.2
       env: WP_VERSION=^4.8
-    - php: 7.3
+    - php: 7.2
       env: WP_VERSION=^4.7
     - php: 7.3
       env: WP_MULTISITE=1

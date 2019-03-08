@@ -23,7 +23,7 @@ use InvalidArgumentException;
  * @version 1.0.0
  * @since   1.0.0
  */
-abstract class AbstractPaymentRequest {
+abstract class AbstractPaymentRequest extends Request {
 	/**
 	 * Amount.
 	 *

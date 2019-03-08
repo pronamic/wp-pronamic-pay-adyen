@@ -143,9 +143,9 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-ok.http' );
 
-		$payment_methods = $client->get_payment_methods();
+		$payment_methods_response = $client->get_payment_methods();
 
-		$this->assertCount( 8, $payment_methods );
+		$this->assertCount( 8, $payment_methods_response->get_payment_methods() );
 	}
 
 	/**

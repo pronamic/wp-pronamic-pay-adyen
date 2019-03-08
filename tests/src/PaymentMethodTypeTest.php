@@ -28,7 +28,7 @@ class PaymentMethodTypeTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider payment_method_type_matrix_provider
 	 */
 	public function test_transform( $adyen_payment_method_type, $expected_payment_method ) {
-		$payment_method = PaymentMethodType::transform_gateway_method( $adyen_payment_method_type );
+		$payment_method = PaymentMethodType::to_wp( $adyen_payment_method_type );
 
 		$this->assertEquals( $expected_payment_method, $payment_method );
 	}

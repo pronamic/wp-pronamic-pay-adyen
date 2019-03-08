@@ -19,7 +19,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentMethodsRequest {
+class PaymentMethodsRequest extends Request {
 	/**
 	 * The merchant account identifier, with which you want to process the transaction.
 	 *

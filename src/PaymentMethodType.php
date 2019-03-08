@@ -165,11 +165,11 @@ class PaymentMethodType {
 	/**
 	 * Transform Adyen method to WordPress payment method.
 	 *
-	 * @param string $method Adyen method.
+	 * @param string $adyen_type Adyen method type.
 	 * @return string|null
 	 */
-	public static function transform_gateway_method( $method ) {
-		$result = array_search( $method, self::$map, true );
+	public static function to_wp( $adyen_type ) {
+		$result = array_search( $adyen_type, self::$map, true );
 
 		if ( false === $result ) {
 			return null;

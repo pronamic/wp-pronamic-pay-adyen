@@ -248,29 +248,20 @@ class Gateway extends Core_Gateway {
 	 * @see Core_Gateway::get_available_payment_methods()
 	 */
 	public function get_available_payment_methods() {
-		$payment_methods = array();
+		$core_payment_methods = array();
 
-		// Get active payment methods for Adyen account.
-		$methods = $this->client->get_payment_methods();
+		$payment_methods_response = $this->client->get_payment_methods();
 
-		if ( ! $methods ) {
-			$this->error = $this->client->get_error();
+		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
+			$core_payment_method = PaymentMethodType::to_wp( $payment_method->type );
 
-			return $payment_methods;
+			$core_payment_methods[] = $core_payment_method;
 		}
 
-		// Transform to WordPress payment methods.
-		foreach ( $methods as $method => $details ) {
-			$payment_method = PaymentMethodType::transform_gateway_method( $method );
+		$core_payment_methods = array_filter( $core_payment_methods );
+		$core_payment_methods = array_unique( $core_payment_methods );
 
-			if ( $payment_method ) {
-				$payment_methods[] = $payment_method;
-			}
-		}
-
-		$payment_methods = array_unique( $payment_methods );
-
-		return $payment_methods;
+		return $core_payment_methods;
 	}
 
 	/**
@@ -279,22 +270,38 @@ class Gateway extends Core_Gateway {
 	 * @see Pronamic_WP_Pay_Gateway::get_issuers()
 	 */
 	public function get_issuers() {
-		$groups = array();
+		$issuers = array();
 
-		$payment_method = PaymentMethodType::transform( PaymentMethods::IDEAL );
+		$payment_methods_response = $this->client->get_payment_methods();
 
-		$result = $this->client->get_issuers( $payment_method );
+		$payment_methods = $payment_methods_response->get_payment_methods();
 
-		if ( ! $result ) {
-			$this->error = $this->client->get_error();
-
-			return $groups;
-		}
-
-		$groups[] = array(
-			'options' => $result,
+		// Limit to iDEAL payment methods.
+		$payment_methods = array_filter(
+			$payment_methods,
+			function( $payment_method ) {
+				return ( PaymentMethodType::IDEAL === $payment_method->type );
+			}
 		);
 
-		return $groups;
+		foreach ( $payment_methods as $payment_method ) {
+			foreach ( $payment_method->details as $detail ) {
+				if ( 'issuer' === $detail->key && 'select' === $detail->type ) {
+					foreach ( $detail->items as $item ) {
+						$issuers[ $item->id ] = $item->name;
+					}
+				}
+			}
+		}
+
+		if ( empty( $issuers ) ) {
+			return false;
+		}
+
+		return array(
+			array(
+				'options' => $issuers,
+			),
+		);
 	}
 }

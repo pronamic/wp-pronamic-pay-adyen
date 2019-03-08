@@ -43,12 +43,12 @@ class Client {
 	/**
 	 * Send request with the specified action and parameters
 	 *
-	 * @param string $method Adyen API method.
-	 * @param object $data   Request data.
+	 * @param string  $method  Adyen API method.
+	 * @param Request $request Request object.
 	 * @return object
 	 * @throws Exception Throws exception when error occurs.
 	 */
-	private function send_request( $method, $data ) {
+	private function send_request( $method, $request ) {
 		// Request.
 		$url = $this->config->get_api_url( $method );
 
@@ -60,7 +60,7 @@ class Client {
 					'X-API-key'    => $this->config->get_api_key(),
 					'Content-Type' => 'application/json',
 				),
-				'body'    => wp_json_encode( $data ),
+				'body'    => wp_json_encode( $request->get_json() ),
 			)
 		);
 
@@ -117,7 +117,7 @@ class Client {
 	 * @return PaymentResponse
 	 */
 	public function create_payment( PaymentRequest $request ) {
-		$data = $this->send_request( 'payments', $request->get_json() );
+		$data = $this->send_request( 'payments', $request );
 
 		return PaymentResponse::from_object( $data );
 	}
@@ -129,7 +129,7 @@ class Client {
 	 * @return PaymentSessionResponse
 	 */
 	public function create_payment_session( PaymentSessionRequest $request ) {
-		$data = $this->send_request( 'paymentSession', $request->get_json() );
+		$data = $this->send_request( 'paymentSession', $request );
 
 		return PaymentSessionResponse::from_object( $data );
 	}
@@ -141,51 +141,9 @@ class Client {
 	 * @return PaymentResultResponse
 	 */
 	public function get_payment_result( PaymentResultRequest $request ) {
-		$data = $this->send_request( 'payments/result', $request->get_json() );
+		$data = $this->send_request( 'payments/result', $request );
 
 		return PaymentResultResponse::from_object( $data );
-	}
-
-	/**
-	 * Get issuers.
-	 *
-	 * @param string $payment_method Payment method.
-	 *
-	 * @return array|bool
-	 */
-	public function get_issuers( $payment_method = null ) {
-		// Check payment method.
-		if ( empty( $payment_method ) ) {
-			return false;
-		}
-
-		// Get issuers.
-		$methods = $this->get_payment_methods();
-
-		if ( false === $methods ) {
-			return false;
-		}
-
-		$issuers = array();
-
-		foreach ( $methods as $method_type => $method ) {
-			if ( $payment_method !== $method_type ) {
-				continue;
-			}
-
-			if ( ! isset( $method['details']['issuer'] ) ) {
-				return false;
-			}
-
-			foreach ( $method['details']['issuer']->items as $issuer ) {
-				$id   = Security::filter( $issuer->id );
-				$name = Security::filter( $issuer->name );
-
-				$issuers[ $id ] = $name;
-			}
-		}
-
-		return $issuers;
 	}
 
 	/**
@@ -194,43 +152,10 @@ class Client {
 	 * @return array|bool
 	 */
 	public function get_payment_methods() {
-		$data = array(
-			'merchantAccount'       => $this->config->get_merchant_account(),
-			'allowedPaymentMethods' => array(),
-		);
+		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
 
-		$response = $this->send_request( 'paymentMethods', $data );
+		$data = $this->send_request( 'paymentMethods', $request );
 
-		if ( false === $response ) {
-			return false;
-		}
-
-		$payment_methods = array();
-
-		if ( isset( $response->paymentMethods ) ) {
-			foreach ( $response->paymentMethods as $payment_method ) {
-				$type = Security::filter( $payment_method->type );
-				$name = Security::filter( $payment_method->name );
-
-				$method = array(
-					'name'    => $name,
-					'details' => array(),
-				);
-
-				if ( isset( $payment_method->details ) ) {
-					foreach ( $payment_method->details as $detail ) {
-						$key = $detail->key;
-
-						$method['details'][ $key ] = $detail;
-
-						unset( $method['details'][ $key ]->key );
-					}
-				}
-
-				$payment_methods[ $type ] = $method;
-			}
-		}
-
-		return $payment_methods;
+		return PaymentMethodsResponse::from_object( $data );
 	}
 }

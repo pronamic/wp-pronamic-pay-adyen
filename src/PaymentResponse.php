@@ -25,41 +25,6 @@ use JsonSchema\Validator;
  */
 class PaymentResponse extends ResponseObject {
 	/**
-	 * This field contains additional data, which may be required to return in a particular payment response.
-	 *
-	 * @var object|null
-	 */
-	private $additional_data;
-
-	/**
-	 * When non-empty, contains all the fields that you must submit to the `/payments/details` endpoint.
-	 *
-	 * @var array|null
-	 */
-	private $details;
-
-	/**
-	 * The fraud result properties of the payment
-	 *
-	 * @var object|null
-	 */
-	private $fraud_result;
-
-	/**
-	 * Contains the details that will be presented to the shopper
-	 *
-	 * @var object|null
-	 */
-	private $output_details;
-
-	/**
-	 * When non-empty, contains a value that you must submit to the `/payments/details` endpoint.
-	 *
-	 * @var string|null
-	 */
-	private $payment_data;
-
-	/**
 	 * Adyen's 16-character string reference associated with the transaction/request. This value is globally unique; quote it when communicating with us about this request.
 	 *
 	 * `pspReference` is returned only for non-redirect payment methods.
@@ -74,22 +39,6 @@ class PaymentResponse extends ResponseObject {
 	 * @var RedirectInformation|null
 	 */
 	private $redirect;
-
-	/**
-	 * If the payment's authorisation is refused or an error occurs during authorisation, this field holds Adyen's mapped reason for the refusal or a description of the error.
-	 *
-	 * When a transaction fails, the authorisation response includes `resultCode` and `refusalReason` values.
-	 *
-	 * @var string|null
-	 */
-	private $refusal_reason;
-
-	/**
-	 * Code that specifies the refusal reason.
-	 *
-	 * @var string|null
-	 */
-	private $refusal_reason_code;
 
 	/**
 	 * The result of the payment.

@@ -163,8 +163,6 @@ class Gateway extends Core_Gateway {
 
 				$payment_session_response = $this->client->create_payment_session( $payment_session_request );
 
-				$payment->set_action_url( $payment->get_pay_redirect_url() );
-
 				$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
 				$payment->set_meta( 'adyen_payment_session', $payment_session_response->get_payment_session() );
 		}

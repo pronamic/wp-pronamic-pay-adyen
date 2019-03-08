@@ -100,6 +100,6 @@ class PaymentMethodsResponse extends ResponseObject {
 
 		$response->set_original_object( $object );
 
-		return $object;
+		return $response;
 	}
 }

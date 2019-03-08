@@ -149,7 +149,7 @@ class Client {
 	/**
 	 * Get payment methods.
 	 *
-	 * @return array|bool
+	 * @return PaymentMethodsResponse
 	 */
 	public function get_payment_methods() {
 		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );

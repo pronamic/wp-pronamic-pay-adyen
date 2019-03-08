@@ -57,15 +57,6 @@ class Amount {
 			);
 		}
 
-		if ( ! is_int( $value ) ) {
-			throw new InvalidArgumentException(
-				sprintf(
-					'Given value `%s` is not an integer.',
-					$value
-				)
-			);
-		}
-
 		$this->currency = $currency;
 		$this->value    = $value;
 	}

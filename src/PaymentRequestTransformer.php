@@ -53,9 +53,7 @@ class PaymentRequestTransformer {
 			}
 
 			// Date of birth.
-			if ( null !== $customer->get_birth_date() ) {
-				$request->set_date_of_birth( $customer->get_birth_date()->format( 'YYYY-MM-DD' ) );
-			}
+			$request->set_date_of_birth( $customer->get_birth_date() );
 		}
 
 		// Billing address.

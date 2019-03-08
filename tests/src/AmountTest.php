@@ -40,15 +40,6 @@ class AmountTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Test invalid value.
-	 */
-	public function test_invalid_value() {
-		$this->setExpectedException( 'InvalidArgumentException' );
-
-		$amount = new Amount( 'EUR', 123.75 );
-	}
-
-	/**
 	 * Test from object.
 	 *
 	 * @dataProvider provider_from_object

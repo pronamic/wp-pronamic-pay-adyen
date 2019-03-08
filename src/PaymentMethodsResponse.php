@@ -66,6 +66,15 @@ class PaymentMethodsResponse extends ResponseObject {
 	}
 
 	/**
+	 * Set one-click payment methods.
+	 *
+	 * @param array|null $one_click_payment_methods One-click payment methods.
+	 */
+	public function set_one_click_payment_methods( $one_click_payment_methods ) {
+		$this->one_click_payment_methods = $one_click_payment_methods;
+	}
+
+	/**
 	 * Create payment methods repsonse from object.
 	 *
 	 * @param object $object Object.
@@ -83,6 +92,14 @@ class PaymentMethodsResponse extends ResponseObject {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		return new self( $object->groups, $object->paymentMethods );
+		$response = new self( $object->groups, $object->paymentMethods );
+
+		if ( isset( $object->oneClickPaymentMethods ) ) {
+			$response->set_one_click_payment_methods( $object->oneClickPaymentMethods );
+		}
+
+		$response->set_original_object( $object );
+
+		return $object;
 	}
 }

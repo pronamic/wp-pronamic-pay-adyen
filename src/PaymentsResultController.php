@@ -93,8 +93,6 @@ class PaymentsResultController {
 		}
 
 		// Client.
-		$client = $gateway->client;
-
 		$payment_result_request = new PaymentResultRequest( $payload );
 
 		$payment_result_response = $gateway->client->get_payment_result( $payment_result_request );

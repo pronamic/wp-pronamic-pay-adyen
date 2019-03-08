@@ -129,7 +129,6 @@ class Integration extends AbstractIntegration {
 			'type'        => 'text',
 			'classes'     => 'regular-text',
 			'description' => '',
-			'options'     => array(),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -145,25 +144,12 @@ class Integration extends AbstractIntegration {
 			'value' => $value,
 		);
 
-		switch ( $args['type'] ) {
-			case 'select':
-				printf(
-					'<select %1$s />%2$s</select>',
-					// @codingStandardsIgnoreStart
-					Pay_Util::array_to_html_attributes( $atts ),
-					Pay_Util::select_options_grouped( $args['options'], $value )
-				// @codingStandardsIgnoreEnd
-				);
-
-				break;
-			default:
-				printf(
-					'<input %1$s />',
-					// @codingStandardsIgnoreStart
-					Pay_Util::array_to_html_attributes( $atts )
-					// @codingStandardsIgnoreEnd
-				);
-		}
+		printf(
+			'<input %1$s />',
+			// @codingStandardsIgnoreStart
+			Pay_Util::array_to_html_attributes( $atts )
+			// @codingStandardsIgnoreEnd
+		);
 
 		if ( ! empty( $args['description'] ) ) {
 			printf(

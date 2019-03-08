@@ -135,27 +135,6 @@ class Client {
 	}
 
 	/**
-	 * Get payment details.
-	 *
-	 * @param string $payload Payload to get payment details for.
-	 *
-	 * @return bool|object
-	 */
-	public function get_payment_details( $payload ) {
-		if ( empty( $payload ) ) {
-			return false;
-		}
-
-		$data = array(
-			'details' => array(
-				'payload' => $payload,
-			),
-		);
-
-		return $this->send_request( 'payments/details', $data );
-	}
-
-	/**
 	 * Get payment result.
 	 *
 	 * @param PaymentResultRequest $request Payment result request.

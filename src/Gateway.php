@@ -235,42 +235,13 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
-		$status = null;
-
 		$payload = filter_input( INPUT_GET, 'payload', FILTER_SANITIZE_STRING );
 
-		switch ( $payment->get_method() ) {
-			case PaymentMethods::IDEAL:
-			case PaymentMethods::SOFORT:
-				$result = $this->client->get_payment_details( $payload );
+		$payment_result_request = new PaymentResultRequest( $payload );
 
-				break;
-			default:
-				$result = $this->client->get_payment_result( $payload );
-		}
+		$payment_result_response = $this->client->get_payment_result( $payment_result_request );
 
-		if ( $result ) {
-			$status = ResultCode::transform( $result->resultCode );
-
-			$psp_reference = $result->pspReference;
-		}
-
-		// Handle errors.
-		if ( empty( $status ) ) {
-			$payment->set_status( Core_Statuses::FAILURE );
-
-			$this->error = $this->client->get_error();
-
-			return;
-		}
-
-		// Update status.
-		$payment->set_status( $status );
-
-		// Update transaction ID.
-		if ( isset( $psp_reference ) ) {
-			$payment->set_transaction_id( $psp_reference );
-		}
+		PaymentResultHelper::update_payment( $payment, $payment_result_response );
 	}
 
 	/**

@@ -116,35 +116,7 @@ class PaymentsResultController {
 			);
 		}
 
-		// Add note.
-		$note = sprintf(
-			'<p>%1$s</p><pre>%2$s</pre>',
-			sprintf(
-				/* translators: %s: payment provider name */
-				__( 'Verified payment result.', 'pronamic_ideal' ),
-				__( 'Adyen', 'pronamic_ideal' )
-			),
-			wp_json_encode( $payment_result_response->get_json(), JSON_PRETTY_PRINT )
-		);
-
-		$payment->add_note( $note );
-
-		// PSP reference.
-		$psp_reference = $payment_result_response->get_psp_reference();
-
-		if ( null !== $psp_reference ) {
-			$payment->set_transaction_id( $psp_reference );
-		}
-
-		// Result code.
-		$result_code = $payment_result_response->get_result_code();
-
-		if ( null !== $result_code ) {
-			$payment->set_status( ResultCode::transform( $result_code ) );
-		}
-
-		// Payment save.
-		$payment->save();
+		PaymentResultHelper::update_payment( $payment, $payment_result_response );
 
 		// Return payment result response.
 		return $payment_result_response->get_json();

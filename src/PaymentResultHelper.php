@@ -29,14 +29,22 @@ class PaymentResultHelper {
 	public static function update_payment( Payment $payment, PaymentResultResponse $response ) {
 		// Add note.
 		$note = sprintf(
-			'<p>%1$s</p><pre>%2$s</pre>',
+			'<p>%s</p>',
 			sprintf(
 				/* translators: %s: payment provider name */
 				__( 'Verified payment result.', 'pronamic_ideal' ),
 				__( 'Adyen', 'pronamic_ideal' )
-			),
-			wp_json_encode( $response->get_json(), JSON_PRETTY_PRINT )
+			)
 		);
+
+		$json = wp_json_encode( $response->get_json(), JSON_PRETTY_PRINT );
+
+		if ( false !== $json ) {
+			$note .= sprintf(
+				'<pre>%s</pre>',
+				$json
+			);
+		}
 
 		$payment->add_note( $note );
 

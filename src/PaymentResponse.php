@@ -23,7 +23,7 @@ use JsonSchema\Validator;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentResponse {
+class PaymentResponse extends ResponseObject {
 	/**
 	 * This field contains additional data, which may be required to return in a particular payment response.
 	 *

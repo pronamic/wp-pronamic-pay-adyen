@@ -22,6 +22,13 @@ use Pronamic\WordPress\Pay\Util as Pay_Util;
  */
 class Integration extends AbstractIntegration {
 	/**
+	 * REST route namespace.
+	 *
+	 * @var string
+	 */
+	const REST_ROUTE_NAMESPACE = 'pronamic-pay/adyen/v1';
+
+	/**
 	 * Integration constructor.
 	 */
 	public function __construct() {
@@ -34,10 +41,15 @@ class Integration extends AbstractIntegration {
 			__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
 		);
 
-		// Notifications.
-		$notifications = new NotificationsController();
+		// Notifications controller.
+		$notifications_controller = new NotificationsController();
 
-		$notifications->setup();
+		$notifications_controller->setup();
+
+		// Payments result controller.
+		$payments_result_controller = new PaymentsResultController();
+
+		$payments_result_controller->setup();
 
 		// Settings.
 		add_action( 'init', array( $this, 'init' ) );

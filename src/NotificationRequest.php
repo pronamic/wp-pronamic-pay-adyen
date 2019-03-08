@@ -23,7 +23,7 @@ use JsonSchema\Validator;
  * @version 1.0.0
  * @since   1.0.0
  */
-class NotificationRequest {
+class NotificationRequest extends ResponseObject {
 	/**
 	 * Informs about the origin of the notification:
 	 *

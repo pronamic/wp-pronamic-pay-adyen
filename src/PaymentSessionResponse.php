@@ -21,7 +21,7 @@ use InvalidArgumentException;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentSessionResponse {
+class PaymentSessionResponse extends ResponseObject {
 	/**
 	 * The encoded payment session that you need to pass to the SDK.
 	 *

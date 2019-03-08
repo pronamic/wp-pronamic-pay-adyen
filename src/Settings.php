@@ -124,7 +124,7 @@ class Settings extends GatewaySettings {
 			'title'    => __( 'Webhook URL', 'pronamic_ideal' ),
 			'type'     => 'text',
 			'classes'  => array( 'large-text', 'code' ),
-			'value'    => get_rest_url( null, NotificationsController::REST_ROUTE_NAMESPACE . '/notifications' ),
+			'value'    => rest_url( Integration::REST_ROUTE_NAMESPACE . '/notifications' ),
 			'readonly' => true,
 			'tooltip'  => sprintf(
 				/* translators: %s: Adyen */

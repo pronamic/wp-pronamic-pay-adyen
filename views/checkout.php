@@ -64,15 +64,13 @@
 
 		?>
 		chckt.hooks.beforeComplete = function( node, paymentData ) {
-			if ( ! paymentData.payload ) {
-				return;
-			}
-
-			var url = new URL( pronamicPayAdyenCheckout.paymentReturnUrl );
-
-			url.searchParams.append( 'payload', paymentData.payload );
-
-			window.location.replace( url );
+			jQuery.post(
+				pronamicPayAdyenCheckout.paymentsResultUrl,
+				paymentData,
+				function() {
+					window.location.replace( pronamicPayAdyenCheckout.paymentReturnUrl );
+				}
+			);
 
 			return false;
 		};

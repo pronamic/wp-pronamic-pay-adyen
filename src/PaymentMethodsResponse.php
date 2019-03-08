@@ -23,7 +23,7 @@ use JsonSchema\Validator;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentMethodsResponse {
+class PaymentMethodsResponse extends ResponseObject {
 	/**
 	 * Groups of payment methods.
 	 *

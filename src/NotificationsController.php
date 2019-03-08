@@ -25,13 +25,6 @@ use WP_REST_Request;
  */
 class NotificationsController {
 	/**
-	 * REST route namespace.
-	 *
-	 * @var string
-	 */
-	const REST_ROUTE_NAMESPACE = 'pronamic-pay/adyen/v1';
-
-	/**
 	 * Setup.
 	 */
 	public function setup() {
@@ -46,7 +39,7 @@ class NotificationsController {
 	 */
 	public function rest_api_init() {
 		register_rest_route(
-			self::REST_ROUTE_NAMESPACE,
+			Integration::REST_ROUTE_NAMESPACE,
 			'/notifications',
 			array(
 				'methods'             => 'POST',

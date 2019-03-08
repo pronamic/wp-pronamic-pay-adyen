@@ -24,7 +24,7 @@ use Pronamic\WordPress\Pay\Core\Util;
  * @version 1.0.0
  * @since   1.0.0
  */
-class NotificationRequestItem {
+class NotificationRequestItem extends ResponseObject {
 	/**
 	 * Amount.
 	 *
@@ -254,33 +254,6 @@ class NotificationRequestItem {
 	}
 
 	/**
-	 * Get JSON.
-	 *
-	 * @return object|null
-	 */
-	public function get_json() {
-		$data = array(
-			'amount'              => $this->get_amount(),
-			'pspReference'        => $this->get_psp_reference(),
-			'eventCode'           => $this->get_event_code(),
-			'eventDate'           => $this->get_event_date(),
-			'merchantAccountCode' => $this->get_merchant_account_code(),
-			'operations'          => $this->get_operations(),
-			'merchantReference'   => $this->get_merchant_reference(),
-			'paymentMethod'       => $this->get_payment_method(),
-			'success'             => Util::boolean_to_string( $this->is_success() ),
-		);
-
-		$data = array_filter( $data );
-
-		if ( empty( $data ) ) {
-			return null;
-		}
-
-		return (object) $data;
-	}
-
-	/**
 	 * Create notification request item from object.
 	 *
 	 * @param object $object Object.
@@ -309,6 +282,8 @@ class NotificationRequestItem {
 		$item->set_merchant_reference( $object->merchantReference );
 		$item->set_payment_method( $object->paymentMethod );
 		$item->set_success( filter_var( $object->success, FILTER_VALIDATE_BOOLEAN ) );
+
+		$item->set_original_object( $object );
 
 		return $item;
 	}

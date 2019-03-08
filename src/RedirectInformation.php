@@ -23,7 +23,7 @@ use JsonSchema\Validator;
  * @version 1.0.0
  * @since   1.0.0
  */
-class RedirectInformation {
+class RedirectInformation extends ResponseObject {
 	/**
 	 * When the redirect URL must be accessed via POST, use this data to post to the redirect URL.
 	 *

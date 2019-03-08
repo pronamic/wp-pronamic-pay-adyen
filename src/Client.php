@@ -158,20 +158,13 @@ class Client {
 	/**
 	 * Get payment result.
 	 *
-	 * @param string $payload Payload to get payment details for.
-	 *
-	 * @return bool|object
+	 * @param PaymentResultRequest $request Payment result request.
+	 * @return PaymentResultResponse
 	 */
-	public function get_payment_result( $payload ) {
-		if ( empty( $payload ) ) {
-			return false;
-		}
+	public function get_payment_result( PaymentResultRequest $request ) {
+		$data = $this->send_request( 'payments/result', $request->get_json() );
 
-		$data = array(
-			'payload' => $payload,
-		);
-
-		return $this->send_request( 'payments/result', $data );
+		return PaymentResultResponse::from_object( $data );
 	}
 
 	/**

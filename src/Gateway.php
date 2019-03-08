@@ -47,7 +47,7 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @var Client
 	 */
-	protected $client;
+	public $client;
 
 	/**
 	 * Constructs and initializes an Adyen gateway.
@@ -194,7 +194,9 @@ class Gateway extends Core_Gateway {
 		wp_register_script(
 			'pronamic-pay-adyen-checkout',
 			$url,
-			array(),
+			array(
+				'jquery',
+			),
 			$sdk_version,
 			false
 		);
@@ -203,9 +205,10 @@ class Gateway extends Core_Gateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			array(
-				'paymentReturnUrl' => $payment->get_return_url(),
-				'paymentSession'   => $payment_session,
-				'configObject'     => array(
+				'paymentsResultUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/result/' . $payment->config_id ),
+				'paymentReturnUrl'  => $payment->get_return_url(),
+				'paymentSession'    => $payment_session,
+				'configObject'      => array(
 					'context' => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
 				),
 			)

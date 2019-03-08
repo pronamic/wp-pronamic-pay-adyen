@@ -92,7 +92,7 @@ class Integration extends AbstractIntegration {
 		add_settings_section(
 			'pronamic_pay_adyen_notification_authentication',
 			__( 'Adyen Notification Authentication', 'pronamic_ideal' ),
-			'__return_false',
+			array( $this, 'settings_section_notification_authentication' ),
 			'pronamic_pay'
 		);
 
@@ -115,6 +115,19 @@ class Integration extends AbstractIntegration {
 			'pronamic_pay_adyen_notification_authentication',
 			array(
 				'label_for' => 'pronamic_pay_adyen_notification_authentication_password',
+			)
+		);
+	}
+
+	/**
+	 * Settings section notification authentication.
+	 */
+	public function settings_section_notification_authentication() {
+		printf(
+			'<p>%s</p>',
+			esc_html__(
+				'Set the user name and password below and in the webhook authentication settings in the Adyen dashboard for increased security (recommended).',
+				'pronamic_ideal'
 			)
 		);
 	}

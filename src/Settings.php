@@ -44,16 +44,9 @@ class Settings extends GatewaySettings {
 		$sections['adyen_feedback'] = array(
 			'title'       => __( 'Transaction feedback', 'pronamic_ideal' ),
 			'methods'     => array( 'adyen' ),
-			'description' => sprintf(
-				'%s %s',
-				__(
-					'The URLs below need to be copied to the payment provider dashboard to receive automatic transaction status updates.',
-					'pronamic_ideal'
-				),
-				__(
-					'Set the user name and password below and in the webhook authentication settings in the Adyen dashboard for increased security (recommended).',
-					'pronamic_ideal'
-				)
+			'description' => __(
+				'The URLs below need to be copied to the payment provider dashboard to receive automatic transaction status updates.',
+				'pronamic_ideal'
 			),
 		);
 

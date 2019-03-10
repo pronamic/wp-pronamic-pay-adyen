@@ -169,7 +169,7 @@ class LineItem {
 	/**
 	 * Get quantity.
 	 *
-	 * @return int
+	 * @return int|null
 	 */
 	public function get_quantity() {
 		return $this->quantity;
@@ -178,7 +178,7 @@ class LineItem {
 	/**
 	 * Get quantity.
 	 *
-	 * @param int $quantity Quantity.
+	 * @param int|null $quantity Quantity.
 	 * @return void
 	 */
 	public function set_quantity( $quantity = null ) {

@@ -76,6 +76,7 @@ class Name {
 	 * Set first name.
 	 *
 	 * @param string $first_name First name.
+	 * @return void
 	 */
 	public function set_first_name( $first_name ) {
 		$this->first_name = $first_name;
@@ -94,6 +95,7 @@ class Name {
 	 * Set gender.
 	 *
 	 * @param string $gender Gender.
+	 * @return void
 	 */
 	public function set_gender( $gender ) {
 		$this->gender = $gender;
@@ -112,6 +114,7 @@ class Name {
 	 * Set infix.
 	 *
 	 * @param string|null $infix Infix.
+	 * @return void
 	 * @throws InvalidArgumentException Throws invalid argument exception when infix is longer then 20 characters.
 	 */
 	public function set_infix( $infix ) {
@@ -140,6 +143,7 @@ class Name {
 	 * Set last name.
 	 *
 	 * @param string $last_name Last name.
+	 * @return void
 	 */
 	public function set_last_name( $last_name ) {
 		$this->last_name = $last_name;

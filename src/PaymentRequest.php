@@ -56,6 +56,7 @@ class PaymentRequest extends AbstractPaymentRequest {
 	 * Set payment method.
 	 *
 	 * @param PaymentMethod $payment_method Payment method.
+	 * @return void
 	 */
 	public function set_payment_method( PaymentMethod $payment_method ) {
 		$this->payment_method = $payment_method;

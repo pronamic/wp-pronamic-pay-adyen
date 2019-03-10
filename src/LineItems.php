@@ -63,6 +63,7 @@ class LineItems {
 	 * Add line item.
 	 *
 	 * @param LineItem $item Line item.
+	 * @return void
 	 */
 	public function add_item( LineItem $item ) {
 		$this->line_items[] = $item;

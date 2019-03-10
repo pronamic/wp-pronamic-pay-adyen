@@ -58,6 +58,8 @@ class Integration extends AbstractIntegration {
 
 	/**
 	 * Initialize.
+	 *
+	 * @return void
 	 */
 	public function init() {
 		/*
@@ -87,6 +89,8 @@ class Integration extends AbstractIntegration {
 
 	/**
 	 * Admin initialize.
+	 *
+	 * @return void
 	 */
 	public function admin_init() {
 		add_settings_section(
@@ -121,6 +125,8 @@ class Integration extends AbstractIntegration {
 
 	/**
 	 * Settings section notification authentication.
+	 *
+	 * @return void
 	 */
 	public function settings_section_notification_authentication() {
 		printf(
@@ -136,6 +142,7 @@ class Integration extends AbstractIntegration {
 	 * Input text.
 	 *
 	 * @param array $args Arguments.
+	 * @return void
 	 */
 	public static function input_element( $args ) {
 		$defaults = array(

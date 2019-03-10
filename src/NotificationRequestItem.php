@@ -104,6 +104,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set amount.
 	 *
 	 * @param Amount $amount Amount.
+	 * @return void
 	 */
 	public function set_amount( Amount $amount ) {
 		$this->amount = $amount;
@@ -122,6 +123,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set PSP reference.
 	 *
 	 * @param string $psp_reference PSP reference.
+	 * @return void
 	 */
 	public function set_psp_reference( $psp_reference ) {
 		$this->psp_reference = $psp_reference;
@@ -140,6 +142,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set event code.
 	 *
 	 * @param string $event_code Event code.
+	 * @return void
 	 */
 	public function set_event_code( $event_code ) {
 		$this->event_code = $event_code;
@@ -158,6 +161,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set event date.
 	 *
 	 * @param DateTime $event_date Event date.
+	 * @return void
 	 */
 	public function set_event_date( DateTime $event_date ) {
 		$this->event_date = $event_date;
@@ -176,6 +180,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set merchant account code.
 	 *
 	 * @param string $merchant_account_code Merchant account code.
+	 * @return void
 	 */
 	public function set_merchant_account_code( $merchant_account_code ) {
 		$this->merchant_account_code = $merchant_account_code;
@@ -194,6 +199,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set operations.
 	 *
 	 * @param array $operations Operations.
+	 * @return void
 	 */
 	public function set_operations( $operations ) {
 		$this->operations = $operations;
@@ -212,6 +218,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set merchant reference.
 	 *
 	 * @param string $merchant_reference Merchant reference.
+	 * @return void
 	 */
 	public function set_merchant_reference( $merchant_reference ) {
 		$this->merchant_reference = $merchant_reference;
@@ -230,6 +237,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set payment method.
 	 *
 	 * @param string $payment_method Payment method.
+	 * @return void
 	 */
 	public function set_payment_method( $payment_method ) {
 		$this->payment_method = $payment_method;
@@ -248,6 +256,7 @@ class NotificationRequestItem extends ResponseObject {
 	 * Set success.
 	 *
 	 * @param boolean $success Success.
+	 * @return void
 	 */
 	public function set_success( $success ) {
 		$this->success = $success;

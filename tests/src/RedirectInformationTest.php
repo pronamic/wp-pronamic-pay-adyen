@@ -27,4 +27,16 @@ class RedirectInformationTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( 'GET', $redirect_information->get_method() );
 		$this->assertEquals( 'https://test.adyen.com/', $redirect_information->get_url() );
 	}
+
+	/**
+	 * Test redirect data.
+	 */
+	public function test_redirect_data() {
+		$redirect_information = new RedirectInformation( 'POST', 'https://test.adyen.com/' );
+		$redirect_information->set_data( (object) array() );
+
+		$this->assertEquals( 'GET', $redirect_information->get_method() );
+		$this->assertEquals( 'https://test.adyen.com/', $redirect_information->get_url() );
+		$this->assertEquals( (object) array(), $redirect_information->get_data() );
+	}
 }

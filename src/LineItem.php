@@ -112,7 +112,7 @@ class LineItem {
 	/**
 	 * Get amount excluding tax.
 	 *
-	 * @return int
+	 * @return int|null
 	 */
 	public function get_amount_including_tax() {
 		return $this->amount_including_tax;
@@ -121,7 +121,7 @@ class LineItem {
 	/**
 	 * Set amount including tax.
 	 *
-	 * @param int $amount_including_tax Amount excluding tax.
+	 * @param int|null $amount_including_tax Amount excluding tax.
 	 */
 	public function set_amount_including_tax( $amount_including_tax = null ) {
 		$this->amount_including_tax = $amount_including_tax;
@@ -140,6 +140,7 @@ class LineItem {
 	 * Set item description.
 	 *
 	 * @param string|null $description Description.
+	 * @return void
 	 * @throws InvalidArgumentException Throws invalid argument exception when value does not apply to format `AN..max 100`.
 	 */
 	public function set_description( $description = null ) {
@@ -159,6 +160,7 @@ class LineItem {
 	 * Set item ID.
 	 *
 	 * @param string|null $id ID.
+	 * @return void
 	 */
 	public function set_id( $id = null ) {
 		$this->id = $id;
@@ -177,6 +179,7 @@ class LineItem {
 	 * Get quantity.
 	 *
 	 * @param int $quantity Quantity.
+	 * @return void
 	 */
 	public function set_quantity( $quantity = null ) {
 		$this->quantity = $quantity;
@@ -195,6 +198,7 @@ class LineItem {
 	 * Set tax amount.
 	 *
 	 * @param int|null $tax_amount Tax amount.
+	 * @return void
 	 */
 	public function set_tax_amount( $tax_amount = null ) {
 		$this->tax_amount = $tax_amount;
@@ -213,6 +217,7 @@ class LineItem {
 	 * Set tax category.
 	 *
 	 * @param string|null $tax_category Tax category.
+	 * @return void
 	 */
 	public function set_tax_category( $tax_category ) {
 		$this->tax_category = $tax_category;
@@ -231,6 +236,7 @@ class LineItem {
 	 * Set tax percentage.
 	 *
 	 * @param int|null $tax_percentage Tax percentage.
+	 * @return void
 	 */
 	public function set_tax_percentage( $tax_percentage ) {
 		$this->tax_percentage = $tax_percentage;

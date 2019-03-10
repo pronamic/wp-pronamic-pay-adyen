@@ -24,28 +24,28 @@ class Config extends GatewayConfig {
 	/**
 	 * API Key.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	public $api_key;
 
 	/**
 	 * API Live URL Prefix.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	public $api_live_url_prefix;
 
 	/**
 	 * Merchant Account.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	public $merchant_account;
 
 	/**
 	 * Get API key.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_api_key() {
 		return $this->api_key;
@@ -54,7 +54,7 @@ class Config extends GatewayConfig {
 	/**
 	 * Get merchant account.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_merchant_account() {
 		return $this->merchant_account;

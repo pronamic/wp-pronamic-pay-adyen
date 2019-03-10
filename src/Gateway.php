@@ -130,7 +130,7 @@ class Gateway extends Core_Gateway {
 
 				$payment_request->set_country_code( $country_code );
 
-				$payment_request = PaymentRequestTransformer::transform( $payment, $payment_request );
+				PaymentRequestHelper::complement( $payment, $payment_request );
 
 				$payment_response = $this->client->create_payment( $payment_request );
 
@@ -148,12 +148,12 @@ class Gateway extends Core_Gateway {
 				$payment_session_request = new PaymentSessionRequest(
 					$amount,
 					$this->config->get_merchant_account(),
-					$payment->get_id(),
+					strval( $payment->get_id() ),
 					$payment->get_return_url(),
 					$country_code
 				);
 
-				$payment_session_request = PaymentRequestTransformer::transform( $payment, $payment_session_request );
+				PaymentRequestHelper::complement( $payment, $payment_session_request );
 
 				$payment_session_request->set_origin( home_url() );
 				$payment_session_request->set_sdk_version( self::SDK_VERSION );
@@ -166,6 +166,8 @@ class Gateway extends Core_Gateway {
 
 				$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
 				$payment->set_meta( 'adyen_payment_session', $payment_session_response->get_payment_session() );
+
+				$payment->set_action_url( $payment->get_pay_redirect_url() );
 		}
 	}
 

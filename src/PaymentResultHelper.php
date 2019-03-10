@@ -59,8 +59,10 @@ class PaymentResultHelper {
 		// Result code.
 		$result_code = $response->get_result_code();
 
-		if ( null !== $result_code ) {
-			$payment->set_status( ResultCode::transform( $result_code ) );
+		$status = ResultCode::transform( $result_code );
+
+		if ( null !== $status ) {
+			$payment->set_status( $status );
 		}
 
 		// Payment save.

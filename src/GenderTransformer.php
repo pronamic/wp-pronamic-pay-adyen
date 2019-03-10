@@ -21,10 +21,9 @@ use Pronamic\WordPress\Pay\Gender as Pay_Gender;
  */
 class GenderTransformer {
 	/**
-	 * Transform WordPress Pay gender to Adyen amount.
+	 * Transform WordPress Pay gender to Adyen gender.
 	 *
-	 * @param string $gender WordPress Pay gender to convert.
-	 *
+	 * @param string|null $gender WordPress Pay gender to convert.
 	 * @return string
 	 */
 	public static function transform( $gender ) {

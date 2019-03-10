@@ -89,14 +89,13 @@ class ResultCode {
 	const REFUSED = 'Refused';
 
 	/**
-	 * Transform an Mollie state to an more global status.
+	 * Transform Adyen result code to WordPress payment status.
 	 *
-	 * @param string $status Mollie status.
-	 *
-	 * @return string|null Pay status.
+	 * @param string|null $result_code Adyen result code.
+	 * @return string|null WordPress payment status.
 	 */
-	public static function transform( $status ) {
-		switch ( $status ) {
+	public static function transform( $result_code ) {
+		switch ( $result_code ) {
 			case self::PENDING:
 			case self::RECEIVED:
 			case self::REDIRECT_SHOPPER:

@@ -1,6 +1,6 @@
 <?php
 /**
- * Payment request transformer
+ * Payment request helper
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2019 Pronamic
@@ -13,21 +13,21 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
- * Payment request transformer
+ * Payment request helper
  *
  * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentRequestTransformer {
+class PaymentRequestHelper {
 	/**
-	 * Transform WordPress Pay payment to Adyen payment request.
+	 * Complement WordPress Pay payment to Adyen payment request.
 	 *
 	 * @param Payment                $payment WordPress Pay payment to convert.
 	 * @param AbstractPaymentRequest $request Adyen payment request.
-	 * @return AbstractPaymentRequest
+	 * @return void
 	 */
-	public static function transform( Payment $payment, AbstractPaymentRequest $request ) {
+	public static function complement( Payment $payment, AbstractPaymentRequest $request ) {
 		// Channel.
 		$request->set_channel( Channel::WEB );
 
@@ -115,8 +115,5 @@ class PaymentRequestTransformer {
 				}
 			}
 		}
-
-		// Return request.
-		return $request;
 	}
 }

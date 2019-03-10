@@ -26,7 +26,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	 * List of payments methods to be presented to the shopper. To refer to payment methods,
 	 * use their brandCode from https://docs.adyen.com/developers/payment-methods/payment-methods-overview
 	 *
-	 * @var array
+	 * @var array|null
 	 */
 	private $allowed_payment_methods;
 
@@ -65,7 +65,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
 	 * Get allowed payment methods.
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	public function get_allowed_payment_methods() {
 		return $this->allowed_payment_methods;
@@ -74,7 +74,8 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
 	 * Set allowed payment methods.
 	 *
-	 * @param array $allowed_payment_methods Allowed payment methods.
+	 * @param array|null $allowed_payment_methods Allowed payment methods.
+	 * @return void
 	 */
 	public function set_allowed_payment_methods( $allowed_payment_methods ) {
 		$this->allowed_payment_methods = $allowed_payment_methods;
@@ -93,6 +94,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	 * Set origin.
 	 *
 	 * @param string|null $origin Origin.
+	 * @return void
 	 */
 	public function set_origin( $origin ) {
 		$this->origin = $origin;
@@ -101,7 +103,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
 	 * Get SDK version.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_sdk_version() {
 		return $this->sdk_version;
@@ -110,7 +112,8 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
 	 * Set SDK version.
 	 *
-	 * @param string $sdk_version SDK version.
+	 * @param string|null $sdk_version SDK version.
+	 * @return void
 	 */
 	public function set_sdk_version( $sdk_version ) {
 		$this->sdk_version = $sdk_version;

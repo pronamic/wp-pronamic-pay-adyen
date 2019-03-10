@@ -83,6 +83,7 @@ class PaymentResultResponse extends ResponseObject {
 	 * Set result code.
 	 *
 	 * @param string|null $result_code Result code.
+	 * @return void
 	 */
 	public function set_result_code( $result_code ) {
 		$this->result_code = $result_code;
@@ -101,6 +102,7 @@ class PaymentResultResponse extends ResponseObject {
 	 * Set PSP reference.
 	 *
 	 * @param string|null $psp_reference PSP reference.
+	 * @return void
 	 */
 	public function set_psp_reference( $psp_reference ) {
 		$this->psp_reference = $psp_reference;

@@ -78,6 +78,7 @@ class PaymentResponse extends ResponseObject {
 	 * Set PSP reference.
 	 *
 	 * @param string|null $psp_reference PSP reference.
+	 * @return void
 	 */
 	public function set_psp_reference( $psp_reference ) {
 		$this->psp_reference = $psp_reference;
@@ -96,6 +97,7 @@ class PaymentResponse extends ResponseObject {
 	 * Set redirect.
 	 *
 	 * @param RedirectInformation|null $redirect Redirect information.
+	 * @return void
 	 */
 	public function set_redirect( RedirectInformation $redirect = null ) {
 		$this->redirect = $redirect;

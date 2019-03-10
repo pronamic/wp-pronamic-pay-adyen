@@ -77,7 +77,7 @@ abstract class AbstractPaymentRequest extends Request {
 	/**
 	 * Line items regarding the payment.
 	 *
-	 * @var LineItems
+	 * @var LineItems|null
 	 */
 	private $line_items;
 
@@ -176,6 +176,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set amount.
 	 *
 	 * @param Amount $amount Amount.
+	 * @return void
 	 */
 	public function set_amount( Amount $amount ) {
 		$this->amount = $amount;
@@ -194,6 +195,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set billing address.
 	 *
 	 * @param Address|null $billing_address Billing address.
+	 * @return void
 	 */
 	public function set_billing_address( Address $billing_address = null ) {
 		$this->billing_address = $billing_address;
@@ -212,6 +214,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set channel.
 	 *
 	 * @param string|null $channel Channel.
+	 * @return void
 	 */
 	public function set_channel( $channel ) {
 		$this->channel = $channel;
@@ -230,6 +233,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set country code.
 	 *
 	 * @param string|null $country_code Country code.
+	 * @return void
 	 * @throws InvalidArgumentException Throws invalid argument exception when country code is not 2 characters.
 	 */
 	public function set_country_code( $country_code ) {
@@ -258,6 +262,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set date of birth.
 	 *
 	 * @param DateTime|null $date_of_birth Date of birth.
+	 * @return void
 	 */
 	public function set_date_of_birth( DateTime $date_of_birth = null ) {
 		$this->date_of_birth = $date_of_birth;
@@ -276,6 +281,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set delivery address.
 	 *
 	 * @param Address|null $delivery_address Delivery address.
+	 * @return void
 	 */
 	public function set_delivery_address( Address $delivery_address = null ) {
 		$this->delivery_address = $delivery_address;
@@ -284,7 +290,7 @@ abstract class AbstractPaymentRequest extends Request {
 	/**
 	 * Get line items.
 	 *
-	 * @return LineItems
+	 * @return LineItems|null
 	 */
 	public function get_line_items() {
 		return $this->line_items;
@@ -293,7 +299,8 @@ abstract class AbstractPaymentRequest extends Request {
 	/**
 	 * Set line items.
 	 *
-	 * @param LineItems $line_items Line items.
+	 * @param LineItems|null $line_items Line items.
+	 * @return void
 	 */
 	public function set_line_items( $line_items ) {
 		$this->line_items = $line_items;
@@ -323,6 +330,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set merchant account.
 	 *
 	 * @param string $merchant_account Merchant account.
+	 * @return void
 	 */
 	public function set_merchant_account( $merchant_account ) {
 		$this->merchant_account = $merchant_account;
@@ -341,6 +349,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set reference.
 	 *
 	 * @param string $reference Reference.
+	 * @return void
 	 */
 	public function set_reference( $reference ) {
 		$this->reference = $reference;
@@ -359,6 +368,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set return URL.
 	 *
 	 * @param string $return_url Return URL.
+	 * @return void
 	 */
 	public function set_return_url( $return_url ) {
 		$this->return_url = $return_url;
@@ -377,6 +387,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set shopper IP.
 	 *
 	 * @param string|null $shopper_ip Shopper IP.
+	 * @return void
 	 */
 	public function set_shopper_ip( $shopper_ip ) {
 		$this->shopper_ip = $shopper_ip;
@@ -395,6 +406,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set shopper locale.
 	 *
 	 * @param string|null $shopper_locale Shopper locale.
+	 * @return void
 	 */
 	public function set_shopper_locale( $shopper_locale ) {
 		$this->shopper_locale = $shopper_locale;
@@ -413,6 +425,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set shopper name.
 	 *
 	 * @param Name|null $shopper_name Shopper name.
+	 * @return void
 	 */
 	public function set_shopper_name( Name $shopper_name = null ) {
 		$this->shopper_name = $shopper_name;
@@ -431,6 +444,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set shopper reference.
 	 *
 	 * @param string|null $shopper_reference Shopper reference.
+	 * @return void
 	 */
 	public function set_shopper_reference( $shopper_reference ) {
 		$this->shopper_reference = $shopper_reference;
@@ -449,6 +463,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set shopper statement.
 	 *
 	 * @param string|null $shopper_statement Shopper statement.
+	 * @return void
 	 */
 	public function set_shopper_statement( $shopper_statement ) {
 		$this->shopper_statement = $shopper_statement;
@@ -467,6 +482,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set shopper statement.
 	 *
 	 * @param string|null $telephone_number Telephone number.
+	 * @return void
 	 */
 	public function set_telephone_number( $telephone_number ) {
 		$this->telephone_number = $telephone_number;

@@ -25,9 +25,10 @@ use WP_REST_Request;
  * @since   1.0.0
  */
 class PaymentsResultController {
-
 	/**
 	 * Setup.
+	 *
+	 * @return void
 	 */
 	public function setup() {
 		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
@@ -38,6 +39,8 @@ class PaymentsResultController {
 	 *
 	 * @link https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/
 	 * @link https://developer.wordpress.org/reference/hooks/rest_api_init/
+	 *
+	 * @return void
 	 */
 	public function rest_api_init() {
 		register_rest_route(
@@ -72,6 +75,7 @@ class PaymentsResultController {
 	 * REST API Adyen payments result handler.
 	 *
 	 * @param WP_REST_Request $request Request.
+	 * @return object
 	 */
 	public function rest_api_adyen_payments_result( WP_REST_Request $request ) {
 		$config_id = $request->get_param( 'config_id' );

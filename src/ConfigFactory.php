@@ -23,7 +23,7 @@ class ConfigFactory extends GatewayConfigFactory {
 	/**
 	 * Get configuration by post ID.
 	 *
-	 * @param string $post_id Post ID.
+	 * @param int $post_id Post ID.
 	 * @return Config
 	 */
 	public function get_config( $post_id ) {

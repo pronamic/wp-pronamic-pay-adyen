@@ -34,7 +34,7 @@ class PaymentMethodsResponse extends ResponseObject {
 	/**
 	 * Detailed list of one-click payment methods.
 	 *
-	 * @var array
+	 * @var array|null
 	 */
 	private $one_click_payment_methods;
 
@@ -69,6 +69,7 @@ class PaymentMethodsResponse extends ResponseObject {
 	 * Set one-click payment methods.
 	 *
 	 * @param array|null $one_click_payment_methods One-click payment methods.
+	 * @return void
 	 */
 	public function set_one_click_payment_methods( $one_click_payment_methods ) {
 		$this->one_click_payment_methods = $one_click_payment_methods;

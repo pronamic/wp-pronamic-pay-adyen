@@ -40,6 +40,7 @@ abstract class ResponseObject {
 	 * Set original object.
 	 *
 	 * @param object|null $object Object.
+	 * @return void
 	 */
 	public function set_original_object( $object ) {
 		$this->original_object = $object;

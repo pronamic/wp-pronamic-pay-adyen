@@ -63,14 +63,14 @@ class LineItem {
 	private $tax_amount;
 
 	/**
-	 * Tax category (high, low, none, zero).
+	 * Tax category: High, Low, None, Zero.
 	 *
 	 * @var string|null
 	 */
 	private $tax_category;
 
 	/**
-	 * Tax percentage.
+	 * Tax percentage, in minor units.
 	 *
 	 * @var int|null
 	 */
@@ -94,7 +94,7 @@ class LineItem {
 	/**
 	 * Get amount excluding tax.
 	 *
-	 * @return int
+	 * @return int|null
 	 */
 	public function get_amount_excluding_tax() {
 		return $this->amount_excluding_tax;
@@ -103,7 +103,7 @@ class LineItem {
 	/**
 	 * Set amount excluding tax.
 	 *
-	 * @param int $amount_excluding_tax Amount excluding tax.
+	 * @param int|null $amount_excluding_tax Amount excluding tax.
 	 */
 	public function set_amount_excluding_tax( $amount_excluding_tax = null ) {
 		$this->amount_excluding_tax = $amount_excluding_tax;
@@ -203,7 +203,7 @@ class LineItem {
 	/**
 	 * Get tax category.
 	 *
-	 * @return int|string
+	 * @return string|null
 	 */
 	public function get_tax_category() {
 		return $this->tax_category;
@@ -212,7 +212,7 @@ class LineItem {
 	/**
 	 * Set tax category.
 	 *
-	 * @param int|string $tax_category Tax category.
+	 * @param string|null $tax_category Tax category.
 	 */
 	public function set_tax_category( $tax_category ) {
 		$this->tax_category = $tax_category;

@@ -25,6 +25,7 @@ class PaymentResultHelper {
 	 *
 	 * @param Payment               $payment  Payment.
 	 * @param PaymentResultResponse $response Response.
+	 * @return void
 	 */
 	public static function update_payment( Payment $payment, PaymentResultResponse $response ) {
 		// Add note.

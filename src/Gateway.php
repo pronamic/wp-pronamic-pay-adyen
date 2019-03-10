@@ -83,9 +83,10 @@ class Gateway extends Core_Gateway {
 	/**
 	 * Start.
 	 *
-	 * @param Payment $payment Payment.
-	 *
 	 * @see Plugin::start()
+	 *
+	 * @param Payment $payment Payment.
+	 * @return void
 	 */
 	public function start( Payment $payment ) {
 		// Amount.

@@ -71,6 +71,7 @@ class RedirectInformation extends ResponseObject {
 	 * Set data.
 	 *
 	 * @param object|null $data Data.
+	 * @return void
 	 */
 	public function set_data( $data ) {
 		$this->data = $data;

@@ -49,7 +49,7 @@ class Error extends Exception {
 	 * @return int
 	 */
 	public function get_code() {
-		return $this->getCode();
+		return intval( $this->getCode() );
 	}
 
 	/**

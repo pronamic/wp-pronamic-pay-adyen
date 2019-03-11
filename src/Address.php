@@ -244,37 +244,29 @@ class Address {
 	 * @return object
 	 */
 	public function get_json() {
-		$object = (object) array();
+		// Properties.
+		$properties = array(
+			'country' => $this->country,
+		);
 
-		// City.
-		if ( null !== $this->city ) {
-			$object->city = $this->city;
-		}
+		// Map.
+		$map = array(
+			'city'                 => 'city',
+			'house_number_or_name' => 'houseNumberOrName',
+			'postal_code'          => 'postalCode',
+			'state_or_province'    => 'stateOrProvince',
+			'street'               => 'street',
+		);
 
-		// Country.
-		$object->country = $this->country;
-
-		// House number or name.
-		if ( null !== $this->house_number_or_name ) {
-			$object->houseNumberOrName = $this->house_number_or_name;
-		}
-
-		// Postal code.
-		if ( null !== $this->postal_code ) {
-			$object->postalCode = $this->postal_code;
-		}
-
-		// State or province.
-		if ( null !== $this->state_or_province ) {
-			$object->stateOrProvince = $this->state_or_province;
-		}
-
-		// Street.
-		if ( null !== $this->street ) {
-			$object->street = $this->street;
+		foreach ( $map as $property => $adyen_property ) {
+			if ( null !== $this->{$property} ) {
+				$properties[ $adyen_property ] = $this->{$property};
+			}
 		}
 
 		// Return object.
+		$object = (object) $properties;
+
 		return $object;
 	}
 }

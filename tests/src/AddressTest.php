@@ -21,16 +21,10 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  */
 class AddressTest extends \PHPUnit_Framework_TestCase {
 	/**
-	 * Test address.
+	 * Test address Netherlands.
 	 */
-	public function test_address() {
-		$address = new Address(
-			'NL',
-			'Burgemeester Wuiteweg',
-			'39b',
-			'9203 KA',
-			'Drachten'
-		);
+	public function test_nl_address() {
+		$address = new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '9203 KA', 'Drachten' );
 
 		$this->assertEquals( 'NL', $address->get_country() );
 		$this->assertEquals( 'Drachten', $address->get_city() );
@@ -38,6 +32,22 @@ class AddressTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( '9203 KA', $address->get_postal_code() );
 		$this->assertEquals( 'Burgemeester Wuiteweg', $address->get_street() );
 		$this->assertNull( $address->get_state_or_province() );
+	}
+
+	/**
+	 * Test address United States.
+	 *
+	 * @link https://automattic.com/contact/
+	 */
+	public function test_address_us() {
+		$address = new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', 'CA' );
+
+		$this->assertEquals( 'US', $address->get_country() );
+		$this->assertEquals( 'San Francisco', $address->get_city() );
+		$this->assertEquals( '343', $address->get_house_number_or_name() );
+		$this->assertEquals( '94110', $address->get_postal_code() );
+		$this->assertEquals( '60 29th Street', $address->get_street() );
+		$this->assertEquals( 'CA', $address->get_state_or_province() );
 	}
 
 	/**
@@ -52,5 +62,72 @@ class AddressTest extends \PHPUnit_Framework_TestCase {
 		$this->assertNull( $address->get_postal_code() );
 		$this->assertNull( $address->get_street() );
 		$this->assertNull( $address->get_state_or_province() );
+	}
+
+	/**
+	 * Test invalid country.
+	 */
+	public function test_invalid_country() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$address = new Address( 'A' );
+	}
+
+	/**
+	 * Test required street.
+	 */
+	public function test_required_street() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$address = new Address( 'NL', null, '39b' );
+	}
+
+	/**
+	 * Test required street.
+	 */
+	public function test_required_postal_code() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$address = new Address( 'NL', 'Burgemeester Wuiteweg', '39b', null );
+	}
+
+	/**
+	 * Test invalid postal code.
+	 */
+	public function test_invalid_postal_code() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$address = new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '1234567890 to long' );
+	}
+
+	/**
+	 * Test required street.
+	 */
+	public function test_required_city() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$address = new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '9203 KA', null );
+	}
+
+	/**
+	 * Test required state or province.
+	 *
+	 * @link https://automattic.com/contact/
+	 */
+	public function test_required_state_or_province() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$address = new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', null );
+	}
+
+	/**
+	 * Test invalid state or province.
+	 *
+	 * @link https://automattic.com/contact/
+	 */
+	public function test_invalid_state_or_province() {
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$address = new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', 'CA to long' );
 	}
 }

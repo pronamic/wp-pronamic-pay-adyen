@@ -30,11 +30,23 @@ class AddressTransformer {
 	public static function transform( Pay_Address $address ) {
 		$country = $address->get_country();
 
-		$country_code = ( null === $country ) ? null : $country->get_code();
+		if ( null === $country ) {
+			return null;
+		}
+
+		$country_code = $country->get_code();
+
+		if ( null === $country_code ) {
+			return null;
+		}
+
+		$state_or_province = null;
 
 		$region = $address->get_region();
 
-		$state_or_province = ( null === $region ) ? null : $region->get_code();
+		if ( null !== $region ) {
+			$state_or_province = $region->get_code();
+		}
 
 		try {
 			$address = new Address(

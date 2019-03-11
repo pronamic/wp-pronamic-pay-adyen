@@ -21,16 +21,29 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
  */
 class PaymentMethodTypeTest extends \PHPUnit_Framework_TestCase {
 	/**
-	 * Test transform.
+	 * Test transform to WordPress.
 	 *
 	 * @param string $adyen_payment_method_type Adyen payment method type.
-	 * @param string $expected_payment_method   Expectd WordPress payment method.
-	 * @dataProvider payment_method_type_matrix_provider
+	 * @param string $wp_payment_method         WordPress payment method.
+	 * @dataProvider transform_test_provider
 	 */
-	public function test_transform( $adyen_payment_method_type, $expected_payment_method ) {
-		$payment_method = PaymentMethodType::to_wp( $adyen_payment_method_type );
+	public function test_to_wp( $adyen_payment_method_type, $wp_payment_method ) {
+		$result = PaymentMethodType::to_wp( $adyen_payment_method_type );
 
-		$this->assertEquals( $expected_payment_method, $payment_method );
+		$this->assertEquals( $wp_payment_method, $result );
+	}
+
+	/**
+	 * Test transform to Adyen.
+	 *
+	 * @param string $adyen_payment_method_type Adyen payment method type.
+	 * @param string $wp_payment_method         WordPress payment method.
+	 * @dataProvider transform_test_provider
+	 */
+	public function test_to_adyen( $adyen_payment_method_type, $wp_payment_method ) {
+		$result = PaymentMethodType::transform( $wp_payment_method );
+
+		$this->assertEquals( $adyen_payment_method_type, $result );
 	}
 
 	/**
@@ -38,7 +51,7 @@ class PaymentMethodTypeTest extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @return array
 	 */
-	public function payment_method_type_matrix_provider() {
+	public function transform_test_provider() {
 		return array(
 			array( PaymentMethodType::AFTERPAY, PaymentMethods::AFTERPAY ),
 			array( PaymentMethodType::ALIPAY, PaymentMethods::ALIPAY ),
@@ -51,7 +64,7 @@ class PaymentMethodTypeTest extends \PHPUnit_Framework_TestCase {
 			array( PaymentMethodType::MAESTRO, PaymentMethods::MAESTRO ),
 			array( PaymentMethodType::PAYPAL, PaymentMethods::PAYPAL ),
 			array( PaymentMethodType::DIRECT_EBANKING, PaymentMethods::SOFORT ),
-			array( 'not existing result code', null ),
+			array( null, null ),
 		);
 	}
 }

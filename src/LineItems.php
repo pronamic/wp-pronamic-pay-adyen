@@ -87,6 +87,12 @@ class LineItems {
 	 */
 	public function get_json() {
 		$data = array_map(
+			/**
+			 * Get line item JSON.
+			 *
+			 * @param LineItem $item Line item.
+			 * @return object
+			 */
 			function( LineItem $item ) {
 				return $item->get_json();
 			},

@@ -93,22 +93,49 @@ class NotificationRequestItem extends ResponseObject {
 	private $success;
 
 	/**
+	 * Construct notification request item.
+	 *
+	 * @link https://stackoverflow.com/questions/34468660/how-to-use-builder-pattern-with-all-parameters-as-mandatory
+	 *
+	 * @param Amount   $amount                Amount.
+	 * @param string   $psp_reference         PSP reference.
+	 * @param string   $event_code            Event code.
+	 * @param DateTime $event_date            Event date.
+	 * @param string   $merchant_account_code Merchant account code.
+	 * @param array    $operations            Operations.
+	 * @param string   $merchant_reference    Merchant reference.
+	 * @param string   $payment_method        Payment method.
+	 * @param boolean  $success               Success.
+	 */
+	public function __construct(
+		Amount $amount,
+		$psp_reference,
+		$event_code,
+		DateTime $event_date,
+		$merchant_account_code,
+		array $operations,
+		$merchant_reference,
+		$payment_method,
+		$success
+	) {
+		$this->amount                = $amount;
+		$this->psp_reference         = $psp_reference;
+		$this->event_code            = $event_code;
+		$this->event_date            = $event_date;
+		$this->merchant_account_code = $merchant_account_code;
+		$this->operations            = $operations;
+		$this->merchant_reference    = $merchant_reference;
+		$this->payment_method        = $payment_method;
+		$this->success               = $success;
+	}
+
+	/**
 	 * Get amount.
 	 *
 	 * @return Amount
 	 */
 	public function get_amount() {
 		return $this->amount;
-	}
-
-	/**
-	 * Set amount.
-	 *
-	 * @param Amount $amount Amount.
-	 * @return void
-	 */
-	public function set_amount( Amount $amount ) {
-		$this->amount = $amount;
 	}
 
 	/**
@@ -121,32 +148,12 @@ class NotificationRequestItem extends ResponseObject {
 	}
 
 	/**
-	 * Set PSP reference.
-	 *
-	 * @param string $psp_reference PSP reference.
-	 * @return void
-	 */
-	public function set_psp_reference( $psp_reference ) {
-		$this->psp_reference = $psp_reference;
-	}
-
-	/**
 	 * Get event code.
 	 *
 	 * @return string
 	 */
 	public function get_event_code() {
 		return $this->event_code;
-	}
-
-	/**
-	 * Set event code.
-	 *
-	 * @param string $event_code Event code.
-	 * @return void
-	 */
-	public function set_event_code( $event_code ) {
-		$this->event_code = $event_code;
 	}
 
 	/**
@@ -159,32 +166,12 @@ class NotificationRequestItem extends ResponseObject {
 	}
 
 	/**
-	 * Set event date.
-	 *
-	 * @param DateTime $event_date Event date.
-	 * @return void
-	 */
-	public function set_event_date( DateTime $event_date ) {
-		$this->event_date = $event_date;
-	}
-
-	/**
 	 * Get merchant account code.
 	 *
 	 * @return string
 	 */
 	public function get_merchant_account_code() {
 		return $this->merchant_account_code;
-	}
-
-	/**
-	 * Set merchant account code.
-	 *
-	 * @param string $merchant_account_code Merchant account code.
-	 * @return void
-	 */
-	public function set_merchant_account_code( $merchant_account_code ) {
-		$this->merchant_account_code = $merchant_account_code;
 	}
 
 	/**
@@ -197,32 +184,12 @@ class NotificationRequestItem extends ResponseObject {
 	}
 
 	/**
-	 * Set operations.
-	 *
-	 * @param array $operations Operations.
-	 * @return void
-	 */
-	public function set_operations( $operations ) {
-		$this->operations = $operations;
-	}
-
-	/**
 	 * Get operations.
 	 *
 	 * @return string
 	 */
 	public function get_merchant_reference() {
 		return $this->merchant_reference;
-	}
-
-	/**
-	 * Set merchant reference.
-	 *
-	 * @param string $merchant_reference Merchant reference.
-	 * @return void
-	 */
-	public function set_merchant_reference( $merchant_reference ) {
-		$this->merchant_reference = $merchant_reference;
 	}
 
 	/**
@@ -235,32 +202,12 @@ class NotificationRequestItem extends ResponseObject {
 	}
 
 	/**
-	 * Set payment method.
-	 *
-	 * @param string $payment_method Payment method.
-	 * @return void
-	 */
-	public function set_payment_method( $payment_method ) {
-		$this->payment_method = $payment_method;
-	}
-
-	/**
 	 * Is success.
 	 *
 	 * @return boolean
 	 */
 	public function is_success() {
 		return $this->success;
-	}
-
-	/**
-	 * Set success.
-	 *
-	 * @param boolean $success Success.
-	 * @return void
-	 */
-	public function set_success( $success ) {
-		$this->success = $success;
 	}
 
 	/**
@@ -281,17 +228,17 @@ class NotificationRequestItem extends ResponseObject {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$item = new self();
-
-		$item->set_amount( Amount::from_object( $object->amount ) );
-		$item->set_psp_reference( $object->pspReference );
-		$item->set_event_code( $object->eventCode );
-		$item->set_event_date( new DateTime( $object->eventDate ) );
-		$item->set_merchant_account_code( $object->merchantAccountCode );
-		$item->set_operations( $object->operations );
-		$item->set_merchant_reference( $object->merchantReference );
-		$item->set_payment_method( $object->paymentMethod );
-		$item->set_success( filter_var( $object->success, FILTER_VALIDATE_BOOLEAN ) );
+		$item = new self(
+			Amount::from_object( $object->amount ),
+			$object->pspReference,
+			$object->eventCode,
+			new DateTime( $object->eventDate ),
+			$object->merchantAccountCode,
+			$object->operations,
+			$object->merchantReference,
+			$object->paymentMethod,
+			filter_var( $object->success, FILTER_VALIDATE_BOOLEAN )
+		);
 
 		$item->set_original_object( $object );
 

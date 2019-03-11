@@ -283,6 +283,7 @@ class Gateway extends Core_Gateway {
 	 * Get issuers.
 	 *
 	 * @see Pronamic_WP_Pay_Gateway::get_issuers()
+	 * @return array
 	 */
 	public function get_issuers() {
 		$issuers = array();
@@ -294,8 +295,14 @@ class Gateway extends Core_Gateway {
 		// Limit to iDEAL payment methods.
 		$payment_methods = array_filter(
 			$payment_methods,
+			/**
+			 * Check if payment method is iDEAL.
+			 *
+			 * @param PaymentMethod $payment_method Payment method.
+			 * @return boolean True if payment method is iDEAL, false otherwise.
+			 */
 			function( $payment_method ) {
-				return ( PaymentMethodType::IDEAL === $payment_method->type );
+				return ( PaymentMethodType::IDEAL === $payment_method->get_type() );
 			}
 		);
 
@@ -310,7 +317,7 @@ class Gateway extends Core_Gateway {
 		}
 
 		if ( empty( $issuers ) ) {
-			return false;
+			return $issuers;
 		}
 
 		return array(

@@ -157,10 +157,10 @@ abstract class AbstractPaymentRequest extends Request {
 	 * @param string $return_url       The URL to return to.
 	 */
 	public function __construct( Amount $amount, $merchant_account, $reference, $return_url ) {
-		$this->set_amount( $amount );
-		$this->set_merchant_account( $merchant_account );
-		$this->set_reference( $reference );
-		$this->set_return_url( $return_url );
+		$this->amount           = $amount;
+		$this->merchant_account = $merchant_account;
+		$this->reference        = $reference;
+		$this->return_url       = $return_url;
 	}
 
 	/**
@@ -170,16 +170,6 @@ abstract class AbstractPaymentRequest extends Request {
 	 */
 	public function get_amount() {
 		return $this->amount;
-	}
-
-	/**
-	 * Set amount.
-	 *
-	 * @param Amount $amount Amount.
-	 * @return void
-	 */
-	public function set_amount( Amount $amount ) {
-		$this->amount = $amount;
 	}
 
 	/**
@@ -327,16 +317,6 @@ abstract class AbstractPaymentRequest extends Request {
 	}
 
 	/**
-	 * Set merchant account.
-	 *
-	 * @param string $merchant_account Merchant account.
-	 * @return void
-	 */
-	public function set_merchant_account( $merchant_account ) {
-		$this->merchant_account = $merchant_account;
-	}
-
-	/**
 	 * Get reference.
 	 *
 	 * @return string
@@ -346,32 +326,12 @@ abstract class AbstractPaymentRequest extends Request {
 	}
 
 	/**
-	 * Set reference.
-	 *
-	 * @param string $reference Reference.
-	 * @return void
-	 */
-	public function set_reference( $reference ) {
-		$this->reference = $reference;
-	}
-
-	/**
 	 * Get return URL.
 	 *
 	 * @return string
 	 */
 	public function get_return_url() {
 		return $this->return_url;
-	}
-
-	/**
-	 * Set return URL.
-	 *
-	 * @param string $return_url Return URL.
-	 * @return void
-	 */
-	public function set_return_url( $return_url ) {
-		$this->return_url = $return_url;
 	}
 
 	/**

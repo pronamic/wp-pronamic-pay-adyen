@@ -40,7 +40,7 @@ class PaymentRequest extends AbstractPaymentRequest {
 	public function __construct( Amount $amount, $merchant_account, $reference, $return_url, PaymentMethod $payment_method ) {
 		parent::__construct( $amount, $merchant_account, $reference, $return_url );
 
-		$this->set_payment_method( $payment_method );
+		$this->payment_method = $payment_method;
 	}
 
 	/**
@@ -50,16 +50,6 @@ class PaymentRequest extends AbstractPaymentRequest {
 	 */
 	public function get_payment_method() {
 		return $this->payment_method;
-	}
-
-	/**
-	 * Set payment method.
-	 *
-	 * @param PaymentMethod $payment_method Payment method.
-	 * @return void
-	 */
-	public function set_payment_method( PaymentMethod $payment_method ) {
-		$this->payment_method = $payment_method;
 	}
 
 	/**

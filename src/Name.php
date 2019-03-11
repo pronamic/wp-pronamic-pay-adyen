@@ -58,9 +58,9 @@ class Name {
 	 * @param string $gender     Gender.
 	 */
 	public function __construct( $first_name, $last_name, $gender ) {
-		$this->set_first_name( $first_name );
-		$this->set_last_name( $last_name );
-		$this->set_gender( $gender );
+		$this->first_name = $first_name;
+		$this->last_name  = $last_name;
+		$this->gender     = $gender;
 	}
 
 	/**
@@ -73,32 +73,12 @@ class Name {
 	}
 
 	/**
-	 * Set first name.
-	 *
-	 * @param string $first_name First name.
-	 * @return void
-	 */
-	public function set_first_name( $first_name ) {
-		$this->first_name = $first_name;
-	}
-
-	/**
 	 * Get gender.
 	 *
 	 * @return string
 	 */
 	public function get_gender() {
 		return $this->gender;
-	}
-
-	/**
-	 * Set gender.
-	 *
-	 * @param string $gender Gender.
-	 * @return void
-	 */
-	public function set_gender( $gender ) {
-		$this->gender = $gender;
 	}
 
 	/**
@@ -137,16 +117,6 @@ class Name {
 	 */
 	public function get_last_name() {
 		return $this->last_name;
-	}
-
-	/**
-	 * Set last name.
-	 *
-	 * @param string $last_name Last name.
-	 * @return void
-	 */
-	public function set_last_name( $last_name ) {
-		$this->last_name = $last_name;
 	}
 
 	/**

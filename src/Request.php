@@ -23,7 +23,5 @@ abstract class Request {
 	 *
 	 * @return object
 	 */
-	public function get_json() {
-		return (object) array();
-	}
+	abstract public function get_json();
 }

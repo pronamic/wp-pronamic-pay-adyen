@@ -45,10 +45,10 @@ class LineItemsTest extends TestCase {
 		$line_item = new LineItem( 'Test', 1, 12399 );
 
 		return array(
-			array( null, null ),
-			array( 1, null ),
-			array( '', null ),
-			array( array(), null ),
+			array( null, array() ),
+			array( 1, array() ),
+			array( '', array() ),
+			array( array(), array() ),
 			array( array( $line_item ), array( $line_item ) ),
 		);
 	}

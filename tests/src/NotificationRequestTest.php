@@ -36,6 +36,8 @@ class NotificationRequestTest extends \PHPUnit_Framework_TestCase {
 
 		$item = array_pop( $items );
 
+		$this->assertEquals( 'EUR', $item->get_amount()->get_currency() );
+		$this->assertEquals( 500, $item->get_amount()->get_value() );
 		$this->assertEquals( '9313547924770610', $item->get_psp_reference() );
 		$this->assertEquals( 'AUTHORISATION', $item->get_event_code() );
 		$this->assertEquals( '2018-01-01T01:02:01+02:00', $item->get_event_date()->format( DATE_W3C ) );

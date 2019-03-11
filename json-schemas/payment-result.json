@@ -23,7 +23,7 @@
 		"shopperLocale": {
 			"type": "string",
 			"description": "The shopperLocale value provided in the payment request"
-		},
+		}
 	},
 	"required": [
 		"merchantReference",

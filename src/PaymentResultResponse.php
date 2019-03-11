@@ -40,6 +40,13 @@ class PaymentResultResponse extends ResponseObject {
 	private $payment_method;
 
 	/**
+	 * The shopperLocale value provided in the payment request
+	 *
+	 * @var string
+	 */
+	private $shopper_locale;
+
+	/**
 	 * The result of the payment.
 	 *
 	 * @var string|null
@@ -58,10 +65,12 @@ class PaymentResultResponse extends ResponseObject {
 	 *
 	 * @param string $merchant_reference Merchant reference.
 	 * @param string $payment_method     Payment method.
+	 * @param string $shopper_locale     Shopper locale.
 	 */
-	public function __construct( $merchant_reference, $payment_method ) {
+	public function __construct( $merchant_reference, $payment_method, $shopper_locale ) {
 		$this->merchant_reference = $merchant_reference;
 		$this->payment_method     = $payment_method;
+		$this->shopper_locale     = $shopper_locale;
 	}
 
 	/**
@@ -71,6 +80,24 @@ class PaymentResultResponse extends ResponseObject {
 	 */
 	public function get_merchant_reference() {
 		return $this->merchant_reference;
+	}
+
+	/**
+	 * Get payment method.
+	 *
+	 * @return string
+	 */
+	public function get_payment_method() {
+		return $this->payment_method;
+	}
+
+	/**
+	 * Get shopper locale.
+	 *
+	 * @return string
+	 */
+	public function get_shopper_locale() {
+		return $this->shopper_locale;
 	}
 
 	/**
@@ -131,7 +158,8 @@ class PaymentResultResponse extends ResponseObject {
 
 		$response = new self(
 			$object->merchantReference,
-			$object->paymentMethod
+			$object->paymentMethod,
+			$object->shopperLocale
 		);
 
 		if ( isset( $object->pspReference ) ) {

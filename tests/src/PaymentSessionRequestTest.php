@@ -22,6 +22,46 @@ class PaymentSessionRequestTest extends \PHPUnit_Framework_TestCase {
 	 * Test payment request.
 	 */
 	public function test_payment_request() {
+		$amount = new Amount( 'EUR', 1000 );
+
+		$payment_request = new PaymentSessionRequest(
+			$amount,
+			'YOUR_MERCHANT_ACCOUNT',
+			'Your order number',
+			'https://your-company.com/...',
+			'NL'
+		);
+
+		$payment_request->set_allowed_payment_methods(
+			array(
+				PaymentMethodType::DIRECT_EBANKING,
+				PaymentMethodType::IDEAL,
+			)
+		);
+
+		$payment_request->set_origin( 'https://www.pronamic.eu/' );
+		$payment_request->set_sdk_version( '1.9.4' );
+
+		$this->assertEquals( $amount, $payment_request->get_amount() );
+		$this->assertEquals( 'YOUR_MERCHANT_ACCOUNT', $payment_request->get_merchant_account() );
+		$this->assertEquals( 'Your order number', $payment_request->get_reference() );
+		$this->assertEquals( 'https://your-company.com/...', $payment_request->get_return_url() );
+		$this->assertEquals( 'NL', $payment_request->get_country_code() );
+		$this->assertEquals(
+			array(
+				PaymentMethodType::DIRECT_EBANKING,
+				PaymentMethodType::IDEAL,
+			),
+			$payment_request->get_allowed_payment_methods()
+		);
+		$this->assertEquals( 'https://www.pronamic.eu/', $payment_request->get_origin() );
+		$this->assertEquals( '1.9.4', $payment_request->get_sdk_version() );
+	}
+
+	/**
+	 * Test JSON.
+	 */
+	public function test_json() {
 		$json_file = __DIR__ . '/../json/payment-session-request.json';
 
 		$amount = new Amount( 'EUR', 1000 );

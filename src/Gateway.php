@@ -268,7 +268,7 @@ class Gateway extends Core_Gateway {
 		$payment_methods_response = $this->client->get_payment_methods();
 
 		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
-			$core_payment_method = PaymentMethodType::to_wp( $payment_method->type );
+			$core_payment_method = PaymentMethodType::to_wp( $payment_method->get_type() );
 
 			$core_payment_methods[] = $core_payment_method;
 		}
@@ -307,10 +307,14 @@ class Gateway extends Core_Gateway {
 		);
 
 		foreach ( $payment_methods as $payment_method ) {
-			foreach ( $payment_method->details as $detail ) {
-				if ( 'issuer' === $detail->key && 'select' === $detail->type ) {
-					foreach ( $detail->items as $item ) {
-						$issuers[ $item->id ] = $item->name;
+			$details = $payment_method->get_details();
+
+			if ( is_array( $details ) ) {
+				foreach ( $details as $detail ) {
+					if ( 'issuer' === $detail->key && 'select' === $detail->type ) {
+						foreach ( $detail->items as $item ) {
+							$issuers[ $item->id ] = $item->name;
+						}
 					}
 				}
 			}

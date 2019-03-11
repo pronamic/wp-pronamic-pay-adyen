@@ -10,6 +10,10 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
+
 /**
  * Payment method
  *
@@ -17,13 +21,20 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentMethod {
+class PaymentMethod extends ResponseObject {
 	/**
 	 * Type.
 	 *
 	 * @var string
 	 */
 	private $type;
+
+	/**
+	 * Details.
+	 *
+	 * @var array|null
+	 */
+	private $details;
 
 	/**
 	 * Construct a payment method.
@@ -44,6 +55,25 @@ class PaymentMethod {
 	}
 
 	/**
+	 * Get details.
+	 *
+	 * @return array|null
+	 */
+	public function get_details() {
+		return $this->details;
+	}
+
+	/**
+	 * Set details.
+	 *
+	 * @param array|null $details Details.
+	 * @return void
+	 */
+	public function set_details( $details ) {
+		$this->details = $details;
+	}
+
+	/**
 	 * Get JSON.
 	 *
 	 * @return object
@@ -52,5 +82,34 @@ class PaymentMethod {
 		return (object) array(
 			'type' => $this->type,
 		);
+	}
+
+	/**
+	 * Create payment method from object.
+	 *
+	 * @param object $object Object.
+	 * @return PaymentMethod
+	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
+	 */
+	public static function from_object( $object ) {
+		$validator = new Validator();
+
+		$validator->validate(
+			$object,
+			(object) array(
+				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-method.json' ),
+			),
+			Constraint::CHECK_MODE_EXCEPTIONS
+		);
+
+		$payment_method = new self( $object->type );
+
+		if ( isset( $object->details ) ) {
+			$payment_method->set_details( $object->details );
+		}
+
+		$payment_method->set_original_object( $object );
+
+		return $payment_method;
 	}
 }

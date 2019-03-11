@@ -34,15 +34,15 @@ class PaymentMethodsResponse extends ResponseObject {
 	/**
 	 * Detailed list of payment methods required to generate payment forms.
 	 *
-	 * @var array
+	 * @var PaymentMethod[]
 	 */
 	private $payment_methods;
 
 	/**
 	 * Construct payment session response object.
 	 *
-	 * @param array $groups          Groups.
-	 * @param array $payment_methods Payment methods.
+	 * @param array           $groups          Groups.
+	 * @param PaymentMethod[] $payment_methods Payment methods.
 	 */
 	public function __construct( $groups, $payment_methods ) {
 		$this->groups          = $groups;
@@ -52,7 +52,7 @@ class PaymentMethodsResponse extends ResponseObject {
 	/**
 	 * Get payment methods.
 	 *
-	 * @return array
+	 * @return PaymentMethod[]
 	 */
 	public function get_payment_methods() {
 		return $this->payment_methods;
@@ -76,7 +76,13 @@ class PaymentMethodsResponse extends ResponseObject {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$response = new self( $object->groups, $object->paymentMethods );
+		$payment_methods = array();
+
+		foreach ( $object->paymentMethods as $payment_method_object ) {
+			$payment_methods[] = PaymentMethod::from_object( $payment_method_object );
+		}
+
+		$response = new self( $object->groups, $payment_methods );
 
 		$response->set_original_object( $object );
 

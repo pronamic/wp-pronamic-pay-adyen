@@ -70,10 +70,14 @@ class PaymentRequest extends AbstractPaymentRequest {
 	public function get_json() {
 		$object = parent::get_json();
 
+		$properties = (array) $object;
+
 		// Payment method.
-		$object->paymentMethod = $this->get_payment_method()->get_json();
+		$properties['paymentMethod'] = $this->get_payment_method()->get_json();
 
 		// Return object.
+		$object = (object) $properties;
+
 		return $object;
 	}
 }

@@ -34,18 +34,21 @@ class PaymentRequestHelper {
 		// Shopper.
 		$request->set_shopper_statement( $payment->get_description() );
 
-		if ( null !== $payment->get_customer() ) {
-			$customer = $payment->get_customer();
+		// Customer.
+		$customer = $payment->get_customer();
 
+		if ( null !== $customer ) {
 			$request->set_shopper_ip( $customer->get_ip_address() );
 			$request->set_shopper_locale( $customer->get_locale() );
 			$request->set_telephone_number( $customer->get_phone() );
 
 			// Shopper name.
-			if ( null !== $customer->get_name() ) {
+			$name = $customer->get_name();
+
+			if ( null !== $name ) {
 				$shopper_name = new Name(
-					$customer->get_name()->get_first_name(),
-					$customer->get_name()->get_last_name(),
+					strval( $name->get_first_name() ),
+					strval( $name->get_last_name() ),
 					GenderTransformer::transform( $customer->get_gender() )
 				);
 
@@ -89,7 +92,7 @@ class PaymentRequestHelper {
 				// Use line item name as fallback for description.
 				if ( null === $description ) {
 					/* translators: %s: item index */
-					$description = sprintf( __( 'Item %s', 'pronamic_ideal' ), $i ++ );
+					$description = sprintf( __( 'Item %s', 'pronamic_ideal' ), $i++ );
 
 					if ( null !== $line->get_name() && '' !== $line->get_name() ) {
 						$description = $line->get_name();
@@ -107,10 +110,10 @@ class PaymentRequestHelper {
 				$item->set_id( $line->get_id() );
 
 				// Tax amount.
-				$tax_amount = $line->get_unit_price()->get_tax_amount();
+				$tax_amount = $line->get_total_amount()->get_tax_amount();
 
 				if ( null !== $tax_amount ) {
-					$item->set_tax_amount( $line->get_total_amount()->get_tax_amount()->get_minor_units() );
+					$item->set_tax_amount( $tax_amount->get_minor_units() );
 					$item->set_tax_percentage( (int) $line->get_total_amount()->get_tax_percentage() * 100 );
 				}
 			}

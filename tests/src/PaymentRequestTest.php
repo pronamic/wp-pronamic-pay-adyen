@@ -24,8 +24,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	public function test_payment_request() {
 		$json_file = __DIR__ . '/../json/payment-request.json';
 
-		$payment_method         = new PaymentMethod( PaymentMethodType::IDEAL );
-		$payment_method->issuer = '1121';
+		$payment_method = new PaymentMethodIDeal( PaymentMethodType::IDEAL, '1121' );
 
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),

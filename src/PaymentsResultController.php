@@ -19,7 +19,8 @@ use WP_REST_Request;
 /**
  * Payments result controller
  *
- * @link    https://docs.adyen.com/developers/checkout/web-sdk/customization/logic#beforecomplete
+ * @link https://docs.adyen.com/developers/checkout/web-sdk/customization/logic#beforecomplete
+ *
  * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
@@ -90,6 +91,18 @@ class PaymentsResultController {
 				sprintf(
 					/* translators: %s: Gateway configuration ID */
 					__( 'Could not found gateway with ID `%s`.', 'pronamic_ideal' ),
+					$config_id
+				),
+				$config_id
+			);
+		}
+
+		if ( ! isset( $gateway->client ) ) {
+			return new WP_Error(
+				'pronamic-pay-adyen-client-not-found',
+				sprintf(
+					/* translators: %s: Gateway configuration ID */
+					__( 'Could not found client in gateway with ID `%s`.', 'pronamic_ideal' ),
 					$config_id
 				),
 				$config_id

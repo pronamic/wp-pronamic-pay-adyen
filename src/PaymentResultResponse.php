@@ -11,6 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use InvalidArgumentException;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
 
 /**
  * Payment result response
@@ -113,8 +116,19 @@ class PaymentResultResponse extends ResponseObject {
 	 *
 	 * @param object $object Object.
 	 * @return PaymentResultResponse
+	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
+		$validator = new Validator();
+
+		$validator->validate(
+			$object,
+			(object) array(
+				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-result.json' ),
+			),
+			Constraint::CHECK_MODE_EXCEPTIONS
+		);
+
 		$response = new self(
 			$object->merchantReference,
 			$object->paymentMethod

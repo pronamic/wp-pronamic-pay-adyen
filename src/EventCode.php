@@ -13,11 +13,11 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 /**
  * Event Codes.
  *
+ * @link https://docs.adyen.com/developers/development-resources/notifications/event-codes
+ *
  * @author  Reüel van der Steege
  * @version 1.0.0
  * @since   1.0.0
- *
- * @link https://docs.adyen.com/developers/development-resources/notifications/event-codes
  */
 class EventCode {
 	/**

@@ -33,6 +33,8 @@ class LineItems {
 	 * @param LineItem[] $items Line items.
 	 */
 	public function __construct( $items = null ) {
+		$this->line_items = array();
+
 		if ( is_array( $items ) ) {
 			foreach ( $items as $item ) {
 				$this->add_item( $item );

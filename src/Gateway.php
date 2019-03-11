@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Locale;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
@@ -20,10 +21,11 @@ use Pronamic\WordPress\Pay\Plugin;
 /**
  * Gateway
  *
+ * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
+ *
  * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
- * @link    https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  */
 class Gateway extends Core_Gateway {
 	/**
@@ -92,83 +94,93 @@ class Gateway extends Core_Gateway {
 		// Amount.
 		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
-		// Payment method. Take leap of faith for unknown payment methods.
+		// Payment method type.
 		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
 
 		// Country.
 		$locale = get_locale();
 
-		if ( null !== $payment->get_customer() ) {
-			$locale = $payment->get_customer()->get_locale();
+		$customer = $payment->get_customer();
+
+		if ( null !== $customer ) {
+			$locale = $customer->get_locale();
 		}
 
-		$locale = explode( '_', $locale );
+		$locale = strval( $locale );
 
-		$country_code = strtoupper( substr( $locale[1], 0, 2 ) );
+		$country_code = Locale::getRegion( $locale );
 
-		// Create payment or payment session request.
-		switch ( $payment->get_method() ) {
-			case PaymentMethods::IDEAL:
-			case PaymentMethods::SOFORT:
-				$payment_method = new PaymentMethod( $payment_method_type );
+		/*
+		 * API Integration
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
+		 */
+		$api_integration_payment_method_types = array(
+			PaymentMethodType::IDEAL,
+			PaymentMethodType::DIRECT_EBANKING,
+		);
 
-				switch ( $payment->get_method() ) {
-					case PaymentMethods::IDEAL:
-						$payment_method->issuer = $payment->get_issuer();
+		if ( in_array( $payment_method_type, $api_integration_payment_method_types, true ) ) {
+			$payment_method = new PaymentMethod( $payment_method_type );
 
-						break;
-				}
+			if ( PaymentMethodType::IDEAL === $payment_method_type ) {
+				$payment_method = new PaymentMethodIDeal( $payment_method_type, $payment->get_issuer() );
+			}
 
-				// API integration.
-				$payment_request = new PaymentRequest(
-					$amount,
-					$this->config->get_merchant_account(),
-					$payment->get_id(),
-					$payment->get_return_url(),
-					$payment_method
-				);
+			// API integration.
+			$payment_request = new PaymentRequest(
+				$amount,
+				$this->config->get_merchant_account(),
+				strval( $payment->get_id() ),
+				$payment->get_return_url(),
+				$payment_method
+			);
 
-				$payment_request->set_country_code( $country_code );
+			$payment_request->set_country_code( $country_code );
 
-				PaymentRequestHelper::complement( $payment, $payment_request );
+			PaymentRequestHelper::complement( $payment, $payment_request );
 
-				$payment_response = $this->client->create_payment( $payment_request );
+			$payment_response = $this->client->create_payment( $payment_request );
 
-				$payment->set_transaction_id( $payment_response->get_psp_reference() );
+			$payment->set_transaction_id( $payment_response->get_psp_reference() );
 
-				$redirect = $payment_response->get_redirect();
+			$redirect = $payment_response->get_redirect();
 
-				if ( null !== $redirect ) {
-					$payment->set_action_url( $redirect->get_url() );
-				}
+			if ( null !== $redirect ) {
+				$payment->set_action_url( $redirect->get_url() );
+			}
 
-				break;
-			default:
-				// Web SDK integration.
-				$payment_session_request = new PaymentSessionRequest(
-					$amount,
-					$this->config->get_merchant_account(),
-					strval( $payment->get_id() ),
-					$payment->get_return_url(),
-					$country_code
-				);
-
-				PaymentRequestHelper::complement( $payment, $payment_session_request );
-
-				$payment_session_request->set_origin( home_url() );
-				$payment_session_request->set_sdk_version( self::SDK_VERSION );
-
-				if ( null !== $payment_method_type ) {
-					$payment_session_request->set_allowed_payment_methods( array( $payment_method_type ) );
-				}
-
-				$payment_session_response = $this->client->create_payment_session( $payment_session_request );
-
-				$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
-				$payment->set_meta( 'adyen_payment_session', $payment_session_response->get_payment_session() );
-
-				$payment->set_action_url( $payment->get_pay_redirect_url() );
+			return;
 		}
+
+		/*
+		 * SDK Integration
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
+		 */
+		$payment_session_request = new PaymentSessionRequest(
+			$amount,
+			$this->config->get_merchant_account(),
+			strval( $payment->get_id() ),
+			$payment->get_return_url(),
+			$country_code
+		);
+
+		PaymentRequestHelper::complement( $payment, $payment_session_request );
+
+		$payment_session_request->set_origin( home_url() );
+		$payment_session_request->set_sdk_version( self::SDK_VERSION );
+
+		if ( null !== $payment_method_type ) {
+			$payment_session_request->set_allowed_payment_methods( array( $payment_method_type ) );
+		}
+
+		$payment_session_response = $this->client->create_payment_session( $payment_session_request );
+
+		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
+		$payment->set_meta( 'adyen_payment_session', $payment_session_response->get_payment_session() );
+
+		$payment->set_action_url( $payment->get_pay_redirect_url() );
 	}
 
 	/**

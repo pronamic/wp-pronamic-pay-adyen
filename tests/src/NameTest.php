@@ -15,7 +15,7 @@ use JsonSchema\Validator;
 /**
  * Name test
  *
- * @link hhttps://docs.adyen.com/developers/api-reference/common-api/name
+ * @link https://docs.adyen.com/developers/api-reference/common-api/name
  *
  * @author  Remco Tolsma
  * @version 1.0.0

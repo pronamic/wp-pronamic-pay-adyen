@@ -127,22 +127,26 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	public function get_json() {
 		$object = parent::get_json();
 
+		$properties = (array) $object;
+
 		// Allowed payment methods.
 		if ( null !== $this->allowed_payment_methods ) {
-			$object->allowedPaymentMethods = $this->allowed_payment_methods;
+			$properties['allowedPaymentMethods'] = $this->allowed_payment_methods;
 		}
 
 		// Origin.
 		if ( null !== $this->origin ) {
-			$object->origin = $this->origin;
+			$properties['origin'] = $this->origin;
 		}
 
 		// SDK version.
 		if ( null !== $this->sdk_version ) {
-			$object->sdkVersion = $this->sdk_version;
+			$properties['sdkVersion'] = $this->sdk_version;
 		}
 
 		// Return object.
+		$object = (object) $properties;
+
 		return $object;
 	}
 }

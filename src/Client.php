@@ -18,10 +18,11 @@ use WP_Error;
 /**
  * Adyen client
  *
+ * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
+ *
  * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
- * @link    https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  */
 class Client {
 	/**

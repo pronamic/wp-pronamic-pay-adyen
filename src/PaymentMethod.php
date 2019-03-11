@@ -14,8 +14,8 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * Payment method
  *
  * @author  Remco Tolsma
- * @version 2.1.0
- * @since   2.0.2
+ * @version 1.0.0
+ * @since   1.0.0
  */
 class PaymentMethod {
 	/**
@@ -23,7 +23,7 @@ class PaymentMethod {
 	 *
 	 * @var string
 	 */
-	public $type;
+	private $type;
 
 	/**
 	 * Construct a payment method.
@@ -49,6 +49,8 @@ class PaymentMethod {
 	 * @return object
 	 */
 	public function get_json() {
-		return (object) (array) $this;
+		return (object) array(
+			'type' => $this->type,
+		);
 	}
 }

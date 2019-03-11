@@ -19,7 +19,8 @@ use Pronamic\WordPress\Pay\Core\Util;
 /**
  * Notification request item
  *
- * @link    https://docs.adyen.com/developers/api-reference/notifications-api#notificationrequestitem
+ * @link https://docs.adyen.com/developers/api-reference/notifications-api#notificationrequestitem
+ *
  * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0

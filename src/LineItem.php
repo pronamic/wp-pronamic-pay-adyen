@@ -104,6 +104,7 @@ class LineItem {
 	 * Set amount excluding tax.
 	 *
 	 * @param int|null $amount_excluding_tax Amount excluding tax.
+	 * @return void
 	 */
 	public function set_amount_excluding_tax( $amount_excluding_tax = null ) {
 		$this->amount_excluding_tax = $amount_excluding_tax;
@@ -122,6 +123,7 @@ class LineItem {
 	 * Set amount including tax.
 	 *
 	 * @param int|null $amount_including_tax Amount excluding tax.
+	 * @return void
 	 */
 	public function set_amount_including_tax( $amount_including_tax = null ) {
 		$this->amount_including_tax = $amount_including_tax;

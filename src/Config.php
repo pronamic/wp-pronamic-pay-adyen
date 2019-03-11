@@ -54,10 +54,10 @@ class Config extends GatewayConfig {
 	/**
 	 * Get merchant account.
 	 *
-	 * @return string|null
+	 * @return string
 	 */
 	public function get_merchant_account() {
-		return $this->merchant_account;
+		return strval( $this->merchant_account );
 	}
 
 	/**

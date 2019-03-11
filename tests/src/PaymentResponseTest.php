@@ -22,6 +22,18 @@ class PaymentResponseTest extends \PHPUnit_Framework_TestCase {
 	 * Test payment response.
 	 */
 	public function test_payment_response() {
+		$payment_response = new PaymentResponse( ResultCode::PENDING );
+
+		$payment_response->set_psp_reference( '8515520546807677' );
+
+		$this->assertEquals( ResultCode::PENDING, $payment_response->get_result_code() );
+		$this->assertEquals( '8515520546807677', $payment_response->get_psp_reference() );
+	}
+
+	/**
+	 * Test from object.
+	 */
+	public function test_from_object() {
 		$json = file_get_contents( __DIR__ . '/../json/payment-response-ideal.json', true );
 
 		$data = json_decode( $json );

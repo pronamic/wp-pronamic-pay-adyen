@@ -19,9 +19,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  */
 class PaymentMethodTest extends \PHPUnit_Framework_TestCase {
 	/**
-	 * Test amount.
+	 * Test payment method.
 	 */
-	public function test_amount() {
+	public function test_payment_method() {
 		$payment_method = new PaymentMethod( PaymentMethodType::IDEAL );
 
 		$this->assertEquals( PaymentMethodType::IDEAL, $payment_method->get_type() );
@@ -32,5 +32,16 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase {
 			),
 			$payment_method->get_json()
 		);
+	}
+
+	/**
+	 * Test payment method.
+	 */
+	public function test_payment_method_details() {
+		$payment_method = new PaymentMethod( PaymentMethodType::IDEAL );
+		$payment_method->set_details( array() );
+
+		$this->assertEquals( PaymentMethodType::IDEAL, $payment_method->get_type() );
+		$this->assertEquals( array(), $payment_method->get_details() );
 	}
 }

@@ -32,13 +32,6 @@ class PaymentMethodsResponse extends ResponseObject {
 	private $groups;
 
 	/**
-	 * Detailed list of one-click payment methods.
-	 *
-	 * @var array|null
-	 */
-	private $one_click_payment_methods;
-
-	/**
 	 * Detailed list of payment methods required to generate payment forms.
 	 *
 	 * @var array
@@ -66,16 +59,6 @@ class PaymentMethodsResponse extends ResponseObject {
 	}
 
 	/**
-	 * Set one-click payment methods.
-	 *
-	 * @param array|null $one_click_payment_methods One-click payment methods.
-	 * @return void
-	 */
-	public function set_one_click_payment_methods( $one_click_payment_methods ) {
-		$this->one_click_payment_methods = $one_click_payment_methods;
-	}
-
-	/**
 	 * Create payment methods repsonse from object.
 	 *
 	 * @param object $object Object.
@@ -94,10 +77,6 @@ class PaymentMethodsResponse extends ResponseObject {
 		);
 
 		$response = new self( $object->groups, $object->paymentMethods );
-
-		if ( isset( $object->oneClickPaymentMethods ) ) {
-			$response->set_one_click_payment_methods( $object->oneClickPaymentMethods );
-		}
 
 		$response->set_original_object( $object );
 

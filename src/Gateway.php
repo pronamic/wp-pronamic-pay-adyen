@@ -14,7 +14,7 @@ use Locale;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
-use Pronamic\WordPress\Pay\Core\Util;
+use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Plugin;
 
@@ -228,7 +228,7 @@ class Gateway extends Core_Gateway {
 		);
 
 		// No cache.
-		Util::no_cache();
+		Core_Util::no_cache();
 
 		require __DIR__ . '/../views/checkout.php';
 

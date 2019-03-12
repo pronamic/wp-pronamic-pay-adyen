@@ -14,7 +14,6 @@ use DateTime;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
-use Pronamic\WordPress\Pay\Core\Util;
 
 /**
  * Notification request item

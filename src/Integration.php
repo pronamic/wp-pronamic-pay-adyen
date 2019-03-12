@@ -146,7 +146,9 @@ class Integration extends AbstractIntegration {
 	 */
 	public static function input_element( $args ) {
 		$name  = $args['label_for'];
+
 		$value = get_option( $name );
+		$value = strval( $value );
 
 		printf(
 			'<input name="%s" id="%s" value="%s" type="text" class="regular-text" />',

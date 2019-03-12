@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use DateTime;
+
 /**
  * Payment session request test
  *
@@ -31,6 +33,18 @@ class PaymentSessionRequestTest extends \PHPUnit_Framework_TestCase {
 			'https://your-company.com/...',
 			'NL'
 		);
+
+		$payment_request->set_billing_address( new Address( 'NL' ) );
+		$payment_request->set_channel( Channel::WEB );
+		$payment_request->set_date_of_birth( new DateTime( '05-05-2005' ) );
+		$payment_request->set_delivery_address( new Address( 'US' ) );
+		$payment_request->set_line_items( null );
+		$payment_request->set_shopper_ip( '127.0.0.1' );
+		$payment_request->set_shopper_locale( 'nl_NL' );
+		$payment_request->set_shopper_name( null );
+		$payment_request->set_shopper_reference( '123' );
+		$payment_request->set_shopper_statement( 'The text to appear on the shopper\'s bank statement.' );
+		$payment_request->set_telephone_number( '085 40 11 580' );
 
 		$payment_request->set_allowed_payment_methods(
 			array(
@@ -56,6 +70,38 @@ class PaymentSessionRequestTest extends \PHPUnit_Framework_TestCase {
 		);
 		$this->assertEquals( 'https://www.pronamic.eu/', $payment_request->get_origin() );
 		$this->assertEquals( '1.9.4', $payment_request->get_sdk_version() );
+		$this->assertEquals( 'NL', $payment_request->get_billing_address()->get_country() );
+		$this->assertEquals( Channel::WEB, $payment_request->get_channel() );
+		$this->assertEquals( '05-05-2005', $payment_request->get_date_of_birth()->format( 'd-m-Y' ) );
+		$this->assertEquals( 'US', $payment_request->get_delivery_address()->get_country() );
+		$this->assertNull( $payment_request->get_line_items() );
+		$this->assertEquals( '127.0.0.1', $payment_request->get_shopper_ip() );
+		$this->assertEquals( 'nl_NL', $payment_request->get_shopper_locale() );
+		$this->assertNull( $payment_request->get_shopper_name() );
+		$this->assertEquals( '123', $payment_request->get_shopper_reference() );
+		$this->assertEquals( 'The text to appear on the shopper\'s bank statement.', $payment_request->get_shopper_statement() );
+		$this->assertEquals( '085 40 11 580', $payment_request->get_telephone_number() );
+
+		$line_items = $payment_request->new_line_items();
+
+		$this->assertInstanceOf( __NAMESPACE__ . '\LineItems', $line_items );
+	}
+
+	/**
+	 * Test invalid country.
+	 */
+	public function test_invalid_country() {
+		$amount = new Amount( 'EUR', 1000 );
+
+		$this->setExpectedException( 'InvalidArgumentException' );
+
+		$payment_request = new PaymentSessionRequest(
+			$amount,
+			'YOUR_MERCHANT_ACCOUNT',
+			'Your order number',
+			'https://your-company.com/...',
+			'NL invalid'
+		);
 	}
 
 	/**

@@ -301,7 +301,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 *
 	 * @return LineItems
 	 */
-	public function new_items() {
+	public function new_line_items() {
 		$this->line_items = new LineItems();
 
 		return $this->line_items;
@@ -454,81 +454,29 @@ abstract class AbstractPaymentRequest extends Request {
 	 * @return object
 	 */
 	public function get_json() {
-		$object = (object) array();
+		$properties = Util::filter_null(
+			array(
+				'amount'           => $this->get_amount()->get_json(),
+				'billingAddress'   => is_null( $this->billing_address ) ? null : $this->billing_address->get_json(),
+				'channel'          => $this->channel,
+				'countryCode'      => $this->country_code,
+				'dateOfBirth'      => is_null( $this->date_of_birth ) ? null : $this->date_of_birth->format( 'Y-m-d' ),
+				'deliveryAddress'  => is_null( $this->delivery_address ) ? null : $this->delivery_address->get_json(),
+				'lineItems'        => is_null( $this->line_items ) ? null : $this->line_items->get_json(),
+				'merchantAccount'  => $this->get_merchant_account(),
+				'reference'        => $this->get_reference(),
+				'returnUrl'        => $this->get_return_url(),
+				'shopperIP'        => $this->shopper_ip,
+				'shopperLocale'    => $this->shopper_locale,
+				'shopperName'      => is_null( $this->shopper_name ) ? null : $this->shopper_name->get_json(),
+				'shopperReference' => $this->shopper_reference,
+				'shopperStatement' => $this->shopper_statement,
+				'telephoneNumber'  => $this->telephone_number,
+			)
+		);
 
-		// Amount.
-		$object->amount = $this->get_amount()->get_json();
+		$object = (object) $properties;
 
-		// Billing address.
-		if ( null !== $this->billing_address ) {
-			$object->billingAddress = $this->billing_address->get_json();
-		}
-
-		// Channel.
-		if ( null !== $this->channel ) {
-			$object->channel = $this->channel;
-		}
-
-		// Country code.
-		if ( null !== $this->country_code ) {
-			$object->countryCode = $this->country_code;
-		}
-
-		// Date of birth.
-		if ( null !== $this->date_of_birth ) {
-			$object->dateOfBirth = $this->date_of_birth->format( 'Y-m-d' );
-		}
-
-		// Delivery address.
-		if ( null !== $this->delivery_address ) {
-			$object->deliveryAddress = $this->delivery_address->get_json();
-		}
-
-		// Line items.
-		if ( null !== $this->line_items ) {
-			$object->lineItems = $this->line_items->get_json();
-		}
-
-		// Merchant account.
-		$object->merchantAccount = $this->get_merchant_account();
-
-		// Reference.
-		$object->reference = $this->get_reference();
-
-		// Return URL.
-		$object->returnUrl = $this->get_return_url();
-
-		// Shopper IP.
-		if ( null !== $this->shopper_ip ) {
-			$object->shopperIP = $this->shopper_ip;
-		}
-
-		// Shopper locale.
-		if ( null !== $this->shopper_locale ) {
-			$object->shopperLocale = $this->shopper_locale;
-		}
-
-		// Shopper name.
-		if ( null !== $this->shopper_name ) {
-			$object->shopperName = $this->shopper_name->get_json();
-		}
-
-		// Shopper reference.
-		if ( null !== $this->shopper_reference ) {
-			$object->shopperReference = $this->shopper_reference;
-		}
-
-		// Shopper statement.
-		if ( null !== $this->shopper_statement ) {
-			$object->shopperStatement = $this->shopper_statement;
-		}
-
-		// Telephone number.
-		if ( null !== $this->telephone_number ) {
-			$object->telephoneNumber = $this->telephone_number;
-		}
-
-		// Return object.
 		return $object;
 	}
 }

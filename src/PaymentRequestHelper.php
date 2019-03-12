@@ -81,7 +81,7 @@ class PaymentRequestHelper {
 		$lines = $payment->get_lines();
 
 		if ( null !== $lines ) {
-			$line_items = $request->new_items();
+			$line_items = $request->new_line_items();
 
 			$i = 1;
 

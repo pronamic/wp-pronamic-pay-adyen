@@ -60,30 +60,6 @@ class Settings extends GatewaySettings {
 	 * @return array
 	 */
 	public function fields( array $fields ) {
-		// API Key.
-		$fields[] = array(
-			'filter'   => FILTER_SANITIZE_STRING,
-			'section'  => 'adyen',
-			'meta_key' => '_pronamic_gateway_adyen_api_key',
-			'title'    => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
-			'type'     => 'textarea',
-			'classes'  => array( 'code' ),
-			'methods'  => array( 'adyen' ),
-			'tooltip'  => __( 'API key as mentioned in the payment provider dashboard', 'pronamic_ideal' ),
-		);
-
-		// Live API URL prefix.
-		$fields[] = array(
-			'filter'   => FILTER_SANITIZE_STRING,
-			'section'  => 'adyen',
-			'meta_key' => '_pronamic_gateway_adyen_live_url_prefix',
-			'title'    => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
-			'type'     => 'text',
-			'classes'  => array( 'regular-text', 'code' ),
-			'methods'  => array( 'adyen' ),
-			'tooltip'  => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard', 'pronamic_ideal' ),
-		);
-
 		// Merchant Account.
 		$fields[] = array(
 			'filter'   => FILTER_SANITIZE_STRING,
@@ -94,6 +70,40 @@ class Settings extends GatewaySettings {
 			'classes'  => array( 'regular-text', 'code' ),
 			'methods'  => array( 'adyen' ),
 			'tooltip'  => __( 'The merchant account identifier, with which you want to process the transaction', 'pronamic_ideal' ),
+		);
+
+		// API Key.
+		$fields[] = array(
+			'filter'      => FILTER_SANITIZE_STRING,
+			'section'     => 'adyen',
+			'meta_key'    => '_pronamic_gateway_adyen_api_key',
+			'title'       => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
+			'type'        => 'textarea',
+			'classes'     => array( 'code' ),
+			'methods'     => array( 'adyen' ),
+			'tooltip'     => __( 'API key as mentioned in the payment provider dashboard', 'pronamic_ideal' ),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a>',
+				esc_url( 'https://docs.adyen.com/developers/user-management/how-to-get-the-api-key' ),
+				esc_html__( 'Adyen documentation: "How to get the API key".', 'pronamic_ideal' )
+			),
+		);
+
+		// Live API URL prefix.
+		$fields[] = array(
+			'filter'      => FILTER_SANITIZE_STRING,
+			'section'     => 'adyen',
+			'meta_key'    => '_pronamic_gateway_adyen_live_url_prefix',
+			'title'       => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
+			'type'        => 'text',
+			'classes'     => array( 'regular-text', 'code' ),
+			'methods'     => array( 'adyen' ),
+			'tooltip'     => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard', 'pronamic_ideal' ),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a>',
+				esc_url( 'https://docs.adyen.com/developers/development-resources/live-endpoints#liveurlprefix' ),
+				esc_html__( 'Adyen documentation: "Live URL prefix".', 'pronamic_ideal' )
+			),
 		);
 
 		// Transaction feedback.
@@ -127,6 +137,34 @@ class Settings extends GatewaySettings {
 				),
 				__( 'Adyen', 'pronamic_ideal' )
 			),
+		);
+
+		/**
+		 * SSL Version.
+		 *
+		 * @link https://docs.adyen.com/developers/development-resources/notifications/set-up-notifications#step3configurenotificationsinthecustomerarea
+		 * @link https://www.howsmyssl.com/a/check
+		 */
+		$fields[] = array(
+			'section' => 'adyen_feedback',
+			'methods' => array( 'adyen' ),
+			'title'   => __( 'SSL Version', 'pronamic_ideal' ),
+			'type'    => 'description',
+			'html'    => __( 'Choose the SSL Version of your server on the Adyen Customer Area.', 'pronamic_ideal' ),
+		);
+
+		/**
+		 * Method.
+		 *
+		 * @link https://docs.adyen.com/developers/development-resources/notifications/set-up-notifications#step3configurenotificationsinthecustomerarea
+		 * @link https://www.howsmyssl.com/a/check
+		 */
+		$fields[] = array(
+			'section' => 'adyen_feedback',
+			'methods' => array( 'adyen' ),
+			'title'   => _x( 'Method', 'adyen notification', 'pronamic_ideal' ),
+			'type'    => 'description',
+			'html'    => __( 'JSON', 'pronamic_ideal' ),
 		);
 
 		// Webhook authentication settings.

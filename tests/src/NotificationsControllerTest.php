@@ -13,6 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Core\Statuses;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use WP_REST_Request;
+use WP_UnitTestCase;
 
 /**
  * Notifications controller test
@@ -21,7 +22,7 @@ use WP_REST_Request;
  * @version 1.0.0
  * @since   1.0.0
  */
-class NotificationsControllerTest extends \WP_UnitTestCase {
+class NotificationsControllerTest extends WP_UnitTestCase {
 	/**
 	 * Setup.
 	 */

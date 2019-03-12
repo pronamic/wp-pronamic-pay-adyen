@@ -82,6 +82,10 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 	 * @link https://github.com/WordPress/wordpress-develop/blob/5.1.0/tests/phpunit/tests/rest-api/rest-blocks-controller.php#L127-L136
 	 */
 	public function test_no_body() {
+		$object = (object) array(
+			'payload' => '123',
+		);
+
 		$post_id = self::factory()->post->create(
 			array(
 				'post_type'   => 'pronamic_gateway',
@@ -99,7 +103,9 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/payments/result/' . $post_id );
 
 		$request->set_header( 'Content-Type', 'application/json' );
-		$request->set_body( '' );
+		$request->set_body( wp_json_encode( $object ) );
+
+		$this->setExpectedException( __NAMESPACE__ . '\Error' );
 
 		$response = rest_do_request( $request );
 

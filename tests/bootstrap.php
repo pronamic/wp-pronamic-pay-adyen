@@ -18,6 +18,8 @@ require_once getenv( 'WP_PHPUNIT__DIR' ) . '/includes/functions.php';
  * Manually load plugin.
  */
 function _manually_load_plugin() {
+	require dirname( __FILE__ ) . '/../pronamic-pay-adyen.php';
+
 	global $pronamic_ideal;
 
 	$pronamic_ideal = pronamic_pay_plugin();

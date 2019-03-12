@@ -34,6 +34,6 @@ class SettingsTest extends WP_UnitTestCase {
 
 		$fields = apply_filters( 'pronamic_pay_gateway_fields', array() );
 
-		$this->assertCount( 6, $fields );
+		$this->assertCount( 8, $fields );
 	}
 }

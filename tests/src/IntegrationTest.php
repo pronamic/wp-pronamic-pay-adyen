@@ -145,6 +145,5 @@ class IntegrationTest extends WP_UnitTestCase {
 
 		$this->assertContains( '<label for="pronamic_pay_adyen_notification_authentication_password">Password</label>', $output );
 		$this->assertContains( '<input name="pronamic_pay_adyen_notification_authentication_password" id="pronamic_pay_adyen_notification_authentication_password" value="" type="text" class="regular-text" />', $output );
-
 	}
 }

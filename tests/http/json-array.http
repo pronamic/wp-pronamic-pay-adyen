@@ -1,0 +1,10 @@
+HTTP/1.1 403 Forbidden
+Date: Thu, 07 Mar 2019 09:01:03 GMT
+Server: Apache
+Set-Cookie: JSESSIONID=BE630789A8415F0D0C71CD611C220112.test4e; Path=/checkout; Secure; HttpOnly
+pspReference: 8515519492638805
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json;charset=UTF-8
+
+[0,1,2,3]

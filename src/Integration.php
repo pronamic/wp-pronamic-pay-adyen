@@ -145,38 +145,15 @@ class Integration extends AbstractIntegration {
 	 * @return void
 	 */
 	public static function input_element( $args ) {
-		$defaults = array(
-			'type'        => 'text',
-			'classes'     => 'regular-text',
-			'description' => '',
-		);
-
-		$args = wp_parse_args( $args, $defaults );
-
 		$name  = $args['label_for'];
 		$value = get_option( $name );
 
-		$atts = array(
-			'name'  => $name,
-			'id'    => $name,
-			'type'  => $args['type'],
-			'class' => $args['classes'],
-			'value' => $value,
-		);
-
 		printf(
-			'<input %1$s />',
-			// @codingStandardsIgnoreStart
-			Pay_Util::array_to_html_attributes( $atts )
-			// @codingStandardsIgnoreEnd
+			'<input name="%s" id="%s" value="%s" type="text" class="regular-text" />',
+			esc_attr( $name ),
+			esc_attr( $name ),
+			esc_attr( $value )
 		);
-
-		if ( ! empty( $args['description'] ) ) {
-			printf(
-				'<p class="description">%s</p>',
-				esc_html( $args['description'] )
-			);
-		}
 	}
 
 	/**

@@ -125,25 +125,17 @@ class Name {
 	 * @return object
 	 */
 	public function get_json() {
-		$object = (object) array();
+		$properties = Util::filter_null(
+			array(
+				'firstName' => $this->get_first_name(),
+				'gender'    => $this->get_gender(),
+				'infix'     => $this->get_infix(),
+				'lastName'  => $this->get_last_name(),
+			)
+		);
 
-		// First name.
-		$object->firstName = $this->get_first_name();
+		$object = (object) $properties;
 
-		// Gender.
-		$object->gender = $this->get_gender();
-
-		// Infix.
-		$infix = $this->get_infix();
-
-		if ( null !== $infix ) {
-			$object->infix = $infix;
-		}
-
-		// Last name.
-		$object->lastName = $this->get_last_name();
-
-		// Return object.
 		return $object;
 	}
 }

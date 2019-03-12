@@ -52,6 +52,20 @@ class AddressTransformerTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test address without country code.
+	 */
+	public function test_address_without_country_cde() {
+		$country = new Country();
+
+		$address = new Pay_Address();
+		$address->set_country( $country );
+
+		$adyen_address = AddressTransformer::transform( $address );
+
+		$this->assertNull( $adyen_address );
+	}
+
+	/**
 	 * Test address United States.
 	 */
 	public function test_address_us() {
@@ -79,5 +93,21 @@ class AddressTransformerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( '94110', $adyen_address->get_postal_code() );
 		$this->assertEquals( '60 29th Street', $adyen_address->get_street() );
 		$this->assertEquals( 'CA', $adyen_address->get_state_or_province() );
+	}
+
+	/**
+	 * Test incomplete address.
+	 */
+	public function test_address_incomplete_address() {
+		$country = new Country();
+		$country->set_code( 'NL' );
+
+		$address = new Pay_Address();
+		$address->set_country( $country );
+		$address->set_street_name( '60 29th Street' );
+
+		$adyen_address = AddressTransformer::transform( $address );
+
+		$this->assertNull( $adyen_address );
 	}
 }

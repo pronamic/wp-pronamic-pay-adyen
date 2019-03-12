@@ -244,27 +244,17 @@ class Address {
 	 * @return object
 	 */
 	public function get_json() {
-		// Properties.
-		$properties = array(
-			'country' => $this->country,
+		$properties = Util::filter_null(
+			array(
+				'country'           => $this->country,
+				'city'              => $this->city,
+				'houseNumberOrName' => $this->house_number_or_name,
+				'postalCode'        => $this->postal_code,
+				'stateOrProvince'   => $this->state_or_province,
+				'street'            => $this->street,
+			)
 		);
 
-		// Map.
-		$map = array(
-			'city'                 => 'city',
-			'house_number_or_name' => 'houseNumberOrName',
-			'postal_code'          => 'postalCode',
-			'state_or_province'    => 'stateOrProvince',
-			'street'               => 'street',
-		);
-
-		foreach ( $map as $property => $adyen_property ) {
-			if ( null !== $this->{$property} ) {
-				$properties[ $adyen_property ] = $this->{$property};
-			}
-		}
-
-		// Return object.
 		$object = (object) $properties;
 
 		return $object;

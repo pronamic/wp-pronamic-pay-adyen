@@ -229,4 +229,38 @@ class ClientTest extends WP_UnitTestCase {
 		$this->assertStringStartsWith( PaymentMethodType::IDEAL, $response->get_payment_method() );
 		$this->assertStringStartsWith( 'nl_NL', $response->get_shopper_locale() );
 	}
+
+	/**
+	 * Test JSON invalid.
+	 */
+	public function test_json_invalid() {
+		$config = new Config();
+
+		$config->mode = Core_Gateway::MODE_TEST;
+
+		$client = new Client( $config );
+
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-invalid.http' );
+
+		$this->setExpectedException( 'Exception' );
+
+		$payment_methods = $client->get_payment_methods();
+	}
+
+	/**
+	 * Test JSON array.
+	 */
+	public function test_json_array() {
+		$config = new Config();
+
+		$config->mode = Core_Gateway::MODE_TEST;
+
+		$client = new Client( $config );
+
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-array.http' );
+
+		$this->setExpectedException( 'Exception' );
+
+		$payment_methods = $client->get_payment_methods();
+	}
 }

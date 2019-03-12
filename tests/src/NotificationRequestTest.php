@@ -54,4 +54,63 @@ class NotificationRequestTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( 'visa', $item->get_payment_method() );
 		$this->assertTrue( $item->is_success() );
 	}
+
+	/**
+	 * Test from object.
+	 */
+	public function test_from_object() {
+		$object = (object) array(
+			'live'              => 'false',
+			'notificationItems' => array(
+				(object) array(
+					'NotificationRequestItem' => (object) array(
+						'additionalData'      => (object) array(
+							'authCode'    => '58747',
+							'cardSummary' => '1111',
+							'expiryDate'  => '8/2018',
+						),
+						'amount'              => (object) array(
+							'value'    => 500,
+							'currency' => 'EUR',
+						),
+						'pspReference'        => '9313547924770610',
+						'eventCode'           => 'AUTHORISATION',
+						'eventDate'           => '2018-01-01T01:02:01.111+02:00',
+						'merchantAccountCode' => 'TestMerchant',
+						'operations'          => array(
+							'CANCEL',
+							'CAPTURE',
+							'REFUND',
+						),
+						'merchantReference'   => 'YourMerchantReference1',
+						'paymentMethod'       => 'visa',
+						'reason'              => '58747:1111:12/2012',
+						'success'             => 'true',
+					),
+				),
+			),
+		);
+
+		$notification_request = NotificationRequest::from_object( $object );
+
+		$this->assertFalse( $notification_request->is_live() );
+	}
+
+	/**
+	 * Test invalid object.
+	 */
+	public function test_invalid_object() {
+		$object = (object) array(
+			'live'              => 'false',
+			'notificationItems' => array(
+				(object) array(
+					'invalid' => (object) array(),
+				),
+			),
+		);
+
+		$this->setExpectedException( 'JsonSchema\Exception\ValidationException' );
+
+		$notification_request = NotificationRequest::from_object( $object );
+	}
 }

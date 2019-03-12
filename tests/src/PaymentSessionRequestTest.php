@@ -84,4 +84,29 @@ class PaymentSessionRequestTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertJsonStringEqualsJsonFile( $json_file, $json_string );
 	}
+
+	/**
+	 * Test JSON optional.
+	 */
+	public function test_json_optional() {
+		$amount = new Amount( 'EUR', 1000 );
+
+		$payment_request = new PaymentSessionRequest(
+			$amount,
+			'YOUR_MERCHANT_ACCOUNT',
+			'Your order number',
+			'https://your-company.com/...',
+			'NL'
+		);
+
+		$payment_request->set_allowed_payment_methods( array( PaymentMethodType::ALIPAY ) );
+		$payment_request->set_sdk_version( '1.9.4' );
+		$payment_request->set_origin( 'https://www.pronamic.eu/' );
+
+		$object = $payment_request->get_json();
+
+		$this->assertEquals( array( 'alipay' ), $object->allowedPaymentMethods );
+		$this->assertEquals( '1.9.4', $object->sdkVersion );
+		$this->assertEquals( 'https://www.pronamic.eu/', $object->origin );
+	}
 }

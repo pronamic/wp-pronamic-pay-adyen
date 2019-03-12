@@ -250,39 +250,20 @@ class LineItem {
 	 * @return object
 	 */
 	public function get_json() {
-		$object = (object) array();
+		$properties = Util::filter_null(
+			array(
+				'amountExcludingTax' => $this->amount_excluding_tax,
+				'amountIncludingTax' => $this->amount_including_tax,
+				'description'        => $this->description,
+				'id'                 => $this->id,
+				'quantity'           => $this->quantity,
+				'taxAmount'          => $this->tax_amount,
+				'taxCategory'        => $this->tax_category,
+				'taxPercentage'      => $this->tax_percentage,
+			)
+		);
 
-		if ( null !== $this->amount_excluding_tax ) {
-			$object->amountExcludingTax = $this->amount_excluding_tax;
-		}
-
-		if ( null !== $this->amount_including_tax ) {
-			$object->amountIncludingTax = $this->amount_including_tax;
-		}
-
-		if ( null !== $this->description ) {
-			$object->description = $this->description;
-		}
-
-		if ( null !== $this->id ) {
-			$object->id = $this->id;
-		}
-
-		if ( null !== $this->quantity ) {
-			$object->quantity = $this->quantity;
-		}
-
-		if ( null !== $this->tax_amount ) {
-			$object->taxAmount = $this->tax_amount;
-		}
-
-		if ( null !== $this->tax_category ) {
-			$object->taxCategory = $this->tax_category;
-		}
-
-		if ( null !== $this->tax_percentage ) {
-			$object->taxPercentage = $this->tax_percentage;
-		}
+		$object = (object) $properties;
 
 		return $object;
 	}

@@ -92,10 +92,6 @@ class NotificationRequest extends ResponseObject {
 		$items = array();
 
 		foreach ( $object->notificationItems as $o ) {
-			if ( ! isset( $o->NotificationRequestItem ) ) {
-				throw new InvalidArgumentException( 'Object must contain `NotificationRequestItem` property.' );
-			}
-
 			$items[] = NotificationRequestItem::from_object( $o->NotificationRequestItem );
 		}
 

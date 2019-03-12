@@ -11,11 +11,25 @@
 		},
 		"notificationItems": {
 			"type": "array",
+			"items": { "$ref": "#/definitions/notificationItemContainer" },
 			"description": "A container object for the details included in the notification."
 		}
 	},
 	"required": [
 		"live",
 		"notificationItems"
-	]
+	],
+	"definitions": {
+		"notificationItemContainer": {
+			"type": "object",
+			"properties": {
+				"NotificationRequestItem": {
+					"$ref": "notification-request-item.json"
+				}
+			},
+			"required": [
+				"NotificationRequestItem"
+			]
+		}
+	}
 }

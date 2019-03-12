@@ -129,20 +129,16 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 
 		$properties = (array) $object;
 
-		// Allowed payment methods.
-		if ( null !== $this->allowed_payment_methods ) {
-			$properties['allowedPaymentMethods'] = $this->allowed_payment_methods;
-		}
+		// Optional.
+		$optional = Util::filter_null(
+			array(
+				'allowedPaymentMethods' => $this->allowed_payment_methods,
+				'origin'                => $this->origin,
+				'sdkVersion'            => $this->sdk_version,
+			)
+		);
 
-		// Origin.
-		if ( null !== $this->origin ) {
-			$properties['origin'] = $this->origin;
-		}
-
-		// SDK version.
-		if ( null !== $this->sdk_version ) {
-			$properties['sdkVersion'] = $this->sdk_version;
-		}
+		$properties = array_merge( $properties, $optional );
 
 		// Return object.
 		$object = (object) $properties;

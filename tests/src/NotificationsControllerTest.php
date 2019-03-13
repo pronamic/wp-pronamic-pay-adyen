@@ -25,12 +25,16 @@ use WP_UnitTestCase;
 class NotificationsControllerTest extends WP_UnitTestCase {
 	/**
 	 * Setup.
+	 *
+	 * @link https://github.com/WordPress/phpunit-test-reporter/blob/master/tests/test-restapi.php
 	 */
 	public function setUp() {
 		parent::setUp();
 
 		$this->controller = new NotificationsController();
 		$this->controller->setup();
+
+		do_action( 'rest_api_init' );
 	}
 
 	/**

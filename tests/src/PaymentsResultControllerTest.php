@@ -25,12 +25,16 @@ use WP_UnitTestCase;
 class PaymentsResultControllerTest extends WP_UnitTestCase {
 	/**
 	 * Setup.
+	 *
+	 * @link https://github.com/WordPress/phpunit-test-reporter/blob/master/tests/test-restapi.php
 	 */
 	public function setUp() {
 		parent::setUp();
 
 		$this->controller = new PaymentsResultController();
 		$this->controller->setup();
+
+		do_action( 'rest_api_init' );
 	}
 
 	/**
@@ -50,8 +54,6 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 	 * @link https://github.com/WordPress/WordPress/blob/5.1/wp-includes/rest-api/class-wp-rest-server.php#L692-L776
 	 */
 	public function test_rest_api_init() {
-		do_action( 'rest_api_init' );
-
 		$routes = rest_get_server()->get_routes();
 
 		$route = '/pronamic-pay/adyen/v1/payments/result/(?P<config_id>\d+)';

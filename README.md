@@ -29,10 +29,10 @@ curl --request POST --user username:password http://pay.test/wp-json/pronamic-pa
 
 ## Production Environment
 
-**Dashboard URL:** https://ca-live.adyen.com/
+**Dashboard URL:** https://ca-live.adyen.com/  
 **API URL:** https://{LIVE_API_URL_PREFIX}-checkout-live.adyenpayments.com/checkout/v41/
 
 ## Test Environment
 
-**Dashboard URL:** https://ca-test.adyen.com/
+**Dashboard URL:** https://ca-test.adyen.com/  
 **API URL:** https://checkout-test.adyen.com/v41/

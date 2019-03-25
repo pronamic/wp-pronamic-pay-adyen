@@ -42,9 +42,10 @@ class Settings extends GatewaySettings {
 
 		// Transaction feedback.
 		$sections['adyen_feedback'] = array(
-			'title'       => __( 'Transaction feedback', 'pronamic_ideal' ),
-			'methods'     => array( 'adyen' ),
-			'description' => __(
+			'title'           => __( 'Transaction feedback', 'pronamic_ideal' ),
+			'methods'         => array( 'adyen' ),
+			'requires_config' => true,
+			'description'     => __(
 				'The URLs below need to be copied to the payment provider dashboard to receive automatic transaction status updates.',
 				'pronamic_ideal'
 			),
@@ -108,17 +109,12 @@ class Settings extends GatewaySettings {
 
 		// Transaction feedback.
 		$fields[] = array(
-			'section' => 'adyen',
-			'methods' => array( 'adyen' ),
-			'title'   => __( 'Transaction feedback', 'pronamic_ideal' ),
-			'type'    => 'description',
-			'html'    => sprintf(
-				'<span class="dashicons dashicons-warning"></span> %s',
-				__(
-					'Receiving payment status updates needs additional configuration, if not yet completed.',
-					'pronamic_ideal'
-				)
-			),
+			'section'         => 'adyen',
+			'methods'         => array( 'adyen' ),
+			'title'           => __( 'Transaction feedback', 'pronamic_ideal' ),
+			'type'            => 'description',
+			'html'            => __( 'Receiving payment status updates needs additional configuration.', 'pronamic_ideal' ),
+			'requires_config' => true,
 		);
 
 		// Webhook URL.
@@ -183,6 +179,15 @@ class Settings extends GatewaySettings {
 					admin_url( 'admin.php' )
 				)
 			),
+		);
+
+		// Webhook status.
+		$fields[] = array(
+			'section'  => 'adyen_feedback',
+			'methods'  => array( 'adyen' ),
+			'title'    => __( 'Status', 'pronamic_ideal' ),
+			'type'     => 'description',
+			'callback' => array( 'Pronamic\WordPress\Pay\Webhook', 'settings_status' ),
 		);
 
 		return $fields;

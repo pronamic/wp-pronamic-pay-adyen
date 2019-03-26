@@ -63,7 +63,11 @@ class NotificationRequestItem extends ResponseObject {
 	/**
 	 * This field holds a list of the modification operations supported by the transaction the notification item refers to.
 	 *
-	 * @var array
+	 * This field is populated only in authorisation notifications.
+	 *
+	 * In case of HTTP POST notifications, the operation list is a sequence of comma-separated string values.
+	 *
+	 * @var array|null
 	 */
 	private $operations;
 
@@ -101,7 +105,6 @@ class NotificationRequestItem extends ResponseObject {
 	 * @param string   $event_code            Event code.
 	 * @param DateTime $event_date            Event date.
 	 * @param string   $merchant_account_code Merchant account code.
-	 * @param array    $operations            Operations.
 	 * @param string   $merchant_reference    Merchant reference.
 	 * @param string   $payment_method        Payment method.
 	 * @param boolean  $success               Success.
@@ -112,7 +115,6 @@ class NotificationRequestItem extends ResponseObject {
 		$event_code,
 		DateTime $event_date,
 		$merchant_account_code,
-		array $operations,
 		$merchant_reference,
 		$payment_method,
 		$success
@@ -122,7 +124,6 @@ class NotificationRequestItem extends ResponseObject {
 		$this->event_code            = $event_code;
 		$this->event_date            = $event_date;
 		$this->merchant_account_code = $merchant_account_code;
-		$this->operations            = $operations;
 		$this->merchant_reference    = $merchant_reference;
 		$this->payment_method        = $payment_method;
 		$this->success               = $success;
@@ -176,10 +177,20 @@ class NotificationRequestItem extends ResponseObject {
 	/**
 	 * Get operations.
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	public function get_operations() {
 		return $this->operations;
+	}
+
+	/**
+	 * Set operations.
+	 *
+	 * @param array|null $operations Operations.
+	 * @return void
+	 */
+	public function set_operations( array $operations = null ) {
+		$this->operations = $operations;
 	}
 
 	/**
@@ -233,11 +244,14 @@ class NotificationRequestItem extends ResponseObject {
 			$object->eventCode,
 			new DateTime( $object->eventDate ),
 			$object->merchantAccountCode,
-			$object->operations,
 			$object->merchantReference,
 			$object->paymentMethod,
 			filter_var( $object->success, FILTER_VALIDATE_BOOLEAN )
 		);
+
+		if ( property_exists( $object, 'operations' ) ) {
+			$item->set_operations( $object->operations );
+		}
 
 		$item->set_original_object( $object );
 

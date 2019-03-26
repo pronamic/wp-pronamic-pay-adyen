@@ -52,7 +52,6 @@
 		"eventCode",
 		"eventDate",
 		"merchantAccountCode",
-		"operations",
 		"merchantReference",
 		"paymentMethod",
 		"success"

@@ -56,6 +56,47 @@ class NotificationRequestTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test notification tests.
+	 *
+	 * @link https://ca-test.adyen.com/ca/ca/config/configurethirdparty.shtml
+	 *
+	 * @dataProvider provider_notification_tests
+	 *
+	 * @param string $file JSON file to test.
+	 */
+	public function test_notification_tests( $file ) {
+		$json = file_get_contents( __DIR__ . '/../json/' . $file, true );
+
+		$data = json_decode( $json );
+
+		$notification_request = NotificationRequest::from_object( $data );
+
+		$this->assertInstanceOf( __NAMESPACE__ . '\NotificationRequest', $notification_request );
+	}
+
+	/**
+	 * Provider notification tests.
+	 *
+	 * @return array
+	 */
+	public function provider_notification_tests() {
+		return array(
+			array(
+				'notification-test-1.json',
+			),
+			array(
+				'notification-test-2.json',
+			),
+			array(
+				'notification-test-3.json',
+			),
+			array(
+				'notification-test-4.json',
+			),
+		);
+	}
+
+	/**
 	 * Test from object.
 	 */
 	public function test_from_object() {

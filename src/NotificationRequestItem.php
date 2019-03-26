@@ -81,7 +81,9 @@ class NotificationRequestItem extends ResponseObject {
 	/**
 	 * The payment method used in the transaction the notification item refers to.
 	 *
-	 * @var string
+	 * This field is populated only in authorisation notifications.
+	 *
+	 * @var string|null
 	 */
 	private $payment_method;
 
@@ -106,7 +108,6 @@ class NotificationRequestItem extends ResponseObject {
 	 * @param DateTime $event_date            Event date.
 	 * @param string   $merchant_account_code Merchant account code.
 	 * @param string   $merchant_reference    Merchant reference.
-	 * @param string   $payment_method        Payment method.
 	 * @param boolean  $success               Success.
 	 */
 	public function __construct(
@@ -116,7 +117,6 @@ class NotificationRequestItem extends ResponseObject {
 		DateTime $event_date,
 		$merchant_account_code,
 		$merchant_reference,
-		$payment_method,
 		$success
 	) {
 		$this->amount                = $amount;
@@ -125,7 +125,6 @@ class NotificationRequestItem extends ResponseObject {
 		$this->event_date            = $event_date;
 		$this->merchant_account_code = $merchant_account_code;
 		$this->merchant_reference    = $merchant_reference;
-		$this->payment_method        = $payment_method;
 		$this->success               = $success;
 	}
 
@@ -205,10 +204,20 @@ class NotificationRequestItem extends ResponseObject {
 	/**
 	 * Get payment method.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_payment_method() {
 		return $this->payment_method;
+	}
+
+	/**
+	 * Set payment method.
+	 *
+	 * @param string|null $payment_method Payment method.
+	 * @return void
+	 */
+	public function set_payment_method( $payment_method ) {
+		$this->payment_method = $payment_method;
 	}
 
 	/**
@@ -245,12 +254,15 @@ class NotificationRequestItem extends ResponseObject {
 			new DateTime( $object->eventDate ),
 			$object->merchantAccountCode,
 			$object->merchantReference,
-			$object->paymentMethod,
 			filter_var( $object->success, FILTER_VALIDATE_BOOLEAN )
 		);
 
 		if ( property_exists( $object, 'operations' ) ) {
 			$item->set_operations( $object->operations );
+		}
+
+		if ( property_exists( $object, 'paymentMethod' ) ) {
+			$item->set_payment_method( $object->paymentMethod );
 		}
 
 		$item->set_original_object( $object );

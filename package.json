@@ -32,10 +32,10 @@
   },
   "homepage": "http://www.wp-pay.org/gateways/adyen/",
   "devDependencies": {
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-phplint": "0.1.0",
     "grunt-phpmd": "^0.1.1",
     "grunt-phpcs": "^0.4.0",
-    "grunt-contrib-jshint": "^2.0.0"
+    "grunt-contrib-jshint": "^2.1.0"
   }
 }

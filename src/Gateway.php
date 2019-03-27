@@ -14,7 +14,6 @@ use Exception;
 use InvalidArgumentException;
 use Locale;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
-use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;

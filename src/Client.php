@@ -11,8 +11,6 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Exception;
-use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
-use Pronamic\WordPress\Pay\Core\XML\Security;
 use WP_Error;
 
 /**

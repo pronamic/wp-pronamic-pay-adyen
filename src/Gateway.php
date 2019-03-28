@@ -163,6 +163,9 @@ class Gateway extends Core_Gateway {
 			if ( null !== $redirect ) {
 				$payment->set_action_url( $redirect->get_url() );
 			}
+
+			// Return early so SDK integration code will not be executed for API integration.
+			return;
 		}
 
 		/*

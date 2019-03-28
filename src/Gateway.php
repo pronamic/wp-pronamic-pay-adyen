@@ -10,13 +10,15 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Exception;
+use InvalidArgumentException;
 use Locale;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
-use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Plugin;
+use WP_Error;
 
 /**
  * Gateway
@@ -92,7 +94,13 @@ class Gateway extends Core_Gateway {
 	 */
 	public function start( Payment $payment ) {
 		// Amount.
-		$amount = AmountTransformer::transform( $payment->get_total_amount() );
+		try {
+			$amount = AmountTransformer::transform( $payment->get_total_amount() );
+		} catch ( InvalidArgumentException $e ) {
+			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+
+			return;
+		}
 
 		// Payment method type.
 		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
@@ -140,7 +148,13 @@ class Gateway extends Core_Gateway {
 
 			PaymentRequestHelper::complement( $payment, $payment_request );
 
-			$payment_response = $this->client->create_payment( $payment_request );
+			try {
+				$payment_response = $this->client->create_payment( $payment_request );
+			} catch ( Exception $e ) {
+				$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+
+				return;
+			}
 
 			$payment->set_transaction_id( $payment_response->get_psp_reference() );
 
@@ -149,8 +163,6 @@ class Gateway extends Core_Gateway {
 			if ( null !== $redirect ) {
 				$payment->set_action_url( $redirect->get_url() );
 			}
-
-			return;
 		}
 
 		/*
@@ -252,9 +264,19 @@ class Gateway extends Core_Gateway {
 
 		$payment_result_request = new PaymentResultRequest( $payload );
 
-		$payment_result_response = $this->client->get_payment_result( $payment_result_request );
+		try {
+			$payment_result_response = $this->client->get_payment_result( $payment_result_request );
 
-		PaymentResultHelper::update_payment( $payment, $payment_result_response );
+			PaymentResultHelper::update_payment( $payment, $payment_result_response );
+		} catch ( Exception $e ) {
+			$note = sprintf(
+				'%1$s %2$s',
+				__( 'Error getting payment result:', 'pronamic_ideal' ),
+				$e->getMessage()
+			);
+
+			$payment->add_note( $note );
+		}
 	}
 
 	/**
@@ -265,7 +287,13 @@ class Gateway extends Core_Gateway {
 	public function get_available_payment_methods() {
 		$core_payment_methods = array();
 
-		$payment_methods_response = $this->client->get_payment_methods();
+		try {
+			$payment_methods_response = $this->client->get_payment_methods();
+		} catch ( Exception $e ) {
+			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+
+			return $core_payment_methods;
+		}
 
 		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
 			$core_payment_method = PaymentMethodType::to_wp( $payment_method->get_type() );
@@ -288,7 +316,13 @@ class Gateway extends Core_Gateway {
 	public function get_issuers() {
 		$issuers = array();
 
-		$payment_methods_response = $this->client->get_payment_methods();
+		try {
+			$payment_methods_response = $this->client->get_payment_methods();
+		} catch ( Exception $e ) {
+			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+
+			return $issuers;
+		}
 
 		$payment_methods = $payment_methods_response->get_payment_methods();
 

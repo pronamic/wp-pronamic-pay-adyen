@@ -1,0 +1,30 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/service-exception.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen service exception.",
+	"type": "object",
+	"properties": {
+		"status": {
+			"type": ["integer", "string"],
+			"description": "The HTTP response status code."
+		},
+		"errorCode": {
+			"type": "string",
+			"description": "The Adyen code that is mapped to the error message."
+		},
+		"message": {
+			"type": "string",
+			"description": "The Adyen code that is mapped to the error message."
+		},
+		"errorType": {
+			"type": "string",
+			"description": "The type of error that was encountered."
+		}
+	},
+	"required": [
+		"status",
+		"errorCode",
+		"message",
+		"errorType"
+	]
+}

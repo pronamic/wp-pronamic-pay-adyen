@@ -1,0 +1,25 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/redirect.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen redirect.",
+	"type": "object",
+	"properties": {
+		"data": {
+			"type": "object",
+			"description": "When the redirect URL must be accessed via POST, use this data to post to the redirect URL"
+		},
+		"method": {
+			"type": "string",
+			"description": "The web method that you must use to access the redirect URL",
+			"enum": ["GET", "POST"]
+		},
+		"url": {
+			"type": "string",
+			"description": "The URL, to which you must redirect a shopper to complete a payment"
+		}
+	},
+	"required": [
+		"method",
+		"url"
+	]
+}

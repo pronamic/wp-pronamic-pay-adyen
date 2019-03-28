@@ -2,6 +2,7 @@
 /build/
 
 # Composer
+/composer.lock
 /vendor/
 
 # Eclipse
@@ -10,4 +11,8 @@
 /.settings
 
 # Node.js
+/package-lock.json
 /node_modules/
+
+# WordPress
+/wordpress/

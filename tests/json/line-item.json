@@ -1,0 +1,10 @@
+{
+  "amountExcludingTax": 10247,
+  "amountIncludingTax": 12399,
+  "description": "Test",
+  "id": "TEST",
+  "quantity": 1,
+  "taxAmount": 2152,
+  "taxCategory": "High",
+  "taxPercentage": 21
+}

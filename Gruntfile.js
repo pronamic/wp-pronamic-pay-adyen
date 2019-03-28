@@ -15,12 +15,14 @@ module.exports = function( grunt ) {
 				src: [
 					'**/*.php',
 					'!node_modules/**',
-					'!vendor/**'
+					'!vendor/**',
+					'!wordpress/**',
+					'!wp-content/**'
 				]
 			},
 			options: {
 				bin: 'vendor/bin/phpcs',
-				standard: 'phpcs.ruleset.xml',
+				standard: 'phpcs.xml.dist',
 				showSniffCodes: true
 			}
 		},
@@ -46,6 +48,14 @@ module.exports = function( grunt ) {
 				reportFormat: 'xml',
 				rulesets: 'phpmd.ruleset.xml'
 			}
+		},
+
+		// PHPUnit
+		phpunit: {
+			options: {
+				bin: 'vendor/bin/phpunit'
+			},
+			application: {},
 		}
 	} );
 
@@ -55,5 +65,5 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-phpmd' );
 
 	// Default task(s).
-	grunt.registerTask( 'default', [ 'jshint', 'phplint', 'phpmd', 'phpcs' ] );
+	grunt.registerTask( 'default', [ 'jshint', 'phplint', 'phpmd', 'phpcs', 'phpunit' ] );
 };

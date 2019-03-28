@@ -1,0 +1,10 @@
+{
+  "amount": {
+    "currency": "EUR",
+    "value": 1000
+  },
+  "countryCode": "NL",
+  "merchantAccount": "YOUR_MERCHANT_ACCOUNT",
+  "reference": "Your order number",
+  "returnUrl": "https:\/\/your-company.com\/..."
+}

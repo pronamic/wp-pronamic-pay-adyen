@@ -1,0 +1,15 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/payment-session-response.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen payment session response.",
+	"type": "object",
+	"properties": {
+		"paymentSession": {
+			"type": "string",
+			"description": "The encoded payment session that you need to pass to the SDK"
+		}
+	},
+	"required": [
+		"paymentSession"
+	]
+}

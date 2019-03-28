@@ -1,0 +1,13 @@
+{
+  "amount": {
+    "currency": "EUR",
+    "value": 1000
+  },
+  "reference": "Your order number",
+  "paymentMethod": {
+    "type": "ideal",
+    "issuer": "1121"
+  },
+  "returnUrl": "https://your-company.com/...",
+  "merchantAccount": "YOUR_MERCHANT_ACCOUNT"
+}

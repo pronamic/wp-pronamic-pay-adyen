@@ -1,0 +1,58 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/notification-request-item.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen notification request item.",
+	"type": "object",
+	"properties": {
+		"amount": {
+			"$ref": "amount.json"
+		},
+		"pspReference": {
+			"type": "string",
+			"description": "Adyen's 16-character unique reference associated with the transaction/the request."
+		},
+		"eventCode": {
+			"type": "string",
+			"description": "The type of event the notification item refers to."
+		},
+		"eventDate": {
+			"type": "string",
+			"format": "date-time",
+			"description": "The time when the event was generated."
+		},
+		"merchantAccountCode": {
+			"type": "string",
+			"description": "The merchant account identifier used in the transaction the notification item refers to."
+		},
+		"operations": {
+			"type": "array",
+			"description": "This field holds a list of the modification operations supported by the transaction the notification item refers to.",
+			"items": {
+				"type": "string",
+				"enum": ["CANCEL", "CAPTURE", "REFUND"]
+			}
+		},
+		"merchantReference": {
+			"type": "string",
+			"description": "A reference to uniquely identify the payment."
+		},
+		"paymentMethod": {
+			"type": "string",
+			"description": "The payment method used in the transaction the notification item refers to."
+		},
+		"success": {
+			"type": "string",
+			"description": "Informs about the outcome of the event (`eventCode`) the notification refers to.",
+			"enum": ["true", "false"]
+		}
+	},
+	"required": [
+		"amount",
+		"pspReference",
+		"eventCode",
+		"eventDate",
+		"merchantAccountCode",
+		"merchantReference",
+		"success"
+	]
+}

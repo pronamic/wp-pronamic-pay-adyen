@@ -1,0 +1,10 @@
+HTTP/1.1 422 Unprocessable Entity
+Date: Thu, 07 Mar 2019 09:05:11 GMT
+Server: Apache
+Set-Cookie: JSESSIONID=EB0D1A4912425442A996138D74C9205D.test4e; Path=/checkout; Secure; HttpOnly
+pspReference: 8515519495118821
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json;charset=UTF-8
+
+{"status":422,"errorCode":"14_006","message":"paymentMethod object has not been provided in the request","errorType":"validation"}

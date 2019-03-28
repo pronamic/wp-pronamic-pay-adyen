@@ -1,0 +1,22 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/error.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen error.",
+	"type": "object",
+	"properties": {
+		"code": {
+			"type": "integer"
+		},
+		"message": {
+			"type": "string"
+		},
+		"requested URI": {
+			"type": "string"
+		}
+	},
+	"required": [
+		"code",
+		"message",
+		"requested URI"
+	]
+}

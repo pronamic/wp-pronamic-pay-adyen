@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased][unreleased]
 -
 
-## 1.0.0 - 2019-03-29
+## 1.0.0 - 2019-03-28
 - First release.
 
 [unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.0.0...HEAD

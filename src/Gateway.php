@@ -273,8 +273,8 @@ class Gateway extends Core_Gateway {
 			PaymentResultHelper::update_payment( $payment, $payment_result_response );
 		} catch ( Exception $e ) {
 			$note = sprintf(
-				'%1$s %2$s',
-				__( 'Error getting payment result:', 'pronamic_ideal' ),
+				/* translators: %s: exception message */
+				__( 'Error getting payment result: %s', 'pronamic_ideal' ),
 				$e->getMessage()
 			);
 

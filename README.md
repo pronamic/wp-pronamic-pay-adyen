@@ -14,6 +14,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/wp-pay-gateways/adyen/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/wp-pay-gateways/adyen/?branch=develop)
 [![Build Status](https://scrutinizer-ci.com/g/wp-pay-gateways/adyen/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/wp-pay-gateways/adyen/build-status/develop)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/wp-pay-gateways/adyen/badges/code-intelligence.svg?b=develop)](https://scrutinizer-ci.com/code-intelligence)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwp-pay-gateways%2Fadyen.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwp-pay-gateways%2Fadyen?ref=badge_shield)
 
 ## Adyen Notifications (webhooks)
 
@@ -36,3 +37,7 @@ curl --request POST --user username:password http://pay.test/wp-json/pronamic-pa
 
 **Dashboard URL:** https://ca-test.adyen.com/  
 **API URL:** https://checkout-test.adyen.com/v41/
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwp-pay-gateways%2Fadyen.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwp-pay-gateways%2Fadyen?ref=badge_large)

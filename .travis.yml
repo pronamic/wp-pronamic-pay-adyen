@@ -80,6 +80,14 @@ install:
   # List available packages.
   - composer show
 
+before_script:
+  - |
+    if [ "$COVERAGE" == "1" ]; then
+      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      chmod +x ./cc-test-reporter
+      ./cc-test-reporter before-build
+    fi
+
 script:
   # PHPLint
   - composer run-script phplint
@@ -97,3 +105,4 @@ script:
 after_success:
   - if [ "$COVERAGE" == "1" ]; then composer run-script coveralls; fi
   - if [ "$COVERAGE" == "1" ]; then bash <(curl -s https://codecov.io/bash); fi
+  - if [ "$COVERAGE" == "1" ]; then ./cc-test-reporter upload-coverage; fi

@@ -6,6 +6,7 @@ language: php
 
 env:
   global:
+    - CC_TEST_REPORTER_ID=75aaef18e38b7ef45eb3268c76129b80e9168129af63fbfb2838c4c3686f251c
     - COMPOSER_NO_INTERACTION=1
     - WP_VERSION=*
 

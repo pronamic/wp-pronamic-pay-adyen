@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Pay\Core\GatewaySettings;
+use Pronamic\WordPress\Pay\WebhookManager;
 
 /**
  * Settings
@@ -42,13 +43,10 @@ class Settings extends GatewaySettings {
 
 		// Transaction feedback.
 		$sections['adyen_feedback'] = array(
-			'title'           => __( 'Transaction feedback', 'pronamic_ideal' ),
-			'methods'         => array( 'adyen' ),
-			'requires_config' => true,
-			'description'     => __(
-				'The URLs below need to be copied to the payment provider dashboard to receive automatic transaction status updates.',
-				'pronamic_ideal'
-			),
+			'title'       => __( 'Transaction feedback', 'pronamic_ideal' ),
+			'methods'     => array( 'adyen' ),
+			'description' => __( 'The URLs below need to be copied to the payment provider dashboard to receive automatic transaction status updates.', 'pronamic_ideal' ),
+			'features'    => Gateway::get_supported_features(),
 		);
 
 		return $sections;
@@ -109,12 +107,12 @@ class Settings extends GatewaySettings {
 
 		// Transaction feedback.
 		$fields[] = array(
-			'section'         => 'adyen',
-			'methods'         => array( 'adyen' ),
-			'title'           => __( 'Transaction feedback', 'pronamic_ideal' ),
-			'type'            => 'description',
-			'html'            => __( 'Receiving payment status updates needs additional configuration.', 'pronamic_ideal' ),
-			'requires_config' => true,
+			'section'  => 'adyen',
+			'methods'  => array( 'adyen' ),
+			'title'    => __( 'Transaction feedback', 'pronamic_ideal' ),
+			'type'     => 'description',
+			'html'     => __( 'Receiving payment status updates needs additional configuration.', 'pronamic_ideal' ),
+			'features' => Gateway::get_supported_features(),
 		);
 
 		// Webhook URL.
@@ -187,9 +185,21 @@ class Settings extends GatewaySettings {
 			'methods'  => array( 'adyen' ),
 			'title'    => __( 'Status', 'pronamic_ideal' ),
 			'type'     => 'description',
-			'callback' => array( 'Pronamic\WordPress\Pay\WebhookManager', 'settings_status' ),
+			'callback' => array( $this, 'feedback_status' ),
 		);
 
+		// Return fields.
 		return $fields;
+	}
+
+	/**
+	 * Transaction feedback status.
+	 *
+	 * @param array $field Settings field.
+	 */
+	public function feedback_status( $field ) {
+		$features = Gateway::get_supported_features();
+
+		WebhookManager::settings_status( $field, $features );
 	}
 }

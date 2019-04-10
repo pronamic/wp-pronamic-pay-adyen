@@ -4,6 +4,11 @@ sudo: false
 
 language: php
 
+addons:
+  apt:
+    packages:
+      - libxml2-utils
+
 env:
   global:
     - CC_TEST_REPORTER_ID=75aaef18e38b7ef45eb3268c76129b80e9168129af63fbfb2838c4c3686f251c
@@ -43,8 +48,8 @@ jobs:
     - env: PHPMD=1
 
 cache:
+  npm: true
   directories:
-    - node_modules
     - vendor
     - $HOME/.composer/cache
 
@@ -104,6 +109,8 @@ script:
   - if [ "$PHPSTAN" == "1" ]; then phpstan analyze; fi
   # Psalm
   - if [ "$PSALM" == "1" ]; then psalm; fi
+  # xmllint
+  - composer run-script xmllint
 
 after_success:
   - if [ "$COVERAGE" == "1" ]; then composer run-script coveralls; fi

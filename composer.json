@@ -40,6 +40,7 @@
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+		"overtrue/phplint": "^1.1",
 		"php-coveralls/php-coveralls": "^2.1",
 		"phpcompatibility/php-compatibility": "^9.1",
 		"phpcompatibility/phpcompatibility-wp": "^2.0",
@@ -54,8 +55,12 @@
 		"coveralls": "vendor/bin/coveralls -v",
 		"phpcbf": "vendor/bin/phpcbf",
 		"phpcs": "vendor/bin/phpcs -s -v",
-		"phplint": "find src tests -name '*.php' | xargs -n 1 -P 4 php -l",
+		"phplint": "vendor/bin/phplint",
 		"phpmd": "vendor/bin/phpmd src,tests text phpmd.ruleset.xml --suffixes php",
-		"phpunit": "vendor/bin/phpunit"
+		"phpunit": "vendor/bin/phpunit",
+		"xmllint-phpcs": "xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd phpcs.xml.dist",
+		"xmllint": [
+			"@xmllint-phpcs"
+		]
 	}
 }

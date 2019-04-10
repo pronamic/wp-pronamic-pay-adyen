@@ -67,6 +67,7 @@ class PaymentSessionResponse extends ResponseObject {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		return new self( $object->paymentSession );
 	}
 }

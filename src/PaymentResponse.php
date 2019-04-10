@@ -121,6 +121,8 @@ class PaymentResponse extends ResponseObject {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+
 		$payment_response = new self( $object->resultCode );
 
 		if ( isset( $object->pspReference ) ) {
@@ -130,6 +132,8 @@ class PaymentResponse extends ResponseObject {
 		if ( isset( $object->redirect ) ) {
 			$payment_response->set_redirect( RedirectInformation::from_object( $object->redirect ) );
 		}
+
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		return $payment_response;
 	}

@@ -91,9 +91,13 @@ class NotificationRequest extends ResponseObject {
 
 		$items = array();
 
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+
 		foreach ( $object->notificationItems as $o ) {
 			$items[] = NotificationRequestItem::from_object( $o->NotificationRequestItem );
 		}
+
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		return new self(
 			filter_var( $object->live, FILTER_VALIDATE_BOOLEAN ),

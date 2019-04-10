@@ -151,7 +151,9 @@ class PaymentSessionRequestTest extends \PHPUnit_Framework_TestCase {
 
 		$object = $payment_request->get_json();
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		$this->assertEquals( array( 'alipay' ), $object->allowedPaymentMethods );
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		$this->assertEquals( '1.9.4', $object->sdkVersion );
 		$this->assertEquals( 'https://www.pronamic.eu/', $object->origin );
 	}

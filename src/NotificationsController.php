@@ -72,6 +72,7 @@ class NotificationsController {
 
 		$authorization = $request->get_header( 'Authorization' );
 
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Benign reason.
 		if ( 'Basic ' . base64_encode( $username . ':' . $password ) === $authorization ) {
 			return true;
 		}

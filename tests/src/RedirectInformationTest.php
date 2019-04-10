@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Redirect information test
  *
@@ -17,7 +19,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * @version 1.0.0
  * @since   1.0.0
  */
-class RedirectInformationTest extends \PHPUnit_Framework_TestCase {
+class RedirectInformationTest extends TestCase {
 	/**
 	 * Test redirect information.
 	 */

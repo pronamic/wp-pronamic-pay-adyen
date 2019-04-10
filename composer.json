@@ -57,7 +57,7 @@
 		"phpcs": "vendor/bin/phpcs -s -v",
 		"phplint": "vendor/bin/phplint",
 		"phpmd": "vendor/bin/phpmd src,tests text phpmd.ruleset.xml --suffixes php",
-		"phpunit": "vendor/bin/phpunit",
+		"phpunit": "vendor/bin/phpunit --colors=always",
 		"xmllint-phpcs": "xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd phpcs.xml.dist",
 		"xmllint": [
 			"@xmllint-phpcs"

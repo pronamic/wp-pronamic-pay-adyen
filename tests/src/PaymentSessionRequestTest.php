@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Payment session request test
@@ -19,7 +20,7 @@ use DateTime;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentSessionRequestTest extends \PHPUnit_Framework_TestCase {
+class PaymentSessionRequestTest extends TestCase {
 	/**
 	 * Test payment request.
 	 */

@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Customer;
 
@@ -20,7 +21,7 @@ use Pronamic\WordPress\Pay\Customer;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentRequestHelperTest extends \PHPUnit_Framework_TestCase {
+class PaymentRequestHelperTest extends TestCase {
 	/**
 	 * Test complement.
 	 */

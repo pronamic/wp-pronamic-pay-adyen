@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use JsonSchema\Validator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Name test
@@ -21,7 +22,7 @@ use JsonSchema\Validator;
  * @version 1.0.0
  * @since   1.0.0
  */
-class NameTest extends \PHPUnit_Framework_TestCase {
+class NameTest extends TestCase {
 	/**
 	 * Test name.
 	 */

@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Payment result response test
  *
@@ -17,7 +19,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentResultResponseTest extends \PHPUnit_Framework_TestCase {
+class PaymentResultResponseTest extends TestCase {
 	/**
 	 * Test payment result response.
 	 */

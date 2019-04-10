@@ -107,7 +107,7 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 		$request->set_header( 'Content-Type', 'application/json' );
 		$request->set_body( wp_json_encode( $object ) );
 
-		$this->setExpectedException( __NAMESPACE__ . '\Error' );
+		$this->expectException( Error::class );
 
 		$response = rest_do_request( $request );
 

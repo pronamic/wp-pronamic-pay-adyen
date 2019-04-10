@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Exception;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use WP_Error;
 use WP_Http;
@@ -92,7 +93,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->setExpectedException( 'Exception' );
+		$this->expectException( Exception::class );
 
 		$payment_methods = $client->get_payment_methods();
 	}
@@ -109,7 +110,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->setExpectedException( __NAMESPACE__ . '\Error' );
+		$this->expectException( Error::class );
 
 		$payment_methods = $client->get_payment_methods();
 	}
@@ -126,7 +127,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-forbidden-901.http' );
 
-		$this->setExpectedException( __NAMESPACE__ . '\ServiceException' );
+		$this->expectException( ServiceException::class );
 
 		$payment_methods = $client->get_payment_methods();
 	}
@@ -173,7 +174,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$payment_response = $client->create_payment( $payment_request );
 
-		$this->assertInstanceOf( __NAMESPACE__ . '\PaymentResponse', $payment_response );
+		$this->assertInstanceOf( PaymentResponse::class, $payment_response );
 		$this->assertEquals( ResultCode::REDIRECT_SHOPPER, $payment_response->get_result_code() );
 		$this->assertEquals( 'GET', $payment_response->get_redirect()->get_method() );
 	}
@@ -202,7 +203,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$payment_response = $client->create_payment_session( $payment_request );
 
-		$this->assertInstanceOf( __NAMESPACE__ . '\PaymentSessionResponse', $payment_response );
+		$this->assertInstanceOf( PaymentSessionResponse::class, $payment_response );
 		$this->assertStringStartsWith( 'eyJjaGVja291dHNob3BwZXJCYXNlVXJs', $payment_response->get_payment_session() );
 	}
 
@@ -222,7 +223,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$response = $client->get_payment_result( $request );
 
-		$this->assertInstanceOf( __NAMESPACE__ . '\PaymentResultResponse', $response );
+		$this->assertInstanceOf( PaymentResultResponse::class, $response );
 		$this->assertStringStartsWith( '8515520546807677', $response->get_psp_reference() );
 		$this->assertStringStartsWith( ResultCode::AUTHORIZED, $response->get_result_code() );
 		$this->assertStringStartsWith( '791', $response->get_merchant_reference() );
@@ -242,7 +243,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-invalid.http' );
 
-		$this->setExpectedException( 'Exception' );
+		$this->expectException( Exception::class );
 
 		$payment_methods = $client->get_payment_methods();
 	}
@@ -259,7 +260,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-array.http' );
 
-		$this->setExpectedException( 'Exception' );
+		$this->expectException( Exception::class );
 
 		$payment_methods = $client->get_payment_methods();
 	}

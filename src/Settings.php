@@ -93,7 +93,7 @@ class Settings extends GatewaySettings {
 		$fields[] = array(
 			'filter'      => FILTER_SANITIZE_STRING,
 			'section'     => 'adyen',
-			'meta_key'    => '_pronamic_gateway_adyen_live_url_prefix',
+			'meta_key'    => '_pronamic_gateway_adyen_api_live_url_prefix',
 			'title'       => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
 			'classes'     => array( 'regular-text', 'code' ),

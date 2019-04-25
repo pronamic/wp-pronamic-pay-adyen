@@ -132,7 +132,7 @@ class Gateway extends Core_Gateway {
 			$payment_method = new PaymentMethod( $payment_method_type );
 
 			if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-				$payment_method = new PaymentMethodIDeal( $payment_method_type, $payment->get_issuer() );
+				$payment_method = new PaymentMethodIDeal( $payment_method_type, (string) $payment->get_issuer() );
 			}
 
 			// API integration.

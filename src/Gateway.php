@@ -190,7 +190,13 @@ class Gateway extends Core_Gateway {
 			$payment_session_request->set_allowed_payment_methods( array( $payment_method_type ) );
 		}
 
-		$payment_session_response = $this->client->create_payment_session( $payment_session_request );
+		try {
+			$payment_session_response = $this->client->create_payment_session( $payment_session_request );
+		} catch ( Exception $e ) {
+			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+
+			return;
+		}
 
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
 		$payment->set_meta( 'adyen_payment_session', $payment_session_response->get_payment_session() );

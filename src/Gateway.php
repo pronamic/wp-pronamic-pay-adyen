@@ -13,6 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Exception;
 use InvalidArgumentException;
 use Locale;
+use const PHP_URL_SCHEME;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
@@ -183,7 +184,13 @@ class Gateway extends Core_Gateway {
 
 		PaymentRequestHelper::complement( $payment, $payment_session_request );
 
-		$payment_session_request->set_origin( home_url() );
+		$origin = sprintf(
+			'%s://%s',
+			parse_url( home_url(), PHP_URL_SCHEME ),
+			parse_url( home_url(), PHP_URL_HOST )
+		);
+
+		$payment_session_request->set_origin( $origin );
 		$payment_session_request->set_sdk_version( self::SDK_VERSION );
 
 		if ( null !== $payment_method_type ) {

@@ -185,8 +185,8 @@ class Gateway extends Core_Gateway {
 
 		$origin = sprintf(
 			'%s://%s',
-			parse_url( home_url(), PHP_URL_SCHEME ),
-			parse_url( home_url(), PHP_URL_HOST )
+			wp_parse_url( home_url(), PHP_URL_SCHEME ),
+			wp_parse_url( home_url(), PHP_URL_HOST )
 		);
 
 		$payment_session_request->set_origin( $origin );

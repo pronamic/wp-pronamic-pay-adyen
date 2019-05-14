@@ -72,11 +72,12 @@ class NotificationsController {
 
 		$authorization = $request->get_header( 'Authorization' );
 
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Benign reason.
 		if ( 'Basic ' . base64_encode( $username . ':' . $password ) === $authorization ) {
 			return true;
 		}
 
-		return new WP_Error( 'rest_forbidden_context', __( 'Sorry, you are not allowed to post Adyen notifications.' ), array( 'status' => rest_authorization_required_code() ) );
+		return new WP_Error( 'rest_forbidden_context', __( 'Sorry, you are not allowed to post Adyen notifications.', 'pronamic_ideal' ), array( 'status' => rest_authorization_required_code() ) );
 	}
 
 	/**
@@ -93,7 +94,7 @@ class NotificationsController {
 		try {
 			$notification_request = NotificationRequest::from_object( $data );
 		} catch ( ValidationException $e ) {
-			return new WP_Error( 'adyen_invalid_notification', __( 'Cannot parse JSON notification.' ), array( 'status' => 500 ) );
+			return new WP_Error( 'adyen_invalid_notification', __( 'Cannot parse JSON notification.', 'pronamic_ideal' ), array( 'status' => 500 ) );
 		}
 
 		foreach ( $notification_request->get_items() as $item ) {

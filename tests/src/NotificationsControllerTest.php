@@ -81,6 +81,7 @@ class NotificationsControllerTest extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/notifications' );
 
 		$request->set_header( 'Content-Type', 'application/json' );
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Benign reason.
 		$request->set_header( 'Authorization', 'Basic ' . base64_encode( $username . ':' . $password ) );
 		$request->set_body( $json );
 
@@ -112,6 +113,7 @@ class NotificationsControllerTest extends WP_UnitTestCase {
 		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/notifications' );
 
 		$request->set_header( 'Content-Type', 'application/json' );
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Benign reason.
 		$request->set_header( 'Authorization', 'Basic ' . base64_encode( $username ) );
 		$request->set_body( $json );
 

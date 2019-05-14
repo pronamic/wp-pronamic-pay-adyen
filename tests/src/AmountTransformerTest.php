@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
 use Pronamic\WordPress\Money\Currency;
 use Pronamic\WordPress\Money\Money;
 
@@ -22,7 +23,7 @@ use Pronamic\WordPress\Money\Money;
  * @version 1.0.0
  * @since   1.0.0
  */
-class AmountTransformerTest extends \PHPUnit_Framework_TestCase {
+class AmountTransformerTest extends TestCase {
 	/**
 	 * Test transform.
 	 */

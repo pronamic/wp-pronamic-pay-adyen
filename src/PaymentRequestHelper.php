@@ -100,8 +100,8 @@ class PaymentRequestHelper {
 				}
 
 				$item = $line_items->new_item(
-					$description,
-					$line->get_quantity(),
+					(string) $description,
+					(int) $line->get_quantity(),
 					$line->get_total_amount()->get_including_tax()->get_minor_units()
 				);
 

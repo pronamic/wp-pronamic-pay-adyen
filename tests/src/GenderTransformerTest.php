@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
 use Pronamic\WordPress\Pay\Gender as Pay_Gender;
 
 /**
@@ -21,7 +22,7 @@ use Pronamic\WordPress\Pay\Gender as Pay_Gender;
  * @version 1.0.0
  * @since   1.0.0
  */
-class GenderTransformerTest extends \PHPUnit_Framework_TestCase {
+class GenderTransformerTest extends TestCase {
 	/**
 	 * Test transform.
 	 *

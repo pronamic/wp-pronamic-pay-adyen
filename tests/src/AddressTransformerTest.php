@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
 use Pronamic\WordPress\Pay\Address as Pay_Address;
 use Pronamic\WordPress\Pay\Country;
 use Pronamic\WordPress\Pay\HouseNumber;
@@ -24,7 +25,7 @@ use Pronamic\WordPress\Pay\Region;
  * @version 1.0.0
  * @since   1.0.0
  */
-class AddressTransformerTest extends \PHPUnit_Framework_TestCase {
+class AddressTransformerTest extends TestCase {
 	/**
 	 * Test empty address.
 	 */

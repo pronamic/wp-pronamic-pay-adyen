@@ -132,7 +132,7 @@ class Gateway extends Core_Gateway {
 			$payment_method = new PaymentMethod( $payment_method_type );
 
 			if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-				$payment_method = new PaymentMethodIDeal( $payment_method_type, $payment->get_issuer() );
+				$payment_method = new PaymentMethodIDeal( $payment_method_type, (string) $payment->get_issuer() );
 			}
 
 			// API integration.
@@ -183,14 +183,26 @@ class Gateway extends Core_Gateway {
 
 		PaymentRequestHelper::complement( $payment, $payment_session_request );
 
-		$payment_session_request->set_origin( home_url() );
+		$origin = sprintf(
+			'%s://%s',
+			wp_parse_url( home_url(), PHP_URL_SCHEME ),
+			wp_parse_url( home_url(), PHP_URL_HOST )
+		);
+
+		$payment_session_request->set_origin( $origin );
 		$payment_session_request->set_sdk_version( self::SDK_VERSION );
 
 		if ( null !== $payment_method_type ) {
 			$payment_session_request->set_allowed_payment_methods( array( $payment_method_type ) );
 		}
 
-		$payment_session_response = $this->client->create_payment_session( $payment_session_request );
+		try {
+			$payment_session_response = $this->client->create_payment_session( $payment_session_request );
+		} catch ( Exception $e ) {
+			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+
+			return;
+		}
 
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
 		$payment->set_meta( 'adyen_payment_session', $payment_session_response->get_payment_session() );
@@ -273,8 +285,8 @@ class Gateway extends Core_Gateway {
 			PaymentResultHelper::update_payment( $payment, $payment_result_response );
 		} catch ( Exception $e ) {
 			$note = sprintf(
-				'%1$s %2$s',
-				__( 'Error getting payment result:', 'pronamic_ideal' ),
+				/* translators: %s: exception message */
+				__( 'Error getting payment result: %s', 'pronamic_ideal' ),
 				$e->getMessage()
 			);
 

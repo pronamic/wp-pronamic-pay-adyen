@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 
@@ -20,7 +21,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
  * @version 1.0.0
  * @since   1.0.0
  */
-class GatewayTest extends \PHPUnit_Framework_TestCase {
+class GatewayTest extends TestCase {
 	/**
 	 * Test gateway.
 	 */

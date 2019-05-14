@@ -78,6 +78,7 @@ class PaymentMethodsResponse extends ResponseObject {
 
 		$payment_methods = array();
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		foreach ( $object->paymentMethods as $payment_method_object ) {
 			$payment_methods[] = PaymentMethod::from_object( $payment_method_object );
 		}

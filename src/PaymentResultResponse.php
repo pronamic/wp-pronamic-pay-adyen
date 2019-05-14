@@ -156,6 +156,8 @@ class PaymentResultResponse extends ResponseObject {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+
 		$response = new self(
 			$object->merchantReference,
 			$object->paymentMethod,
@@ -169,6 +171,8 @@ class PaymentResultResponse extends ResponseObject {
 		if ( isset( $object->resultCode ) ) {
 			$response->set_result_code( $object->resultCode );
 		}
+
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		$response->set_original_object( $object );
 

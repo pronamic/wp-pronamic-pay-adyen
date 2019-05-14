@@ -247,6 +247,8 @@ class NotificationRequestItem extends ResponseObject {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+
 		$item = new self(
 			Amount::from_object( $object->amount ),
 			$object->pspReference,
@@ -264,6 +266,8 @@ class NotificationRequestItem extends ResponseObject {
 		if ( property_exists( $object, 'paymentMethod' ) ) {
 			$item->set_payment_method( $object->paymentMethod );
 		}
+
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		$item->set_original_object( $object );
 

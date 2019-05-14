@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Payment session request test
@@ -19,7 +20,7 @@ use DateTime;
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentSessionRequestTest extends \PHPUnit_Framework_TestCase {
+class PaymentSessionRequestTest extends TestCase {
 	/**
 	 * Test payment request.
 	 */
@@ -151,7 +152,9 @@ class PaymentSessionRequestTest extends \PHPUnit_Framework_TestCase {
 
 		$object = $payment_request->get_json();
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		$this->assertEquals( array( 'alipay' ), $object->allowedPaymentMethods );
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		$this->assertEquals( '1.9.4', $object->sdkVersion );
 		$this->assertEquals( 'https://www.pronamic.eu/', $object->origin );
 	}

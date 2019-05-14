@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Amount test
  *
@@ -19,7 +21,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * @version 1.0.0
  * @since   1.0.0
  */
-class AmountTest extends \PHPUnit_Framework_TestCase {
+class AmountTest extends TestCase {
 	/**
 	 * Test amount.
 	 */

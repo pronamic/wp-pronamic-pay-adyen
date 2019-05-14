@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Service exception test
  *
@@ -17,7 +19,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * @version 1.0.0
  * @since   1.0.0
  */
-class ServiceExceptionTest extends \PHPUnit_Framework_TestCase {
+class ServiceExceptionTest extends TestCase {
 	/**
 	 * Test service exception.
 	 */

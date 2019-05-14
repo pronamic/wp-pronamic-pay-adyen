@@ -69,7 +69,7 @@ class Settings extends GatewaySettings {
 			'type'     => 'text',
 			'classes'  => array( 'regular-text', 'code' ),
 			'methods'  => array( 'adyen' ),
-			'tooltip'  => __( 'The merchant account identifier, with which you want to process the transaction', 'pronamic_ideal' ),
+			'tooltip'  => __( 'The merchant account identifier, with which you want to process the transaction.', 'pronamic_ideal' ),
 		);
 
 		// API Key.
@@ -81,7 +81,7 @@ class Settings extends GatewaySettings {
 			'type'        => 'textarea',
 			'classes'     => array( 'code' ),
 			'methods'     => array( 'adyen' ),
-			'tooltip'     => __( 'API key as mentioned in the payment provider dashboard', 'pronamic_ideal' ),
+			'tooltip'     => __( 'API key as mentioned in the payment provider dashboard.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
 				esc_url( 'https://docs.adyen.com/developers/user-management/how-to-get-the-api-key' ),
@@ -93,12 +93,12 @@ class Settings extends GatewaySettings {
 		$fields[] = array(
 			'filter'      => FILTER_SANITIZE_STRING,
 			'section'     => 'adyen',
-			'meta_key'    => '_pronamic_gateway_adyen_live_url_prefix',
+			'meta_key'    => '_pronamic_gateway_adyen_api_live_url_prefix',
 			'title'       => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
 			'classes'     => array( 'regular-text', 'code' ),
 			'methods'     => array( 'adyen' ),
-			'tooltip'     => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard', 'pronamic_ideal' ),
+			'tooltip'     => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
 				esc_url( 'https://docs.adyen.com/developers/development-resources/live-endpoints#liveurlprefix' ),

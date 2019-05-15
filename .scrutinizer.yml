@@ -13,10 +13,10 @@ build:
       - composer install --ignore-platform-reqs --no-interaction
   nodes:
     coverage:
+      environment:
+        php:
+          version: 5.6.20
       tests:
-        environment:
-          php:
-            version: 5.6.20
         override:
           - command: ./vendor/bin/phpunit
             coverage:

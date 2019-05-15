@@ -5,6 +5,8 @@ build:
       WP_TESTS_DB_USER: 'root'
       WP_TESTS_DB_PASS: ''
       WP_TESTS_DB_HOST: 'localhost'
+    php:
+      version: 5.6.20
   project_setup:
     before:
       - mysql -e "CREATE DATABASE wp_phpunit_tests"

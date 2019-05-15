@@ -183,11 +183,18 @@ class Gateway extends Core_Gateway {
 
 		PaymentRequestHelper::complement( $payment, $payment_session_request );
 
-		$origin = sprintf(
-			'%s://%s',
-			wp_parse_url( home_url(), PHP_URL_SCHEME ),
-			wp_parse_url( home_url(), PHP_URL_HOST )
-		);
+		// Origin.
+		$origin = home_url();
+
+		$origin_url = wp_parse_url( home_url() );
+
+		if ( is_array( $origin_url ) && isset( $origin_url['scheme'], $origin_url['host'] ) ) {
+			$origin = sprintf(
+				'%s://%s',
+				$origin_url['scheme'],
+				$origin_url['host']
+			);
+		}
 
 		$payment_session_request->set_origin( $origin );
 		$payment_session_request->set_sdk_version( self::SDK_VERSION );

@@ -118,6 +118,15 @@ class Gateway extends Core_Gateway {
 
 		$country_code = Locale::getRegion( $locale );
 
+		// Set country from billing address.
+		if ( null !== $payment->get_billing_address() ) {
+			$country = $payment->get_billing_address()->get_country_code();
+
+			if ( ! empty( $country ) ) {
+				$country_code = $country;
+			}
+		}
+
 		/*
 		 * API Integration
 		 *

@@ -35,7 +35,8 @@ class Integration extends AbstractIntegration {
 		$this->id            = 'adyen';
 		$this->name          = 'Adyen';
 		$this->provider      = 'adyen';
-		$this->url           = 'https://www.adyen.com/';
+		$this->url           = __( 'https://www.adyen.com/', 'pronamic_ideal' );
+		$this->product_url   = __( 'https://www.adyen.com/pricing', 'pronamic_ideal' );
 		$this->dashboard_url = array(
 			__( 'test', 'pronamic_ideal' ) => 'https://ca-test.adyen.com/ca/ca/login.shtml',
 			__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',

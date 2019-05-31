@@ -64,7 +64,22 @@ class Gateway extends Core_Gateway {
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
 		$this->set_slug( self::SLUG );
 
+		// Supported features.
+		$this->supports = self::get_supported_features();
+
+		// Client.
 		$this->client = new Client( $config );
+	}
+
+	/**
+	 * Get supported features.
+	 *
+	 * @return array
+	 */
+	public static function get_supported_features() {
+		return array(
+			'webhook_manual_config',
+		);
 	}
 
 	/**

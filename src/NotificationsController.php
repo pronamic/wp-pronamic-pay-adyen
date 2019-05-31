@@ -125,6 +125,8 @@ class NotificationsController {
 
 			$payment->add_note( $note );
 
+			do_action( 'pronamic_pay_webhook_log_payment', $payment );
+
 			// Authorization.
 			if ( EventCode::AUTHORIZATION === $item->get_event_code() ) {
 				$payment->set_status( $item->is_success() ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE );

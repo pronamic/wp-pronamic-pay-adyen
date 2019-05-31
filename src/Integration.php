@@ -173,7 +173,9 @@ class Integration extends AbstractIntegration {
 	 *
 	 * @return array
 	 */
-	public function fields( array $fields ) {
+	public function get_settings_fields() {
+		$fields = array();
+
 		// Merchant Account.
 		$fields[] = array(
 			'section'  => 'general',
@@ -226,7 +228,7 @@ class Integration extends AbstractIntegration {
 			'title'    => __( 'Webhook URL', 'pronamic_ideal' ),
 			'type'     => 'text',
 			'classes'  => array( 'large-text', 'code' ),
-			'value'    => rest_url( Integration::REST_ROUTE_NAMESPACE . '/notifications' ),
+			'value'    => rest_url( self::REST_ROUTE_NAMESPACE . '/notifications' ),
 			'readonly' => true,
 			'tooltip'  => sprintf(
 				/* translators: %s: Adyen */

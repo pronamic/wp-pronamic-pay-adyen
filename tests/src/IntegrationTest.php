@@ -61,21 +61,6 @@ class IntegrationTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test integration settings.
-	 */
-	public function test_integration_settings() {
-		$expected = __NAMESPACE__ . '\Settings';
-
-		$class = $this->integration->get_settings_class();
-
-		$this->assertEquals( $expected, $class );
-
-		$settings = $this->integration->get_settings();
-
-		$this->assertInternalType( 'array', $settings );
-	}
-
-	/**
 	 * Test init.
 	 */
 	public function test_init() {
@@ -145,5 +130,14 @@ class IntegrationTest extends WP_UnitTestCase {
 
 		$this->assertContains( '<label for="pronamic_pay_adyen_notification_authentication_password">Password</label>', $output );
 		$this->assertContains( '<input name="pronamic_pay_adyen_notification_authentication_password" id="pronamic_pay_adyen_notification_authentication_password" value="" type="text" class="regular-text" />', $output );
+	}
+
+	/**
+	 * Test settings fields.
+	 */
+	public function test_settings_fields() {
+		$fields = $this->integration->get_settings_fields();
+
+		$this->assertCount( 7, $fields );
 	}
 }

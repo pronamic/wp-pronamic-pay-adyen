@@ -41,6 +41,9 @@ class Integration extends AbstractIntegration {
 			__( 'test', 'pronamic_ideal' ) => 'https://ca-test.adyen.com/ca/ca/login.shtml',
 			__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
 		);
+		$this->supports      = array(
+			'webhook',
+		);
 
 		// Notifications controller.
 		$notifications_controller = new NotificationsController();
@@ -184,7 +187,6 @@ class Integration extends AbstractIntegration {
 			'title'    => _x( 'Merchant Account', 'adyen', 'pronamic_ideal' ),
 			'type'     => 'text',
 			'classes'  => array( 'regular-text', 'code' ),
-			'methods'  => array( 'adyen' ),
 			'tooltip'  => __( 'The merchant account identifier, with which you want to process the transaction.', 'pronamic_ideal' ),
 		);
 
@@ -196,7 +198,6 @@ class Integration extends AbstractIntegration {
 			'title'       => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'textarea',
 			'classes'     => array( 'code' ),
-			'methods'     => array( 'adyen' ),
 			'tooltip'     => __( 'API key as mentioned in the payment provider dashboard.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
@@ -213,7 +214,6 @@ class Integration extends AbstractIntegration {
 			'title'       => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
 			'classes'     => array( 'regular-text', 'code' ),
-			'methods'     => array( 'adyen' ),
 			'tooltip'     => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
@@ -248,7 +248,6 @@ class Integration extends AbstractIntegration {
 		 */
 		$fields[] = array(
 			'section' => 'feedback',
-			'methods' => array( 'adyen' ),
 			'title'   => __( 'SSL Version', 'pronamic_ideal' ),
 			'type'    => 'description',
 			'html'    => __( 'Choose the SSL Version of your server on the Adyen Customer Area.', 'pronamic_ideal' ),
@@ -262,7 +261,6 @@ class Integration extends AbstractIntegration {
 		 */
 		$fields[] = array(
 			'section' => 'feedback',
-			'methods' => array( 'adyen' ),
 			'title'   => _x( 'Method', 'adyen notification', 'pronamic_ideal' ),
 			'type'    => 'description',
 			'html'    => __( 'JSON', 'pronamic_ideal' ),
@@ -271,7 +269,6 @@ class Integration extends AbstractIntegration {
 		// Webhook authentication settings.
 		$fields[] = array(
 			'section' => 'feedback',
-			'methods' => array( 'adyen' ),
 			'title'   => __( 'Authentication', 'pronamic_ideal' ),
 			'type'    => 'description',
 			'html'    => sprintf(

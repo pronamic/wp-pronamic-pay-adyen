@@ -295,4 +295,14 @@ class Integration extends AbstractIntegration {
 
 		return $config;
 	}
+
+	/**
+	 * Get gateway.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return Gateway
+	 */
+	public function get_gateway( $post_id ) {
+		return new Gateway( $this->get_config( $post_id ) );
+	}
 }

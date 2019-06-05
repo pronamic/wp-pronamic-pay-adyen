@@ -163,15 +163,6 @@ class Integration extends AbstractIntegration {
 	}
 
 	/**
-	 * Get config factory class.
-	 *
-	 * @return string
-	 */
-	public function get_config_factory_class() {
-		return __NAMESPACE__ . '\ConfigFactory';
-	}
-
-	/**
 	 * Get settings fields.
 	 *
 	 * @return array
@@ -285,5 +276,23 @@ class Integration extends AbstractIntegration {
 
 		// Return fields.
 		return $fields;
+	}
+
+	/**
+	 * Get configuration by post ID.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return Config
+	 */
+	public function get_config( $post_id ) {
+		$config = new Config();
+
+		$config->post_id             = intval( $post_id );
+		$config->mode                = $this->get_meta( $post_id, 'mode' );
+		$config->api_key             = $this->get_meta( $post_id, 'adyen_api_key' );
+		$config->api_live_url_prefix = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
+		$config->merchant_account    = $this->get_meta( $post_id, 'adyen_merchant_account' );
+
+		return $config;
 	}
 }

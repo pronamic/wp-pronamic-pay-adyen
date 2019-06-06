@@ -155,7 +155,11 @@ class PaymentMethodType {
 	 * @return string|null
 	 */
 	public static function transform( $payment_method ) {
-		if ( isset( self::$map[ $payment_method ] ) ) {
+		if ( null === $payment_method ) {
+			return null;
+		}
+
+		if ( array_key_exists( $payment_method, self::$map ) ) {
 			return self::$map[ $payment_method ];
 		}
 

@@ -32,7 +32,7 @@
 		"sort-packages": true
 	},
 	"require": {
-		"php": ">=5.6.0",
+		"php": ">=5.6.20",
 		"ext-intl": "*",
 		"justinrainbow/json-schema": "^5.2",
 		"pronamic/wp-money": "dev-develop as 1.3",

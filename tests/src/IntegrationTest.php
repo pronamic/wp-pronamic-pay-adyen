@@ -49,18 +49,6 @@ class IntegrationTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test integration.
-	 */
-	public function test_integration() {
-		$expected = __NAMESPACE__ . '\ConfigFactory';
-
-		$class = $this->integration->get_config_factory_class();
-
-		$this->assertEquals( $expected, $class );
-		$this->assertTrue( class_exists( $class ) );
-	}
-
-	/**
 	 * Test init.
 	 */
 	public function test_init() {

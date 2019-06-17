@@ -287,7 +287,6 @@ class Integration extends AbstractIntegration {
 	public function get_config( $post_id ) {
 		$config = new Config();
 
-		$config->post_id             = intval( $post_id );
 		$config->mode                = $this->get_meta( $post_id, 'mode' );
 		$config->api_key             = $this->get_meta( $post_id, 'adyen_api_key' );
 		$config->api_live_url_prefix = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );

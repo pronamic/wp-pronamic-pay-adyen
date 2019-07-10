@@ -276,12 +276,26 @@ class Gateway extends Core_Gateway {
 			)
 		);
 
+		// Add checkout head action.
+		add_action( 'pronamic_pay_adyen_checkout_head', array( $this, 'checkout_head' ) );
+
 		// No cache.
 		Core_Util::no_cache();
 
 		require __DIR__ . '/../views/checkout.php';
 
 		exit;
+	}
+
+	/**
+	 * Checkout head.
+	 *
+	 * @return void
+	 */
+	public function checkout_head() {
+		wp_print_styles( 'pronamic-pay-redirect' );
+
+		wp_print_scripts( 'pronamic-pay-adyen-checkout' );
 	}
 
 	/**

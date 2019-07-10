@@ -19,9 +19,7 @@
 
 		<?php
 
-		wp_print_styles( 'pronamic-pay-redirect' );
-
-		wp_print_scripts( 'pronamic-pay-adyen-checkout' );
+		do_action( 'pronamic_pay_adyen_checkout_head' );
 
 		?>
 	</head>

@@ -14,6 +14,7 @@
 <html <?php language_attributes(); ?>>
 	<head>
 		<meta charset="<?php bloginfo( 'charset' ); ?>" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
 		<title><?php esc_html_e( 'Checkout', 'pronamic_ideal' ); ?></title>
 

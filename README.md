@@ -28,6 +28,25 @@ The WordPress REST API Adyen notifications endpoint can be tested with for examp
 curl --request POST --user username:password http://pay.test/wp-json/pronamic-pay/adyen/v1/notifications
 ```
 
+## WordPress Filters
+
+### pronamic_pay_adyen_checkout_head
+
+```php
+add_action( 'pronamic_pay_adyen_checkout_head', 'custom_adyen_checkout_head', 15 );
+
+function custom_adyen_checkout_head() {
+	wp_register_style(
+		'custom-adyen-checkout-style',
+		get_stylesheet_directory_uri() . '/css/adyen-checkout.css',
+		array(),
+		'1.0.0'
+	);
+
+	wp_print_styles( 'custom-adyen-checkout-style' );
+}
+```
+
 ## Production Environment
 
 **Dashboard URL:** https://ca-live.adyen.com/  

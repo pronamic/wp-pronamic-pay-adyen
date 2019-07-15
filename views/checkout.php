@@ -20,6 +20,13 @@
 
 		<?php
 
+		/**
+		 * Triggers on Adyen checkout page.
+		 *
+		 * @link https://github.com/wp-pay-gateways/adyen#pronamic_pay_adyen_checkout_head
+		 *
+		 * @since 1.1
+		 */
 		do_action( 'pronamic_pay_adyen_checkout_head' );
 
 		?>

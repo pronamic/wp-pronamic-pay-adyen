@@ -47,6 +47,40 @@ function custom_adyen_checkout_head() {
 }
 ```
 
+### pronamic_pay_adyen_config_object
+
+```php
+add_filter( 'pronamic_pay_adyen_config_object', 'custom_adyen_config_object', 15 );
+
+function custom_adyen_config_object( $config_object ) {
+	$style_object = (object) array(
+		'base'        => (object) array(
+			'color'         => '#000',
+			'fontSize'      => '14px',
+			'lineHeight'    => '14px',
+			'fontSmoothing' => 'antialiased',
+		),
+		'error'       => (object) array(
+			'color' => 'red',
+		),
+		'placeholder' => (object) array(
+			'color' => '#d8d8d8',
+		),
+		'validated'   => (object) array(
+			'color' => 'green',
+		),
+	);
+
+	$config_object->paymentMethods = (object) array(
+		'card' => (object) array(
+			'sfStyles' => $style_object,
+		),
+	);
+
+	return $config_object;
+}
+```
+
 ## Production Environment
 
 **Dashboard URL:** https://ca-live.adyen.com/  

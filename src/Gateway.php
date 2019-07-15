@@ -263,6 +263,31 @@ class Gateway extends Core_Gateway {
 			false
 		);
 
+		/**
+		 * Config object.
+		 *
+		 * @link https://docs.adyen.com/checkout/web-sdk/
+		 * @link https://docs.adyen.com/checkout/web-sdk/customization/settings/
+		 * @link https://docs.adyen.com/checkout/web-sdk/customization/styling/#styling-the-card-fields
+		 */
+		$config_object = (object) array(
+			'context' => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+		);
+
+		/**
+		 * Filters the Adyen config object.
+		 *
+		 * @link https://github.com/wp-pay-gateways/adyen#pronamic_pay_adyen_config_object
+		 * @link https://docs.adyen.com/checkout/web-sdk/
+		 * @link https://docs.adyen.com/checkout/web-sdk/customization/settings/
+		 * @link https://docs.adyen.com/checkout/web-sdk/customization/styling/#styling-the-card-fields
+		 *
+		 * @param object $config_object Adyen config object.
+		 *
+		 * @since 1.1
+		 */
+		$config_object = apply_filters( 'pronamic_pay_adyen_config_object', $config_object );
+
 		wp_localize_script(
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
@@ -270,9 +295,7 @@ class Gateway extends Core_Gateway {
 				'paymentsResultUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/result/' . $payment->config_id ),
 				'paymentReturnUrl'  => $payment->get_return_url(),
 				'paymentSession'    => $payment_session,
-				'configObject'      => array(
-					'context' => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-				),
+				'configObject'      => $config_object,
 			)
 		);
 

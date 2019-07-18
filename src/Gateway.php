@@ -31,13 +31,6 @@ use WP_Error;
  */
 class Gateway extends Core_Gateway {
 	/**
-	 * Slug of this gateway.
-	 *
-	 * @var string
-	 */
-	const SLUG = 'adyen';
-
-	/**
 	 * Web SDK version.
 	 *
 	 * @link https://docs.adyen.com/developers/checkout/web-sdk/release-notes-web-sdk
@@ -62,7 +55,6 @@ class Gateway extends Core_Gateway {
 		parent::__construct( $config );
 
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
-		$this->set_slug( self::SLUG );
 
 		// Supported features.
 		$this->supports = array();

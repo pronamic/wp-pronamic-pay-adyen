@@ -52,7 +52,7 @@
 		"wp-phpunit/wp-phpunit": "^5.2"
 	},
 	"scripts": {
-		"coveralls": "vendor/bin/coveralls -v",
+		"coveralls": "vendor/bin/php-coveralls -v",
 		"phpcbf": "vendor/bin/phpcbf",
 		"phpcs": "vendor/bin/phpcs -s -v",
 		"phplint": "vendor/bin/phplint",

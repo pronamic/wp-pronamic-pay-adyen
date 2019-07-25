@@ -239,6 +239,10 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
+		if ( empty( $payment->config_id ) ) {
+			return;
+		}
+
 		$url = sprintf(
 			'https://checkoutshopper-%s.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.%s.min.js',
 			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),

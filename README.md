@@ -91,6 +91,15 @@ function custom_adyen_config_object( $config_object ) {
 **Dashboard URL:** https://ca-test.adyen.com/  
 **API URL:** https://checkout-test.adyen.com/v41/
 
+## Frequently Asked Questions
+
+### Why do I get the "Unable to instantiate the payment screen" notice?
+
+**Adyen** says on **August 12, 2019**:
+
+> The "Unable to instantiate the payment screen" appears when Adyen doesn't have any available payment methods to display in our SDK.
+>
+> Bancontact is exclusive to Belgium and I can see you in `/paymentSession​` request, you set `"countryCode" : "NL"​`. Could you try setting this to `BE​`, then you should be able to see BCMC.
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwp-pay-gateways%2Fadyen.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwp-pay-gateways%2Fadyen?ref=badge_large)

@@ -49,9 +49,13 @@ abstract class ResponseObject {
 	/**
 	 * Get JSON.
 	 *
-	 * @return object|null
+	 * @return object
 	 */
 	public function get_json() {
-		return $this->get_original_object();
+		if ( null !== $this->original_object ) {
+			return $this->original_object;
+		}
+
+		return (object) array();
 	}
 }

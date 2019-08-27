@@ -31,13 +31,6 @@ use WP_Error;
  */
 class Gateway extends Core_Gateway {
 	/**
-	 * Slug of this gateway.
-	 *
-	 * @var string
-	 */
-	const SLUG = 'adyen';
-
-	/**
 	 * Web SDK version.
 	 *
 	 * @link https://docs.adyen.com/developers/checkout/web-sdk/release-notes-web-sdk
@@ -62,8 +55,11 @@ class Gateway extends Core_Gateway {
 		parent::__construct( $config );
 
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
-		$this->set_slug( self::SLUG );
 
+		// Supported features.
+		$this->supports = array();
+
+		// Client.
 		$this->client = new Client( $config );
 	}
 
@@ -117,6 +113,17 @@ class Gateway extends Core_Gateway {
 		$locale = strval( $locale );
 
 		$country_code = Locale::getRegion( $locale );
+
+		// Set country from billing address.
+		$billing_address = $payment->get_billing_address();
+
+		if ( null !== $billing_address ) {
+			$country = $billing_address->get_country_code();
+
+			if ( ! empty( $country ) ) {
+				$country_code = $country;
+			}
+		}
 
 		/*
 		 * API Integration
@@ -183,11 +190,18 @@ class Gateway extends Core_Gateway {
 
 		PaymentRequestHelper::complement( $payment, $payment_session_request );
 
-		$origin = sprintf(
-			'%s://%s',
-			wp_parse_url( home_url(), PHP_URL_SCHEME ),
-			wp_parse_url( home_url(), PHP_URL_HOST )
-		);
+		// Origin.
+		$origin = home_url();
+
+		$origin_url = wp_parse_url( home_url() );
+
+		if ( is_array( $origin_url ) && isset( $origin_url['scheme'], $origin_url['host'] ) ) {
+			$origin = sprintf(
+				'%s://%s',
+				$origin_url['scheme'],
+				$origin_url['host']
+			);
+		}
 
 		$payment_session_request->set_origin( $origin );
 		$payment_session_request->set_sdk_version( self::SDK_VERSION );
@@ -225,6 +239,10 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
+		if ( empty( $payment->config_id ) ) {
+			return;
+		}
+
 		$url = sprintf(
 			'https://checkoutshopper-%s.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.%s.min.js',
 			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
@@ -241,6 +259,31 @@ class Gateway extends Core_Gateway {
 			false
 		);
 
+		/**
+		 * Config object.
+		 *
+		 * @link https://docs.adyen.com/checkout/web-sdk/
+		 * @link https://docs.adyen.com/checkout/web-sdk/customization/settings/
+		 * @link https://docs.adyen.com/checkout/web-sdk/customization/styling/#styling-the-card-fields
+		 */
+		$config_object = (object) array(
+			'context' => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+		);
+
+		/**
+		 * Filters the Adyen config object.
+		 *
+		 * @link https://github.com/wp-pay-gateways/adyen#pronamic_pay_adyen_config_object
+		 * @link https://docs.adyen.com/checkout/web-sdk/
+		 * @link https://docs.adyen.com/checkout/web-sdk/customization/settings/
+		 * @link https://docs.adyen.com/checkout/web-sdk/customization/styling/#styling-the-card-fields
+		 *
+		 * @param object $config_object Adyen config object.
+		 *
+		 * @since 1.1
+		 */
+		$config_object = apply_filters( 'pronamic_pay_adyen_config_object', $config_object );
+
 		wp_localize_script(
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
@@ -248,11 +291,12 @@ class Gateway extends Core_Gateway {
 				'paymentsResultUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/result/' . $payment->config_id ),
 				'paymentReturnUrl'  => $payment->get_return_url(),
 				'paymentSession'    => $payment_session,
-				'configObject'      => array(
-					'context' => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-				),
+				'configObject'      => $config_object,
 			)
 		);
+
+		// Add checkout head action.
+		add_action( 'pronamic_pay_adyen_checkout_head', array( $this, 'checkout_head' ) );
 
 		// No cache.
 		Core_Util::no_cache();
@@ -260,6 +304,17 @@ class Gateway extends Core_Gateway {
 		require __DIR__ . '/../views/checkout.php';
 
 		exit;
+	}
+
+	/**
+	 * Checkout head.
+	 *
+	 * @return void
+	 */
+	public function checkout_head() {
+		wp_print_styles( 'pronamic-pay-redirect' );
+
+		wp_print_scripts( 'pronamic-pay-adyen-checkout' );
 	}
 
 	/**

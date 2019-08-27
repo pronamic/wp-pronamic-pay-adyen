@@ -110,6 +110,8 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-forbidden.http' );
+
 		$this->expectException( Error::class );
 
 		$payment_methods = $client->get_payment_methods();

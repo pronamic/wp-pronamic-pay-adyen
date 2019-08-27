@@ -10,8 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Pay\Core\Statuses;
-use Pronamic\WordPress\Pay\Payments\Payment;
+use WP_Http;
 use WP_REST_Request;
 use WP_UnitTestCase;
 
@@ -24,6 +23,13 @@ use WP_UnitTestCase;
  */
 class PaymentsResultControllerTest extends WP_UnitTestCase {
 	/**
+	 * Mock HTTP responses.
+	 *
+	 * @var array
+	 */
+	private $mock_http_responses;
+
+	/**
 	 * Setup.
 	 *
 	 * @link https://github.com/WordPress/phpunit-test-reporter/blob/master/tests/test-restapi.php
@@ -34,7 +40,53 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 		$this->controller = new PaymentsResultController();
 		$this->controller->setup();
 
+		// Mock HTTP responses.
+		$this->mock_http_responses = array();
+
+		add_filter( 'pre_http_request', array( $this, 'pre_http_request' ), 10, 3 );
+
+		// REST API init.
 		do_action( 'rest_api_init' );
+	}
+
+	/**
+	 * Mock HTTP response.
+	 *
+	 * @param string $url  URL.
+	 * @param string $file File with HTTP response.
+	 */
+	public function mock_http_response( $url, $file ) {
+		$this->mock_http_responses[ $url ] = $file;
+	}
+
+	/**
+	 * Pre HTTP request
+	 *
+	 * @link https://github.com/WordPress/WordPress/blob/3.9.1/wp-includes/class-http.php#L150-L164
+	 *
+	 * @param false|array|WP_Error $preempt Whether to preempt an HTTP request's return value. Default false.
+	 * @param array                $r       HTTP request arguments.
+	 * @param string               $url     The request URL.
+	 * @return array
+	 */
+	public function pre_http_request( $preempt, $r, $url ) {
+		if ( ! isset( $this->mock_http_responses[ $url ] ) ) {
+			return $preempt;
+		}
+
+		$file = $this->mock_http_responses[ $url ];
+
+		unset( $this->mock_http_responses[ $url ] );
+
+		$response = file_get_contents( $file, true );
+
+		$processed_response = WP_Http::processResponse( $response );
+
+		$processed_headers = WP_Http::processHeaders( $processed_response['headers'], $url );
+
+		$processed_headers['body'] = $processed_response['body'];
+
+		return $processed_headers;
 	}
 
 	/**
@@ -106,6 +158,8 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 
 		$request->set_header( 'Content-Type', 'application/json' );
 		$request->set_body( wp_json_encode( $object ) );
+
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/payments/result', __DIR__ . '/../http/checkout-test-adyen-com-v41-payments-result-500.http' );
 
 		$this->expectException( Error::class );
 

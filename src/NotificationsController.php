@@ -101,7 +101,7 @@ class NotificationsController {
 		} catch ( ValidationException $e ) {
 			return new WP_Error(
 				'adyen_invalid_notification',
-				/* translators: Translate 'notification' the same as in the Adyen dashboard. */				
+				/* translators: Translate 'notification' the same as in the Adyen dashboard. */
 				_x( 'Cannot parse JSON notification.', 'Adyen', 'pronamic_ideal' ),
 				array( 'status' => 500 )
 			);

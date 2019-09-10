@@ -22,7 +22,7 @@ use WP_REST_Request;
  * @link https://docs.adyen.com/developers/checkout/web-sdk/customization/logic#beforecomplete
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.3
  * @since   1.0.0
  */
 class PaymentsResultController {

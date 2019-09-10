@@ -21,7 +21,7 @@ use WP_REST_Request;
  * @link https://docs.adyen.com/developers/api-reference/notifications-api#notificationrequest
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.3
  * @since   1.0.0
  */
 class NotificationsController {

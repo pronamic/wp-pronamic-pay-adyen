@@ -22,7 +22,7 @@ use WP_REST_Request;
  * @link https://docs.adyen.com/developers/checkout/web-sdk/customization/logic#beforecomplete
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.3
  * @since   1.0.0
  */
 class PaymentsResultController {
@@ -80,7 +80,22 @@ class PaymentsResultController {
 	 */
 	public function rest_api_adyen_payments_result( WP_REST_Request $request ) {
 		$config_id = $request->get_param( 'config_id' );
-		$payload   = $request->get_param( 'payload' );
+
+		if ( null === $config_id ) {
+			return new WP_Error(
+				'pronamic-pay-adyen-no-gateway-configuration-id',
+				__( 'No gateway configuration ID given in `config_id` parameter.', 'pronamic_ideal' )
+			);
+		}
+
+		$payload = $request->get_param( 'payload' );
+
+		if ( null === $payload ) {
+			return new WP_Error(
+				'pronamic-pay-adyen-no-payload',
+				__( 'No payload given in `payload` parameter.', 'pronamic_ideal' )
+			);
+		}
 
 		// Gateway.
 		$gateway = Plugin::get_gateway( $config_id );

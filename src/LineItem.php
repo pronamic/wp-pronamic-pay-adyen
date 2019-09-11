@@ -10,8 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use InvalidArgumentException;
-
 /**
  * Line item.
  *
@@ -19,7 +17,7 @@ use InvalidArgumentException;
  * @version 1.0.0
  * @since   1.0.0
  */
-class LineItem {
+class LineItem implements \JsonSerializable {
 	/**
 	 * Amount excluding tax.
 	 *
@@ -83,7 +81,7 @@ class LineItem {
 	 * @param int    $quantity             Quantity.
 	 * @param int    $amount_including_tax Amount (including tax).
 	 *
-	 * @throws InvalidArgumentException Throws invalid argument exception when arguments are invalid.
+	 * @throws \InvalidArgumentException Throws invalid argument exception when arguments are invalid.
 	 */
 	public function __construct( $description, $quantity, $amount_including_tax ) {
 		$this->set_description( $description );
@@ -143,7 +141,7 @@ class LineItem {
 	 *
 	 * @param string|null $description Description.
 	 * @return void
-	 * @throws InvalidArgumentException Throws invalid argument exception when value does not apply to format `AN..max 100`.
+	 * @throws \InvalidArgumentException Throws invalid argument exception when value does not apply to format `AN..max 100`.
 	 */
 	public function set_description( $description = null ) {
 		$this->description = $description;
@@ -266,5 +264,15 @@ class LineItem {
 		$object = (object) $properties;
 
 		return $object;
+	}
+
+	/**
+	 * JSON serialize.
+	 *
+	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+	 * @return object
+	 */
+	public function jsonSerialize() {
+		return $this->get_json();
 	}
 }

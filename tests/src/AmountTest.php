@@ -30,6 +30,7 @@ class AmountTest extends TestCase {
 
 		$this->assertEquals( 'EUR', $amount->get_currency() );
 		$this->assertEquals( 12375, $amount->get_value() );
+		$this->assertEquals( '{"currency":"EUR","value":12375}', json_encode( $amount ) );
 	}
 
 	/**

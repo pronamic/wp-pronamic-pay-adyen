@@ -10,11 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use InvalidArgumentException;
-use JsonSchema\Constraints\Constraint;
-use JsonSchema\Exception\ValidationException;
-use JsonSchema\Validator;
-
 /**
  * Amount
  *
@@ -24,7 +19,7 @@ use JsonSchema\Validator;
  * @version 1.0.0
  * @since   1.0.0
  */
-class Amount {
+class Amount implements \JsonSerializable {
 	/**
 	 * Currency.
 	 *
@@ -45,11 +40,11 @@ class Amount {
 	 * @param string $currency Currency.
 	 * @param int    $value    Value.
 	 *
-	 * @throws InvalidArgumentException Throws invalid argument exception when Adyen amount requirements are not met.
+	 * @throws \InvalidArgumentException Throws invalid argument exception when Adyen amount requirements are not met.
 	 */
 	public function __construct( $currency, $value ) {
 		if ( 3 !== strlen( $currency ) ) {
-			throw new InvalidArgumentException(
+			throw new \InvalidArgumentException(
 				sprintf(
 					'Given currency `%s` not a three-character ISO currency code.',
 					$currency
@@ -92,21 +87,31 @@ class Amount {
 	}
 
 	/**
+	 * JSON serialize.
+	 *
+	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+	 * @return object
+	 */
+	public function jsonSerialize() {
+		return $this->get_json();
+	}
+
+	/**
 	 * Create amount from object.
 	 *
 	 * @param object $object Object.
 	 * @return Amount
-	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
+	 * @throws \JsonSchema\Exception\ValidationException Throws validation exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
-		$validator = new Validator();
+		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
 			$object,
 			(object) array(
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/amount.json' ),
 			),
-			Constraint::CHECK_MODE_EXCEPTIONS
+			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
 		return new self(

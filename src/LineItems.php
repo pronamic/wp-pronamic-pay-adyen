@@ -81,7 +81,7 @@ class LineItems implements \JsonSerializable {
 	/**
 	 * Get JSON.
 	 *
-	 * @return array|null
+	 * @return array<object>
 	 */
 	public function get_json() {
 		$data = array_map(
@@ -104,7 +104,7 @@ class LineItems implements \JsonSerializable {
 	 * JSON serialize.
 	 *
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
-	 * @return object
+	 * @return array<object>
 	 */
 	public function jsonSerialize() {
 		return $this->get_json();

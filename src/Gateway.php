@@ -93,9 +93,7 @@ class Gateway extends Core_Gateway {
 		try {
 			$amount = AmountTransformer::transform( $payment->get_total_amount() );
 		} catch ( InvalidArgumentException $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return;
+			throw new \Pronamic\WordPress\Pay\GatewayException( 'adyen', $e->getMessage() );
 		}
 
 		// Payment method type.
@@ -158,9 +156,7 @@ class Gateway extends Core_Gateway {
 			try {
 				$payment_response = $this->client->create_payment( $payment_request );
 			} catch ( Exception $e ) {
-				$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-				return;
+				throw new \Pronamic\WordPress\Pay\GatewayException( 'adyen', $e->getMessage() );
 			}
 
 			$payment->set_transaction_id( $payment_response->get_psp_reference() );
@@ -213,9 +209,7 @@ class Gateway extends Core_Gateway {
 		try {
 			$payment_session_response = $this->client->create_payment_session( $payment_session_request );
 		} catch ( Exception $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return;
+			throw new \Pronamic\WordPress\Pay\GatewayException( 'adyen', $e->getMessage() );
 		}
 
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
@@ -360,9 +354,7 @@ class Gateway extends Core_Gateway {
 		try {
 			$payment_methods_response = $this->client->get_payment_methods();
 		} catch ( Exception $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return $core_payment_methods;
+			throw new \Pronamic\WordPress\Pay\GatewayException( 'adyen', $e->getMessage() );
 		}
 
 		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
@@ -389,9 +381,7 @@ class Gateway extends Core_Gateway {
 		try {
 			$payment_methods_response = $this->client->get_payment_methods();
 		} catch ( Exception $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return $issuers;
+			throw new \Pronamic\WordPress\Pay\GatewayException( 'adyen', $e->getMessage() );
 		}
 
 		$payment_methods = $payment_methods_response->get_payment_methods();

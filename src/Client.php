@@ -70,6 +70,18 @@ class Client {
 		// Body.
 		$body = wp_remote_retrieve_body( $response );
 
+		// Handle HTTP 4xx and 5xx response.
+		// @link https://docs.adyen.com/development-resources/response-handling
+		$response_code = wp_remote_retrieve_response_code( $response );
+
+		if ( in_array( $response_code, array( 400, 401, 403, 404, 422, 500 ), true ) ) {
+			throw new \Pronamic\WordPress\Pay\GatewayException(
+				'adyen',
+				sprintf( '%1$s (%2$s)', wp_remote_retrieve_response_message( $response ), $response_code ),
+				$response
+			);
+		}
+
 		$data = json_decode( $body );
 
 		// JSON error.

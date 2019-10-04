@@ -11,7 +11,6 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use JsonSchema\Exception\ValidationException;
-use Pronamic\WordPress\Pay\Payments\PaymentStatus as PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
 use WP_Error;
 use WP_REST_Request;

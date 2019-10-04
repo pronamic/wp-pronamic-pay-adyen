@@ -10,8 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Pay\Payments\PaymentStatus as Core_Statuses;
-
 /**
  * Response object
  *

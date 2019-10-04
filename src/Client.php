@@ -48,7 +48,7 @@ class Client {
 		// Request.
 		$url = $this->config->get_api_url( $method );
 
-		$response = wp_remote_request(
+		$response = \wp_remote_request(
 			$url,
 			array(
 				'method'  => 'POST',
@@ -56,7 +56,7 @@ class Client {
 					'X-API-key'    => $this->config->get_api_key(),
 					'Content-Type' => 'application/json',
 				),
-				'body'    => wp_json_encode( $request->get_json() ),
+				'body'    => \wp_json_encode( $request->get_json() ),
 			)
 		);
 
@@ -65,44 +65,41 @@ class Client {
 		}
 
 		// Body.
-		$body = wp_remote_retrieve_body( $response );
+		$body = \wp_remote_retrieve_body( $response );
 
-		/**
-		 * Handle HTTP 4xx and 5xx response.
-		 *
-		 * @link https://docs.adyen.com/development-resources/response-handling
-		 */
-		$response_code = \wp_remote_retrieve_response_code( $response );
+		// Response.
+		$response_code    = \wp_remote_retrieve_response_code( $response );
+		$response_message = \wp_remote_retrieve_response_message( $response );
 
-		if ( \in_array( $response_code, array( 400, 401, 403, 404, 422, 500 ), true ) ) {
-			throw new \Exception(
-				\sprintf(
-					'%1$s (%2$s)',
-					\wp_remote_retrieve_response_message( $response ),
-					$response_code
-				)
-			);
-		}
-
+		// Data.
 		$data = json_decode( $body );
 
 		// JSON error.
 		$json_error = json_last_error();
 
-		if ( JSON_ERROR_NONE !== $json_error ) {
+		if ( \JSON_ERROR_NONE !== $json_error ) {
 			throw new \Exception(
-				sprintf( 'JSON: %s', json_last_error_msg() ),
+				\sprintf(
+					'Could not JSON decode Adyen response, HTTP response: "%s %s", HTTP body length: "%d", JSON error: "%s".',
+					$response_code,
+					$response_message,
+					\strlen( $body ),
+					\json_last_error_msg()
+				),
 				$json_error
 			);
 		}
 
 		// Object.
-		if ( ! is_object( $data ) ) {
-			$code = wp_remote_retrieve_response_code( $response );
-
+		if ( ! \is_object( $data ) ) {
 			throw new \Exception(
-				sprintf( 'Could not JSON decode Adyen response to an object (HTTP Status Code: %s).', $code ),
-				intval( $code )
+				\sprintf(
+					'Could not JSON decode Adyen response to an object, HTTP response: "%s %s", HTTP body: "%s".',
+					$response_code,
+					$response_message,
+					$body
+				),
+				\intval( $response_code )
 			);
 		}
 
@@ -131,7 +128,7 @@ class Client {
 	 *
 	 * @return PaymentResponse
 	 *
-	 * @throws Exception Throws error if request fails.
+	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment( PaymentRequest $request ) {
 		$data = $this->send_request( 'payments', $request );
@@ -146,7 +143,7 @@ class Client {
 	 *
 	 * @return PaymentSessionResponse
 	 *
-	 * @throws Exception Throws error if request fails.
+	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment_session( PaymentSessionRequest $request ) {
 		$data = $this->send_request( 'paymentSession', $request );
@@ -161,7 +158,7 @@ class Client {
 	 *
 	 * @return PaymentResultResponse
 	 *
-	 * @throws Exception Throws error if request fails.
+	 * @throws \Exception Throws error if request fails.
 	 */
 	public function get_payment_result( PaymentResultRequest $request ) {
 		$data = $this->send_request( 'payments/result', $request );
@@ -174,7 +171,7 @@ class Client {
 	 *
 	 * @return PaymentMethodsResponse
 	 *
-	 * @throws Exception Throws error if request fails.
+	 * @throws \Exception Throws error if request fails.
 	 */
 	public function get_payment_methods() {
 		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );

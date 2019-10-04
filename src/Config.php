@@ -10,7 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Exception;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\GatewayConfig;
 
@@ -18,7 +17,7 @@ use Pronamic\WordPress\Pay\Core\GatewayConfig;
  * Config
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.4
  * @since   1.0.0
  */
 class Config extends GatewayConfig {
@@ -66,7 +65,7 @@ class Config extends GatewayConfig {
 	 *
 	 * @param string $method API method.
 	 * @return string
-	 * @throws Exception Throws exception when mode is live and API live URL prefix is empty.
+	 * @throws \Exception Throws exception when mode is live and API live URL prefix is empty.
 	 */
 	public function get_api_url( $method ) {
 		if ( Core_Gateway::MODE_TEST === $this->mode ) {
@@ -74,7 +73,7 @@ class Config extends GatewayConfig {
 		}
 
 		if ( empty( $this->api_live_url_prefix ) ) {
-			throw new Exception( 'API Live URL prefix is required for live configurations.' );
+			throw new \Exception( 'Adyen API Live URL prefix is required for live configurations.' );
 		}
 
 		return sprintf( Endpoint::API_URL_LIVE, $this->api_live_url_prefix, $method );

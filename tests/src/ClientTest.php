@@ -22,7 +22,7 @@ use WP_UnitTestCase;
  * @link https://docs.adyen.com/developers/development-resources/live-endpoints
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.4
  * @since   1.0.0
  */
 class ClientTest extends WP_UnitTestCase {
@@ -93,7 +93,26 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->expectException( Exception::class );
+		$this->expectException( \Exception::class );
+		$this->expectExceptionMessage( 'Adyen API Live URL prefix is required for live configurations.' );
+
+		$payment_methods = $client->get_payment_methods();
+	}
+
+	/**
+	 * Test get payment methods unauthorized.
+	 */
+	public function test_get_payment_methods_unauthorized() {
+		$config = new Config();
+
+		$config->mode = Core_Gateway::MODE_TEST;
+
+		$client = new Client( $config );
+
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-unauthorized.http' );
+
+		$this->expectException( \Exception::class );
+		$this->expectExceptionMessage( 'Could not JSON decode Adyen response, HTTP response: "401 Unauthorized", HTTP body length: "0", JSON error: "Syntax error".' );
 
 		$payment_methods = $client->get_payment_methods();
 	}
@@ -113,6 +132,7 @@ class ClientTest extends WP_UnitTestCase {
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-forbidden.http' );
 
 		$this->expectException( Error::class );
+		$this->expectExceptionMessage( 'Forbidden' );
 
 		$payment_methods = $client->get_payment_methods();
 	}
@@ -130,6 +150,7 @@ class ClientTest extends WP_UnitTestCase {
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-forbidden-901.http' );
 
 		$this->expectException( ServiceException::class );
+		$this->expectExceptionMessage( 'Invalid Merchant Account' );
 
 		$payment_methods = $client->get_payment_methods();
 	}
@@ -245,7 +266,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-invalid.http' );
 
-		$this->expectException( Exception::class );
+		$this->expectException( \Exception::class );
 
 		$payment_methods = $client->get_payment_methods();
 	}
@@ -262,7 +283,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-array.http' );
 
-		$this->expectException( Exception::class );
+		$this->expectException( \Exception::class );
 
 		$payment_methods = $client->get_payment_methods();
 	}

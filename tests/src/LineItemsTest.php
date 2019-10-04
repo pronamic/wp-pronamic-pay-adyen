@@ -83,7 +83,7 @@ class LineItemsTest extends TestCase {
 
 		$json_data = json_decode( file_get_contents( $json_file, true ) );
 
-		$json_string = wp_json_encode( $line_items->get_json(), JSON_PRETTY_PRINT );
+		$json_string = wp_json_encode( $line_items, JSON_PRETTY_PRINT );
 
 		self::assertEquals( wp_json_encode( $json_data, JSON_PRETTY_PRINT ), $json_string );
 

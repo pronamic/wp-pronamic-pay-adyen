@@ -10,7 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Pay\Core\Statuses;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use WP_UnitTestCase;
 
@@ -43,7 +43,7 @@ class PaymentResultHelperTest extends WP_UnitTestCase {
 		PaymentResultHelper::update_payment( $payment, $payment_result_response );
 
 		$this->assertEquals( '1234567890123456', $payment->get_transaction_id() );
-		$this->assertEquals( Statuses::SUCCESS, $payment->get_status() );
+		$this->assertEquals( PaymentStatus::SUCCESS, $payment->get_status() );
 
 		$comments = get_comments(
 			array(

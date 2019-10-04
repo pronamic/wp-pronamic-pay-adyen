@@ -10,7 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 
 /**
  * Result code
@@ -99,17 +99,14 @@ class ResultCode {
 			case self::PENDING:
 			case self::RECEIVED:
 			case self::REDIRECT_SHOPPER:
-				return Core_Statuses::OPEN;
-
+				return PaymentStatus::OPEN;
 			case self::CANCELLED:
-				return Core_Statuses::CANCELLED;
-
+				return PaymentStatus::CANCELLED;
 			case self::ERROR:
 			case self::REFUSED:
-				return Core_Statuses::FAILURE;
-
+				return PaymentStatus::FAILURE;
 			case self::AUTHORIZED:
-				return Core_Statuses::SUCCESS;
+				return PaymentStatus::SUCCESS;
 		}
 
 		return null;

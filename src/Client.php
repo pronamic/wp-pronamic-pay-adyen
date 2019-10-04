@@ -10,16 +10,13 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Exception;
-use WP_Error;
-
 /**
  * Adyen client
  *
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.4
  * @since   1.0.0
  */
 class Client {
@@ -45,7 +42,7 @@ class Client {
 	 * @param string  $method  Adyen API method.
 	 * @param Request $request Request object.
 	 * @return object
-	 * @throws Exception Throws exception when error occurs.
+	 * @throws \Exception Throws exception when error occurs.
 	 */
 	private function send_request( $method, $request ) {
 		// Request.
@@ -63,15 +60,18 @@ class Client {
 			)
 		);
 
-		if ( $response instanceof WP_Error ) {
-			throw new Exception( $response->get_error_message() );
+		if ( $response instanceof \WP_Error ) {
+			throw new \Exception( $response->get_error_message() );
 		}
 
 		// Body.
 		$body = wp_remote_retrieve_body( $response );
 
-		// Handle HTTP 4xx and 5xx response.
-		// @link https://docs.adyen.com/development-resources/response-handling
+		/**
+		 * Handle HTTP 4xx and 5xx response.
+		 *
+		 * @link https://docs.adyen.com/development-resources/response-handling
+		 */
 		$response_code = \wp_remote_retrieve_response_code( $response );
 
 		if ( \in_array( $response_code, array( 400, 401, 403, 404, 422, 500 ), true ) ) {
@@ -90,7 +90,7 @@ class Client {
 		$json_error = json_last_error();
 
 		if ( JSON_ERROR_NONE !== $json_error ) {
-			throw new Exception(
+			throw new \Exception(
 				sprintf( 'JSON: %s', json_last_error_msg() ),
 				$json_error
 			);
@@ -100,7 +100,7 @@ class Client {
 		if ( ! is_object( $data ) ) {
 			$code = wp_remote_retrieve_response_code( $response );
 
-			throw new Exception(
+			throw new \Exception(
 				sprintf( 'Could not JSON decode Adyen response to an object (HTTP Status Code: %s).', $code ),
 				intval( $code )
 			);

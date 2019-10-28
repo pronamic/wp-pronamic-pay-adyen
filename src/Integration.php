@@ -37,7 +37,6 @@ class Integration extends AbstractIntegration {
 		$this->provider      = 'adyen';
 		$this->url           = __( 'https://www.adyen.com/', 'pronamic_ideal' );
 		$this->product_url   = __( 'https://www.adyen.com/pricing', 'pronamic_ideal' );
-		$this->manual_url    = __( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' );
 		$this->dashboard_url = array(
 			__( 'test', 'pronamic_ideal' ) => 'https://ca-test.adyen.com/ca/ca/login.shtml',
 			__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
@@ -46,6 +45,8 @@ class Integration extends AbstractIntegration {
 			'webhook',
 			'webhook_log',
 		);
+
+		$this->set_manual_url( __( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ) );
 
 		// Notifications controller.
 		$notifications_controller = new NotificationsController();

@@ -58,6 +58,11 @@ class Integration extends AbstractIntegration {
 
 		$payments_result_controller->setup();
 
+		// Site Health controller.
+		$site_healht_controller = new SiteHealthController();
+
+		$site_healht_controller->setup();
+
 		// Settings.
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );

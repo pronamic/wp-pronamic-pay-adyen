@@ -41,6 +41,7 @@ class PaymentRequestHelper {
 			$request->set_shopper_ip( $customer->get_ip_address() );
 			$request->set_shopper_locale( $customer->get_locale() );
 			$request->set_telephone_number( $customer->get_phone() );
+			$request->set_shopper_email( $customer->get_email() );
 
 			// Shopper name.
 			$name = $customer->get_name();

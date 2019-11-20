@@ -71,7 +71,26 @@ class Client {
 		$response_code    = \wp_remote_retrieve_response_code( $response );
 		$response_message = \wp_remote_retrieve_response_message( $response );
 
-		// Data.
+		/**
+		 * On PHP 7 or higher the `json_decode` function will return `null` and
+		 * `json_last_error` will return `4` (Syntax error). On PHP 5.6 or lower 
+		 * the `json_decode` will also return `null`, but json_last_error` will
+		 * return `0` (No error). Therefor we check if the HTTP response body
+		 * is an empty string.
+		 *
+		 * @link https://3v4l.org/
+		 */
+		if ( '' === $body ) {
+			throw new \Exception(
+				\sprintf(
+					'Adyen response is empty, HTTP response: "%s %s".',
+					$response_code,
+					$response_message
+				)
+			);
+		}
+
+		// JSON.
 		$data = json_decode( $body );
 
 		// JSON error.

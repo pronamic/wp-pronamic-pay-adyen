@@ -112,7 +112,7 @@ class ClientTest extends WP_UnitTestCase {
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-unauthorized.http' );
 
 		$this->expectException( \Exception::class );
-		$this->expectExceptionMessage( 'Could not JSON decode Adyen response, HTTP response: "401 Unauthorized", HTTP body length: "0", JSON error: "Syntax error".' );
+		$this->expectExceptionMessage( 'Adyen response is empty, HTTP response: "401 Unauthorized".' );
 
 		$payment_methods = $client->get_payment_methods();
 	}

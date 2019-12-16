@@ -236,9 +236,6 @@ class SiteHealthController {
 	 */
 	public function rest_api_http_authorization_test( WP_REST_Request $request ) {
 		$data = array(
-			'php_version'   => PHP_VERSION,
-			'php_sapi_name' => \php_sapi_name(),
-			'php_uname'     => \php_uname(),
 			'authorization' => $request->get_header( 'Authorization' ),
 		);
 

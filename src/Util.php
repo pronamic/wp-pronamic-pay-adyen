@@ -21,8 +21,8 @@ class Util {
 	/**
 	 * Filter null.
 	 *
-	 * @param array $array Array to filter null values from.
-	 * @return array
+	 * @param array<int|string, mixed> $array Array to filter null values from.
+	 * @return array<int|string, mixed>
 	 */
 	public static function filter_null( $array ) {
 		return array_filter( $array, array( __CLASS__, 'is_not_null' ) );

@@ -26,7 +26,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	 * List of payments methods to be presented to the shopper. To refer to payment methods,
 	 * use their brandCode from https://docs.adyen.com/developers/payment-methods/payment-methods-overview
 	 *
-	 * @var array|null
+	 * @var array<int, string>|null
 	 */
 	private $allowed_payment_methods;
 
@@ -65,7 +65,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
 	 * Get allowed payment methods.
 	 *
-	 * @return array|null
+	 * @return array<int, string>|null
 	 */
 	public function get_allowed_payment_methods() {
 		return $this->allowed_payment_methods;
@@ -74,7 +74,7 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
 	 * Set allowed payment methods.
 	 *
-	 * @param array|null $allowed_payment_methods Allowed payment methods.
+	 * @param array<int, string>|null $allowed_payment_methods Allowed payment methods.
 	 * @return void
 	 */
 	public function set_allowed_payment_methods( $allowed_payment_methods ) {

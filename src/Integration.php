@@ -154,7 +154,7 @@ class Integration extends AbstractIntegration {
 	/**
 	 * Input text.
 	 *
-	 * @param array $args Arguments.
+	 * @param array<string,string> $args Arguments.
 	 * @return void
 	 */
 	public static function input_element( $args ) {
@@ -174,7 +174,7 @@ class Integration extends AbstractIntegration {
 	/**
 	 * Get settings fields.
 	 *
-	 * @return array
+	 * @return array<int, array<string, int|string|bool|array<int,string>>>
 	 */
 	public function get_settings_fields() {
 		$fields = array();

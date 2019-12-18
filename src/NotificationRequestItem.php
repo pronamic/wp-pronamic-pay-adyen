@@ -67,7 +67,7 @@ class NotificationRequestItem extends ResponseObject {
 	 *
 	 * In case of HTTP POST notifications, the operation list is a sequence of comma-separated string values.
 	 *
-	 * @var array|null
+	 * @var array<string, string|array<string, string|array<int, string>>>|null
 	 */
 	private $operations;
 
@@ -176,7 +176,7 @@ class NotificationRequestItem extends ResponseObject {
 	/**
 	 * Get operations.
 	 *
-	 * @return array|null
+	 * @return array<string, string|array<string, string|array<int, string>>>|null
 	 */
 	public function get_operations() {
 		return $this->operations;
@@ -185,7 +185,7 @@ class NotificationRequestItem extends ResponseObject {
 	/**
 	 * Set operations.
 	 *
-	 * @param array|null $operations Operations.
+	 * @param array<string, string|array<string, string|array<int, string>>>|null $operations Operations.
 	 * @return void
 	 */
 	public function set_operations( array $operations = null ) {

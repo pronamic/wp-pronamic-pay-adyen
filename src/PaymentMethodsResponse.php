@@ -27,7 +27,7 @@ class PaymentMethodsResponse extends ResponseObject {
 	/**
 	 * Groups of payment methods.
 	 *
-	 * @var array
+	 * @var array<string, string|array<int, string>>
 	 */
 	private $groups;
 
@@ -41,8 +41,8 @@ class PaymentMethodsResponse extends ResponseObject {
 	/**
 	 * Construct payment session response object.
 	 *
-	 * @param array           $groups          Groups.
-	 * @param PaymentMethod[] $payment_methods Payment methods.
+	 * @param array<string, string|array<int, string>> $groups          Groups.
+	 * @param PaymentMethod[]                          $payment_methods Payment methods.
 	 */
 	public function __construct( $groups, $payment_methods ) {
 		$this->groups          = $groups;

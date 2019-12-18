@@ -55,8 +55,8 @@ class SiteHealthController {
 	 * Site status tests.
 	 *
 	 * @link https://make.wordpress.org/core/2019/04/25/site-health-check-in-5-2/
-	 * @param array $tests Tests.
-	 * @return array
+	 * @param array<string, array<string, array<string, string>>> $tests Tests.
+	 * @return array<string, array<string, array<string, string>>>
 	 */
 	public function site_status_tests( $tests ) {
 		$tests['async']['pronamic_pay_adyen_http_authorization_test'] = array(
@@ -80,7 +80,7 @@ class SiteHealthController {
 	/**
 	 * Get HTTP authorization test.
 	 *
-	 * @return array
+	 * @return array<string, string|array<string, string>>
 	 */
 	private function get_http_authorization_test() {
 		$result = array(

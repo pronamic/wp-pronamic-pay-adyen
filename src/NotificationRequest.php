@@ -38,7 +38,7 @@ class NotificationRequest extends ResponseObject {
 	/**
 	 * A container object for the details included in the notification.
 	 *
-	 * @var array
+	 * @var array<int, NotificationRequestItem>
 	 */
 	private $items;
 

@@ -132,7 +132,7 @@ class PaymentMethodType {
 	/**
 	 * Map payment methods to brand codes.
 	 *
-	 * @var array
+	 * @var array<string, string>
 	 */
 	private static $map = array(
 		PaymentMethods::AFTERPAY         => self::AFTERPAY,

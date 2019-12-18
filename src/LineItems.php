@@ -21,7 +21,7 @@ class LineItems implements \JsonSerializable {
 	/**
 	 * Line items.
 	 *
-	 * @var array
+	 * @var array<int, LineItem>
 	 */
 	private $line_items;
 

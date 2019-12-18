@@ -67,6 +67,8 @@ class Gateway extends Core_Gateway {
 	 * Get supported payment methods
 	 *
 	 * @see Core_Gateway::get_supported_payment_methods()
+	 *
+	 * @return array<string>
 	 */
 	public function get_supported_payment_methods() {
 		return array(
@@ -353,6 +355,8 @@ class Gateway extends Core_Gateway {
 	 * Get available payment methods.
 	 *
 	 * @see Core_Gateway::get_available_payment_methods()
+	 *
+	 * @return array<int, string>
 	 */
 	public function get_available_payment_methods() {
 		$core_payment_methods = array();
@@ -381,7 +385,7 @@ class Gateway extends Core_Gateway {
 	 * Get issuers.
 	 *
 	 * @see Pronamic_WP_Pay_Gateway::get_issuers()
-	 * @return array
+	 * @return array<int, array<string, array<string, string>>>
 	 */
 	public function get_issuers() {
 		$issuers = array();
@@ -415,9 +419,13 @@ class Gateway extends Core_Gateway {
 
 			if ( is_array( $details ) ) {
 				foreach ( $details as $detail ) {
+					if ( ! isset( $detail->key, $detail->type, $detail->items ) ) {
+						continue;
+					}
+
 					if ( 'issuer' === $detail->key && 'select' === $detail->type ) {
 						foreach ( $detail->items as $item ) {
-							$issuers[ $item->id ] = $item->name;
+							$issuers[ \strval( $item->id ) ] = \strval( $item->name );
 						}
 					}
 				}

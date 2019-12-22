@@ -26,7 +26,7 @@ use WP_Error;
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.5
  * @since   1.0.0
  */
 class Gateway extends Core_Gateway {

@@ -17,8 +17,8 @@ use WP_REST_Request;
  * Site Health controller
  *
  * @author  Remco Tolsma
- * @version unreleased
- * @since   unreleased
+ * @version 1.0.5
+ * @since   1.0.5
  */
 class SiteHealthController {
 	/**

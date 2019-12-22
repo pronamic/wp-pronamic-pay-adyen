@@ -17,7 +17,7 @@ use Pronamic\WordPress\Pay\Util as Pay_Util;
  * Integration
  *
  * @author  Remco Tolsma
- * @version 1.0.3
+ * @version 1.0.5
  * @since   1.0.0
  */
 class Integration extends AbstractIntegration {

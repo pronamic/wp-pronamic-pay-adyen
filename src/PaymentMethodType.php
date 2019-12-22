@@ -18,7 +18,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
  * @link https://docs.adyen.com/developers/classic-integration/directory-lookup#DirectoryLookup-Step2:Displaylocalpaymentmethods
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.5
  * @since   1.0.0
  */
 class PaymentMethodType {

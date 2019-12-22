@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased][unreleased]
 -
 
+## [1.0.5] - 2019-12-22
+- Added Site Health test for HTTP authorization header.
+- Added URL to manual in gateway settings.
+- Added shopper email to payment request.
+- Improved support for PHP 5.6.
+
 ## [1.0.4] - 2019-10-04
 - Improved some exception messages.
 
@@ -25,7 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.0.4...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.0.5...HEAD
+[1.0.5]: https://github.com/wp-pay-gateways/adyen/compare/1.0.4...1.0.5
 [1.0.4]: https://github.com/wp-pay-gateways/adyen/compare/1.0.3...1.0.4
 [1.0.3]: https://github.com/wp-pay-gateways/adyen/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/wp-pay-gateways/adyen/compare/1.0.1...1.0.2

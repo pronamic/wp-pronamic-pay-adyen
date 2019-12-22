@@ -14,14 +14,14 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * Line items.
  *
  * @author  Reüel van der Steege
- * @version 1.0.0
+ * @version 1.0.5
  * @since   1.0.0
  */
 class LineItems implements \JsonSerializable {
 	/**
 	 * Line items.
 	 *
-	 * @var array
+	 * @var array<int, LineItem>
 	 */
 	private $line_items;
 

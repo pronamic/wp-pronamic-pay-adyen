@@ -21,7 +21,7 @@ use JsonSchema\Validator;
  * @link https://docs.adyen.com/developers/api-reference/notifications-api#notificationrequest
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.5
  * @since   1.0.0
  */
 class NotificationRequest extends ResponseObject {
@@ -38,7 +38,7 @@ class NotificationRequest extends ResponseObject {
 	/**
 	 * A container object for the details included in the notification.
 	 *
-	 * @var array
+	 * @var array<int, NotificationRequestItem>
 	 */
 	private $items;
 

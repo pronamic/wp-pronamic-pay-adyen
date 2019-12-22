@@ -20,7 +20,7 @@ use InvalidArgumentException;
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.5
  * @since   1.0.0
  */
 abstract class AbstractPaymentRequest extends Request {
@@ -125,6 +125,13 @@ abstract class AbstractPaymentRequest extends Request {
 	 * @var Name|null
 	 */
 	private $shopper_name;
+
+	/**
+	 * The shopper's email address. We recommend that you provide this data, as it is used in velocity fraud checks.
+	 *
+	 * @var string|null
+	 */
+	private $shopper_email;
 
 	/**
 	 * The shopper's reference to uniquely identify this shopper (e.g. user ID or account ID). This field is
@@ -392,6 +399,26 @@ abstract class AbstractPaymentRequest extends Request {
 	}
 
 	/**
+	 * Get shopper email.
+	 *
+	 * @return string|null
+	 */
+	public function get_shopper_email() {
+		return $this->shopper_email;
+	}
+
+	/**
+	 * Set shopper email.
+	 *
+	 * @param string|null $shopper_email Shopper email.
+	 *
+	 * @return void
+	 */
+	public function set_shopper_email( $shopper_email = null ) {
+		$this->shopper_email = $shopper_email;
+	}
+
+	/**
 	 * Get shopper reference.
 	 *
 	 * @return string|null
@@ -469,6 +496,7 @@ abstract class AbstractPaymentRequest extends Request {
 				'shopperIP'        => $this->shopper_ip,
 				'shopperLocale'    => $this->shopper_locale,
 				'shopperName'      => is_null( $this->shopper_name ) ? null : $this->shopper_name->get_json(),
+				'shopperEmail'     => $this->shopper_email,
 				'shopperReference' => $this->shopper_reference,
 				'shopperStatement' => $this->shopper_statement,
 				'telephoneNumber'  => $this->telephone_number,

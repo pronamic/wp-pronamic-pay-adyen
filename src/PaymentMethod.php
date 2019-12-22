@@ -18,7 +18,7 @@ use JsonSchema\Validator;
  * Payment method
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.5
  * @since   1.0.0
  */
 class PaymentMethod extends ResponseObject {
@@ -32,7 +32,7 @@ class PaymentMethod extends ResponseObject {
 	/**
 	 * Details.
 	 *
-	 * @var array|null
+	 * @var array<int, object>|null
 	 */
 	private $details;
 
@@ -57,7 +57,7 @@ class PaymentMethod extends ResponseObject {
 	/**
 	 * Get details.
 	 *
-	 * @return array|null
+	 * @return array<int, object>|null
 	 */
 	public function get_details() {
 		return $this->details;
@@ -66,7 +66,7 @@ class PaymentMethod extends ResponseObject {
 	/**
 	 * Set details.
 	 *
-	 * @param array|null $details Details.
+	 * @param array<int, object> $details Details.
 	 * @return void
 	 */
 	public function set_details( $details ) {

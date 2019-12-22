@@ -21,7 +21,7 @@ use WP_REST_Request;
  * @link https://docs.adyen.com/developers/api-reference/notifications-api#notificationrequest
  *
  * @author  Remco Tolsma
- * @version 1.0.3
+ * @version 1.0.5
  * @since   1.0.0
  */
 class NotificationsController {
@@ -71,6 +71,25 @@ class NotificationsController {
 		}
 
 		$authorization = $request->get_header( 'Authorization' );
+
+		/**
+		 * Authorization header missing.
+		 *
+		 * @link https://basecamp.com/1810084/projects/10966871/todos/403544593
+		 * @link https://github.com/WordPress/WordPress/blob/5.2/wp-includes/rest-api/class-wp-rest-request.php#L188-L208
+		 * @link https://www.wp-pay.org/http-authorization-header-missing/
+		 */
+		if ( null === $authorization ) {
+			return new WP_Error(
+				'rest_forbidden_context',
+				sprintf(
+					/* translators: %s: Help URL. */
+					__( 'HTTP Authorization header is missing, read %s for more information.', 'pronamic_ideal' ),
+					'https://www.wp-pay.org/http-authorization-header-missing/'
+				),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
 
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Benign reason.
 		if ( 'Basic ' . base64_encode( $username . ':' . $password ) === $authorization ) {

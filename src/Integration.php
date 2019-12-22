@@ -17,7 +17,7 @@ use Pronamic\WordPress\Pay\Util as Pay_Util;
  * Integration
  *
  * @author  Remco Tolsma
- * @version 1.0.3
+ * @version 1.0.5
  * @since   1.0.0
  */
 class Integration extends AbstractIntegration {
@@ -46,6 +46,8 @@ class Integration extends AbstractIntegration {
 			'webhook_log',
 		);
 
+		$this->set_manual_url( __( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ) );
+
 		// Notifications controller.
 		$notifications_controller = new NotificationsController();
 
@@ -55,6 +57,11 @@ class Integration extends AbstractIntegration {
 		$payments_result_controller = new PaymentsResultController();
 
 		$payments_result_controller->setup();
+
+		// Site Health controller.
+		$site_healht_controller = new SiteHealthController();
+
+		$site_healht_controller->setup();
 
 		// Settings.
 		add_action( 'init', array( $this, 'init' ) );
@@ -147,7 +154,7 @@ class Integration extends AbstractIntegration {
 	/**
 	 * Input text.
 	 *
-	 * @param array $args Arguments.
+	 * @param array<string,string> $args Arguments.
 	 * @return void
 	 */
 	public static function input_element( $args ) {
@@ -167,7 +174,7 @@ class Integration extends AbstractIntegration {
 	/**
 	 * Get settings fields.
 	 *
-	 * @return array
+	 * @return array<int, array<string, int|string|bool|array<int,string>>>
 	 */
 	public function get_settings_fields() {
 		$fields = array();

@@ -18,7 +18,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
  * @link https://docs.adyen.com/developers/classic-integration/directory-lookup#DirectoryLookup-Step2:Displaylocalpaymentmethods
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.5
  * @since   1.0.0
  */
 class PaymentMethodType {
@@ -132,7 +132,7 @@ class PaymentMethodType {
 	/**
 	 * Map payment methods to brand codes.
 	 *
-	 * @var array
+	 * @var array<string, string>
 	 */
 	private static $map = array(
 		PaymentMethods::AFTERPAY         => self::AFTERPAY,

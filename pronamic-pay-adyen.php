@@ -15,6 +15,8 @@
  *
  * License: GPL-3.0-or-later
  *
+ * Depends: wp-pay/core
+ *
  * GitHub URI: https://github.com/wp-pay-gateways/adyen
  *
  * @author    Pronamic <info@pronamic.eu>

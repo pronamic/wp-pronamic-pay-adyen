@@ -14,7 +14,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * Util
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.5
  * @since   1.0.0
  */
 class Util {

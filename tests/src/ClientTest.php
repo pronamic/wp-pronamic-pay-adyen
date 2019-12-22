@@ -22,7 +22,7 @@ use WP_UnitTestCase;
  * @link https://docs.adyen.com/developers/development-resources/live-endpoints
  *
  * @author  Remco Tolsma
- * @version 1.0.4
+ * @version 1.0.5
  * @since   1.0.0
  */
 class ClientTest extends WP_UnitTestCase {

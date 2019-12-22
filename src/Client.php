@@ -16,7 +16,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
  * @author  Remco Tolsma
- * @version 1.0.4
+ * @version 1.0.5
  * @since   1.0.0
  */
 class Client {

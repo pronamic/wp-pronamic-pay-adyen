@@ -84,7 +84,7 @@ class SiteHealthController {
 	 */
 	private function get_http_authorization_test() {
 		$result = array(
-			'label'       => __( 'HTTP Basic authentication is working' ),
+			'label'       => __( 'HTTP Basic authentication is working', 'pronamic_ideal' ),
 			'status'      => 'good',
 			'badge'       => array(
 				'label' => __( 'Payments', 'pronamic_ideal' ),

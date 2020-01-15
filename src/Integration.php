@@ -274,7 +274,7 @@ class Integration extends AbstractIntegration {
 			'html'    => sprintf(
 				'For webhook authentication settings, please visit <a href="%2$s" title="Settings">%1$s settings</a>.',
 				__( 'Pronamic Pay', 'pronamic_ideal' ),
-				$url = add_query_arg(
+				add_query_arg(
 					array(
 						'page' => 'pronamic_pay_settings',
 					),

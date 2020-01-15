@@ -10,10 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use JsonSchema\Constraints\Constraint;
-use JsonSchema\Exception\ValidationException;
-use JsonSchema\Validator;
-
 /**
  * Redirect information
  *
@@ -100,17 +96,17 @@ class RedirectInformation extends ResponseObject {
 	 *
 	 * @param object $object Object.
 	 * @return RedirectInformation
-	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
+	 * @throws \JsonSchema\Exception\ValidationException Throws validation exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
-		$validator = new Validator();
+		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
 			$object,
 			(object) array(
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/redirect.json' ),
 			),
-			Constraint::CHECK_MODE_EXCEPTIONS
+			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
 		$redirect = new self(

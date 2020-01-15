@@ -11,9 +11,6 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use DateTime;
-use JsonSchema\Constraints\Constraint;
-use JsonSchema\Exception\ValidationException;
-use JsonSchema\Validator;
 
 /**
  * Notification request item
@@ -234,17 +231,17 @@ class NotificationRequestItem extends ResponseObject {
 	 *
 	 * @param object $object Object.
 	 * @return NotificationRequestItem
-	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
+	 * @throws \JsonSchema\Exception\ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
 	public static function from_object( $object ) {
-		$validator = new Validator();
+		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
 			$object,
 			(object) array(
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/notification-request-item.json' ),
 			),
-			Constraint::CHECK_MODE_EXCEPTIONS
+			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
 		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.

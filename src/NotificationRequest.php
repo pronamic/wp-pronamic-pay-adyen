@@ -10,11 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use InvalidArgumentException;
-use JsonSchema\Constraints\Constraint;
-use JsonSchema\Exception\ValidationException;
-use JsonSchema\Validator;
-
 /**
  * Notification request
  *
@@ -76,17 +71,17 @@ class NotificationRequest extends ResponseObject {
 	 *
 	 * @param object $object Object.
 	 * @return NotificationRequest
-	 * @throws InvalidArgumentException Throws JSON schema validation exception when JSON is invalid.
+	 * @throws \InvalidArgumentException Throws JSON schema validation exception when JSON is invalid.
 	 */
 	public static function from_object( $object ) {
-		$validator = new Validator();
+		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
 			$object,
 			(object) array(
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/notification-request.json' ),
 			),
-			Constraint::CHECK_MODE_EXCEPTIONS
+			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
 		$items = array();

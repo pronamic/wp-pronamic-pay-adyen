@@ -13,7 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 /**
  * Payment methods request
  *
- * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentMethods
+ * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/paymentMethods
  *
  * @author  Remco Tolsma
  * @version 1.0.0
@@ -26,6 +26,20 @@ class PaymentMethodsRequest extends Request {
 	 * @var string
 	 */
 	private $merchant_account;
+
+	/**
+	 * The shopper's country code.
+	 *
+	 * @var string|null
+	 */
+	private $country_code;
+
+	/**
+	 * The amount information for the transaction.
+	 *
+	 * @var Amount|null
+	 */
+	private $amount;
 
 	/**
 	 * Construct a payment request object.

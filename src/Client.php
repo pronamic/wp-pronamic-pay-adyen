@@ -188,14 +188,15 @@ class Client {
 	/**
 	 * Get payment methods.
 	 *
+	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/paymentMethods
+	 * @link https://docs.adyen.com/checkout/drop-in-web#step-1-get-available-payment-methods
 	 * @return PaymentMethodsResponse
-	 *
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function get_payment_methods() {
 		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
 
-		$data = $this->send_request( 'v41/paymentMethods', $request );
+		$data = $this->send_request( 'v51/paymentMethods', $request );
 
 		return PaymentMethodsResponse::from_object( $data );
 	}

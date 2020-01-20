@@ -39,11 +39,11 @@
 		"wp-pay/core": "^2.2"
 	},
 	"require-dev": {
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",
 		"overtrue/phplint": "^1.2",
 		"php-coveralls/php-coveralls": "^2.2",
-		"phpcompatibility/php-compatibility": "^9.2",
-		"phpcompatibility/phpcompatibility-wp": "^2.0",
+		"phpcompatibility/php-compatibility": "^9.3",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"phpmd/phpmd": "^2.8",
 		"phpunit/phpunit": "^5.7",
 		"roots/wordpress": "^5.3",

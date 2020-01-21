@@ -92,7 +92,7 @@ class DropInGateway extends AbstractGateway {
 		 * @link https://docs.adyen.com/checkout/components-web
 		 */
 		$configuration = (object) array(
-			'locale'                 => 'en-US',
+			'locale'                 => Util::get_payment_locale( $payment ),
 			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
 			'originKey'              => $this->config->origin_key,
 			'paymentMethodsResponse' => $payment_methods->get_original_object(),

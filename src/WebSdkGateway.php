@@ -1,9 +1,9 @@
 <?php
 /**
- * Gateway
+ * Web SDK gateway
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2019 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -21,7 +21,7 @@ use Pronamic\WordPress\Pay\Plugin;
 use WP_Error;
 
 /**
- * Gateway
+ * Web SDK gateway
  *
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
@@ -29,7 +29,7 @@ use WP_Error;
  * @version 1.0.5
  * @since   1.0.0
  */
-class Gateway extends Core_Gateway {
+class WebSdkGateway extends AbstractGateway {
 	/**
 	 * Web SDK version.
 	 *
@@ -37,31 +37,7 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @var string
 	 */
-	const SDK_VERSION = '3.4.0';
-
-	/**
-	 * Client.
-	 *
-	 * @var Client
-	 */
-	public $client;
-
-	/**
-	 * Constructs and initializes an Adyen gateway.
-	 *
-	 * @param Config $config Config.
-	 */
-	public function __construct( Config $config ) {
-		parent::__construct( $config );
-
-		$this->set_method( self::METHOD_HTTP_REDIRECT );
-
-		// Supported features.
-		$this->supports = array();
-
-		// Client.
-		$this->client = new Client( $config );
-	}
+	const SDK_VERSION = '1.9.2';
 
 	/**
 	 * Get supported payment methods
@@ -245,31 +221,20 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
-		$url_script = sprintf(
-			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.js',
+		$url = sprintf(
+			'https://checkoutshopper-%s.adyen.com/checkoutshopper/assets/js/sdk/checkoutSDK.%s.min.js',
 			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
 			$sdk_version
 		);
 
 		wp_register_script(
 			'pronamic-pay-adyen-checkout',
-			$url_script,
-			array(),
-			null,
+			$url,
+			array(
+				'jquery',
+			),
+			$sdk_version,
 			false
-		);
-
-		$url_stylesheet = sprintf(
-			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.css',
-			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			$sdk_version
-		);
-
-		wp_register_style(
-			'pronamic-pay-adyen-checkout',
-			$url_stylesheet,
-			array(),
-			null
 		);
 
 		/**
@@ -297,8 +262,6 @@ class Gateway extends Core_Gateway {
 		 */
 		$config_object = apply_filters( 'pronamic_pay_adyen_config_object', $config_object );
 
-		$payment_methods = $this->client->get_payment_methods();
-
 		wp_localize_script(
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
@@ -307,7 +270,6 @@ class Gateway extends Core_Gateway {
 				'paymentReturnUrl'  => $payment->get_return_url(),
 				'paymentSession'    => $payment_session,
 				'configObject'      => $config_object,
-				'paymentMethodsResponse' => $payment_methods->get_original_object(),
 			)
 		);
 
@@ -317,7 +279,7 @@ class Gateway extends Core_Gateway {
 		// No cache.
 		Core_Util::no_cache();
 
-		require __DIR__ . '/../views/checkout.php';
+		require __DIR__ . '/../views/checkout-web-sdk.php';
 
 		exit;
 	}
@@ -331,8 +293,6 @@ class Gateway extends Core_Gateway {
 		wp_print_styles( 'pronamic-pay-redirect' );
 
 		wp_print_scripts( 'pronamic-pay-adyen-checkout' );
-
-		wp_print_styles( 'pronamic-pay-adyen-checkout' );
 	}
 
 	/**

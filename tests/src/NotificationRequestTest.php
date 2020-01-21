@@ -154,6 +154,6 @@ class NotificationRequestTest extends TestCase {
 
 		$this->setExpectedException( 'JsonSchema\Exception\ValidationException' );
 
-		$notification_request = NotificationRequest::from_object( $object );
+		NotificationRequest::from_object( $object );
 	}
 }

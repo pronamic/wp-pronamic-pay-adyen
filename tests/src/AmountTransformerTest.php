@@ -44,6 +44,6 @@ class AmountTransformerTest extends TestCase {
 
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$amount = AmountTransformer::transform( $money );
+		AmountTransformer::transform( $money );
 	}
 }

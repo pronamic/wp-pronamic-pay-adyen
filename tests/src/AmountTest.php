@@ -39,7 +39,7 @@ class AmountTest extends TestCase {
 	public function test_invalid_currency() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$amount = new Amount( 'TE', 12375 );
+		new Amount( 'TE', 12375 );
 	}
 
 	/**

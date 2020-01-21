@@ -43,6 +43,13 @@ class Config extends GatewayConfig {
 	public $merchant_account;
 
 	/**
+	 * Origin key.
+	 *
+	 * @var string|null
+	 */
+	public $origin_key;
+
+	/**
 	 * Get API key.
 	 *
 	 * @return string|null

@@ -96,7 +96,7 @@ class PaymentSessionRequestTest extends TestCase {
 
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$payment_request = new PaymentSessionRequest(
+		new PaymentSessionRequest(
 			$amount,
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',

@@ -96,7 +96,7 @@ class ClientTest extends WP_UnitTestCase {
 		$this->expectException( \Exception::class );
 		$this->expectExceptionMessage( 'Adyen API Live URL prefix is required for live configurations.' );
 
-		$payment_methods = $client->get_payment_methods();
+		$client->get_payment_methods();
 	}
 
 	/**
@@ -114,7 +114,7 @@ class ClientTest extends WP_UnitTestCase {
 		$this->expectException( \Exception::class );
 		$this->expectExceptionMessage( 'Adyen response is empty, HTTP response: "401 Unauthorized".' );
 
-		$payment_methods = $client->get_payment_methods();
+		$client->get_payment_methods();
 	}
 
 	/**
@@ -134,7 +134,7 @@ class ClientTest extends WP_UnitTestCase {
 		$this->expectException( Error::class );
 		$this->expectExceptionMessage( 'Forbidden' );
 
-		$payment_methods = $client->get_payment_methods();
+		$client->get_payment_methods();
 	}
 
 	/**
@@ -152,7 +152,7 @@ class ClientTest extends WP_UnitTestCase {
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'Invalid Merchant Account' );
 
-		$payment_methods = $client->get_payment_methods();
+		$client->get_payment_methods();
 	}
 
 	/**
@@ -268,7 +268,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->expectException( \Exception::class );
 
-		$payment_methods = $client->get_payment_methods();
+		$client->get_payment_methods();
 	}
 
 	/**
@@ -285,6 +285,6 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->expectException( \Exception::class );
 
-		$payment_methods = $client->get_payment_methods();
+		$client->get_payment_methods();
 	}
 }

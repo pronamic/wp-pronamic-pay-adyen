@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Payments\Payment;
+
 /**
  * Util
  *
@@ -36,5 +38,24 @@ class Util {
 	 */
 	private static function is_not_null( $value ) {
 		return ( null !== $value );
+	}
+
+	/**
+	 * Get payment country code.
+	 *
+	 * @param Payment $payment
+	 *
+	 * @return string
+	 */
+	public static function get_payment_locale( Payment $payment ) {
+		$locale = get_locale();
+
+		$customer = $payment->get_customer();
+
+		if ( null !== $customer ) {
+			$locale = $customer->get_locale();
+		}
+
+		return strval( $locale );
 	}
 }

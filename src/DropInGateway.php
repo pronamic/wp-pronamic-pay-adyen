@@ -79,7 +79,11 @@ class DropInGateway extends AbstractGateway {
 		/**
 		 * Payment methods.
 		 */
-		$payment_methods = $this->client->get_payment_methods();
+		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
+
+		$request->set_amount( AmountTransformer::transform( $payment->get_total_amount() ) );
+
+		$payment_methods = $this->client->get_payment_methods( $request );
 
 		/**
 		 * Adyen checkout configuration.

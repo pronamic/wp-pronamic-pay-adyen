@@ -51,16 +51,44 @@ class PaymentMethodsRequest extends Request {
 	}
 
 	/**
+	 * Set the shopper's country code.
+	 *
+	 * @param string|null $country_code The shopper's country code.
+	 */
+	public function set_country_code( $country_code ) {
+		$this->country_code = $country_code;
+	}
+
+	/**
+	 * Set the amount information for the transaction. 
+	 *
+	 * @param Amount|null $amount The amount information for the transaction. 
+	 */
+	public function set_amount( Amount $amount = null ) {
+		$this->amount = $amount;
+	}
+
+	/**
 	 * Get JSON.
 	 *
 	 * @return object
 	 */
 	public function get_json() {
-		$object = (object) array(
+		$properties = array(
 			'merchantAccount' => $this->merchant_account,
 		);
 
+		if ( null !== $this->country_code ) {
+			$properties['countryCode'] = $this->country_code;
+		}
+
+		if ( null !== $this->amount ) {
+			$properties['amount'] = $this->amount->get_json();
+		}
+
 		// Return object.
+		$object = (object) $properties;
+
 		return $object;
 	}
 }

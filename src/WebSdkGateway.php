@@ -338,7 +338,7 @@ class WebSdkGateway extends AbstractGateway {
 		$core_payment_methods = array();
 
 		try {
-			$payment_methods_response = $this->client->get_payment_methods();
+			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
 
@@ -367,7 +367,7 @@ class WebSdkGateway extends AbstractGateway {
 		$issuers = array();
 
 		try {
-			$payment_methods_response = $this->client->get_payment_methods();
+			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
 		} catch ( Exception $e ) {
 			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
 

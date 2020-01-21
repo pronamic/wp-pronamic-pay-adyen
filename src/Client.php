@@ -193,9 +193,7 @@ class Client {
 	 * @return PaymentMethodsResponse
 	 * @throws \Exception Throws error if request fails.
 	 */
-	public function get_payment_methods() {
-		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
-
+	public function get_payment_methods( PaymentMethodsRequest $request ) {
 		$data = $this->send_request( 'v51/paymentMethods', $request );
 
 		return PaymentMethodsResponse::from_object( $data );

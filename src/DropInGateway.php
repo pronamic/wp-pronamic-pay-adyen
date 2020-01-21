@@ -81,6 +81,11 @@ class DropInGateway extends AbstractGateway {
 		 */
 		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
 
+		$locale = Util::get_payment_locale( $payment );
+
+		$country_code = Locale::getRegion( $locale );
+
+		$request->set_country_code( $country_code );
 		$request->set_amount( AmountTransformer::transform( $payment->get_total_amount() ) );
 
 		$payment_methods = $this->client->get_payment_methods( $request );

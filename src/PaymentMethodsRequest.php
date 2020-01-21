@@ -51,6 +51,15 @@ class PaymentMethodsRequest extends Request {
 	}
 
 	/**
+	 * Get country code.
+	 *
+	 * @return string|null
+	 */
+	public function get_country_code() {
+		return $this->country_code;
+	}
+
+	/**
 	 * Set the shopper's country code.
 	 *
 	 * @param string|null $country_code The shopper's country code.
@@ -60,9 +69,18 @@ class PaymentMethodsRequest extends Request {
 	}
 
 	/**
-	 * Set the amount information for the transaction. 
+	 * Get amount.
 	 *
-	 * @param Amount|null $amount The amount information for the transaction. 
+	 * @return Amount|null
+	 */
+	public function get_amount() {
+		return $this->amount;
+	}
+
+	/**
+	 * Set the amount information for the transaction.
+	 *
+	 * @param Amount|null $amount The amount information for the transaction.
 	 */
 	public function set_amount( Amount $amount = null ) {
 		$this->amount = $amount;
@@ -74,16 +92,15 @@ class PaymentMethodsRequest extends Request {
 	 * @return object
 	 */
 	public function get_json() {
-		$properties = array(
-			'merchantAccount' => $this->merchant_account,
+		$properties = Util::filter_null(
+			array(
+				'merchantAccount' => $this->merchant_account,
+				'countryCode'     => $this->get_country_code(),
+			)
 		);
 
-		if ( null !== $this->country_code ) {
-			$properties['countryCode'] = $this->country_code;
-		}
-
-		if ( null !== $this->amount ) {
-			$properties['amount'] = $this->amount->get_json();
+		if ( null !== $this->get_amount() ) {
+			$properties['amount'] = $this->get_amount()->get_json();
 		}
 
 		// Return object.

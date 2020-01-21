@@ -53,4 +53,97 @@ abstract class AbstractGateway extends Core_Gateway {
 		// Client.
 		$this->client = new Client( $config );
 	}
+
+	/**
+	 * Get available payment methods.
+	 *
+	 * @return array<int, string>
+	 * @see Core_Gateway::get_available_payment_methods()
+	 *
+	 */
+	public function get_available_payment_methods() {
+		$core_payment_methods = array();
+
+		try {
+			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+		} catch ( Exception $e ) {
+			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+
+			return $core_payment_methods;
+		}
+
+		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
+			$core_payment_method = PaymentMethodType::to_wp( $payment_method->get_type() );
+
+			$core_payment_methods[] = $core_payment_method;
+		}
+
+		$core_payment_methods = array_filter( $core_payment_methods );
+		$core_payment_methods = array_unique( $core_payment_methods );
+
+		return $core_payment_methods;
+	}
+
+	/**
+	 * Get issuers.
+	 *
+	 * @return array<int, array<string, array<string, string>>>
+	 * @see Pronamic_WP_Pay_Gateway::get_issuers()
+	 */
+	public function get_issuers() {
+		$issuers = array();
+
+		try {
+			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+		} catch ( Exception $e ) {
+			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+
+			return $issuers;
+		}
+
+		$payment_methods = $payment_methods_response->get_payment_methods();
+
+		// Limit to iDEAL payment methods.
+		$payment_methods = array_filter(
+			$payment_methods,
+			/**
+			 * Check if payment method is iDEAL.
+			 *
+			 * @param PaymentMethod $payment_method Payment method.
+			 *
+			 * @return boolean True if payment method is iDEAL, false otherwise.
+			 */
+			function( $payment_method ) {
+				return ( PaymentMethodType::IDEAL === $payment_method->get_type() );
+			}
+		);
+
+		foreach ( $payment_methods as $payment_method ) {
+			$details = $payment_method->get_details();
+
+			if ( is_array( $details ) ) {
+				foreach ( $details as $detail ) {
+					if ( ! isset( $detail->key, $detail->type, $detail->items ) ) {
+						continue;
+					}
+
+					if ( 'issuer' === $detail->key && 'select' === $detail->type ) {
+						foreach ( $detail->items as $item ) {
+							$issuers[ \strval( $item->id ) ] = \strval( $item->name );
+						}
+					}
+				}
+			}
+		}
+
+		if ( empty( $issuers ) ) {
+			return $issuers;
+		}
+
+		return array(
+			array(
+				'options' => $issuers,
+			),
+		);
+	}
 }

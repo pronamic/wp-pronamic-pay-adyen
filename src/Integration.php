@@ -53,6 +53,11 @@ class Integration extends AbstractIntegration {
 
 		$notifications_controller->setup();
 
+		// Payments controller.
+		$payments_controller = new PaymentsController();
+
+		$payments_controller->setup();
+
 		// Payments result controller.
 		$payments_result_controller = new PaymentsResultController();
 

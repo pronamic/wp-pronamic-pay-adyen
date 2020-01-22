@@ -150,7 +150,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment( PaymentRequest $request ) {
-		$data = $this->send_request( 'v41/payments', $request );
+		$data = $this->send_request( 'v51/payments', $request );
 
 		return PaymentResponse::from_object( $data );
 	}

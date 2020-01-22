@@ -71,15 +71,33 @@
 				}
 			},
 			onSubmit: ( state, dropin ) => {
-				makePayment( state.data )
-				// Your function calling your server to make the /payments request
-				.then( action => {
-					dropin.handleAction( action );
-					// Drop-in handles the action object from the /payments response
-				} )
-				.catch( error => {
-					throw Error(error);
-				} );
+                // Your function calling your server to make the `/payments` request.
+                makePayment( state.data )
+                .then( response => {
+                    console.log( response );
+
+                    // Drop-in handles the action object from the `/payments` response.
+                    if ( typeof response.action != "undefined" ) {
+                        dropin.handleAction( response.action );
+                    }
+
+                    // Handle result codes.
+                    if ( typeof response.resultCode != "undefined" ) {
+                        switch ( response.resultCode ) {
+                            case 'Received' :
+                                dropin.setStatus('success', { message: 'The order has been received and we are waiting for the payment to clear.' } );
+
+                                // @todo redirect to payment pending status page.
+
+                                break;
+                        }
+                    }
+
+                    return response;
+                } )
+                .catch( error => {
+                    throw Error( error );
+                } );
 			},
 			onAdditionalDetails: ( state, dropin ) => {
 				makeDetailsCall( state.data )
@@ -94,5 +112,20 @@
 			}
 		} )
 		.mount( '#pronamic-pay-adyen-drop-in' );
+
+		async function makePayment( data ) {
+			console.log( data );
+
+			const response = await fetch( pronamicPayAdyenCheckout.paymentsUrl, {
+				method: 'POST',
+				cache: 'no-cache',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify( data )
+			} );
+
+			return await response.json();
+		}
 	</script>
 </html>

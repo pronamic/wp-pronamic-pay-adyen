@@ -120,4 +120,22 @@ class RedirectInformation extends ResponseObject {
 
 		return $redirect;
 	}
+
+	/**
+	 * Get JSON.
+	 *
+	 * @return object
+	 */
+	public function get_json() {
+		$properties = Util::filter_null(
+			array(
+				'method' => $this->get_method(),
+				'url'    => $this->get_url(),
+			)
+		);
+
+		$object = (object) $properties;
+
+		return $object;
+	}
 }

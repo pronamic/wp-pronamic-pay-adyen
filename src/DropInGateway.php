@@ -18,7 +18,6 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Plugin;
-use WP_Error;
 
 /**
  * Drop-in gateway
@@ -38,6 +37,117 @@ class DropInGateway extends AbstractGateway {
 	 * @var string
 	 */
 	const SDK_VERSION = '3.4.0';
+
+	/**
+	 * Get supported payment methods
+	 *
+	 * @return array<string>
+	 * @see Core_Gateway::get_supported_payment_methods()
+	 *
+	 */
+	public function get_supported_payment_methods() {
+		return array(
+			PaymentMethods::ALIPAY,
+			PaymentMethods::BANCONTACT,
+			PaymentMethods::CREDIT_CARD,
+			PaymentMethods::DIRECT_DEBIT,
+			PaymentMethods::GIROPAY,
+			PaymentMethods::IDEAL,
+			PaymentMethods::MAESTRO,
+			PaymentMethods::SOFORT,
+		);
+	}
+
+	/**
+	 * Start.
+	 *
+	 * @param Payment $payment Payment.
+	 *
+	 * @return void
+	 * @see Plugin::start()
+	 *
+	 */
+	public function start( Payment $payment ) {
+		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
+		$payment->set_action_url( $payment->get_pay_redirect_url() );
+
+		/*
+		 * API Integration
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
+		 */
+		$api_integration_payment_method_types = array(
+			PaymentMethodType::IDEAL,
+			PaymentMethodType::DIRECT_EBANKING,
+		);
+
+		// Return early if API integration is not being used.
+		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
+
+		if ( ! in_array( $payment_method_type, $api_integration_payment_method_types, true ) ) {
+			return;
+		}
+
+		$payment_method = new PaymentMethod( $payment_method_type );
+
+		if ( PaymentMethodType::IDEAL === $payment_method_type ) {
+			$payment_method = new PaymentMethodIDeal( $payment_method_type, (string) $payment->get_issuer() );
+		}
+
+		// Amount.
+		try {
+			$amount = AmountTransformer::transform( $payment->get_total_amount() );
+		} catch ( InvalidArgumentException $e ) {
+			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
+
+			return;
+		}
+
+		// Country.
+		$locale = Util::get_payment_locale( $payment );
+
+		$country_code = Locale::getRegion( $locale );
+
+		// Set country from billing address.
+		$billing_address = $payment->get_billing_address();
+
+		if ( null !== $billing_address ) {
+			$country = $billing_address->get_country_code();
+
+			if ( ! empty( $country ) ) {
+				$country_code = $country;
+			}
+		}
+
+		// API integration.
+		$payment_request = new PaymentRequest(
+			$amount,
+			$this->config->get_merchant_account(),
+			strval( $payment->get_id() ),
+			$payment->get_return_url(),
+			$payment_method
+		);
+
+		$payment_request->set_country_code( $country_code );
+
+		PaymentRequestHelper::complement( $payment, $payment_request );
+
+		try {
+			$payment_response = $this->client->create_payment( $payment_request );
+		} catch ( Exception $e ) {
+			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
+
+			return;
+		}
+
+		$payment->set_transaction_id( $payment_response->get_psp_reference() );
+
+		$redirect = $payment_response->get_redirect();
+
+		if ( null !== $redirect ) {
+			$payment->set_action_url( $redirect->get_url() );
+		}
+	}
 
 	/**
 	 * Payment redirect.
@@ -115,6 +225,8 @@ class DropInGateway extends AbstractGateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			array(
+				'paymentsUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment->get_id() ),
+				'paymentsDetailsUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' ),
 				'configuration' => $configuration,
 			)
 		);
@@ -141,5 +253,92 @@ class DropInGateway extends AbstractGateway {
 		wp_print_scripts( 'pronamic-pay-adyen-checkout' );
 
 		wp_print_styles( 'pronamic-pay-adyen-checkout' );
+	}
+
+	/**
+	 * Create payment.
+	 *
+	 * @param Payment       $payment        Payment.
+	 * @param PaymentMethod $payment_method Payment method.
+	 *
+	 * @return \WP_Error|PaymentResponse
+	 */
+	public function create_payment( Payment $payment, PaymentMethod $payment_method ) {
+		// Amount.
+		try {
+			$amount = AmountTransformer::transform( $payment->get_total_amount() );
+		} catch ( \InvalidArgumentException $e ) {
+			return new \WP_Error( 'adyen_error', $e->getMessage() );
+		}
+
+		// Payment request.
+		$payment_request = new PaymentRequest(
+			$amount,
+			$this->config->get_merchant_account(),
+			strval( $payment->get_id() ),
+			$payment->get_return_url(),
+			$payment_method
+		);
+
+		// Country.
+		$locale = Util::get_payment_locale( $payment );
+
+		$country_code = \Locale::getRegion( $locale );
+
+		// Set country from billing address.
+		$billing_address = $payment->get_billing_address();
+
+		if ( null !== $billing_address ) {
+			$country = $billing_address->get_country_code();
+
+			if ( ! empty( $country ) ) {
+				$country_code = $country;
+			}
+		}
+
+		$payment_request->set_country_code( $country_code );
+
+		PaymentRequestHelper::complement( $payment, $payment_request );
+
+		// Create payment.
+		try {
+			$payment_response = $this->client->create_payment( $payment_request );
+		} catch ( \Exception $e ) {
+			return new \WP_Error( 'adyen_error', $e->getMessage() );
+		}
+
+		return $payment_response;
+	}
+
+	/**
+	 * Update status of the specified payment.
+	 *
+	 * @param Payment $payment Payment.
+	 *
+	 * @return void
+	 */
+	public function update_status( Payment $payment ) {
+		// Process payload on return.
+		if ( ! filter_has_var( INPUT_GET, 'payload' ) ) {
+			return;
+		}
+
+		$payload = filter_input( INPUT_GET, 'payload', FILTER_SANITIZE_STRING );
+
+		$payment_result_request = new PaymentResultRequest( $payload );
+
+		try {
+			$payment_result_response = $this->client->get_payment_result( $payment_result_request );
+
+			PaymentResultHelper::update_payment( $payment, $payment_result_response );
+		} catch ( Exception $e ) {
+			$note = sprintf(
+				/* translators: %s: exception message */
+				__( 'Error getting payment result: %s', 'pronamic_ideal' ),
+				$e->getMessage()
+			);
+
+			$payment->add_note( $note );
+		}
 	}
 }

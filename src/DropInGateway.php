@@ -198,7 +198,13 @@ class DropInGateway extends AbstractGateway {
 		$request->set_country_code( $country_code );
 		$request->set_amount( AmountTransformer::transform( $payment->get_total_amount() ) );
 
-		$payment_methods = $this->client->get_payment_methods( $request );
+		try {
+			$payment_methods = $this->client->get_payment_methods( $request );
+		} catch ( \Exception $e ) {
+			Plugin::render_exception( $e );
+
+			exit;
+		}
 
 		/**
 		 * Adyen checkout configuration.

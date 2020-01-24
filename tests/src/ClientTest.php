@@ -10,7 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Exception;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use WP_Error;
 use WP_Http;
@@ -96,7 +95,7 @@ class ClientTest extends WP_UnitTestCase {
 		$this->expectException( \Exception::class );
 		$this->expectExceptionMessage( 'Adyen API Live URL prefix is required for live configurations.' );
 
-		$client->get_payment_methods();
+		$client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 	}
 
 	/**
@@ -109,12 +108,12 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-unauthorized.http' );
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
 
-		$this->expectException( \Exception::class );
-		$this->expectExceptionMessage( 'Adyen response is empty, HTTP response: "401 Unauthorized".' );
+		$this->expectException( ServiceException::class );
+		$this->expectExceptionMessage( 'HTTP Status Response - Unauthorized' );
 
-		$client->get_payment_methods();
+		$client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 	}
 
 	/**
@@ -129,12 +128,12 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-forbidden.http' );
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
 
-		$this->expectException( Error::class );
-		$this->expectExceptionMessage( 'Forbidden' );
+		$this->expectException( ServiceException::class );
+		$this->expectExceptionMessage( 'HTTP Status Response - Unauthorized' );
 
-		$client->get_payment_methods();
+		$client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 	}
 
 	/**
@@ -147,12 +146,12 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-forbidden-901.http' );
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-forbidden-901.http' );
 
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'Invalid Merchant Account' );
 
-		$client->get_payment_methods();
+		$client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 	}
 
 	/**
@@ -165,11 +164,11 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentMethods-ok.http' );
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-ok.http' );
 
-		$payment_methods_response = $client->get_payment_methods();
+		$payment_methods_response = $client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 
-		$this->assertCount( 8, $payment_methods_response->get_payment_methods() );
+		$this->assertCount( 10, $payment_methods_response->get_payment_methods() );
 	}
 
 	/**
@@ -182,7 +181,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/payments', __DIR__ . '/../http/checkout-test-adyen-com-v41-payments-ok.http' );
+		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/payments', __DIR__ . '/../http/checkout-test-adyen-com-v51-payments-ok.http' );
 
 		$payment_method         = new PaymentMethod( PaymentMethodType::IDEAL );
 		$payment_method->issuer = '1121';
@@ -268,7 +267,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->expectException( \Exception::class );
 
-		$client->get_payment_methods();
+		$client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 	}
 
 	/**
@@ -285,6 +284,6 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->expectException( \Exception::class );
 
-		$client->get_payment_methods();
+		$client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 	}
 }

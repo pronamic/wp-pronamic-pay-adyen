@@ -10,15 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Exception;
-use InvalidArgumentException;
-use Locale;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
-use Pronamic\WordPress\Pay\Core\PaymentMethods;
-use Pronamic\WordPress\Pay\Core\Util as Core_Util;
-use Pronamic\WordPress\Pay\Payments\Payment;
-use Pronamic\WordPress\Pay\Plugin;
-use WP_Error;
 
 /**
  * Gateway
@@ -66,8 +58,8 @@ abstract class AbstractGateway extends Core_Gateway {
 
 		try {
 			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
-		} catch ( Exception $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+		} catch ( \Exception $e ) {
+			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
 
 			return $core_payment_methods;
 		}
@@ -95,8 +87,8 @@ abstract class AbstractGateway extends Core_Gateway {
 
 		try {
 			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
-		} catch ( Exception $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
+		} catch ( \Exception $e ) {
+			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
 
 			return $issuers;
 		}

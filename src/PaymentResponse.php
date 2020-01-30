@@ -64,7 +64,7 @@ class PaymentResponse extends ResponseObject {
 	/**
 	 * Refusal reason.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $refusal_reason;
 
@@ -151,7 +151,7 @@ class PaymentResponse extends ResponseObject {
 	/**
 	 * Get refusal reason.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_refusal_reason() {
 		return $this->refusal_reason;
@@ -160,7 +160,7 @@ class PaymentResponse extends ResponseObject {
 	/**
 	 * Set refusal reason.
 	 *
-	 * @param string $refusal_reason Refusal reason.
+	 * @param string|null $refusal_reason Refusal reason.
 	 */
 	public function set_refusal_reason( $refusal_reason ) {
 		$this->refusal_reason = $refusal_reason;

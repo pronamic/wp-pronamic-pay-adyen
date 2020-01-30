@@ -442,17 +442,18 @@ class DropInGateway extends AbstractGateway {
 	}
 
 	/**
-	 * Update status of the specified payment.
+	 * Send payment details.
 	 *
-	 * @param Payment $payment Payment.
+	 * @param Payment               $payment                 Payment.
+	 * @param PaymentDetailsRequest $payment_details_request Payment details request.
 	 *
-	 * @return void
+	 * @throws \Exception
 	 */
-	public function update_status( Payment $payment ) {
-		// Process payload on return.
-		if ( ! filter_has_var( INPUT_GET, 'payload' ) ) {
-			return;
-		}
+	public function send_payment_details( Payment $payment, PaymentDetailsRequest $payment_details_request ) {
+		$payment_response = $this->client->request_payment_details( $payment_details_request );
+
+		return $payment_response;
+	}
 
 	/**
 	 * Get checkout payment methods configuration.

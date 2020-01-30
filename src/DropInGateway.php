@@ -141,6 +141,19 @@ class DropInGateway extends AbstractGateway {
 	 * @return void
 	 */
 	public function payment_redirect( Payment $payment ) {
+		$payment_response = $payment->get_meta( 'adyen_payment_response' );
+
+		// Only show drop-in checkout page if payment method does not redirect.
+		if ( '' !== $payment_response ) {
+			$payment_response = PaymentResponse::from_object( $payment_response );
+
+			$redirect = $payment_response->get_redirect();
+
+			if ( null !== $redirect ) {
+				\wp_redirect( $redirect->get_url() );
+			}
+		}
+
 		$url_script = sprintf(
 			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.js',
 			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
@@ -182,6 +195,13 @@ class DropInGateway extends AbstractGateway {
 		 * Payment methods.
 		 */
 		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
+
+		if ( null !== $payment->get_method() ) {
+			// Payment method type.
+			$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
+
+			$request->set_allowed_payment_methods( array( $payment_method_type ) );
+		}
 
 		$locale = Util::get_payment_locale( $payment );
 

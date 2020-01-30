@@ -145,6 +145,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * The shopper's reference to uniquely identify this shopper (e.g. user ID or account ID). This field is
 	 * required for recurring payments
 	 *
+	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_shopperReference
 	 * @var string|null
 	 */
 	private $shopper_reference;
@@ -200,6 +201,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set application info.
 	 *
 	 * @param ApplicationInfo|null $application_info Application info.
+	 * @return void
 	 */
 	public function set_application_info( $application_info ) {
 		$this->application_info = $application_info;

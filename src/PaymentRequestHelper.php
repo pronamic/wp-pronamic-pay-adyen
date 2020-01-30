@@ -38,7 +38,9 @@ class PaymentRequestHelper {
 		$customer = $payment->get_customer();
 
 		if ( null !== $customer ) {
-			$request->set_shopper_reference( $customer->get_user_id() );
+			$user_id = $customer->get_user_id();
+
+			$request->set_shopper_reference( \is_null( $user_id ) ? null : \strval( $user_id ) );
 			$request->set_shopper_ip( $customer->get_ip_address() );
 			$request->set_shopper_locale( $customer->get_locale() );
 			$request->set_telephone_number( $customer->get_phone() );

@@ -53,6 +53,7 @@ class DetailsInformation extends ResponseObject {
 	 * Set key.
 	 *
 	 * @param string $key Key.
+	 * @return void
 	 */
 	public function set_key( $key ) {
 		$this->key = $key;
@@ -71,6 +72,7 @@ class DetailsInformation extends ResponseObject {
 	 * Set type.
 	 *
 	 * @param mixed $type Type.
+	 * @return void
 	 */
 	public function set_type( $type ) {
 		$this->type = $type;
@@ -115,8 +117,8 @@ class DetailsInformation extends ResponseObject {
 	public function get_json() {
 		$properties = Util::filter_null(
 			array(
-				'key' => $this->get_key(),
-				'type'    => $this->get_type(),
+				'key'  => $this->get_key(),
+				'type' => $this->get_type(),
 			)
 		);
 

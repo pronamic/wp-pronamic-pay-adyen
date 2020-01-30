@@ -56,6 +56,7 @@ class PaymentDetailsRequest extends Request {
 	 * Set details.
 	 *
 	 * @param DetailsInformation $details Details.
+	 * @return void
 	 */
 	public function set_details( DetailsInformation $details ) {
 		$this->details = $details;
@@ -74,6 +75,7 @@ class PaymentDetailsRequest extends Request {
 	 * Set payment data.
 	 *
 	 * @param string $payment_data Payment data.
+	 * @return void
 	 */
 	public function set_payment_data( $payment_data ) {
 		$this->payment_data = $payment_data;

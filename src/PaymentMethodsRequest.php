@@ -70,6 +70,7 @@ class PaymentMethodsRequest extends Request {
 	 * Set allowed payment methods.
 	 *
 	 * @param array $allowed_payment_methods Allowed payment methods.
+	 * @return void
 	 */
 	public function set_allowed_payment_methods( $allowed_payment_methods ) {
 		$this->allowed_payment_methods = $allowed_payment_methods;
@@ -88,6 +89,7 @@ class PaymentMethodsRequest extends Request {
 	 * Set the shopper's country code.
 	 *
 	 * @param string|null $country_code The shopper's country code.
+	 * @return void
 	 */
 	public function set_country_code( $country_code ) {
 		$this->country_code = $country_code;
@@ -106,6 +108,7 @@ class PaymentMethodsRequest extends Request {
 	 * Set the amount information for the transaction.
 	 *
 	 * @param Amount|null $amount The amount information for the transaction.
+	 * @return void
 	 */
 	public function set_amount( Amount $amount = null ) {
 		$this->amount = $amount;

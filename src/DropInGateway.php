@@ -401,6 +401,27 @@ class DropInGateway extends AbstractGateway {
 			$payment_method
 		);
 
+		/**
+		 * Application info.
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_applicationInfo
+		 * @link https://docs.adyen.com/development-resources/building-adyen-solutions
+		 */
+		$application_info = new ApplicationInfo();
+
+		$application_info->merchant_application = (object) array(
+			'name'    => 'Pronamic Pay',
+			'version' => \pronamic_pay_plugin()->get_version(),
+		);
+
+		$application_info->external_platform = (object) array(
+			'integrator' => 'Pronamic',
+			'name'       => 'WordPress',
+			'version'    => \get_bloginfo( 'version' ),
+		);
+
+		$payment_request->set_application_info( $application_info );
+
 		// Set country code.
 		$locale = Util::get_payment_locale( $payment );
 

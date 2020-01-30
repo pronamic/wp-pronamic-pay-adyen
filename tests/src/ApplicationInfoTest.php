@@ -1,6 +1,6 @@
 <?php
 /**
- * Payment request test
+ * Application info test
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2020 Pronamic
@@ -10,35 +10,18 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use PHPUnit\Framework\TestCase;
-
 /**
- * Payment request test
+ * Application info test
  *
  * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
  */
-class PaymentRequestTest extends TestCase {
+class ApplicationInfoTest extends \PHPUnit\Framework\TestCase {
 	/**
-	 * Test payment request.
+	 * Test application info.
 	 */
-	public function test_payment_request() {
-		$json_file = __DIR__ . '/../json/payment-request.json';
-
-		$payment_method = array(
-			'type' => PaymentMethodType::IDEAL,
-			'issuer' => '1121',
-		);
-
-		$payment_request = new PaymentRequest(
-			new Amount( 'EUR', 1000 ),
-			'YOUR_MERCHANT_ACCOUNT',
-			'Your order number',
-			'https://your-company.com/...',
-			new PaymentMethod( (object) $payment_method )
-		);
-
+	public function test_application_info() {
 		/**
 		 * Application info.
 		 *
@@ -58,11 +41,14 @@ class PaymentRequestTest extends TestCase {
 			'version'    => '5.3.2',
 		);
 
-		$payment_request->set_application_info( $application_info );
+		$json_file = __DIR__ . '/../json/application-info.json';
 
-		// JSON.
-		$json_string = wp_json_encode( $payment_request->get_json(), JSON_PRETTY_PRINT );
+		$json_data = json_decode( file_get_contents( $json_file, true ) );
 
-		$this->assertJsonStringEqualsJsonFile( $json_file, $json_string );
+		$json_string = wp_json_encode( $application_info, JSON_PRETTY_PRINT );
+
+		self::assertEquals( wp_json_encode( $json_data, JSON_PRETTY_PRINT ), $json_string );
+
+		self::assertJsonStringEqualsJsonFile( $json_file, $json_string );
 	}
 }

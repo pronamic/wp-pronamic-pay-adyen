@@ -39,6 +39,22 @@ class DropInGateway extends AbstractGateway {
 	const SDK_VERSION = '3.4.0';
 
 	/**
+	 * Constructs and initializes an Adyen gateway.
+	 *
+	 * @param Config $config Config.
+	 */
+	public function __construct( Config $config ) {
+		parent::__construct( $config );
+
+		// Supported features.
+		$this->supports = array(
+			'payment_status_request',
+			'webhook_log',
+			'webhook'
+		);
+	}
+
+	/**
 	 * Get supported payment methods
 	 *
 	 * @return array<string>

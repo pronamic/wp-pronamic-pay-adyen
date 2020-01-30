@@ -40,6 +40,21 @@ class WebSdkGateway extends AbstractGateway {
 	const SDK_VERSION = '1.9.2';
 
 	/**
+	 * Constructs and initializes an Adyen gateway.
+	 *
+	 * @param Config $config Config.
+	 */
+	public function __construct( Config $config ) {
+		parent::__construct( $config );
+
+		// Supported features.
+		$this->supports = array(
+			'webhook_log',
+			'webhook'
+		);
+	}
+
+	/**
 	 * Get supported payment methods
 	 *
 	 * @see Core_Gateway::get_supported_payment_methods()

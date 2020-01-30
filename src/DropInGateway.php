@@ -54,7 +54,6 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::EPS,
 			PaymentMethods::GIROPAY,
 			PaymentMethods::IDEAL,
-			PaymentMethods::MAESTRO,
 			PaymentMethods::SOFORT,
 		);
 	}

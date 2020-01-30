@@ -172,6 +172,14 @@ class DropInGateway extends AbstractGateway {
 			false
 		);
 
+		wp_register_script(
+			'pronamic-pay-adyen-checkout-drop-in',
+			plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
+			array ( 'pronamic-pay-adyen-checkout' ),
+			null,
+			true
+		);
+
 		$url_stylesheet = sprintf(
 			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.css',
 			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
@@ -213,10 +221,12 @@ class DropInGateway extends AbstractGateway {
 		 * @link https://docs.adyen.com/checkout/components-web
 		 */
 		$configuration = (object) array(
-			'locale'                 => Util::get_payment_locale( $payment ),
-			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			'originKey'              => $this->config->origin_key,
-			'paymentMethodsResponse' => $payment_methods->get_original_object(),
+			'locale'                      => Util::get_payment_locale( $payment ),
+			'environment'                 => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+			'originKey'                   => $this->config->origin_key,
+			'paymentMethodsResponse'      => $payment_methods->get_original_object(),
+			'paymentMethodsConfiguration' => $this->get_checkout_payment_methods_configuration( $payment ),
+			'amount'                      => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		);
 
 		/**
@@ -231,9 +241,13 @@ class DropInGateway extends AbstractGateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			array(
-				'paymentsUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment->get_id() ),
+				'paymentsUrl'        => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment->get_id() ),
 				'paymentsDetailsUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' ),
-				'configuration' => $configuration,
+				'paymentReturnUrl'   => $payment->get_return_url(),
+				'configuration'      => $configuration,
+				'paymentAuthorised'  => __( 'Payment completed successfully.', 'pronamic_ideal' ),
+				'paymentReceived'    => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
+				'paymentRefused'     => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
 			)
 		);
 
@@ -329,7 +343,24 @@ class DropInGateway extends AbstractGateway {
 			return;
 		}
 
-		$payload = filter_input( INPUT_GET, 'payload', FILTER_SANITIZE_STRING );
+	/**
+	 * Get checkout payment methods configuration.
+	 *
+	 * @param Payment $payment Payment.
+	 *
+	 * @return object
+	 */
+	public function get_checkout_payment_methods_configuration( Payment $payment ) {
+		$configuration = array();
+
+		// Cards.
+		$configuration[ 'card' ] = array(
+			'enableStoreDetails' => true,
+			'hasHolderName'      => true,
+			'holderNameRequired' => true,
+			'hideCVC'            => false,
+			'name'               => __( 'Credit or debit card', 'pronamic_ideal' ),
+		);
 
 		$payment_result_request = new PaymentResultRequest( $payload );
 

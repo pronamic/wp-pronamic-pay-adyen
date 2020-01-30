@@ -9,6 +9,17 @@ module.exports = function( grunt ) {
 			all: [ 'Gruntfile.js', 'composer.json', 'package.json' ]
 		},
 
+		babel: {
+			options: {
+				sourceMap: true
+			},
+			dist: {
+				files: {
+					'js/dist/checkout-drop-in.js': 'js/src/checkout-drop-in.js'
+				}
+			}
+		},
+
 		// PHP Code Sniffer
 		phpcs: {
 			application: {
@@ -59,11 +70,12 @@ module.exports = function( grunt ) {
 		}
 	} );
 
+	grunt.loadNpmTasks( 'grunt-babel' );
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-phpcs' );
 	grunt.loadNpmTasks( 'grunt-phplint' );
 	grunt.loadNpmTasks( 'grunt-phpmd' );
 
 	// Default task(s).
-	grunt.registerTask( 'default', [ 'jshint', 'phplint', 'phpmd', 'phpcs', 'phpunit' ] );
+	grunt.registerTask( 'default', [ 'jshint', 'babel', 'phplint', 'phpmd', 'phpcs', 'phpunit' ] );
 };

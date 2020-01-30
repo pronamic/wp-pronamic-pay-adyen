@@ -51,6 +51,7 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::BANCONTACT,
 			PaymentMethods::CREDIT_CARD,
 			PaymentMethods::DIRECT_DEBIT,
+			PaymentMethods::EPS,
 			PaymentMethods::GIROPAY,
 			PaymentMethods::IDEAL,
 			PaymentMethods::MAESTRO,

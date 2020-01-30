@@ -21,6 +21,13 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  */
 class PaymentMethodsRequest extends Request {
 	/**
+	 * Allowed payment methods.
+	 *
+	 * @var array|null
+	 */
+	private $allowed_payment_methods;
+
+	/**
 	 * The merchant account identifier, with which you want to process the transaction.
 	 *
 	 * @var string
@@ -48,6 +55,24 @@ class PaymentMethodsRequest extends Request {
 	 */
 	public function __construct( $merchant_account ) {
 		$this->merchant_account = $merchant_account;
+	}
+
+	/**
+	 * Get allowed payment methods.
+	 *
+	 * @return array<int, string>|null
+	 */
+	public function get_allowed_payment_methods() {
+		return $this->allowed_payment_methods;
+	}
+
+	/**
+	 * Set allowed payment methods.
+	 *
+	 * @param array $allowed_payment_methods Allowed payment methods.
+	 */
+	public function set_allowed_payment_methods( $allowed_payment_methods ) {
+		$this->allowed_payment_methods = $allowed_payment_methods;
 	}
 
 	/**
@@ -94,8 +119,9 @@ class PaymentMethodsRequest extends Request {
 	public function get_json() {
 		$properties = Util::filter_null(
 			array(
-				'merchantAccount' => $this->merchant_account,
-				'countryCode'     => $this->get_country_code(),
+				'merchantAccount'       => $this->merchant_account,
+				'countryCode'           => $this->get_country_code(),
+				'allowedPaymentMethods' => $this->get_allowed_payment_methods(),
 			)
 		);
 

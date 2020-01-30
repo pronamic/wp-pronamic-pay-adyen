@@ -183,15 +183,17 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/payments', __DIR__ . '/../http/checkout-test-adyen-com-v51-payments-ok.http' );
 
-		$payment_method         = new PaymentMethod( PaymentMethodType::IDEAL );
-		$payment_method->issuer = '1121';
+		$payment_method = array (
+			'type'   => PaymentMethodType::IDEAL,
+			'issuer' => '1121',
+		);
 
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
 			'https://your-company.com/...',
-			$payment_method
+			new PaymentMethod( (object) $payment_method )
 		);
 
 		$payment_response = $client->create_payment( $payment_request );

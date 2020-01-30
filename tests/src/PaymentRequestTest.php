@@ -26,14 +26,17 @@ class PaymentRequestTest extends TestCase {
 	public function test_payment_request() {
 		$json_file = __DIR__ . '/../json/payment-request.json';
 
-		$payment_method = new PaymentMethodIDeal( PaymentMethodType::IDEAL, '1121' );
+		$payment_method = array(
+			'type' => PaymentMethodType::IDEAL,
+			'issuer' => '1121',
+		);
 
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
 			'https://your-company.com/...',
-			$payment_method
+			new PaymentMethod( (object) $payment_method )
 		);
 
 		$json_string = wp_json_encode( $payment_request->get_json(), JSON_PRETTY_PRINT );

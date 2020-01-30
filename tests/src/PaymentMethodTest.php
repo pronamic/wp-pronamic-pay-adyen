@@ -24,7 +24,11 @@ class PaymentMethodTest extends TestCase {
 	 * Test payment method.
 	 */
 	public function test_payment_method() {
-		$payment_method = new PaymentMethod( PaymentMethodType::IDEAL );
+		$payment_method = new PaymentMethod(
+			(object) array (
+				'type' => PaymentMethodType::IDEAL,
+			)
+		);
 
 		$this->assertEquals( PaymentMethodType::IDEAL, $payment_method->get_type() );
 
@@ -40,7 +44,12 @@ class PaymentMethodTest extends TestCase {
 	 * Test payment method.
 	 */
 	public function test_payment_method_details() {
-		$payment_method = new PaymentMethod( PaymentMethodType::IDEAL );
+		$payment_method = new PaymentMethod(
+			(object) array(
+				'type' => PaymentMethodType::IDEAL,
+			)
+		);
+
 		$payment_method->set_details( array() );
 
 		$this->assertEquals( PaymentMethodType::IDEAL, $payment_method->get_type() );

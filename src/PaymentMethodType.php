@@ -74,6 +74,13 @@ class PaymentMethodType {
 	const DOTPAY = 'dotpay';
 
 	/**
+	 * Constant for the 'eps' payment method type.
+	 *
+	 * @var string
+	 */
+	const EPS = 'eps';
+
+	/**
 	 * Constant for the 'GiroPay' payment method type.
 	 *
 	 * @var string
@@ -140,6 +147,7 @@ class PaymentMethodType {
 		PaymentMethods::BANCONTACT       => self::BANCONTACT,
 		PaymentMethods::CREDIT_CARD      => self::SCHEME,
 		PaymentMethods::DIRECT_DEBIT     => self::SEPA_DIRECT_DEBIT,
+		PaymentMethods::EPS              => self::EPS,
 		PaymentMethods::GIROPAY          => self::GIROPAY,
 		PaymentMethods::IDEAL            => self::IDEAL,
 		PaymentMethods::KLARNA_PAY_LATER => self::KLARNA,

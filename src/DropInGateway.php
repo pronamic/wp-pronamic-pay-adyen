@@ -10,8 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Exception;
-use InvalidArgumentException;
 use Locale;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;

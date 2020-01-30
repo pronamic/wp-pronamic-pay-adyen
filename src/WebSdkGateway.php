@@ -50,7 +50,7 @@ class WebSdkGateway extends AbstractGateway {
 		// Supported features.
 		$this->supports = array(
 			'webhook_log',
-			'webhook'
+			'webhook',
 		);
 	}
 
@@ -122,7 +122,7 @@ class WebSdkGateway extends AbstractGateway {
 
 		if ( in_array( $payment_method_type, $api_integration_payment_method_types, true ) ) {
 			$payment_method = array(
-				'type' => $payment_method_type
+				'type' => $payment_method_type,
 			);
 
 			if ( PaymentMethodType::IDEAL === $payment_method_type ) {

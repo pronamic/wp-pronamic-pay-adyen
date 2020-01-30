@@ -183,7 +183,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/payments', __DIR__ . '/../http/checkout-test-adyen-com-v51-payments-ok.http' );
 
-		$payment_method = array (
+		$payment_method = array(
 			'type'   => PaymentMethodType::IDEAL,
 			'issuer' => '1121',
 		);

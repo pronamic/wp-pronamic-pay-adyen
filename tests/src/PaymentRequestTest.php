@@ -27,7 +27,7 @@ class PaymentRequestTest extends TestCase {
 		$json_file = __DIR__ . '/../json/payment-request.json';
 
 		$payment_method = array(
-			'type' => PaymentMethodType::IDEAL,
+			'type'   => PaymentMethodType::IDEAL,
 			'issuer' => '1121',
 		);
 

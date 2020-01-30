@@ -270,7 +270,7 @@ class PaymentResponse extends ResponseObject {
 	 * @return object
 	 */
 	public function get_json() {
-		$properties      = array(
+		$properties = array(
 			'refusalReason' => $this->get_refusal_reason(),
 			'redirect'      => ( null === $this->get_redirect() ? null : $this->get_redirect()->get_json() ),
 			'resultCode'    => $this->get_result_code(),

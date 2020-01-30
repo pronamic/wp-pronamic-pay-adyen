@@ -51,7 +51,6 @@ abstract class AbstractGateway extends Core_Gateway {
 	 *
 	 * @return array<int, string>
 	 * @see Core_Gateway::get_available_payment_methods()
-	 *
 	 */
 	public function get_available_payment_methods() {
 		$core_payment_methods = array();

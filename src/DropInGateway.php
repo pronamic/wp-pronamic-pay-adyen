@@ -49,7 +49,7 @@ class DropInGateway extends AbstractGateway {
 		$this->supports = array(
 			'payment_status_request',
 			'webhook_log',
-			'webhook'
+			'webhook',
 		);
 	}
 
@@ -58,7 +58,6 @@ class DropInGateway extends AbstractGateway {
 	 *
 	 * @return array<string>
 	 * @see Core_Gateway::get_supported_payment_methods()
-	 *
 	 */
 	public function get_supported_payment_methods() {
 		return array(
@@ -80,7 +79,6 @@ class DropInGateway extends AbstractGateway {
 	 *
 	 * @return void
 	 * @see Plugin::start()
-	 *
 	 */
 	public function start( Payment $payment ) {
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
@@ -171,7 +169,7 @@ class DropInGateway extends AbstractGateway {
 		wp_register_script(
 			'pronamic-pay-adyen-checkout-drop-in',
 			plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
-			array ( 'pronamic-pay-adyen-checkout' ),
+			array( 'pronamic-pay-adyen-checkout' ),
 			null,
 			true
 		);
@@ -487,7 +485,7 @@ class DropInGateway extends AbstractGateway {
 		$configuration = array();
 
 		// Cards.
-		$configuration[ 'card' ] = array(
+		$configuration['card'] = array(
 			'enableStoreDetails' => true,
 			'hasHolderName'      => true,
 			'holderNameRequired' => true,
@@ -496,7 +494,7 @@ class DropInGateway extends AbstractGateway {
 		);
 
 		// Apple Pay.
-		$configuration[ 'applepay' ] = array(
+		$configuration['applepay'] = array(
 			'configuration' => array(
 				// Name to be displayed on the form
 				'merchantName'       => 'Adyen Test merchant',
@@ -514,9 +512,9 @@ class DropInGateway extends AbstractGateway {
 		);
 
 		// Google Pay.
-		$configuration[ 'googlepay' ] = array(
+		$configuration['googlepay'] = array(
 			// Change this to PRODUCTION when you're ready to accept live Google Pay payments
-			'environment' => 'TEST',
+			'environment'   => 'TEST',
 
 			'configuration' => array(
 				// Your Adyen merchant or company account name. Remove this field in TEST.
@@ -528,7 +526,7 @@ class DropInGateway extends AbstractGateway {
 		);
 
 		// Boleto Bancário.
-		$configuration[ 'boletobancario ' ] = array(
+		$configuration['boletobancario '] = array(
 			// Turn personal details section on/off.
 			'personalDetailsRequired' => true,
 

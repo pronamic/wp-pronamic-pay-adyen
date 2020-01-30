@@ -50,7 +50,7 @@ class PaymentsController {
 				'methods'  => 'POST',
 				'callback' => array( $this, 'rest_api_adyen_payments' ),
 				'args'     => array(
-					'payment_id'  => array(
+					'payment_id' => array(
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
 					),
@@ -66,7 +66,7 @@ class PaymentsController {
 				'methods'  => 'POST',
 				'callback' => array( $this, 'rest_api_adyen_payment_details' ),
 				'args'     => array(
-					'payment_id'  => array(
+					'payment_id' => array(
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
 					),
@@ -119,7 +119,7 @@ class PaymentsController {
 		// Gateway.
 		$config_id = $payment->get_config_id();
 
-		$gateway   = Plugin::get_gateway( $config_id );
+		$gateway = Plugin::get_gateway( $config_id );
 
 		if ( empty( $gateway ) ) {
 			return new \WP_Error(
@@ -231,7 +231,7 @@ class PaymentsController {
 		// Gateway.
 		$config_id = $payment->get_config_id();
 
-		$gateway   = Plugin::get_gateway( $config_id );
+		$gateway = Plugin::get_gateway( $config_id );
 
 		if ( empty( $gateway ) ) {
 			return new \WP_Error(

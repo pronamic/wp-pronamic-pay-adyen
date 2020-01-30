@@ -39,10 +39,10 @@
 			</div>
 		</div>
 
-        <?php
+		<?php
 
-        wp_print_scripts( 'pronamic-pay-adyen-checkout-drop-in' );
+		wp_print_scripts( 'pronamic-pay-adyen-checkout-drop-in' );
 
-        ?>
+		?>
 	</body>
 </html>

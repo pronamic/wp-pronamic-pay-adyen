@@ -25,7 +25,7 @@ class PaymentMethodTest extends TestCase {
 	 */
 	public function test_payment_method() {
 		$payment_method = new PaymentMethod(
-			(object) array (
+			(object) array(
 				'type' => PaymentMethodType::IDEAL,
 			)
 		);

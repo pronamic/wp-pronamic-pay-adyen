@@ -42,9 +42,9 @@ class DropInGatewayTest extends TestCase {
 				PaymentMethods::BANCONTACT,
 				PaymentMethods::CREDIT_CARD,
 				PaymentMethods::DIRECT_DEBIT,
+				PaymentMethods::EPS,
 				PaymentMethods::GIROPAY,
 				PaymentMethods::IDEAL,
-				PaymentMethods::MAESTRO,
 				PaymentMethods::SOFORT,
 			),
 			$gateway->get_supported_payment_methods()

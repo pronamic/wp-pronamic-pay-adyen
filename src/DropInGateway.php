@@ -475,20 +475,70 @@ class DropInGateway extends AbstractGateway {
 			'name'               => __( 'Credit or debit card', 'pronamic_ideal' ),
 		);
 
-		$payment_result_request = new PaymentResultRequest( $payload );
+		// Apple Pay.
+		$configuration[ 'applepay' ] = array(
+			'configuration' => array(
+				// Name to be displayed on the form
+				'merchantName'       => 'Adyen Test merchant',
 
-		try {
-			$payment_result_response = $this->client->get_payment_result( $payment_result_request );
+				// Your Apple merchant identifier as described in https://developer.apple.com/documentation/apple_pay_on_the_web/applepayrequest/2951611-merchantidentifier
+				'merchantIdentifier' => 'adyen.test.merchant',
+			),
 
-			PaymentResultHelper::update_payment( $payment, $payment_result_response );
-		} catch ( Exception $e ) {
-			$note = sprintf(
-				/* translators: %s: exception message */
-				__( 'Error getting payment result: %s', 'pronamic_ideal' ),
-				$e->getMessage()
-			);
+			/*
+			onValidateMerchant: ( resolve, reject, validationURL ) => {
+				// Call the validation endpoint with validationURL.
+				// Call resolve(MERCHANTSESSION) or reject() to complete merchant validation.
+			}
+			*/
+		);
 
-			$payment->add_note( $note );
-		}
+		// Google Pay.
+		$configuration[ 'googlepay' ] = array(
+			// Change this to PRODUCTION when you're ready to accept live Google Pay payments
+			'environment' => 'TEST',
+
+			'configuration' => array(
+				// Your Adyen merchant or company account name. Remove this field in TEST.
+				'gatewayMerchantId'  => 'YourCompanyOrMerchantAccount',
+
+				// Required for PRODUCTION. Remove this field in TEST. Your Google Merchant ID as described in https://developers.google.com/pay/api/web/guides/test-and-deploy/deploy-production-environment#obtain-your-merchantID
+				'merchantIdentifier' => '12345678910111213141',
+			),
+		);
+
+		// Boleto Bancário.
+		$configuration[ 'boletobancario ' ] = array(
+			// Turn personal details section on/off.
+			'personalDetailsRequired' => true,
+
+			// Turn billing address section on/off.
+			'billingAddressRequired'  => true,
+
+			// Allow shopper to specify their email address.
+			'showEmailAddress'        => true,
+
+			// Optionally pre-fill some fields, here all fields are filled:
+			/*
+			'data'                    => array(
+				'socialSecurityNumber' => '56861752509',
+				'shopperName'          => array(
+					'firstName' => $payment->get_customer()->get_name()->get_first_name(),
+					'lastName'  => $payment->get_customer()->get_name()->get_last_name(),
+				),
+				'billingAddress'       => array(
+					'street'            => 'Rua Funcionarios',
+					'houseNumberOrName' => '952',
+					'city'              => 'São Paulo',
+					'postalCode'        => '04386040',
+					'stateOrProvince'   => 'SP',
+					'country'           => 'BR'
+				),
+				'shopperEmail'         => $payment->get_customer()->get_email(),
+			),
+			*/
+		);
+
+		return (object) $configuration;
 	}
 }

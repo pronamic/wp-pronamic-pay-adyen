@@ -39,10 +39,15 @@ class PaymentMethod extends ResponseObject {
 	/**
 	 * Construct a payment method.
 	 *
-	 * @param string $type Adyen payment method type.
+	 * @param object $payment_method_object Original object.
 	 */
-	public function __construct( $type ) {
-		$this->type = $type;
+	public function __construct( $payment_method_object ) {
+		// Set type.
+		if ( isset( $payment_method_object->type ) ) {
+			$this->type = $payment_method_object->type;
+		}
+
+		$this->set_original_object( $payment_method_object );
 	}
 
 	/**
@@ -74,17 +79,6 @@ class PaymentMethod extends ResponseObject {
 	}
 
 	/**
-	 * Get JSON.
-	 *
-	 * @return object
-	 */
-	public function get_json() {
-		return (object) array(
-			'type' => $this->type,
-		);
-	}
-
-	/**
 	 * Create payment method from object.
 	 *
 	 * @param object $object Object.
@@ -102,7 +96,7 @@ class PaymentMethod extends ResponseObject {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$payment_method = new self( $object->type );
+		$payment_method = new self( $object );
 
 		if ( isset( $object->details ) ) {
 			$payment_method->set_details( $object->details );

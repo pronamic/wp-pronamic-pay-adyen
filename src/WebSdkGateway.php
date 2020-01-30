@@ -106,10 +106,12 @@ class WebSdkGateway extends AbstractGateway {
 		);
 
 		if ( in_array( $payment_method_type, $api_integration_payment_method_types, true ) ) {
-			$payment_method = new PaymentMethod( $payment_method_type );
+			$payment_method = array(
+				'type' => $payment_method_type
+			);
 
 			if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-				$payment_method = new PaymentMethodIDeal( $payment_method_type, (string) $payment->get_issuer() );
+				$payment_method['issuer'] = (string) $payment->get_issuer();
 			}
 
 			// API integration.
@@ -118,7 +120,7 @@ class WebSdkGateway extends AbstractGateway {
 				$this->config->get_merchant_account(),
 				strval( $payment->get_id() ),
 				$payment->get_return_url(),
-				$payment_method
+				new PaymentMethod( (object) $payment_method )
 			);
 
 			$payment_request->set_country_code( $country_code );

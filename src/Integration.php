@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Dependencies\PhpExtensionDependency;
 use Pronamic\WordPress\Pay\Gateways\Common\AbstractIntegration;
 use Pronamic\WordPress\Pay\Util as Pay_Util;
 
@@ -32,6 +33,8 @@ class Integration extends AbstractIntegration {
 	 * Integration constructor.
 	 */
 	public function __construct() {
+		parent::__construct();
+
 		$this->id            = 'adyen';
 		$this->name          = 'Adyen';
 		$this->provider      = 'adyen';
@@ -47,6 +50,11 @@ class Integration extends AbstractIntegration {
 		);
 
 		$this->set_manual_url( __( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ) );
+
+		// Dependencies.
+		$dependencies = $this->get_dependencies();
+
+		$dependencies->add( new PhpExtensionDependency( 'intl' ) );
 
 		// Notifications controller.
 		$notifications_controller = new NotificationsController();

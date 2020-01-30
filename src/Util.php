@@ -43,8 +43,7 @@ class Util {
 	/**
 	 * Get payment country code.
 	 *
-	 * @param Payment $payment
-	 *
+	 * @param Payment $payment Payment.
 	 * @return string
 	 */
 	public static function get_payment_locale( Payment $payment ) {

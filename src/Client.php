@@ -156,6 +156,21 @@ class Client {
 	}
 
 	/**
+	 * Submit additional payment details.
+	 *
+	 * @param PaymentRequest $request Payment request.
+	 *
+	 * @return PaymentDetailsResponse
+	 *
+	 * @throws \Exception Throws error if request fails.
+	 */
+	public function request_payment_details( PaymentDetailsRequest $request ) {
+		$data = $this->send_request( 'v51/payments/details', $request );
+
+		return PaymentDetailsResponse::from_object( $data );
+	}
+
+	/**
 	 * Create payment session.
 	 *
 	 * @param PaymentSessionRequest $request Payment session request.

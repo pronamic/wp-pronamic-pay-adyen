@@ -83,7 +83,13 @@ class PaymentMethodsResponse extends ResponseObject {
 			$payment_methods[] = PaymentMethod::from_object( $payment_method_object );
 		}
 
-		$response = new self( $object->groups, $payment_methods );
+		$groups = array();
+
+		if ( isset( $object->groups ) ) {
+			$groups = $object->groups;
+		}
+
+		$response = new self( $groups, $payment_methods );
 
 		$response->set_original_object( $object );
 

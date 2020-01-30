@@ -107,12 +107,12 @@ class PaymentsController {
 		}
 
 		// State data.
-		$data = \json_decode( \file_get_contents( 'php://input' ) );
+		$data = \json_decode( $request->get_body() );
 
 		if ( null === $data ) {
 			return new \WP_Error(
 				'pronamic-pay-adyen-no-data',
-				__( 'No state data given in request body.', 'pronamic_ideal' )
+				__( 'No data given in request body.', 'pronamic_ideal' )
 			);
 		}
 

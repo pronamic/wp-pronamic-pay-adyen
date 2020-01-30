@@ -93,6 +93,7 @@ class DropInGateway extends AbstractGateway {
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
 		 */
 		$api_integration_payment_method_types = array(
+			PaymentMethodType::ALIPAY,
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,
 		);
@@ -104,60 +105,27 @@ class DropInGateway extends AbstractGateway {
 			return;
 		}
 
-		$payment_method = new PaymentMethod( $payment_method_type );
-
-		if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-			$payment_method = new PaymentMethodIDeal( $payment_method_type, (string) $payment->get_issuer() );
-		}
-
-		// Amount.
-		try {
-			$amount = AmountTransformer::transform( $payment->get_total_amount() );
-		} catch ( InvalidArgumentException $e ) {
-			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
-
-			return;
-		}
-
-		// Country.
-		$locale = Util::get_payment_locale( $payment );
-
-		$country_code = Locale::getRegion( $locale );
-
-		// Set country from billing address.
-		$billing_address = $payment->get_billing_address();
-
-		if ( null !== $billing_address ) {
-			$country = $billing_address->get_country_code();
-
-			if ( ! empty( $country ) ) {
-				$country_code = $country;
-			}
-		}
-
-		// API integration.
-		$payment_request = new PaymentRequest(
-			$amount,
-			$this->config->get_merchant_account(),
-			strval( $payment->get_id() ),
-			$payment->get_return_url(),
-			$payment_method
+		// Payment method.
+		$payment_method = array(
+			'type' => $payment_method_type,
 		);
 
-		$payment_request->set_country_code( $country_code );
+		if ( PaymentMethodType::IDEAL === $payment_method_type ) {
+			$payment_method['issuer'] = (string) $payment->get_issuer();
+		}
 
-		PaymentRequestHelper::complement( $payment, $payment_request );
+		$payment_method = new PaymentMethod( (object) $payment_method );
 
-		try {
-			$payment_response = $this->client->create_payment( $payment_request );
-		} catch ( Exception $e ) {
-			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
+		// Create payment.
+		$payment_response = $this->create_payment( $payment, $payment_method );
+
+		if ( $payment_response instanceof \WP_Error ) {
+			$this->error = $payment_response;
 
 			return;
 		}
 
-		$payment->set_transaction_id( $payment_response->get_psp_reference() );
-
+		// Set payment action URL.
 		$redirect = $payment_response->get_redirect();
 
 		if ( null !== $redirect ) {
@@ -316,12 +284,11 @@ class DropInGateway extends AbstractGateway {
 			$payment_method
 		);
 
-		// Country.
+		// Set country code.
 		$locale = Util::get_payment_locale( $payment );
 
 		$country_code = \Locale::getRegion( $locale );
 
-		// Set country from billing address.
 		$billing_address = $payment->get_billing_address();
 
 		if ( null !== $billing_address ) {
@@ -334,6 +301,7 @@ class DropInGateway extends AbstractGateway {
 
 		$payment_request->set_country_code( $country_code );
 
+		// Complement payment request.
 		PaymentRequestHelper::complement( $payment, $payment_request );
 
 		// Create payment.
@@ -342,6 +310,16 @@ class DropInGateway extends AbstractGateway {
 		} catch ( \Exception $e ) {
 			return new \WP_Error( 'adyen_error', $e->getMessage() );
 		}
+
+		/*
+		 * Store payment response for later requests to `/payments/details`.
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments/details
+		 */
+		$payment->set_meta( 'adyen_payment_response', $payment_response->get_json() );
+
+		// Update payment status based on response.
+		PaymentResponseHelper::update_payment( $payment, $payment_response );
 
 		return $payment_response;
 	}

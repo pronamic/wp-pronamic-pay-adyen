@@ -97,6 +97,7 @@ class PaymentResponse extends ResponseObject {
 	 * Set details.
 	 *
 	 * @param array|null $details Details.
+	 * @return void
 	 */
 	public function set_details( $details ) {
 		$this->details = $details;
@@ -115,6 +116,7 @@ class PaymentResponse extends ResponseObject {
 	 * Set payment data.
 	 *
 	 * @param string $payment_data Payment data.
+	 * @return void
 	 */
 	public function set_payment_data( $payment_data ) {
 		$this->payment_data = $payment_data;
@@ -161,6 +163,7 @@ class PaymentResponse extends ResponseObject {
 	 * Set refusal reason.
 	 *
 	 * @param string|null $refusal_reason Refusal reason.
+	 * @return void
 	 */
 	public function set_refusal_reason( $refusal_reason ) {
 		$this->refusal_reason = $refusal_reason;

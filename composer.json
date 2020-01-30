@@ -36,7 +36,7 @@
 		"ext-intl": "*",
 		"justinrainbow/json-schema": "^5.2",
 		"pronamic/wp-money": "^1.2",
-		"wp-pay/core": "^2.2"
+		"wp-pay/core": "dev-develop as 2.2.7"
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",

@@ -15,6 +15,7 @@ use InvalidArgumentException;
 use Locale;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Plugin;
@@ -277,6 +278,104 @@ class DropInGateway extends AbstractGateway {
 		wp_print_scripts( 'pronamic-pay-adyen-checkout' );
 
 		wp_print_styles( 'pronamic-pay-adyen-checkout' );
+	}
+
+	/**
+	 * Update status of the specified payment.
+	 *
+	 * @param Payment $payment Payment.
+	 *
+	 * @return void
+	 */
+	public function update_status( Payment $payment ) {
+		// Process payload on return.
+		if ( filter_has_var( INPUT_GET, 'payload' ) ) {
+			$payload = filter_input( INPUT_GET, 'payload', FILTER_SANITIZE_STRING );
+
+			$payment_result_request = new PaymentResultRequest( $payload );
+
+			try {
+				$payment_result_response = $this->client->get_payment_result( $payment_result_request );
+
+				PaymentResultHelper::update_payment( $payment, $payment_result_response );
+			} catch ( \Exception $e ) {
+				$note = sprintf(
+				/* translators: %s: exception message */
+					__( 'Error getting payment result: %s', 'pronamic_ideal' ),
+					$e->getMessage()
+				);
+
+				$payment->add_note( $note );
+			}
+
+			return;
+		}
+
+		// Retrieve status from payment details.
+		$payment_response = $payment->get_meta( 'adyen_payment_response' );
+
+		if ( '' !== $payment_response ) {
+			$payment_response = PaymentResponse::from_object( $payment_response );
+
+			$details_result = $payment->get_meta( 'adyen_details_result' );
+
+			// JSON decode details result meta.
+			if ( '' !== $details_result ) {
+				$details_result = \json_decode( $details_result );
+			}
+
+			// Set details result meta from GET or POST request parameters.
+			if ( '' === $details_result ) {
+				$details_result = array();
+
+				$details = $payment_response->get_details();
+
+				if ( null !== $details ) {
+					$input_type = ( 'POST' === Server::get( 'REQUEST_METHOD' ) ? INPUT_POST : INPUT_GET );
+
+					foreach ( $details as $detail ) {
+						$key = $detail->get_key();
+
+						$details_result[ $key ] = \filter_input( $input_type, $key, FILTER_SANITIZE_STRING );
+					}
+
+					$details_result = Util::filter_null( $details_result );
+
+					$details_result = (object) $details_result;
+
+					if ( ! empty( $details_result ) ) {
+						$payment->set_meta( 'adyen_details_result', \wp_json_encode( $details_result ) );
+					}
+				}
+			}
+
+			$payment_data = $payment_response->get_payment_data();
+
+			// Do not attempt to retrieve status without any request data,
+			// payment status already updated when additional details were submitted (i.e. cards).
+			if ( empty( $details_result ) && empty( $payment_data ) ) {
+				return;
+			}
+
+			// Update payment status from payment details.
+			$payment_details_request = new PaymentDetailsRequest( $details_result );
+
+			$payment_details_request->set_payment_data( $payment_data );
+
+			try {
+				$payment_details_response = $this->client->request_payment_details( $payment_details_request );
+
+				PaymentResponseHelper::update_payment( $payment, $payment_details_response );
+			} catch ( \Exception $e ) {
+				$note = sprintf(
+					/* translators: %s: exception message */
+					__( 'Error getting payment details: %s', 'pronamic_ideal' ),
+					$e->getMessage()
+				);
+
+				$payment->add_note( $note );
+			}
+		}
 	}
 
 	/**

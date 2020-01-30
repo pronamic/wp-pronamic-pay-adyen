@@ -62,6 +62,13 @@ class PaymentResponse extends ResponseObject {
 	private $payment_data;
 
 	/**
+	 * Refusal reason.
+	 *
+	 * @var string
+	 */
+	private $refusal_reason;
+
+	/**
 	 * The result of the payment.
 	 *
 	 * @var string
@@ -142,6 +149,24 @@ class PaymentResponse extends ResponseObject {
 	}
 
 	/**
+	 * Get refusal reason.
+	 *
+	 * @return string
+	 */
+	public function get_refusal_reason() {
+		return $this->refusal_reason;
+	}
+
+	/**
+	 * Set refusal reason.
+	 *
+	 * @param string $refusal_reason Refusal reason.
+	 */
+	public function set_refusal_reason( $refusal_reason ) {
+		$this->refusal_reason = $refusal_reason;
+	}
+
+	/**
 	 * Get redirect.
 	 *
 	 * @return RedirectInformation|null
@@ -219,6 +244,10 @@ class PaymentResponse extends ResponseObject {
 			$payment_response->set_details( $details );
 		}
 
+		if ( isset( $object->refusalReason ) ) {
+			$payment_response->set_refusal_reason( $object->refusalReason );
+		}
+
 		if ( isset( $object->redirect ) ) {
 			$payment_response->set_redirect( RedirectInformation::from_object( $object->redirect ) );
 		}
@@ -238,13 +267,24 @@ class PaymentResponse extends ResponseObject {
 	 * @return object
 	 */
 	public function get_json() {
-		$properties = Util::filter_null(
-			array(
-				'redirect'    => $this->get_redirect()->get_json(),
-				'resultCode'  => $this->get_result_code(),
-				'paymentData' => $this->get_payment_data(),
-			)
+		$properties      = array(
+			'refusalReason' => $this->get_refusal_reason(),
+			'redirect'      => ( null === $this->get_redirect() ? null : $this->get_redirect()->get_json() ),
+			'resultCode'    => $this->get_result_code(),
+			'paymentData'   => $this->get_payment_data(),
 		);
+
+		if ( null !== $this->get_details() ) {
+			$details = array();
+
+			foreach ( $this->get_details() as $detail ) {
+				$details[] = $detail->get_json();
+			}
+
+			$properties['details'] = $details;
+		}
+
+		$properties = Util::filter_null( $properties );
 
 		$object = (object) $properties;
 

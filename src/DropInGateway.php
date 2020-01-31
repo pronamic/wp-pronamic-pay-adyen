@@ -141,7 +141,7 @@ class DropInGateway extends AbstractGateway {
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
 		// Only show drop-in checkout page if payment method does not redirect.
-		if ( '' !== $payment_response ) {
+		if ( is_object( $payment_response ) ) {
 			$payment_response = PaymentResponse::from_object( $payment_response );
 
 			$redirect = $payment_response->get_redirect();
@@ -162,7 +162,7 @@ class DropInGateway extends AbstractGateway {
 			'pronamic-pay-adyen-checkout',
 			$url_script,
 			array(),
-			null,
+			self::SDK_VERSION,
 			false
 		);
 
@@ -170,7 +170,7 @@ class DropInGateway extends AbstractGateway {
 			'pronamic-pay-adyen-checkout-drop-in',
 			plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
 			array( 'pronamic-pay-adyen-checkout' ),
-			null,
+			\pronamic_pay_plugin()->get_version(),
 			true
 		);
 
@@ -310,13 +310,13 @@ class DropInGateway extends AbstractGateway {
 		// Retrieve status from payment details.
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
-		if ( '' !== $payment_response ) {
+		if ( is_string( $payment_response ) && '' !== $payment_response ) {
 			$payment_response = PaymentResponse::from_object( $payment_response );
 
 			$details_result = $payment->get_meta( 'adyen_details_result' );
 
 			// JSON decode details result meta.
-			if ( '' !== $details_result ) {
+			if ( is_string( $details_result ) && '' !== $details_result ) {
 				$details_result = \json_decode( $details_result );
 			}
 
@@ -354,7 +354,9 @@ class DropInGateway extends AbstractGateway {
 			}
 
 			// Update payment status from payment details.
-			$payment_details_request = new PaymentDetailsRequest( $details_result );
+			$payment_details_request = new PaymentDetailsRequest();
+
+			$payment_details_request->set_details( $details_result );
 
 			$payment_details_request->set_payment_data( $payment_data );
 
@@ -463,12 +465,11 @@ class DropInGateway extends AbstractGateway {
 	/**
 	 * Send payment details.
 	 *
-	 * @param Payment               $payment                 Payment.
 	 * @param PaymentDetailsRequest $payment_details_request Payment details request.
 	 *
-	 * @throws \Exception
+	 * @throws \Exception Throws error if request fails.
 	 */
-	public function send_payment_details( Payment $payment, PaymentDetailsRequest $payment_details_request ) {
+	public function send_payment_details( PaymentDetailsRequest $payment_details_request ) {
 		$payment_response = $this->client->request_payment_details( $payment_details_request );
 
 		return $payment_response;
@@ -493,68 +494,11 @@ class DropInGateway extends AbstractGateway {
 			'name'               => __( 'Credit or debit card', 'pronamic_ideal' ),
 		);
 
-		// Apple Pay.
-		$configuration['applepay'] = array(
-			'configuration' => array(
-				// Name to be displayed on the form
-				'merchantName'       => 'Adyen Test merchant',
-
-				// Your Apple merchant identifier as described in https://developer.apple.com/documentation/apple_pay_on_the_web/applepayrequest/2951611-merchantidentifier
-				'merchantIdentifier' => 'adyen.test.merchant',
-			),
-
-			/*
-			onValidateMerchant: ( resolve, reject, validationURL ) => {
-				// Call the validation endpoint with validationURL.
-				// Call resolve(MERCHANTSESSION) or reject() to complete merchant validation.
-			}
-			*/
-		);
-
-		// Google Pay.
-		$configuration['googlepay'] = array(
-			// Change this to PRODUCTION when you're ready to accept live Google Pay payments
-			'environment'   => 'TEST',
-
-			'configuration' => array(
-				// Your Adyen merchant or company account name. Remove this field in TEST.
-				'gatewayMerchantId'  => 'YourCompanyOrMerchantAccount',
-
-				// Required for PRODUCTION. Remove this field in TEST. Your Google Merchant ID as described in https://developers.google.com/pay/api/web/guides/test-and-deploy/deploy-production-environment#obtain-your-merchantID
-				'merchantIdentifier' => '12345678910111213141',
-			),
-		);
-
 		// Boleto Bancário.
 		$configuration['boletobancario '] = array(
-			// Turn personal details section on/off.
 			'personalDetailsRequired' => true,
-
-			// Turn billing address section on/off.
 			'billingAddressRequired'  => true,
-
-			// Allow shopper to specify their email address.
 			'showEmailAddress'        => true,
-
-			// Optionally pre-fill some fields, here all fields are filled:
-			/*
-			'data'                    => array(
-				'socialSecurityNumber' => '56861752509',
-				'shopperName'          => array(
-					'firstName' => $payment->get_customer()->get_name()->get_first_name(),
-					'lastName'  => $payment->get_customer()->get_name()->get_last_name(),
-				),
-				'billingAddress'       => array(
-					'street'            => 'Rua Funcionarios',
-					'houseNumberOrName' => '952',
-					'city'              => 'São Paulo',
-					'postalCode'        => '04386040',
-					'stateOrProvince'   => 'SP',
-					'country'           => 'BR'
-				),
-				'shopperEmail'         => $payment->get_customer()->get_email(),
-			),
-			*/
 		);
 
 		return (object) $configuration;

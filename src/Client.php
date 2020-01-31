@@ -158,16 +158,16 @@ class Client {
 	/**
 	 * Submit additional payment details.
 	 *
-	 * @param PaymentRequest $request Payment request.
+	 * @param PaymentDetailsRequest $request Payment request.
 	 *
-	 * @return PaymentDetailsResponse
+	 * @return PaymentResponse
 	 *
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function request_payment_details( PaymentDetailsRequest $request ) {
 		$data = $this->send_request( 'v51/payments/details', $request );
 
-		return PaymentDetailsResponse::from_object( $data );
+		return PaymentResponse::from_object( $data );
 	}
 
 	/**
@@ -205,6 +205,9 @@ class Client {
 	 *
 	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/paymentMethods
 	 * @link https://docs.adyen.com/checkout/drop-in-web#step-1-get-available-payment-methods
+	 *
+	 * @param PaymentMethodsRequest $request Payment methods request.
+	 *
 	 * @return PaymentMethodsResponse
 	 * @throws \Exception Throws error if request fails.
 	 */

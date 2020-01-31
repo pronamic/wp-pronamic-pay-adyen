@@ -146,6 +146,7 @@ class PaymentsController {
 		}
 
 		// Create payment.
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		if ( ! isset( $data->paymentMethod->type ) ) {
 			return new \WP_Error(
 				'pronamic-pay-adyen-no-payment-method',
@@ -153,6 +154,7 @@ class PaymentsController {
 			);
 		}
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		$payment_method = PaymentMethod::from_object( $data->paymentMethod );
 
 		try {
@@ -257,7 +259,7 @@ class PaymentsController {
 			);
 		}
 
-		// Send additional details.
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		if ( ! isset( $data->paymentMethod->type ) ) {
 			return new \WP_Error(
 				'pronamic-pay-adyen-no-payment-method',
@@ -265,13 +267,13 @@ class PaymentsController {
 			);
 		}
 
-		// Payment details request.
+		// Send additional payment details.
 		$payment_details_request = new PaymentDetailsRequest();
 
 		$payment_details_request->set_payment_data( $data );
 
 		try {
-			$response = $gateway->send_payment_details( $payment, $payment_details_request );
+			$response = $gateway->send_payment_details( $payment_details_request );
 
 			// Update payment status based on response.
 			PaymentResponseHelper::update_payment( $payment, $response );

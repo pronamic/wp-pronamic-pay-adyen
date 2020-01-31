@@ -23,30 +23,21 @@ class PaymentDetailsRequest extends Request {
 	/**
 	 * Use this collection to submit the details that were returned as a result of the /payments call.
 	 *
-	 * @var object
+	 * @var object|null
 	 */
 	private $details;
 
 	/**
 	 * The paymentData value that you received in the response to the /payments call.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $payment_data;
 
 	/**
-	 * Construct a payment details request object.
-	 *
-	 * @param object $details Details.
-	 */
-	public function __construct( $details ) {
-		$this->details = $details;
-	}
-
-	/**
 	 * Get details.
 	 *
-	 * @return object
+	 * @return object|null
 	 */
 	public function get_details() {
 		return $this->details;
@@ -65,7 +56,7 @@ class PaymentDetailsRequest extends Request {
 	/**
 	 * Get payment data.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_payment_data() {
 		return $this->payment_data;

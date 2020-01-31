@@ -230,6 +230,8 @@ class ActionInformation extends ResponseObject {
 
 		$action = new self();
 
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+
 		if ( isset( $object->data ) ) {
 			$action->set_data( $object->data );
 		}
@@ -257,6 +259,8 @@ class ActionInformation extends ResponseObject {
 		if ( isset( $object->url ) ) {
 			$action->set_url( $object->url );
 		}
+
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		return $action;
 	}

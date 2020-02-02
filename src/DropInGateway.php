@@ -138,10 +138,19 @@ class DropInGateway extends AbstractGateway {
 	 * @return void
 	 */
 	public function payment_redirect( Payment $payment ) {
+		// Check payment ID.
+		$payment_id = $payment->get_id();
+
+		if ( null === $payment_id ) {
+			return;
+		}
+
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
 		// Only show drop-in checkout page if payment method does not redirect.
-		if ( is_object( $payment_response ) ) {
+		if ( is_string( $payment_response ) && '' !== $payment_response ) {
+			$payment_response = \json_decode( $payment_response );
+
 			$payment_response = PaymentResponse::from_object( $payment_response );
 
 			$redirect = $payment_response->get_redirect();
@@ -197,7 +206,9 @@ class DropInGateway extends AbstractGateway {
 			// Payment method type.
 			$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
 
-			$request->set_allowed_payment_methods( array( $payment_method_type ) );
+			if ( null !== $payment_method_type ) {
+				$request->set_allowed_payment_methods( array( $payment_method_type ) );
+			}
 		}
 
 		$locale = Util::get_payment_locale( $payment );
@@ -242,7 +253,7 @@ class DropInGateway extends AbstractGateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			array(
-				'paymentsUrl'        => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment->get_id() ),
+				'paymentsUrl'        => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
 				'paymentsDetailsUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' ),
 				'paymentReturnUrl'   => $payment->get_return_url(),
 				'configuration'      => $configuration,
@@ -311,6 +322,8 @@ class DropInGateway extends AbstractGateway {
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
 		if ( is_string( $payment_response ) && '' !== $payment_response ) {
+			$payment_response = \json_decode( $payment_response );
+
 			$payment_response = PaymentResponse::from_object( $payment_response );
 
 			$details_result = $payment->get_meta( 'adyen_details_result' );
@@ -330,18 +343,16 @@ class DropInGateway extends AbstractGateway {
 					$input_type = ( 'POST' === Server::get( 'REQUEST_METHOD' ) ? INPUT_POST : INPUT_GET );
 
 					foreach ( $details as $detail ) {
-						$key = $detail->get_key();
+						$key = (string) $detail->get_key();
 
 						$details_result[ $key ] = \filter_input( $input_type, $key, FILTER_SANITIZE_STRING );
 					}
 
 					$details_result = Util::filter_null( $details_result );
+				}
 
-					$details_result = (object) $details_result;
-
-					if ( ! empty( $details_result ) ) {
-						$payment->set_meta( 'adyen_details_result', \wp_json_encode( $details_result ) );
-					}
+				if ( ! empty( $details_result ) ) {
+					$payment->set_meta( 'adyen_details_result', \wp_json_encode( (object) $details_result ) );
 				}
 			}
 
@@ -356,7 +367,7 @@ class DropInGateway extends AbstractGateway {
 			// Update payment status from payment details.
 			$payment_details_request = new PaymentDetailsRequest();
 
-			$payment_details_request->set_details( $details_result );
+			$payment_details_request->set_details( (object) $details_result );
 
 			$payment_details_request->set_payment_data( $payment_data );
 
@@ -467,6 +478,7 @@ class DropInGateway extends AbstractGateway {
 	 *
 	 * @param PaymentDetailsRequest $payment_details_request Payment details request.
 	 *
+	 * @return PaymentResponse
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function send_payment_details( PaymentDetailsRequest $payment_details_request ) {

@@ -64,7 +64,13 @@ abstract class AbstractGateway extends Core_Gateway {
 		}
 
 		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
-			$core_payment_method = PaymentMethodType::to_wp( $payment_method->get_type() );
+			$type = $payment_method->get_type();
+
+			if ( null === $type ) {
+				continue;
+			}
+
+			$core_payment_method = PaymentMethodType::to_wp( $type );
 
 			$core_payment_methods[] = $core_payment_method;
 		}

@@ -23,27 +23,21 @@ class DetailsInformation extends ResponseObject {
 	/**
 	 * The value to provide in the result.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $key;
 
 	/**
 	 * The type of the required input.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $type;
 
 	/**
-	 * Construct action information.
-	 */
-	public function __construct() {
-	}
-
-	/**
 	 * Get key.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_key() {
 		return $this->key;
@@ -52,7 +46,7 @@ class DetailsInformation extends ResponseObject {
 	/**
 	 * Set key.
 	 *
-	 * @param string $key Key.
+	 * @param string|null $key Key.
 	 * @return void
 	 */
 	public function set_key( $key ) {
@@ -62,7 +56,7 @@ class DetailsInformation extends ResponseObject {
 	/**
 	 * Get type.
 	 *
-	 * @return mixed
+	 * @return string|null
 	 */
 	public function get_type() {
 		return $this->type;
@@ -71,7 +65,7 @@ class DetailsInformation extends ResponseObject {
 	/**
 	 * Set type.
 	 *
-	 * @param mixed $type Type.
+	 * @param string|null $type Type.
 	 * @return void
 	 */
 	public function set_type( $type ) {

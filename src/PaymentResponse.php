@@ -57,7 +57,7 @@ class PaymentResponse extends ResponseObject {
 	/**
 	 * Payment data.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $payment_data;
 
@@ -96,7 +96,7 @@ class PaymentResponse extends ResponseObject {
 	/**
 	 * Set details.
 	 *
-	 * @param array|null $details Details.
+	 * @param array<int, DetailsInformation>|null $details Details.
 	 * @return void
 	 */
 	public function set_details( $details ) {
@@ -106,7 +106,7 @@ class PaymentResponse extends ResponseObject {
 	/**
 	 * Get payment data.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_payment_data() {
 		return $this->payment_data;
@@ -115,7 +115,7 @@ class PaymentResponse extends ResponseObject {
 	/**
 	 * Set payment data.
 	 *
-	 * @param string $payment_data Payment data.
+	 * @param string|null $payment_data Payment data.
 	 * @return void
 	 */
 	public function set_payment_data( $payment_data ) {
@@ -270,21 +270,30 @@ class PaymentResponse extends ResponseObject {
 	 * @return object
 	 */
 	public function get_json() {
+		// Redirect.
+		$redirect = $this->get_redirect();
+
+		if ( null !== $redirect ) {
+			$redirect = $redirect->get_json();
+		}
+
+		// Properties.
 		$properties = array(
 			'refusalReason' => $this->get_refusal_reason(),
-			'redirect'      => ( null === $this->get_redirect() ? null : $this->get_redirect()->get_json() ),
+			'redirect'      => $redirect,
 			'resultCode'    => $this->get_result_code(),
 			'paymentData'   => $this->get_payment_data(),
 		);
 
-		if ( null !== $this->get_details() ) {
-			$details = array();
+		// Details.
+		$details = $this->get_details();
 
-			foreach ( $this->get_details() as $detail ) {
-				$details[] = $detail->get_json();
+		if ( null !== $details ) {
+			$properties['details'] = array();
+
+			foreach ( $details as $detail ) {
+				$properties['details'][] = $detail->get_json();
 			}
-
-			$properties['details'] = $details;
 		}
 
 		$properties = Util::filter_null( $properties );

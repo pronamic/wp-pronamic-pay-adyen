@@ -25,7 +25,7 @@ class PaymentMethod extends ResponseObject {
 	/**
 	 * Type.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $type;
 
@@ -53,7 +53,7 @@ class PaymentMethod extends ResponseObject {
 	/**
 	 * Get type.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_type() {
 		return $this->type;

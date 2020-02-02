@@ -23,7 +23,7 @@ class PaymentMethodsRequest extends Request {
 	/**
 	 * Allowed payment methods.
 	 *
-	 * @var array|null
+	 * @var array<int, string>|null
 	 */
 	private $allowed_payment_methods;
 
@@ -69,7 +69,7 @@ class PaymentMethodsRequest extends Request {
 	/**
 	 * Set allowed payment methods.
 	 *
-	 * @param array $allowed_payment_methods Allowed payment methods.
+	 * @param array<int, string> $allowed_payment_methods Allowed payment methods.
 	 * @return void
 	 */
 	public function set_allowed_payment_methods( $allowed_payment_methods ) {
@@ -128,8 +128,11 @@ class PaymentMethodsRequest extends Request {
 			)
 		);
 
-		if ( null !== $this->get_amount() ) {
-			$properties['amount'] = $this->get_amount()->get_json();
+		// Amount.
+		$amount = $this->get_amount();
+
+		if ( null !== $amount ) {
+			$properties['amount'] = $amount->get_json();
 		}
 
 		// Return object.

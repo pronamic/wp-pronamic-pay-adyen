@@ -32,50 +32,44 @@ class ActionInformation extends ResponseObject {
 	 *
 	 * Possible values: GET, POST.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $method;
 
 	/**
 	 * When non-empty, contains a value that you must submit to the /payments/details endpoint. In some cases, required for polling.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $payment_data;
 
 	/**
 	 * Specifies the payment method.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $payment_method_type;
 
 	/**
 	 * A token to pass to the 3DS2 Component to get the fingerprint/challenge.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $token;
 
 	/**
 	 * Enum that specifies the action that needs to be taken by the client.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $type;
 
 	/**
 	 * The URL, to which you must redirect a shopper to complete a payment
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $url;
-
-	/**
-	 * Construct action information.
-	 */
-	public function __construct() {
-	}
 
 	/**
 	 * Get data.
@@ -99,7 +93,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Get method.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_method() {
 		return $this->method;
@@ -108,7 +102,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Set method.
 	 *
-	 * @param string $method Method.
+	 * @param string|null $method Method.
 	 * @return void
 	 */
 	public function set_method( $method ) {
@@ -118,7 +112,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Get payment data.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_payment_data() {
 		return $this->payment_data;
@@ -127,7 +121,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Set payment data.
 	 *
-	 * @param string $payment_data Payment data.
+	 * @param string|null $payment_data Payment data.
 	 * @return void
 	 */
 	public function set_payment_data( $payment_data ) {
@@ -137,7 +131,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Get payment method type.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_payment_method_type() {
 		return $this->payment_method_type;
@@ -146,7 +140,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Set payment method type.
 	 *
-	 * @param string $payment_method_type Payment method type.
+	 * @param string|null $payment_method_type Payment method type.
 	 * @return void
 	 */
 	public function set_payment_method_type( $payment_method_type ) {
@@ -156,7 +150,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Get token.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_token() {
 		return $this->token;
@@ -165,7 +159,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Set token.
 	 *
-	 * @param string $token Token.
+	 * @param string|null $token Token.
 	 * @return void
 	 */
 	public function set_token( $token ) {
@@ -175,7 +169,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Get type.
 	 *
-	 * @return mixed
+	 * @return string|null
 	 */
 	public function get_type() {
 		return $this->type;
@@ -184,7 +178,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Set type.
 	 *
-	 * @param mixed $type Type.
+	 * @param string|null $type Type.
 	 * @return void
 	 */
 	public function set_type( $type ) {
@@ -194,7 +188,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Get URL.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_url() {
 		return $this->url;
@@ -203,7 +197,7 @@ class ActionInformation extends ResponseObject {
 	/**
 	 * Set URL.
 	 *
-	 * @param string $url URL.
+	 * @param string|null $url URL.
 	 * @return void
 	 */
 	public function set_url( $url ) {

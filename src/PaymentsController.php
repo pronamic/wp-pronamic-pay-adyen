@@ -119,6 +119,13 @@ class PaymentsController {
 		// Gateway.
 		$config_id = $payment->get_config_id();
 
+		if ( null === $config_id ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-config',
+				__( 'No gateway configuration ID given in payment.', 'pronamic_ideal' )
+			);
+		}
+
 		$gateway = Plugin::get_gateway( $config_id );
 
 		if ( empty( $gateway ) ) {
@@ -158,6 +165,12 @@ class PaymentsController {
 		$payment_method = PaymentMethod::from_object( $data->paymentMethod );
 
 		try {
+			if ( ! \is_callable( array( $gateway, 'create_payment' ) ) ) {
+				return (object) array(
+					'error' => __( 'Gateway does not support method to create payment.', 'pronamic_ideal' ),
+				);
+			}
+
 			$response = $gateway->create_payment( $payment, $payment_method );
 		} catch ( \Exception $e ) {
 			return (object) array(
@@ -233,6 +246,13 @@ class PaymentsController {
 		// Gateway.
 		$config_id = $payment->get_config_id();
 
+		if ( null === $config_id ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-config',
+				__( 'No gateway configuration ID given in payment.', 'pronamic_ideal' )
+			);
+		}
+
 		$gateway = Plugin::get_gateway( $config_id );
 
 		if ( empty( $gateway ) ) {
@@ -270,9 +290,26 @@ class PaymentsController {
 		// Send additional payment details.
 		$payment_details_request = new PaymentDetailsRequest();
 
-		$payment_details_request->set_payment_data( $data );
+		// Set payment data from original payment response.
+		$payment_response = $payment->get_meta( 'adyen_payment_response' );
+
+		if ( is_string( $payment_response ) && '' !== $payment_response ) {
+			$payment_response = \json_decode( $payment_response );
+
+			$payment_response = PaymentResponse::from_object( $payment_response );
+
+			$payment_data = $payment_response->get_payment_data();
+
+			$payment_details_request->set_payment_data( $payment_data );
+		}
 
 		try {
+			if ( ! \is_callable( array( $gateway, 'send_payment_details' ) ) ) {
+				return (object) array(
+					'error' => __( 'Gateway does not support sending additional payment details.', 'pronamic_ideal' ),
+				);
+			}
+
 			$response = $gateway->send_payment_details( $payment_details_request );
 
 			// Update payment status based on response.

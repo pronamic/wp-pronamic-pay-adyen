@@ -116,12 +116,6 @@ class DropInGateway extends AbstractGateway {
 		// Create payment.
 		$payment_response = $this->create_payment( $payment, $payment_method );
 
-		if ( $payment_response instanceof \WP_Error ) {
-			$this->error = $payment_response;
-
-			return;
-		}
-
 		// Set payment action URL.
 		$redirect = $payment_response->get_redirect();
 
@@ -393,15 +387,12 @@ class DropInGateway extends AbstractGateway {
 	 * @param Payment       $payment        Payment.
 	 * @param PaymentMethod $payment_method Payment method.
 	 *
-	 * @return \WP_Error|PaymentResponse
+	 * @return PaymentResponse
+	 * @throws \InvalidArgumentException Throws exception on invalid amount.
+	 * @throws \Exception Throws exception if payment creation request fails.
 	 */
 	public function create_payment( Payment $payment, PaymentMethod $payment_method ) {
-		// Amount.
-		try {
-			$amount = AmountTransformer::transform( $payment->get_total_amount() );
-		} catch ( \InvalidArgumentException $e ) {
-			return new \WP_Error( 'adyen_error', $e->getMessage() );
-		}
+		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment request.
 		$payment_request = new PaymentRequest(
@@ -454,11 +445,7 @@ class DropInGateway extends AbstractGateway {
 		PaymentRequestHelper::complement( $payment, $payment_request );
 
 		// Create payment.
-		try {
-			$payment_response = $this->client->create_payment( $payment_request );
-		} catch ( \Exception $e ) {
-			return new \WP_Error( 'adyen_error', $e->getMessage() );
-		}
+		$payment_response = $this->client->create_payment( $payment_request );
 
 		/*
 		 * Store payment response for later requests to `/payments/details`.

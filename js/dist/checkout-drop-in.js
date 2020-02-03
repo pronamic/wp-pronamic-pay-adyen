@@ -53,7 +53,7 @@
         throw Error(error);
       });
     }
-  }).mount('#pronamic-pay-adyen-drop-in');
+  }).mount('#pronamic-pay-checkout');
 
   var send_request = function send_request(url, data) {
     return fetch(url, {
@@ -148,3 +148,4 @@
     }
   };
 })();
+//# sourceMappingURL=checkout-drop-in.js.map

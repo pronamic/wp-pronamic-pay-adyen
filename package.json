@@ -32,7 +32,7 @@
   },
   "homepage": "http://www.wp-pay.org/gateways/adyen/",
   "scripts": {
-    "babel": "babel ./js/src -d ./js/dist"
+    "babel": "babel ./js/src -d ./js/dist --source-maps"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",

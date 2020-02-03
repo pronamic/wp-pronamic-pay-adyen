@@ -35,8 +35,8 @@
 	<body>
 		<div class="pronamic-pay-redirect-page">
 			<div class="pronamic-pay-redirect-container alignleft">
-				<div id="pronamic-pay-adyen-drop-in"></div>
-			</div>
+                <div id="pronamic-pay-checkout"></div>
+            </div>
 		</div>
 
 		<?php

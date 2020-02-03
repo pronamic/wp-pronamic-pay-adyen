@@ -3,7 +3,7 @@
  * Abstract payment request
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -30,6 +30,14 @@ abstract class AbstractPaymentRequest extends Request {
 	 * @var Amount
 	 */
 	private $amount;
+
+	/**
+	 * Information about your application.
+	 *
+	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_applicationInfo
+	 * @var ApplicationInfo|null
+	 */
+	private $application_info;
 
 	/**
 	 * Billing address.
@@ -137,6 +145,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * The shopper's reference to uniquely identify this shopper (e.g. user ID or account ID). This field is
 	 * required for recurring payments
 	 *
+	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_shopperReference
 	 * @var string|null
 	 */
 	private $shopper_reference;
@@ -177,6 +186,25 @@ abstract class AbstractPaymentRequest extends Request {
 	 */
 	public function get_amount() {
 		return $this->amount;
+	}
+
+	/**
+	 * Get application info.
+	 *
+	 * @return ApplicationInfo|null
+	 */
+	public function get_application_info() {
+		return $this->application_info;
+	}
+
+	/**
+	 * Set application info.
+	 *
+	 * @param ApplicationInfo|null $application_info Application info.
+	 * @return void
+	 */
+	public function set_application_info( $application_info ) {
+		$this->application_info = $application_info;
 	}
 
 	/**
@@ -484,6 +512,7 @@ abstract class AbstractPaymentRequest extends Request {
 		$properties = Util::filter_null(
 			array(
 				'amount'           => $this->get_amount()->get_json(),
+				'applicationInfo'  => $this->application_info,
 				'billingAddress'   => is_null( $this->billing_address ) ? null : $this->billing_address->get_json(),
 				'channel'          => $this->channel,
 				'countryCode'      => $this->country_code,

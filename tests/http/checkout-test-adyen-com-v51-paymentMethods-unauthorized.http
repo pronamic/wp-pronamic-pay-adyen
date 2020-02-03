@@ -1,0 +1,10 @@
+HTTP/1.1 401 Unauthorized
+Date: Fri, 24 Jan 2020 09:56:31 GMT
+Server: Apache
+Set-Cookie: JSESSIONID=F60D7ABEF6521BE504291B6CFF2C9F15.test103e; Path=/checkout; Secure; HttpOnly
+WWW-Authenticate: BASIC realm="Adyen PAL Service Authentication"
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json
+
+{"status":401,"errorCode":"000","message":"HTTP Status Response - Unauthorized","errorType":"security"}

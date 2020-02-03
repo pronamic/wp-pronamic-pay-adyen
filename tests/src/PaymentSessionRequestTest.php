@@ -3,7 +3,7 @@
  * Payment session request test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -96,7 +96,7 @@ class PaymentSessionRequestTest extends TestCase {
 
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$payment_request = new PaymentSessionRequest(
+		new PaymentSessionRequest(
 			$amount,
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',

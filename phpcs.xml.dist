@@ -18,6 +18,8 @@
 	<exclude-pattern>wordpress/*</exclude-pattern>
 	<exclude-pattern type="relative">^wp-content/*</exclude-pattern>
 
+	<rule ref="VariableAnalysis"/>
+
 	<rule ref="PHPCompatibilityWP"/>
 
 	<rule ref="WordPress">

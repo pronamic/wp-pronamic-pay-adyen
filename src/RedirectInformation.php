@@ -3,16 +3,12 @@
  * Redirect information
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
-
-use JsonSchema\Constraints\Constraint;
-use JsonSchema\Exception\ValidationException;
-use JsonSchema\Validator;
 
 /**
  * Redirect information
@@ -100,17 +96,17 @@ class RedirectInformation extends ResponseObject {
 	 *
 	 * @param object $object Object.
 	 * @return RedirectInformation
-	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
+	 * @throws \JsonSchema\Exception\ValidationException Throws validation exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {
-		$validator = new Validator();
+		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
 			$object,
 			(object) array(
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/redirect.json' ),
 			),
-			Constraint::CHECK_MODE_EXCEPTIONS
+			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
 		$redirect = new self(
@@ -123,5 +119,23 @@ class RedirectInformation extends ResponseObject {
 		}
 
 		return $redirect;
+	}
+
+	/**
+	 * Get JSON.
+	 *
+	 * @return object
+	 */
+	public function get_json() {
+		$properties = Util::filter_null(
+			array(
+				'method' => $this->get_method(),
+				'url'    => $this->get_url(),
+			)
+		);
+
+		$object = (object) $properties;
+
+		return $object;
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Gateway
+ * Web SDK gateway
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2019 Pronamic
@@ -21,7 +21,7 @@ use Pronamic\WordPress\Pay\Plugin;
 use WP_Error;
 
 /**
- * Gateway
+ * Web SDK gateway
  *
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
@@ -29,7 +29,7 @@ use WP_Error;
  * @version 1.0.5
  * @since   1.0.0
  */
-class Gateway extends Core_Gateway {
+class WebSdkGateway extends AbstractGateway {
 	/**
 	 * Web SDK version.
 	 *
@@ -40,13 +40,6 @@ class Gateway extends Core_Gateway {
 	const SDK_VERSION = '1.9.2';
 
 	/**
-	 * Client.
-	 *
-	 * @var Client
-	 */
-	public $client;
-
-	/**
 	 * Constructs and initializes an Adyen gateway.
 	 *
 	 * @param Config $config Config.
@@ -54,13 +47,11 @@ class Gateway extends Core_Gateway {
 	public function __construct( Config $config ) {
 		parent::__construct( $config );
 
-		$this->set_method( self::METHOD_HTTP_REDIRECT );
-
 		// Supported features.
-		$this->supports = array();
-
-		// Client.
-		$this->client = new Client( $config );
+		$this->supports = array(
+			'webhook_log',
+			'webhook',
+		);
 	}
 
 	/**
@@ -104,15 +95,7 @@ class Gateway extends Core_Gateway {
 		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
 
 		// Country.
-		$locale = get_locale();
-
-		$customer = $payment->get_customer();
-
-		if ( null !== $customer ) {
-			$locale = $customer->get_locale();
-		}
-
-		$locale = strval( $locale );
+		$locale = Util::get_payment_locale( $payment );
 
 		$country_code = Locale::getRegion( $locale );
 
@@ -138,10 +121,12 @@ class Gateway extends Core_Gateway {
 		);
 
 		if ( in_array( $payment_method_type, $api_integration_payment_method_types, true ) ) {
-			$payment_method = new PaymentMethod( $payment_method_type );
+			$payment_method = array(
+				'type' => $payment_method_type,
+			);
 
 			if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-				$payment_method = new PaymentMethodIDeal( $payment_method_type, (string) $payment->get_issuer() );
+				$payment_method['issuer'] = (string) $payment->get_issuer();
 			}
 
 			// API integration.
@@ -150,7 +135,7 @@ class Gateway extends Core_Gateway {
 				$this->config->get_merchant_account(),
 				strval( $payment->get_id() ),
 				$payment->get_return_url(),
-				$payment_method
+				new PaymentMethod( (object) $payment_method )
 			);
 
 			$payment_request->set_country_code( $country_code );
@@ -303,7 +288,7 @@ class Gateway extends Core_Gateway {
 		// No cache.
 		Core_Util::no_cache();
 
-		require __DIR__ . '/../views/checkout.php';
+		require __DIR__ . '/../views/checkout-web-sdk.php';
 
 		exit;
 	}
@@ -349,97 +334,5 @@ class Gateway extends Core_Gateway {
 
 			$payment->add_note( $note );
 		}
-	}
-
-	/**
-	 * Get available payment methods.
-	 *
-	 * @see Core_Gateway::get_available_payment_methods()
-	 *
-	 * @return array<int, string>
-	 */
-	public function get_available_payment_methods() {
-		$core_payment_methods = array();
-
-		try {
-			$payment_methods_response = $this->client->get_payment_methods();
-		} catch ( Exception $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return $core_payment_methods;
-		}
-
-		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
-			$core_payment_method = PaymentMethodType::to_wp( $payment_method->get_type() );
-
-			$core_payment_methods[] = $core_payment_method;
-		}
-
-		$core_payment_methods = array_filter( $core_payment_methods );
-		$core_payment_methods = array_unique( $core_payment_methods );
-
-		return $core_payment_methods;
-	}
-
-	/**
-	 * Get issuers.
-	 *
-	 * @see Pronamic_WP_Pay_Gateway::get_issuers()
-	 * @return array<int, array<string, array<string, string>>>
-	 */
-	public function get_issuers() {
-		$issuers = array();
-
-		try {
-			$payment_methods_response = $this->client->get_payment_methods();
-		} catch ( Exception $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return $issuers;
-		}
-
-		$payment_methods = $payment_methods_response->get_payment_methods();
-
-		// Limit to iDEAL payment methods.
-		$payment_methods = array_filter(
-			$payment_methods,
-			/**
-			 * Check if payment method is iDEAL.
-			 *
-			 * @param PaymentMethod $payment_method Payment method.
-			 * @return boolean True if payment method is iDEAL, false otherwise.
-			 */
-			function( $payment_method ) {
-				return ( PaymentMethodType::IDEAL === $payment_method->get_type() );
-			}
-		);
-
-		foreach ( $payment_methods as $payment_method ) {
-			$details = $payment_method->get_details();
-
-			if ( is_array( $details ) ) {
-				foreach ( $details as $detail ) {
-					if ( ! isset( $detail->key, $detail->type, $detail->items ) ) {
-						continue;
-					}
-
-					if ( 'issuer' === $detail->key && 'select' === $detail->type ) {
-						foreach ( $detail->items as $item ) {
-							$issuers[ \strval( $item->id ) ] = \strval( $item->name );
-						}
-					}
-				}
-			}
-		}
-
-		if ( empty( $issuers ) ) {
-			return $issuers;
-		}
-
-		return array(
-			array(
-				'options' => $issuers,
-			),
-		);
 	}
 }

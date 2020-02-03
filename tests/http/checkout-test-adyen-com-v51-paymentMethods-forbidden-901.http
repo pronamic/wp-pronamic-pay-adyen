@@ -1,0 +1,10 @@
+HTTP/1.1 403 Forbidden
+Date: Fri, 24 Jan 2020 09:19:10 GMT
+Server: Apache
+Set-Cookie: JSESSIONID=90943A6526D0CAB6029DE7E5BDFF0B26.test4e; Path=/checkout; Secure; HttpOnly
+pspReference: 851579857550652D
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: application/json;charset=UTF-8
+
+{"status":403,"errorCode":"901","message":"Invalid Merchant Account","errorType":"security"}

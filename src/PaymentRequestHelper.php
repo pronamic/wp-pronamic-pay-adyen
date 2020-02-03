@@ -3,7 +3,7 @@
  * Payment request helper
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -38,6 +38,9 @@ class PaymentRequestHelper {
 		$customer = $payment->get_customer();
 
 		if ( null !== $customer ) {
+			$user_id = $customer->get_user_id();
+
+			$request->set_shopper_reference( \is_null( $user_id ) ? null : \strval( $user_id ) );
 			$request->set_shopper_ip( $customer->get_ip_address() );
 			$request->set_shopper_locale( $customer->get_locale() );
 			$request->set_telephone_number( $customer->get_phone() );

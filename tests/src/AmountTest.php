@@ -3,7 +3,7 @@
  * Amount test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -39,7 +39,7 @@ class AmountTest extends TestCase {
 	public function test_invalid_currency() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$amount = new Amount( 'TE', 12375 );
+		new Amount( 'TE', 12375 );
 	}
 
 	/**

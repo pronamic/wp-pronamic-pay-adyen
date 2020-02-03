@@ -4,10 +4,28 @@
 	"title": "Adyen payment response.",
 	"type": "object",
 	"properties": {
+		"action": {
+			"$ref": "action.json"
+		},
+		"details": {
+			"type": "array",
+			"description": "When non-empty, contains all the fields that you must submit to the /payments/details endpoint.",
+			"items": {
+				"anyOf": [
+					{
+						"$ref": "details.json"
+					}
+				]
+			}
+		},
 		"resultCode": {
 			"type": "string",
 			"description": "The result of the payment.",
 			"enum": ["Authorised", "Refused", "RedirectShopper", "Received", "Cancelled", "Pending", "Error"]
+		},
+		"paymentData": {
+			"type": "string",
+			"description": "When non-empty, contains a value that you must submit to the `/payments/details` endpoint."
 		},
 		"pspReference": {
 			"type": "string",

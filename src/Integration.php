@@ -3,13 +3,14 @@
  * Integration
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Dependencies\PhpExtensionDependency;
 use Pronamic\WordPress\Pay\Gateways\Common\AbstractIntegration;
 use Pronamic\WordPress\Pay\Util as Pay_Util;
 
@@ -32,6 +33,8 @@ class Integration extends AbstractIntegration {
 	 * Integration constructor.
 	 */
 	public function __construct() {
+		parent::__construct();
+
 		$this->id            = 'adyen';
 		$this->name          = 'Adyen';
 		$this->provider      = 'adyen';
@@ -48,10 +51,20 @@ class Integration extends AbstractIntegration {
 
 		$this->set_manual_url( __( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ) );
 
+		// Dependencies.
+		$dependencies = $this->get_dependencies();
+
+		$dependencies->add( new PhpExtensionDependency( 'intl' ) );
+
 		// Notifications controller.
 		$notifications_controller = new NotificationsController();
 
 		$notifications_controller->setup();
+
+		// Payments controller.
+		$payments_controller = new PaymentsController();
+
+		$payments_controller->setup();
 
 		// Payments result controller.
 		$payments_result_controller = new PaymentsResultController();
@@ -222,6 +235,26 @@ class Integration extends AbstractIntegration {
 			),
 		);
 
+		// Origin Key.
+		$fields[] = array(
+			'section'     => 'general',
+			'filter'      => FILTER_SANITIZE_STRING,
+			'meta_key'    => '_pronamic_gateway_adyen_origin_key',
+			'title'       => _x( 'Origin Key', 'adyen', 'pronamic_ideal' ),
+			'type'        => 'text',
+			'classes'     => array(
+				'regular-text',
+				'code',
+				'pronamic-pay-form-control-lg',
+			),
+			'tooltip'     => __( 'An origin key is a client-side key that is used to validate Adyen\'s JavaScript component library. It is required for the Drop-in and Component integrations.', 'pronamic_ideal' ),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a>',
+				esc_url( 'https://docs.adyen.com/user-management/how-to-get-an-origin-key' ),
+				esc_html__( 'Adyen documentation: "How to get an origin key".', 'pronamic_ideal' )
+			),
+		);
+
 		// Webhook URL.
 		$fields[] = array(
 			'section'  => 'feedback',
@@ -274,7 +307,7 @@ class Integration extends AbstractIntegration {
 			'html'    => sprintf(
 				'For webhook authentication settings, please visit <a href="%2$s" title="Settings">%1$s settings</a>.',
 				__( 'Pronamic Pay', 'pronamic_ideal' ),
-				$url = add_query_arg(
+				add_query_arg(
 					array(
 						'page' => 'pronamic_pay_settings',
 					),
@@ -300,6 +333,7 @@ class Integration extends AbstractIntegration {
 		$config->api_key             = $this->get_meta( $post_id, 'adyen_api_key' );
 		$config->api_live_url_prefix = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
 		$config->merchant_account    = $this->get_meta( $post_id, 'adyen_merchant_account' );
+		$config->origin_key          = $this->get_meta( $post_id, 'adyen_origin_key' );
 
 		return $config;
 	}
@@ -308,9 +342,15 @@ class Integration extends AbstractIntegration {
 	 * Get gateway.
 	 *
 	 * @param int $post_id Post ID.
-	 * @return Gateway
+	 * @return AbstractGateway
 	 */
 	public function get_gateway( $post_id ) {
-		return new Gateway( $this->get_config( $post_id ) );
+		$config = $this->get_config( $post_id );
+
+		if ( empty( $config->origin_key ) ) {
+			return new WebSdkGateway( $config );
+		}
+
+		return new DropInGateway( $config );
 	}
 }

@@ -3,7 +3,7 @@
  * Site Health controller
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -84,7 +84,7 @@ class SiteHealthController {
 	 */
 	private function get_http_authorization_test() {
 		$result = array(
-			'label'       => __( 'HTTP Basic authentication is working' ),
+			'label'       => __( 'HTTP Basic authentication is working', 'pronamic_ideal' ),
 			'status'      => 'good',
 			'badge'       => array(
 				'label' => __( 'Payments', 'pronamic_ideal' ),

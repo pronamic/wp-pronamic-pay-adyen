@@ -3,7 +3,7 @@
  * Endpoint
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -25,12 +25,12 @@ class Endpoint {
 	 *
 	 * @var string
 	 */
-	const API_URL_TEST = 'https://checkout-test.adyen.com/v41/%s';
+	const API_URL_TEST = 'https://checkout-test.adyen.com/%s';
 
 	/**
 	 * API endpoint live URL.
 	 *
 	 * @var string
 	 */
-	const API_URL_LIVE = 'https://%s-checkout-live.adyenpayments.com/checkout/v41/%s';
+	const API_URL_LIVE = 'https://%s-checkout-live.adyenpayments.com/checkout/%s';
 }

@@ -3,7 +3,7 @@
  * Payment response
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -25,6 +25,13 @@ use JsonSchema\Validator;
  */
 class PaymentResponse extends ResponseObject {
 	/**
+	 * Details.
+	 *
+	 * @var array<int, DetailsInformation>|null
+	 */
+	private $details;
+
+	/**
 	 * Adyen's 16-character string reference associated with the transaction/request. This value is globally unique; quote it when communicating with us about this request.
 	 *
 	 * `pspReference` is returned only for non-redirect payment methods.
@@ -41,6 +48,27 @@ class PaymentResponse extends ResponseObject {
 	private $redirect;
 
 	/**
+	 * The action.
+	 *
+	 * @var ActionInformation|null
+	 */
+	private $action;
+
+	/**
+	 * Payment data.
+	 *
+	 * @var string|null
+	 */
+	private $payment_data;
+
+	/**
+	 * Refusal reason.
+	 *
+	 * @var string|null
+	 */
+	private $refusal_reason;
+
+	/**
 	 * The result of the payment.
 	 *
 	 * @var string
@@ -54,6 +82,44 @@ class PaymentResponse extends ResponseObject {
 	 */
 	public function __construct( $result_code ) {
 		$this->result_code = $result_code;
+	}
+
+	/**
+	 * Get details.
+	 *
+	 * @return array<int, DetailsInformation>|null
+	 */
+	public function get_details() {
+		return $this->details;
+	}
+
+	/**
+	 * Set details.
+	 *
+	 * @param array<int, DetailsInformation>|null $details Details.
+	 * @return void
+	 */
+	public function set_details( $details ) {
+		$this->details = $details;
+	}
+
+	/**
+	 * Get payment data.
+	 *
+	 * @return string|null
+	 */
+	public function get_payment_data() {
+		return $this->payment_data;
+	}
+
+	/**
+	 * Set payment data.
+	 *
+	 * @param string|null $payment_data Payment data.
+	 * @return void
+	 */
+	public function set_payment_data( $payment_data ) {
+		$this->payment_data = $payment_data;
 	}
 
 	/**
@@ -85,6 +151,25 @@ class PaymentResponse extends ResponseObject {
 	}
 
 	/**
+	 * Get refusal reason.
+	 *
+	 * @return string|null
+	 */
+	public function get_refusal_reason() {
+		return $this->refusal_reason;
+	}
+
+	/**
+	 * Set refusal reason.
+	 *
+	 * @param string|null $refusal_reason Refusal reason.
+	 * @return void
+	 */
+	public function set_refusal_reason( $refusal_reason ) {
+		$this->refusal_reason = $refusal_reason;
+	}
+
+	/**
 	 * Get redirect.
 	 *
 	 * @return RedirectInformation|null
@@ -104,7 +189,26 @@ class PaymentResponse extends ResponseObject {
 	}
 
 	/**
-	 * Create payment repsonse from object.
+	 * Get action.
+	 *
+	 * @return ActionInformation|null
+	 */
+	public function get_action() {
+		return $this->action;
+	}
+
+	/**
+	 * Set action.
+	 *
+	 * @param ActionInformation|null $action Action information.
+	 * @return void
+	 */
+	public function set_action( ActionInformation $action = null ) {
+		$this->action = $action;
+	}
+
+	/**
+	 * Create payment response from object.
 	 *
 	 * @param object $object Object.
 	 * @return PaymentResponse
@@ -129,12 +233,73 @@ class PaymentResponse extends ResponseObject {
 			$payment_response->set_psp_reference( $object->pspReference );
 		}
 
+		if ( isset( $object->action ) ) {
+			$payment_response->set_action( ActionInformation::from_object( $object->action ) );
+		}
+
+		if ( isset( $object->details ) ) {
+			$details = array();
+
+			foreach ( $object->details as $detail ) {
+				$details[] = DetailsInformation::from_object( $detail );
+			}
+
+			$payment_response->set_details( $details );
+		}
+
+		if ( isset( $object->refusalReason ) ) {
+			$payment_response->set_refusal_reason( $object->refusalReason );
+		}
+
 		if ( isset( $object->redirect ) ) {
 			$payment_response->set_redirect( RedirectInformation::from_object( $object->redirect ) );
+		}
+
+		if ( isset( $object->paymentData ) ) {
+			$payment_response->set_payment_data( $object->paymentData );
 		}
 
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		return $payment_response;
+	}
+
+	/**
+	 * Get JSON.
+	 *
+	 * @return object
+	 */
+	public function get_json() {
+		// Redirect.
+		$redirect = $this->get_redirect();
+
+		if ( null !== $redirect ) {
+			$redirect = $redirect->get_json();
+		}
+
+		// Properties.
+		$properties = array(
+			'refusalReason' => $this->get_refusal_reason(),
+			'redirect'      => $redirect,
+			'resultCode'    => $this->get_result_code(),
+			'paymentData'   => $this->get_payment_data(),
+		);
+
+		// Details.
+		$details = $this->get_details();
+
+		if ( null !== $details ) {
+			$properties['details'] = array();
+
+			foreach ( $details as $detail ) {
+				$properties['details'][] = $detail->get_json();
+			}
+		}
+
+		$properties = Util::filter_null( $properties );
+
+		$object = (object) $properties;
+
+		return $object;
 	}
 }

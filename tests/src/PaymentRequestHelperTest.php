@@ -3,7 +3,7 @@
  * Payment request helper test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -42,14 +42,17 @@ class PaymentRequestHelperTest extends TestCase {
 		/**
 		 * Payment request.
 		 */
-		$payment_method = new PaymentMethodIDeal( PaymentMethodType::IDEAL, '1121' );
+		$payment_method = array(
+			'type'   => PaymentMethodType::IDEAL,
+			'issuer' => '1121',
+		);
 
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
 			'https://your-company.com/...',
-			$payment_method
+			new PaymentMethod( (object) $payment_method )
 		);
 
 		/*

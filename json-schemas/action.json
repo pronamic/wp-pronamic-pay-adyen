@@ -1,0 +1,37 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/action.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen action.",
+	"type": "object",
+	"properties": {
+		"data": {
+			"type": "object",
+			"description": "When the redirect URL must be accessed via POST, use this data to post to the redirect URL."
+		},
+		"method": {
+			"type": "string",
+			"description": "Specifies the HTTP method, for example GET or POST.",
+			"enum": ["GET", "POST"]
+		},
+		"paymentData": {
+			"type": "string",
+			"description": "When non-empty, contains a value that you must submit to the `/payments/details` endpoint. In some cases, required for polling."
+		},
+		"paymentMethodType": {
+			"type": "string",
+			"description": "Specifies the payment method."
+		},
+		"token": {
+			"type": "string",
+			"description": "A token to pass to the 3DS2 Component to get the fingerprint/challenge."
+		},
+		"type": {
+			"type": "string",
+			"description": "Enum that specifies the action that needs to be taken by the client."
+		},
+		"url": {
+			"type": "string",
+			"description": "Specifies the URL to redirect to."
+		}
+	}
+}

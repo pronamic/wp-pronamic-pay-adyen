@@ -3,7 +3,7 @@
  * Integration test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -126,6 +126,6 @@ class IntegrationTest extends WP_UnitTestCase {
 	public function test_settings_fields() {
 		$fields = $this->integration->get_settings_fields();
 
-		$this->assertCount( 7, $fields );
+		$this->assertCount( 8, $fields );
 	}
 }

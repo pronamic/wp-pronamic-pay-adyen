@@ -3,7 +3,7 @@
  * Payment methods response
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -83,7 +83,13 @@ class PaymentMethodsResponse extends ResponseObject {
 			$payment_methods[] = PaymentMethod::from_object( $payment_method_object );
 		}
 
-		$response = new self( $object->groups, $payment_methods );
+		$groups = array();
+
+		if ( isset( $object->groups ) ) {
+			$groups = $object->groups;
+		}
+
+		$response = new self( $groups, $payment_methods );
 
 		$response->set_original_object( $object );
 

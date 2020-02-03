@@ -3,7 +3,7 @@
  * Address test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -84,7 +84,7 @@ class AddressTest extends TestCase {
 	public function test_invalid_country() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$address = new Address( 'A' );
+		new Address( 'A' );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class AddressTest extends TestCase {
 	public function test_required_street() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$address = new Address( 'NL', null, '39b' );
+		new Address( 'NL', null, '39b' );
 	}
 
 	/**
@@ -102,7 +102,7 @@ class AddressTest extends TestCase {
 	public function test_required_postal_code() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$address = new Address( 'NL', 'Burgemeester Wuiteweg', '39b', null );
+		new Address( 'NL', 'Burgemeester Wuiteweg', '39b', null );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class AddressTest extends TestCase {
 	public function test_invalid_postal_code() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$address = new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '1234567890 to long' );
+		new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '1234567890 to long' );
 	}
 
 	/**
@@ -120,7 +120,7 @@ class AddressTest extends TestCase {
 	public function test_required_city() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$address = new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '9203 KA', null );
+		new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '9203 KA', null );
 	}
 
 	/**
@@ -131,7 +131,7 @@ class AddressTest extends TestCase {
 	public function test_required_state_or_province() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$address = new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', null );
+		new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', null );
 	}
 
 	/**
@@ -142,6 +142,6 @@ class AddressTest extends TestCase {
 	public function test_invalid_state_or_province() {
 		$this->setExpectedException( 'InvalidArgumentException' );
 
-		$address = new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', 'CA to long' );
+		new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', 'CA to long' );
 	}
 }

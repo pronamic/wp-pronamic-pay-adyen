@@ -3,7 +3,7 @@
  * Config
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -41,6 +41,13 @@ class Config extends GatewayConfig {
 	 * @var string|null
 	 */
 	public $merchant_account;
+
+	/**
+	 * Origin key.
+	 *
+	 * @var string|null
+	 */
+	public $origin_key;
 
 	/**
 	 * Get API key.

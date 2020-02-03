@@ -3,7 +3,7 @@
  * Adyen client
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -150,7 +150,22 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment( PaymentRequest $request ) {
-		$data = $this->send_request( 'payments', $request );
+		$data = $this->send_request( 'v51/payments', $request );
+
+		return PaymentResponse::from_object( $data );
+	}
+
+	/**
+	 * Submit additional payment details.
+	 *
+	 * @param PaymentDetailsRequest $request Payment request.
+	 *
+	 * @return PaymentResponse
+	 *
+	 * @throws \Exception Throws error if request fails.
+	 */
+	public function request_payment_details( PaymentDetailsRequest $request ) {
+		$data = $this->send_request( 'v51/payments/details', $request );
 
 		return PaymentResponse::from_object( $data );
 	}
@@ -165,7 +180,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment_session( PaymentSessionRequest $request ) {
-		$data = $this->send_request( 'paymentSession', $request );
+		$data = $this->send_request( 'v41/paymentSession', $request );
 
 		return PaymentSessionResponse::from_object( $data );
 	}
@@ -180,7 +195,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function get_payment_result( PaymentResultRequest $request ) {
-		$data = $this->send_request( 'payments/result', $request );
+		$data = $this->send_request( 'v41/payments/result', $request );
 
 		return PaymentResultResponse::from_object( $data );
 	}
@@ -188,14 +203,16 @@ class Client {
 	/**
 	 * Get payment methods.
 	 *
-	 * @return PaymentMethodsResponse
+	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/paymentMethods
+	 * @link https://docs.adyen.com/checkout/drop-in-web#step-1-get-available-payment-methods
 	 *
+	 * @param PaymentMethodsRequest $request Payment methods request.
+	 *
+	 * @return PaymentMethodsResponse
 	 * @throws \Exception Throws error if request fails.
 	 */
-	public function get_payment_methods() {
-		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
-
-		$data = $this->send_request( 'paymentMethods', $request );
+	public function get_payment_methods( PaymentMethodsRequest $request ) {
+		$data = $this->send_request( 'v51/paymentMethods', $request );
 
 		return PaymentMethodsResponse::from_object( $data );
 	}

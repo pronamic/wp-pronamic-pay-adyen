@@ -506,13 +506,6 @@ class DropInGateway extends AbstractGateway {
 			'name'               => __( 'Credit or debit card', 'pronamic_ideal' ),
 		);
 
-		// Boleto Bancário.
-		$configuration['boletobancario '] = array(
-			'personalDetailsRequired' => true,
-			'billingAddressRequired'  => true,
-			'showEmailAddress'        => true,
-		);
-
 		return (object) $configuration;
 	}
 }

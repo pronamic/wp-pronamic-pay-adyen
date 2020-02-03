@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased][unreleased]
 -
 
+## [1.0.6] - 2020-02-03
+- Added support for Drop-in implementation (requires 'Origin Key' in gateway settings).
+- Added application info support.
+
 ## [1.0.5] - 2019-12-22
 - Added Site Health test for HTTP authorization header.
 - Added URL to manual in gateway settings.
@@ -31,7 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.0.5...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.0.6...HEAD
+[1.0.6]: https://github.com/wp-pay-gateways/adyen/compare/1.0.5...1.0.6
 [1.0.5]: https://github.com/wp-pay-gateways/adyen/compare/1.0.4...1.0.5
 [1.0.4]: https://github.com/wp-pay-gateways/adyen/compare/1.0.3...1.0.4
 [1.0.3]: https://github.com/wp-pay-gateways/adyen/compare/1.0.2...1.0.3

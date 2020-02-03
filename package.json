@@ -17,32 +17,29 @@
   "author": {
     "name": "Pronamic",
     "email": "info@pronamic.nl",
-    "url": "http://www.pronamic.nl/"
+    "url": "https://www.pronamic.nl/"
   },
   "contributors": [
     {
       "name": "Remco Tolsma",
       "email": "info@remcotolsma.nl",
-      "url": "http://www.remcotolsma.nl/"
+      "url": "https://www.remcotolsma.nl/"
     }
   ],
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/wp-pay-gateways/adyen/issues"
   },
-  "homepage": "http://www.wp-pay.org/gateways/adyen/",
+  "homepage": "https://www.wp-pay.org/gateways/adyen/",
   "scripts": {
-    "babel": "babel ./js/src -d ./js/dist --source-maps"
+    "babel": "babel ./js/src -d ./js/dist --source-maps",
+    "eslint": "eslint . --ext .json --ext .js"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
     "@babel/core": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
-    "grunt": "^1.0.4",
-    "grunt-babel": "^8.0.0",
-    "grunt-contrib-jshint": "^2.1.0",
-    "grunt-phpcs": "^0.4.0",
-    "grunt-phplint": "0.1.0",
-    "grunt-phpmd": "^0.1.1"
+    "eslint": "^6.3.0",
+    "eslint-plugin-json": "^1.4.0"
   }
 }

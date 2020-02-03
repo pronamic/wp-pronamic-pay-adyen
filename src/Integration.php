@@ -55,6 +55,15 @@ class Integration extends AbstractIntegration {
 		$dependencies = $this->get_dependencies();
 
 		$dependencies->add( new PhpExtensionDependency( 'intl' ) );
+	}
+
+	/**
+	 * Plugins loaded.
+	 */
+	public function plugins_loaded() {
+		if ( ! $this->get_dependencies()->are_met() ) {
+			return;
+		}
 
 		// Notifications controller.
 		$notifications_controller = new NotificationsController();

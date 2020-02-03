@@ -4,7 +4,7 @@
 
 	const checkout = new AdyenCheckout( pronamicPayAdyenCheckout.configuration );
 
-	const status = response => {
+	const validate_http_status = response => {
 		if ( response.status >= 200 && response.status < 300 ) {
 			return Promise.resolve( response );
 		}
@@ -12,15 +12,14 @@
 		return Promise.reject( new Error( response.statusText ) );
 	};
 
-	const json = response => response.json();
+	const get_json = response => response.json();
 
 	const dropin = checkout.create( 'dropin', {
 		paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
 		onSubmit: ( state, dropin ) => {
-
 			send_request( pronamicPayAdyenCheckout.paymentsUrl, state.data )
-			.then( status )
-			.then( json )
+			.then( validate_http_status )
+			.then( get_json )
 			.then( response => {
 				// Handle action object.
 				if ( response.action ) {
@@ -44,8 +43,8 @@
 		},
 		onAdditionalDetails: ( state, dropin ) => {
 			send_request( pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data )
-			.then( status )
-			.then( json )
+			.then( validate_http_status )
+			.then( get_json )
 			.then( response => {
 				// Handle action object.
 				if ( response.action ) {

@@ -6,7 +6,7 @@
 
   var checkout = new AdyenCheckout(pronamicPayAdyenCheckout.configuration);
 
-  var status = function status(response) {
+  var validate_http_status = function validate_http_status(response) {
     if (response.status >= 200 && response.status < 300) {
       return Promise.resolve(response);
     }
@@ -14,14 +14,14 @@
     return Promise.reject(new Error(response.statusText));
   };
 
-  var json = function json(response) {
+  var get_json = function get_json(response) {
     return response.json();
   };
 
   var dropin = checkout.create('dropin', {
     paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
     onSubmit: function onSubmit(state, dropin) {
-      send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(status).then(json).then(function (response) {
+      send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(validate_http_status).then(get_json).then(function (response) {
         // Handle action object.
         if (response.action) {
           dropin.handleAction(response.action);
@@ -39,7 +39,7 @@
       });
     },
     onAdditionalDetails: function onAdditionalDetails(state, dropin) {
-      send_request(pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data).then(status).then(json).then(function (response) {
+      send_request(pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data).then(validate_http_status).then(get_json).then(function (response) {
         // Handle action object.
         if (response.action) {
           dropin.handleAction(response.action);

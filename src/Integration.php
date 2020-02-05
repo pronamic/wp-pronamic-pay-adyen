@@ -59,6 +59,8 @@ class Integration extends AbstractIntegration {
 
 	/**
 	 * Plugins loaded.
+	 *
+	 * @return void
 	 */
 	public function plugins_loaded() {
 		if ( ! $this->get_dependencies()->are_met() ) {

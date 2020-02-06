@@ -173,9 +173,15 @@ class PaymentsController {
 
 			$response = $gateway->create_payment( $payment, $payment_method );
 		} catch ( \Exception $e ) {
-			return (object) array(
-				'error' => $e->getMessage(),
-			);
+			$error = $e->getMessage();
+
+			$error_code = $e->getCode();
+
+			if ( null !== $error_code ) {
+				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
+			}
+
+			return (object) array( 'error' => $error );
 		}
 
 		// Update payment status based on response.
@@ -315,9 +321,15 @@ class PaymentsController {
 			// Update payment status based on response.
 			PaymentResponseHelper::update_payment( $payment, $response );
 		} catch ( \Exception $e ) {
-			return (object) array(
-				'error' => $e->getMessage(),
-			);
+			$error = $e->getMessage();
+
+			$error_code = $e->getCode();
+
+			if ( null !== $error_code ) {
+				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
+			}
+
+			return (object) array( 'error' => $error );
 		}
 
 		$result = array(

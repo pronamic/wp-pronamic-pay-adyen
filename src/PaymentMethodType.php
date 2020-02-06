@@ -88,6 +88,13 @@ class PaymentMethodType {
 	const GIROPAY = 'giropay';
 
 	/**
+	 * Constant for the 'paywithgoogle' payment method type.
+	 *
+	 * @var string
+	 */
+	const GOOGLE_PAY = 'paywithgoogle';
+
+	/**
 	 * Constant for the 'ideal' payment method type.
 	 *
 	 * @var string
@@ -149,6 +156,7 @@ class PaymentMethodType {
 		PaymentMethods::DIRECT_DEBIT     => self::SEPA_DIRECT_DEBIT,
 		PaymentMethods::EPS              => self::EPS,
 		PaymentMethods::GIROPAY          => self::GIROPAY,
+		PaymentMethods::GOOGLE_PAY       => self::GOOGLE_PAY,
 		PaymentMethods::IDEAL            => self::IDEAL,
 		PaymentMethods::KLARNA_PAY_LATER => self::KLARNA,
 		PaymentMethods::MAESTRO          => self::MAESTRO,

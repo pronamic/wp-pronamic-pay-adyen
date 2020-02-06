@@ -80,6 +80,7 @@ class PaymentsController {
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return object
+	 * @throws \Exception Throws exception on Adyen service exception response.
 	 */
 	public function rest_api_adyen_payments( WP_REST_Request $request ) {
 		$payment_id = $request->get_param( 'payment_id' );
@@ -230,6 +231,7 @@ class PaymentsController {
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return object
+	 * @throws \Exception Throws exception on Adyen service exception response.
 	 */
 	public function rest_api_adyen_payment_details( WP_REST_Request $request ) {
 		$payment_id = $request->get_param( 'payment_id' );

@@ -50,6 +50,13 @@ class Config extends GatewayConfig {
 	public $origin_key;
 
 	/**
+	 * Google Pay merchant identifier.
+	 *
+	 * @var string|null
+	 */
+	public $google_pay_merchant_identifier;
+
+	/**
 	 * Get API key.
 	 *
 	 * @return string|null
@@ -65,6 +72,15 @@ class Config extends GatewayConfig {
 	 */
 	public function get_merchant_account() {
 		return strval( $this->merchant_account );
+	}
+
+	/**
+	 * Get Google Pay merchant identifier.
+	 *
+	 * @return string|null
+	 */
+	public function get_google_pay_merchant_identifier() {
+		return $this->google_pay_merchant_identifier;
 	}
 
 	/**

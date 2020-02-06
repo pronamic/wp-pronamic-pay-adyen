@@ -266,6 +266,24 @@ class Integration extends AbstractIntegration {
 			),
 		);
 
+		// Google Pay - Merchant identifier.
+		$fields[] = array(
+			'section'     => 'advanced',
+			'filter'      => FILTER_SANITIZE_STRING,
+			'meta_key'    => '_pronamic_gateway_adyen_google_pay_merchant_identifier',
+			'title'       => _x( 'Google Pay Merchant Identifier', 'adyen', 'pronamic_ideal' ),
+			'type'        => 'text',
+			'classes'     => array( 'regular-text', 'code' ),
+			'tooltip'     => __( 'Your Google Merchant ID. Required for accepting live payments.', 'pronamic_ideal' ),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a><br /><a href="%s" target="_blank">%s</a>',
+				esc_url( 'https://docs.adyen.com/payment-methods/google-pay/web-drop-in#test-and-go-live' ),
+				esc_html__( 'Adyen documentation: "Google Pay Drop-in - Test and go live".', 'pronamic_ideal' ),
+				esc_url( 'https://developers.google.com/pay/api/web/guides/test-and-deploy/deploy-production-environment' ),
+				esc_html__( 'Google documentation: "Deploy production environment".', 'pronamic_ideal' )
+			),
+		);
+
 		// Webhook URL.
 		$fields[] = array(
 			'section'  => 'feedback',
@@ -340,11 +358,12 @@ class Integration extends AbstractIntegration {
 	public function get_config( $post_id ) {
 		$config = new Config();
 
-		$config->mode                = $this->get_meta( $post_id, 'mode' );
-		$config->api_key             = $this->get_meta( $post_id, 'adyen_api_key' );
-		$config->api_live_url_prefix = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
-		$config->merchant_account    = $this->get_meta( $post_id, 'adyen_merchant_account' );
-		$config->origin_key          = $this->get_meta( $post_id, 'adyen_origin_key' );
+		$config->mode                           = $this->get_meta( $post_id, 'mode' );
+		$config->api_key                        = $this->get_meta( $post_id, 'adyen_api_key' );
+		$config->api_live_url_prefix            = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
+		$config->merchant_account               = $this->get_meta( $post_id, 'adyen_merchant_account' );
+		$config->origin_key                     = $this->get_meta( $post_id, 'adyen_origin_key' );
+		$config->google_pay_merchant_identifier = $this->get_meta( $post_id, 'adyen_google_pay_merchant_identifier' );
 
 		return $config;
 	}

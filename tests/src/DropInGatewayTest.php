@@ -44,6 +44,7 @@ class DropInGatewayTest extends TestCase {
 				PaymentMethods::DIRECT_DEBIT,
 				PaymentMethods::EPS,
 				PaymentMethods::GIROPAY,
+				PaymentMethods::GOOGLE_PAY,
 				PaymentMethods::IDEAL,
 				PaymentMethods::SOFORT,
 			),

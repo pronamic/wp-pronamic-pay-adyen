@@ -11,7 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Pay\Dependencies\PhpExtensionDependency;
-use Pronamic\WordPress\Pay\Gateways\Common\AbstractIntegration;
+use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
 use Pronamic\WordPress\Pay\Util as Pay_Util;
 
 /**
@@ -21,7 +21,7 @@ use Pronamic\WordPress\Pay\Util as Pay_Util;
  * @version 1.0.5
  * @since   1.0.0
  */
-class Integration extends AbstractIntegration {
+class Integration extends AbstractGatewayIntegration {
 	/**
 	 * REST route namespace.
 	 *
@@ -30,26 +30,32 @@ class Integration extends AbstractIntegration {
 	const REST_ROUTE_NAMESPACE = 'pronamic-pay/adyen/v1';
 
 	/**
-	 * Integration constructor.
+	 * Construct Adyen integration.
+	 *
+	 * @param array $args Arguments.
 	 */
-	public function __construct() {
-		parent::__construct();
-
-		$this->id            = 'adyen';
-		$this->name          = 'Adyen';
-		$this->provider      = 'adyen';
-		$this->url           = __( 'https://www.adyen.com/', 'pronamic_ideal' );
-		$this->product_url   = __( 'https://www.adyen.com/pricing', 'pronamic_ideal' );
-		$this->dashboard_url = array(
-			__( 'test', 'pronamic_ideal' ) => 'https://ca-test.adyen.com/ca/ca/login.shtml',
-			__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
+	public function __construct( $args = array() ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'id'            => 'adyen',
+				'name'          => 'Adyen',
+				'provider'      => 'adyen',
+				'url'           => \__( 'https://www.adyen.com/', 'pronamic_ideal' ),
+				'product_url'   => \__( 'https://www.adyen.com/pricing', 'pronamic_ideal' ),
+				'dashboard_url' => array(
+					\__( 'test', 'pronamic_ideal' ) => 'https://ca-test.adyen.com/ca/ca/login.shtml',
+					\__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
+				),
+				'manual_url'    => \__( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ),
+				'supports'      => array(
+					'webhook',
+					'webhook_log',
+				),
+			)
 		);
-		$this->supports      = array(
-			'webhook',
-			'webhook_log',
-		);
 
-		$this->set_manual_url( __( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ) );
+		parent::__construct( $args );
 
 		// Dependencies.
 		$dependencies = $this->get_dependencies();

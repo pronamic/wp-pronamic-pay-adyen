@@ -143,9 +143,7 @@ class DropInGateway extends AbstractGateway {
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
 		// Only show drop-in checkout page if payment method does not redirect.
-		if ( is_string( $payment_response ) && '' !== $payment_response ) {
-			$payment_response = \json_decode( $payment_response );
-
+		if ( is_object( $payment_response ) ) {
 			$payment_response = PaymentResponse::from_object( $payment_response );
 
 			$redirect = $payment_response->get_redirect();

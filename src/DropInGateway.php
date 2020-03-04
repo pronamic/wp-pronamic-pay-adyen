@@ -168,6 +168,13 @@ class DropInGateway extends AbstractGateway {
 			}
 		}
 
+		// Prevent Apple Pay if no merchant identifier has been configured.
+		$apple_pay_merchant_id = $this->config->get_apple_pay_merchant_id();
+
+		if ( empty( $apple_pay_merchant_id ) ) {
+			$request->set_blocked_payment_methods( array( PaymentMethodType::APPLE_PAY ) );
+		}
+
 		$locale = Util::get_payment_locale( $payment );
 
 		$country_code = Locale::getRegion( $locale );

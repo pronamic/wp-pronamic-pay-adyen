@@ -46,6 +46,13 @@ class PaymentMethodType {
 	const ALIPAY = 'alipay';
 
 	/**
+	 * Constant for the 'applepay' payment method type.
+	 *
+	 * @var string
+	 */
+	const APPLE_PAY = 'applepay';
+
+	/**
 	 * Constant for the 'bcmc' payment method type.
 	 *
 	 * @var string
@@ -151,6 +158,7 @@ class PaymentMethodType {
 	private static $map = array(
 		PaymentMethods::AFTERPAY         => self::AFTERPAY,
 		PaymentMethods::ALIPAY           => self::ALIPAY,
+		PaymentMethods::APPLE_PAY        => self::APPLE_PAY,
 		PaymentMethods::BANCONTACT       => self::BANCONTACT,
 		PaymentMethods::CREDIT_CARD      => self::SCHEME,
 		PaymentMethods::DIRECT_DEBIT     => self::SEPA_DIRECT_DEBIT,

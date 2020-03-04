@@ -14,6 +14,29 @@
 
 	const get_json = response => response.json();
 
+	if ( pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay ) {
+		pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = ( resolve, reject, validationUrl ) => {
+			send_request( pronamicPayAdyenCheckout.applePayMerchantValidationUrl, { validation_url: validationUrl } )
+				.then( validate_http_status )
+				.then( get_json )
+				.then( response => {
+					// Handle error.
+					if ( response.statusMessage ) {
+						return Promise.reject( new Error( response.statusMessage ) );
+					}
+
+					return resolve( response );
+				} )
+				.catch( error => {
+					dropin.setStatus( 'error', { message: error.message } );
+
+					setTimeout( () => {dropin.setStatus( 'ready' );}, 5000 );
+
+					return reject();
+				} );
+		};
+	}
+
 	const dropin = checkout.create( 'dropin', {
 		paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
 		onSubmit: ( state, dropin ) => {

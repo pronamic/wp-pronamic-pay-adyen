@@ -39,6 +39,7 @@ class DropInGatewayTest extends TestCase {
 		$this->assertEquals(
 			array(
 				PaymentMethods::ALIPAY,
+				PaymentMethods::APPLE_PAY,
 				PaymentMethods::BANCONTACT,
 				PaymentMethods::CREDIT_CARD,
 				PaymentMethods::DIRECT_DEBIT,

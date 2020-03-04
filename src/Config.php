@@ -50,6 +50,20 @@ class Config extends GatewayConfig {
 	public $origin_key;
 
 	/**
+	 * Apple Pay merchant identifier.
+	 *
+	 * @var string|null
+	 */
+	public $apple_pay_merchant_id;
+
+	/**
+	 * Apple Pay merchant identity private key password.
+	 *
+	 * @var string|null
+	 */
+	public $apple_pay_merchant_id_private_key_password;
+
+	/**
 	 * Google Pay merchant identifier.
 	 *
 	 * @var string|null
@@ -72,6 +86,24 @@ class Config extends GatewayConfig {
 	 */
 	public function get_merchant_account() {
 		return strval( $this->merchant_account );
+	}
+
+	/**
+	 * Get Apple Pay merchant identifier.
+	 *
+	 * @return string|null
+	 */
+	public function get_apple_pay_merchant_id() {
+		return $this->apple_pay_merchant_id;
+	}
+
+	/**
+	 * Get Apple Pay merchant identity certificate private key password.
+	 *
+	 * @return string|null
+	 */
+	public function get_apple_pay_merchant_id_private_key_password() {
+		return $this->apple_pay_merchant_id_private_key_password;
 	}
 
 	/**

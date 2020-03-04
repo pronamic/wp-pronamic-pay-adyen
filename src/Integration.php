@@ -272,12 +272,46 @@ class Integration extends AbstractGatewayIntegration {
 			),
 		);
 
+		// Apple Pay - Merchant identifier.
+		$fields[] = array(
+			'section'     => 'advanced',
+			'filter'      => FILTER_SANITIZE_STRING,
+			'meta_key'    => '_pronamic_gateway_adyen_apple_pay_merchant_id',
+			'title'       => _x( 'Apple Pay Merchant ID', 'adyen', 'pronamic_ideal' ),
+			'type'        => 'text',
+			'classes'     => array( 'regular-text', 'code' ),
+			'tooltip'     => __( 'Your Apple Pay Merchant ID. Required for accepting live payments.', 'pronamic_ideal' ),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a><br /><a href="%s" target="_blank">%s</a>',
+				esc_url( 'https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#before-you-begin' ),
+				esc_html__( 'Adyen documentation: "Apple Pay Drop-in - Before you begin".', 'pronamic_ideal' ),
+				esc_url( 'https://developer.apple.com/documentation/apple_pay_on_the_web/configuring_your_environment' ),
+				esc_html__( 'Apple documentation: "Configuring your environment".', 'pronamic_ideal' )
+			),
+		);
+
+		// Apple Pay - Merchant Identity Certificate private key password.
+		$fields[] = array(
+			'section'     => 'advanced',
+			'filter'      => FILTER_SANITIZE_STRING,
+			'meta_key'    => '_pronamic_gateway_adyen_apple_pay_merchant_id_private_key_password',
+			'title'       => _x( 'Apple Pay Merchant Identity Certificate Private Key Password', 'adyen', 'pronamic_ideal' ),
+			'type'        => 'text',
+			'classes'     => array( 'regular-text', 'code' ),
+			'tooltip'     => __( 'Your Apple Pay Merchant Identity Certificate private key password.', 'pronamic_ideal' ),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a>',
+				esc_url( 'https://docs.adyen.com/payment-methods/apple-pay/enable-apple-pay#create-merchant-identity-certificate' ),
+				esc_html__( 'Adyen documentation: "Enable Apple Pay - Create a merchant identity certificate".', 'pronamic_ideal' )
+			),
+		);
+
 		// Google Pay - Merchant identifier.
 		$fields[] = array(
 			'section'     => 'advanced',
 			'filter'      => FILTER_SANITIZE_STRING,
 			'meta_key'    => '_pronamic_gateway_adyen_google_pay_merchant_identifier',
-			'title'       => _x( 'Google Pay Merchant Identifier', 'adyen', 'pronamic_ideal' ),
+			'title'       => _x( 'Google Pay Merchant ID', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
 			'classes'     => array( 'regular-text', 'code' ),
 			'tooltip'     => __( 'Your Google Merchant ID. Required for accepting live payments.', 'pronamic_ideal' ),
@@ -364,12 +398,14 @@ class Integration extends AbstractGatewayIntegration {
 	public function get_config( $post_id ) {
 		$config = new Config();
 
-		$config->mode                           = $this->get_meta( $post_id, 'mode' );
-		$config->api_key                        = $this->get_meta( $post_id, 'adyen_api_key' );
-		$config->api_live_url_prefix            = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
-		$config->merchant_account               = $this->get_meta( $post_id, 'adyen_merchant_account' );
-		$config->origin_key                     = $this->get_meta( $post_id, 'adyen_origin_key' );
-		$config->google_pay_merchant_identifier = $this->get_meta( $post_id, 'adyen_google_pay_merchant_identifier' );
+		$config->mode                                       = $this->get_meta( $post_id, 'mode' );
+		$config->api_key                                    = $this->get_meta( $post_id, 'adyen_api_key' );
+		$config->api_live_url_prefix                        = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
+		$config->merchant_account                           = $this->get_meta( $post_id, 'adyen_merchant_account' );
+		$config->origin_key                                 = $this->get_meta( $post_id, 'adyen_origin_key' );
+		$config->apple_pay_merchant_id                      = $this->get_meta( $post_id, 'adyen_apple_pay_merchant_id' );
+		$config->apple_pay_merchant_id_private_key_password = $this->get_meta( $post_id, 'adyen_apple_pay_merchant_id_private_key_password' );
+		$config->google_pay_merchant_identifier             = $this->get_meta( $post_id, 'adyen_google_pay_merchant_identifier' );
 
 		return $config;
 	}

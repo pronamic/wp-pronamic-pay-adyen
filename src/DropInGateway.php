@@ -62,6 +62,7 @@ class DropInGateway extends AbstractGateway {
 	public function get_supported_payment_methods() {
 		return array(
 			PaymentMethods::ALIPAY,
+			PaymentMethods::APPLE_PAY,
 			PaymentMethods::BANCONTACT,
 			PaymentMethods::CREDIT_CARD,
 			PaymentMethods::DIRECT_DEBIT,
@@ -263,14 +264,15 @@ class DropInGateway extends AbstractGateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			array(
-				'paymentMethodsConfiguration' => $this->get_checkout_payment_methods_configuration( $payment_method_types, $payment ),
-				'paymentsUrl'                 => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
-				'paymentsDetailsUrl'          => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' ),
-				'paymentReturnUrl'            => $payment->get_return_url(),
-				'configuration'               => $configuration,
-				'paymentAuthorised'           => __( 'Payment completed successfully.', 'pronamic_ideal' ),
-				'paymentReceived'             => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
-				'paymentRefused'              => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
+				'paymentMethodsConfiguration'   => $this->get_checkout_payment_methods_configuration( $payment_method_types, $payment ),
+				'paymentsUrl'                   => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
+				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' ),
+				'applePayMerchantValidationUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
+				'paymentReturnUrl'              => $payment->get_return_url(),
+				'configuration'                 => $configuration,
+				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),
+				'paymentReceived'               => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
+				'paymentRefused'                => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
 			)
 		);
 
@@ -494,6 +496,39 @@ class DropInGateway extends AbstractGateway {
 	 */
 	public function get_checkout_payment_methods_configuration( $payment_method_types, Payment $payment ) {
 		$configuration = array();
+
+		/*
+		 * Apple Pay.
+		 *
+		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#show-apple-pay-in-your-payment-form
+		 */
+		if ( \in_array( PaymentMethodType::APPLE_PAY, $payment_method_types, true ) ) {
+			$configuration['applepay'] = array(
+				'amount'        => $payment->get_total_amount()->get_minor_units(),
+				'currencyCode'  => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
+				'configuration' => array(
+					'merchantName'       => \get_bloginfo( 'name' ),
+					'merchantIdentifier' => $this->config->get_apple_pay_merchant_id(),
+				),
+			);
+
+			// Line items.
+			$lines = $payment->get_lines();
+
+			if ( null !== $lines ) {
+				$line_items = array();
+
+				foreach ( $lines as $line ) {
+					$line_items[] = array(
+						'label'  => $line->get_name(),
+						'amount' => (string) $line->get_total_amount()->get_value(),
+						'type'   => 'final',
+					);
+				}
+
+				$configuration['applepay']['lineItems'] = $line_items;
+			}
+		}
 
 		/*
 		 * Cards.

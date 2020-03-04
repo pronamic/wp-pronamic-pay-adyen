@@ -332,17 +332,10 @@ class DropInGateway extends AbstractGateway {
 		// Retrieve status from payment details.
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
-		if ( is_string( $payment_response ) && '' !== $payment_response ) {
-			$payment_response = \json_decode( $payment_response );
-
+		if ( is_object( $payment_response ) ) {
 			$payment_response = PaymentResponse::from_object( $payment_response );
 
 			$details_result = $payment->get_meta( 'adyen_details_result' );
-
-			// JSON decode details result meta.
-			if ( is_string( $details_result ) && '' !== $details_result ) {
-				$details_result = \json_decode( $details_result );
-			}
 
 			// Set details result meta from GET or POST request parameters.
 			if ( '' === $details_result ) {

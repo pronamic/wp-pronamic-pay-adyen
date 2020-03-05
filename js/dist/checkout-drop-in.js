@@ -23,7 +23,12 @@
       send_request(pronamicPayAdyenCheckout.applePayMerchantValidationUrl, {
         validation_url: validationUrl
       }).then(validate_http_status).then(get_json).then(function (response) {
-        // Handle error.
+        // Handle Pronamic Pay error.
+        if (response.error) {
+          return Promise.reject(new Error(response.error));
+        } // Handle Adyen error.
+
+
         if (response.statusMessage) {
           return Promise.reject(new Error(response.statusMessage));
         }

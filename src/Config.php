@@ -57,6 +57,20 @@ class Config extends GatewayConfig {
 	public $apple_pay_merchant_id;
 
 	/**
+	 * Apple Pay merchant identity certificate.
+	 *
+	 * @var string|null
+	 */
+	public $apple_pay_merchant_id_certificate;
+
+	/**
+	 * Apple Pay merchant identity private key.
+	 *
+	 * @var string|null
+	 */
+	public $apple_pay_merchant_id_private_key;
+
+	/**
 	 * Apple Pay merchant identity private key password.
 	 *
 	 * @var string|null
@@ -98,7 +112,25 @@ class Config extends GatewayConfig {
 	}
 
 	/**
-	 * Get Apple Pay merchant identity certificate private key password.
+	 * Get Apple Pay merchant identity certificate.
+	 *
+	 * @return string|null
+	 */
+	public function get_apple_pay_merchant_id_certificate() {
+		return $this->apple_pay_merchant_id_certificate;
+	}
+
+	/**
+	 * Get Apple Pay merchant identity private key.
+	 *
+	 * @return string|null
+	 */
+	public function get_apple_pay_merchant_id_private_key() {
+		return $this->apple_pay_merchant_id_private_key;
+	}
+
+	/**
+	 * Get Apple Pay merchant identity private key password.
 	 *
 	 * @return string|null
 	 */

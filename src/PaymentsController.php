@@ -519,19 +519,42 @@ class PaymentsController {
 		);
 
 		try {
-			add_action( 'http_api_curl', array( $this, 'http_curl_applepay_merchant_validation' ), 10, 3 );
+			add_action( 'http_api_curl', array( $this, 'http_curl_applepay_merchant_identity' ), 10, 3 );
 
+			$certificate = $config->get_apple_pay_merchant_id_certificate();
+			$private_key = $config->get_apple_pay_merchant_id_private_key();
+
+			if ( empty( $certificate ) || empty( $private_key ) ) {
+				throw new \Exception( __( 'Invalid Apple Pay Merchant Identity configuration.', 'pronamic_ideal' ) );
+			}
+
+			// Create temporary files for merchant validation.
+			$certificate_file = \tmpfile();
+			$private_key_file = \tmpfile();
+
+			\fwrite( $certificate_file, $certificate );
+			\fwrite( $private_key_file, $private_key );
+
+			// Validate merchant.
 			$response = \wp_remote_request(
 				$data->validation_url,
 				array(
-					'method'                      => 'POST',
-					'headers'                     => array(
+					'method'                           => 'POST',
+					'headers'                          => array(
 						'Content-Type' => 'application/json',
 					),
-					'body'                        => \wp_json_encode( (object) $request ),
-					'adyen_applepay_key_password' => $config->get_apple_pay_merchant_id_private_key_password(),
+					'body'                             => \wp_json_encode( (object) $request ),
+					'adyen_applepay_merchant_identity' => array(
+						'certificate_path'     => stream_get_meta_data( $certificate_file )['uri'],
+						'private_key_path'     => stream_get_meta_data( $private_key_file )['uri'],
+						'private_key_password' => $config->get_apple_pay_merchant_id_private_key_password(),
+					)
 				)
 			);
+
+			// Remove temporary files.
+			\fclose( $certificate_file );
+			\fclose( $private_key_file );
 
 			$body = \wp_remote_retrieve_body( $response );
 
@@ -558,30 +581,31 @@ class PaymentsController {
 	 * @param array    $parsed_args Parsed arguments.
 	 * @param string   $url         Request URL.
 	 * @return void
+	 * @throws \Exception Throws exception on error while reading temporary files.
 	 */
-	public function http_curl_applepay_merchant_validation( $handle, $parsed_args, $url ) {
-		if ( ! isset( $parsed_args['adyen_applepay_key_password'] ) ) {
+	public function http_curl_applepay_merchant_identity( $handle, $parsed_args, $url ) {
+		if ( ! isset( $parsed_args['adyen_applepay_merchant_identity'] ) ) {
 			return;
 		}
 
-		// @todo Upload Apple Pay Merchant Identity certificate and private key through gateway settings.
-		$certificate_path = \ABSPATH . 'applepay-merchant-identity-cert.pem';
-		$private_key_path = \ABSPATH . 'applepay-merchant-identity-key.pem';
-		$password         = $parsed_args['adyen_applepay_key_password'];
+		$merchant_identity = $parsed_args['adyen_applepay_merchant_identity'];
 
-		// Set merchant identity certificate path.
-		if ( \file_exists( $certificate_path ) ) {
-			\curl_setopt( $handle, CURLOPT_SSLCERT, $certificate_path );
+		$certificate_path     = $merchant_identity['certificate_path'];
+		$private_key_path     = $merchant_identity['private_key_path'];
+		$private_key_password = $merchant_identity['private_key_password'];
+
+		// Check temporary files existence.
+		if ( ! \is_readable( $certificate_path ) || ! \is_readable( $private_key_path ) ) {
+			throw new \Exception( __( 'Error reading merchant identity files.', 'pronamic_ideal' ) );
 		}
 
-		// Set merchant identity private key path.
-		if ( \file_exists( $private_key_path ) ) {
-			\curl_setopt( $handle, CURLOPT_SSLKEY, $private_key_path );
-		}
+		// Set merchant identity certificate and private key SSL options.
+		\curl_setopt( $handle, CURLOPT_SSLCERT, $certificate_path );
+		\curl_setopt( $handle, CURLOPT_SSLKEY, $private_key_path );
 
 		// Set merchant identity private key password.
-		if ( ! empty( $password ) ) {
-			\curl_setopt( $handle, CURLOPT_SSLKEYPASSWD, $password );
+		if ( ! empty( $private_key_password ) ) {
+			\curl_setopt( $handle, CURLOPT_SSLKEYPASSWD, $private_key_password );
 		}
 	}
 }

@@ -20,7 +20,12 @@
 				.then( validate_http_status )
 				.then( get_json )
 				.then( response => {
-					// Handle error.
+					// Handle Pronamic Pay error.
+					if ( response.error ) {
+						return Promise.reject( new Error( response.error ) );
+					}
+
+					// Handle Adyen error.
 					if ( response.statusMessage ) {
 						return Promise.reject( new Error( response.statusMessage ) );
 					}

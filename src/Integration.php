@@ -295,14 +295,14 @@ class Integration extends AbstractGatewayIntegration {
 
 		// Apple Pay - Merchant Identity PKCS#12.
 		$fields[] = array(
-			'section'  => 'advanced',
-			'filter'   => \FILTER_SANITIZE_STRING,
-			'meta_key' => '_pronamic_gateway_adyen_apple_pay_merchant_id_certificate',
-			'title'    => __( 'Apple Pay Merchant Identity Certificate', 'pronamic_ideal' ),
-			'type'     => 'textarea',
-			'callback' => array( $this, 'field_certificate' ),
-			'classes'  => array( 'code' ),
-			'tooltip'  => __( 'The Apple Pay Merchant Identity certificate required for secure communication with Apple.', 'pronamic_ideal' ),
+			'section'     => 'advanced',
+			'filter'      => \FILTER_SANITIZE_STRING,
+			'meta_key'    => '_pronamic_gateway_adyen_apple_pay_merchant_id_certificate',
+			'title'       => __( 'Apple Pay Merchant Identity Certificate', 'pronamic_ideal' ),
+			'type'        => 'textarea',
+			'callback'    => array( $this, 'field_certificate' ),
+			'classes'     => array( 'code' ),
+			'tooltip'     => __( 'The Apple Pay Merchant Identity certificate required for secure communication with Apple.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
 				esc_url( 'https://docs.adyen.com/payment-methods/apple-pay/enable-apple-pay#create-merchant-identity-certificate' ),
@@ -324,13 +324,13 @@ class Integration extends AbstractGatewayIntegration {
 
 		// Apple Pay - Merchant Identity certificate private key password.
 		$fields[] = array(
-			'section'     => 'advanced',
-			'filter'      => \FILTER_SANITIZE_STRING,
-			'meta_key'    => '_pronamic_gateway_adyen_apple_pay_merchant_id_private_key_password',
-			'title'       => _x( 'Apple Pay Merchant Identity Private Key Password', 'adyen', 'pronamic_ideal' ),
-			'type'        => 'text',
-			'classes'     => array( 'regular-text', 'code' ),
-			'tooltip'     => __( 'Your Apple Pay Merchant Identity Certificate private key password.', 'pronamic_ideal' ),
+			'section'  => 'advanced',
+			'filter'   => \FILTER_SANITIZE_STRING,
+			'meta_key' => '_pronamic_gateway_adyen_apple_pay_merchant_id_private_key_password',
+			'title'    => _x( 'Apple Pay Merchant Identity Private Key Password', 'adyen', 'pronamic_ideal' ),
+			'type'     => 'text',
+			'classes'  => array( 'regular-text', 'code' ),
+			'tooltip'  => __( 'Your Apple Pay Merchant Identity Certificate private key password.', 'pronamic_ideal' ),
 		);
 
 		// Google Pay - Merchant identifier.
@@ -420,45 +420,49 @@ class Integration extends AbstractGatewayIntegration {
 	 * Field certificate.
 	 *
 	 * @param array $field Field.
+	 * @return void
 	 */
 	public function field_certificate( $field ) {
 		if ( ! \array_key_exists( 'meta_key', $field ) ) {
 			return;
 		}
 
-		$certificate = get_post_meta( get_the_ID(), $field['meta_key'], true );
+		$certificate = \get_post_meta( get_the_ID(), $field['meta_key'], true );
 
 		if ( ! empty( $certificate ) ) {
 			$fingerprint = Security::get_sha_fingerprint( $certificate );
-			$fingerprint = str_split( $fingerprint, 2 );
-			$fingerprint = implode( ':', $fingerprint );
 
 			echo '<dl>';
 
-			echo '<dt>', esc_html__( 'SHA Fingerprint', 'pronamic_ideal' ), '</dt>';
-			echo '<dd>', esc_html( $fingerprint ), '</dd>';
+			if ( null !== $fingerprint ) {
+				$fingerprint = \str_split( $fingerprint, 2 );
+				$fingerprint = \implode( ':', $fingerprint );
 
-			$info = openssl_x509_parse( $certificate );
+				echo '<dt>', \esc_html__( 'SHA Fingerprint', 'pronamic_ideal' ), '</dt>';
+				echo '<dd>', \esc_html( $fingerprint ), '</dd>';
+			}
+
+			$info = \openssl_x509_parse( $certificate );
 
 			if ( $info ) {
 				$date_format = __( 'M j, Y @ G:i', 'pronamic_ideal' );
 
 				if ( isset( $info['validFrom_time_t'] ) ) {
-					echo '<dt>', esc_html__( 'Valid From', 'pronamic_ideal' ), '</dt>';
-					echo '<dd>', esc_html( date_i18n( $date_format, $info['validFrom_time_t'] ) ), '</dd>';
+					echo '<dt>', \esc_html__( 'Valid From', 'pronamic_ideal' ), '</dt>';
+					echo '<dd>', \esc_html( \date_i18n( $date_format, $info['validFrom_time_t'] ) ), '</dd>';
 				}
 
 				if ( isset( $info['validTo_time_t'] ) ) {
-					echo '<dt>', esc_html__( 'Valid To', 'pronamic_ideal' ), '</dt>';
-					echo '<dd>', esc_html( date_i18n( $date_format, $info['validTo_time_t'] ) ), '</dd>';
+					echo '<dt>', \esc_html__( 'Valid To', 'pronamic_ideal' ), '</dt>';
+					echo '<dd>', \esc_html( \date_i18n( $date_format, $info['validTo_time_t'] ) ), '</dd>';
 				}
 			}
 
 			echo '</dl>';
 		} elseif ( false !== \strpos( $field['meta_key'], 'apple_pay' ) ) {
-			printf(
+			\printf(
 				'<p class="pronamic-pay-description description">%s</p><p>&nbsp;</p>',
-				esc_html__( 'Upload an Apple Pay Merchant Identity certificate, which can be exported from Keychain Access on Mac as a PKCS#12 (*.p12) file.', 'pronamic_ideal' )
+				\esc_html__( 'Upload an Apple Pay Merchant Identity certificate, which can be exported from Keychain Access on Mac as a PKCS#12 (*.p12) file.', 'pronamic_ideal' )
 			);
 		}
 
@@ -467,7 +471,7 @@ class Integration extends AbstractGatewayIntegration {
 			<?php
 
 			if ( ! empty( $certificate ) ) {
-				submit_button(
+				\submit_button(
 					__( 'Download', 'pronamic_ideal' ),
 					'secondary',
 					'download' . $field['meta_key'],
@@ -477,10 +481,10 @@ class Integration extends AbstractGatewayIntegration {
 				echo ' ';
 			}
 
-			printf(
+			\printf(
 				'<label class="pronamic-pay-form-control-file-button button">%s <input type="file" name="%s" /></label>',
-				esc_html__( 'Upload', 'pronamic_ideal' ),
-				$field['meta_key'] . '_file'
+				\esc_html__( 'Upload', 'pronamic_ideal' ),
+				\esc_attr( $field['meta_key'] . '_file' )
 			);
 
 			?>
@@ -492,20 +496,21 @@ class Integration extends AbstractGatewayIntegration {
 	 * Field private key.
 	 *
 	 * @param array $field Field.
+	 * @return void
 	 */
 	public function field_private_key( $field ) {
 		if ( ! \array_key_exists( 'meta_key', $field ) ) {
 			return;
 		}
 
-		$private_key = get_post_meta( get_the_ID(), $field['meta_key'], true );
+		$private_key = \get_post_meta( \get_the_ID(), $field['meta_key'], true );
 
 		?>
-        <p>
+		<p>
 			<?php
 
 			if ( ! empty( $private_key ) ) {
-				submit_button(
+				\submit_button(
 					__( 'Download', 'pronamic_ideal' ),
 					'secondary',
 					'download' . $field['meta_key'],
@@ -516,25 +521,27 @@ class Integration extends AbstractGatewayIntegration {
 			}
 
 			if ( empty( $private_key ) && false !== \strpos( $field['meta_key'], 'apple_pay' ) ) {
-			    printf(
-				    '<p class="pronamic-pay-description description">%s</p><p>&nbsp;</p>',
-				    esc_html__( 'Leave empty to auto fill when uploading an Apple Pay Merchant Identity PKCS#12 certificate file.', 'pronamic_ideal' )
-			    );
+				\printf(
+					'<p class="pronamic-pay-description description">%s</p><p>&nbsp;</p>',
+					\esc_html__( 'Leave empty to auto fill when uploading an Apple Pay Merchant Identity PKCS#12 certificate file.', 'pronamic_ideal' )
+				);
 			}
 
-			printf(
+			\printf(
 				'<label class="pronamic-pay-form-control-file-button button">%s <input type="file" name="%s" /></label>',
-				esc_html__( 'Upload', 'pronamic_ideal' ),
-				$field['meta_key'] . '_file'
+				\esc_html__( 'Upload', 'pronamic_ideal' ),
+				\esc_attr( $field['meta_key'] . '_file' )
 			);
 
 			?>
-        </p>
+		</p>
 		<?php
 	}
 
 	/**
 	 * Download certificate or key in Privacy Enhanced Mail (PEM) format.
+	 *
+	 * @return void
 	 */
 	public function maybe_download_certificate_or_key() {
 		// Certificate fields and download filename.
@@ -577,6 +584,7 @@ class Integration extends AbstractGatewayIntegration {
 	 * Save post.
 	 *
 	 * @param int $post_id Post ID.
+	 * @return void
 	 */
 	public function save_post( $post_id ) {
 		// Files.
@@ -588,7 +596,7 @@ class Integration extends AbstractGatewayIntegration {
 		foreach ( $files as $name => $meta_key ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			if ( isset( $_FILES[ $name ] ) && \UPLOAD_ERR_OK === $_FILES[ $name ]['error'] ) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 				$value = file_get_contents( $_FILES[ $name ]['tmp_name'] );
 
 				if ( '_pronamic_gateway_adyen_apple_pay_merchant_id_certificate' === $meta_key ) {

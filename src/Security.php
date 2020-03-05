@@ -38,35 +38,22 @@ class Security {
 	/**
 	 * Get the sha1 fingerprint from the specified certificate
 	 *
-	 * @param string $certificate
+	 * @param string $certificate Certificate.
 	 *
-	 * @return string Fingerprint or null on failure
+	 * @return null|string Fingerprint or null on failure
 	 */
 	public static function get_sha_fingerprint( $certificate ) {
 		return self::get_fingerprint( $certificate, 'sha1' );
 	}
 
 	/**
-	 * Get the md5 fingerprint from the specified certificate
-	 *
-	 * @param string $certificate
-	 *
-	 * @return string Fingerprint or null on failure
-	 */
-	public static function get_md5_fingerprint( $certificate ) {
-		return self::get_fingerprint( $certificate, 'md5' );
-	}
-
-	/**
 	 * Get the fingerprint from the specified certificate
 	 *
-	 * @param string $certificate
-	 *
-	 * @return string Fingerprint or null on failure
+	 * @param string      $certificate Certificate.
+	 * @param null|string $hash        Hash.
+	 * @return null|string Fingerprint or null on failure.
 	 */
 	public static function get_fingerprint( $certificate, $hash = null ) {
-		$fingerprint = null;
-
 		// The openssl_x509_read() function will throw an warning if the supplied
 		// parameter cannot be coerced into an X509 certificate
 		// @codingStandardsIgnoreStart
@@ -74,25 +61,25 @@ class Security {
 		// @codingStandardsIgnoreEnd
 
 		if ( false === $resource ) {
-			return false;
+			return null;
 		}
 
-		$output = null;
+		$output = '';
 
 		$result = openssl_x509_export( $resource, $output );
 
 		if ( false === $result ) {
-			return false;
+			return null;
 		}
 
 		$output = str_replace( self::CERTIFICATE_BEGIN, '', $output );
 		$output = str_replace( self::CERTIFICATE_END, '', $output );
 
-		// Base64 decode
+		// Base64 decode.
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 		$fingerprint = base64_decode( $output );
 
-		// Hash
+		// Hash.
 		if ( null !== $hash ) {
 			$fingerprint = hash( $hash, $fingerprint );
 		}

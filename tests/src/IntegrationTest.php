@@ -128,6 +128,6 @@ class IntegrationTest extends WP_UnitTestCase {
 	public function test_settings_fields() {
 		$fields = $this->integration->get_settings_fields();
 
-		$this->assertCount( 11, $fields );
+		$this->assertCount( 13, $fields );
 	}
 }

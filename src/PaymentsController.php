@@ -532,6 +532,10 @@ class PaymentsController {
 			$certificate_file = \tmpfile();
 			$private_key_file = \tmpfile();
 
+			if ( false === $certificate_file || false === $private_key_file ) {
+				throw new \Exception( __( 'Error creating merchant identity files.', 'pronamic_ideal' ) );
+			}
+
 			\fwrite( $certificate_file, $certificate );
 			\fwrite( $private_key_file, $private_key );
 
@@ -548,7 +552,7 @@ class PaymentsController {
 						'certificate_path'     => stream_get_meta_data( $certificate_file )['uri'],
 						'private_key_path'     => stream_get_meta_data( $private_key_file )['uri'],
 						'private_key_password' => $config->get_apple_pay_merchant_id_private_key_password(),
-					)
+					),
 				)
 			);
 
@@ -600,6 +604,7 @@ class PaymentsController {
 		}
 
 		// Set merchant identity certificate and private key SSL options.
+		// phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_setopt
 		\curl_setopt( $handle, CURLOPT_SSLCERT, $certificate_path );
 		\curl_setopt( $handle, CURLOPT_SSLKEY, $private_key_path );
 
@@ -607,5 +612,7 @@ class PaymentsController {
 		if ( ! empty( $private_key_password ) ) {
 			\curl_setopt( $handle, CURLOPT_SSLKEYPASSWD, $private_key_password );
 		}
+
+		// phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_setopt
 	}
 }

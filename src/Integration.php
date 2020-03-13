@@ -65,8 +65,8 @@ class Integration extends AbstractGatewayIntegration {
 
 	/**
 	 * Setup gateway integration.
-     *
-     * @return void
+	 *
+	 * @return void
 	 */
 	public function setup() {
 		// Check if dependencies are met and integration is active.

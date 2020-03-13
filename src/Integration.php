@@ -609,8 +609,8 @@ class Integration extends AbstractGatewayIntegration {
 		foreach ( $files as $name => $meta_key ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			if ( isset( $_FILES[ $name ] ) && \UPLOAD_ERR_OK === $_FILES[ $name ]['error'] ) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-				$value = file_get_contents( $_FILES[ $name ]['tmp_name'] );
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				$value = file_get_contents( $_FILES[ $name ]['tmp_name'], true );
 
 				if ( '_pronamic_gateway_adyen_apple_pay_merchant_id_certificate' === $meta_key ) {
 					$apple_pay_merchant_id_pkcs12 = $value;

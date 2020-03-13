@@ -44,7 +44,7 @@ class IntegrationTest extends WP_UnitTestCase {
 	 * @link https://developer.wordpress.org/reference/functions/has_filter/
 	 */
 	public function test_filters() {
-		$this->integration->plugins_loaded();
+		$this->integration->setup();
 
 		$this->assertEquals( has_filter( 'init', array( $this->integration, 'init' ) ), 10 );
 		$this->assertEquals( has_filter( 'admin_init', array( $this->integration, 'admin_init' ) ), 10 );

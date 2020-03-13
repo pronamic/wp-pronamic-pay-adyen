@@ -34,7 +34,10 @@ class NotificationsControllerTest extends WP_UnitTestCase {
 		$this->rest_server = \rest_get_server();
 
 		$this->controller = new NotificationsController();
-		$this->controller->rest_api_init( $this->rest_server );
+		$this->controller->setup();
+
+		// REST API init.
+		do_action( 'rest_api_init' );
 	}
 
 	/**

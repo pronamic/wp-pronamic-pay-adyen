@@ -37,6 +37,10 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
+		global $wp_rest_server;
+		$this->server   = new \WP_REST_Server;
+		$wp_rest_server = $this->server;
+
 		$this->controller = new PaymentsResultController();
 		$this->controller->setup();
 

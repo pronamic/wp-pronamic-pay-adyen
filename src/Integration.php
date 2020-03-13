@@ -402,8 +402,8 @@ class Integration extends AbstractGatewayIntegration {
 			'title'   => __( 'Authentication', 'pronamic_ideal' ),
 			'type'    => 'description',
 			'html'    => \sprintf(
-				/* translators: %s: Pronamic Pay settings URL. */
-				__( 'For webhook authentication settings, please visit <a href="%s">Pronamic Pay settings</a>.', 'pronamic_ideal' ),
+				/* translators: %s: Pronamic Pay settings page URL. */
+				__( 'Go to the <a href="%s">Pronamic Pay settings page</a> for webhook authentication settings.', 'pronamic_ideal' ),
 				\esc_url(
 					\add_query_arg(
 						array(

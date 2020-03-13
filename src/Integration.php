@@ -64,12 +64,13 @@ class Integration extends AbstractGatewayIntegration {
 	}
 
 	/**
-	 * Plugins loaded.
-	 *
-	 * @return void
+	 * Setup gateway integration.
+     *
+     * @return void
 	 */
-	public function plugins_loaded() {
-		if ( ! $this->get_dependencies()->are_met() ) {
+	public function setup() {
+		// Check if dependencies are met and integration is active.
+		if ( ! $this->is_active() ) {
 			return;
 		}
 

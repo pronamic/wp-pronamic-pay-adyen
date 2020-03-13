@@ -31,14 +31,10 @@ class NotificationsControllerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		global $wp_rest_server;
-		$this->server   = new \WP_REST_Server;
-		$wp_rest_server = $this->server;
+		$this->rest_server = \rest_get_server();
 
 		$this->controller = new NotificationsController();
-		$this->controller->setup();
-
-		do_action( 'rest_api_init' );
+		$this->controller->rest_api_init( $this->rest_server );
 	}
 
 	/**

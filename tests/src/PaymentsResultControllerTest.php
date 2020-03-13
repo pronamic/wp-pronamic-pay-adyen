@@ -37,20 +37,15 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		global $wp_rest_server;
-		$this->server   = new \WP_REST_Server;
-		$wp_rest_server = $this->server;
+		$this->rest_server = \rest_get_server();
 
 		$this->controller = new PaymentsResultController();
-		$this->controller->setup();
+		$this->controller->rest_api_init( $this->rest_server );
 
 		// Mock HTTP responses.
 		$this->mock_http_responses = array();
 
 		add_filter( 'pre_http_request', array( $this, 'pre_http_request' ), 10, 3 );
-
-		// REST API init.
-		do_action( 'rest_api_init' );
 	}
 
 	/**
@@ -101,6 +96,8 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 	 * @link https://developer.wordpress.org/reference/functions/has_filter/
 	 */
 	public function test_filters() {
+		$this->controller->setup();
+
 		$this->assertEquals( has_filter( 'rest_api_init', array( $this->controller, 'rest_api_init' ) ), 10 );
 	}
 

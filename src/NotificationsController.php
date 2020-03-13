@@ -40,9 +40,10 @@ class NotificationsController {
 	 * @link https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/
 	 * @link https://developer.wordpress.org/reference/hooks/rest_api_init/
 	 *
+	 * @param \WP_REST_Server $wp_rest_server Server object.
 	 * @return void
 	 */
-	public function rest_api_init() {
+	public function rest_api_init( $wp_rest_server ) {
 		register_rest_route(
 			Integration::REST_ROUTE_NAMESPACE,
 			'/notifications',

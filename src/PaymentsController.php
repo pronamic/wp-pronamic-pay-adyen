@@ -411,6 +411,7 @@ class PaymentsController {
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return object
+	 * @throws \Exception Throws exception on merchant identity files problems.
 	 */
 	public function rest_api_applepay_merchant_validation( WP_REST_Request $request ) {
 		$payment_id = $request->get_param( 'payment_id' );
@@ -536,7 +537,9 @@ class PaymentsController {
 				throw new \Exception( __( 'Error creating merchant identity files.', 'pronamic_ideal' ) );
 			}
 
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite -- Temporary files.
 			\fwrite( $certificate_file, $certificate );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite -- Temporary files.
 			\fwrite( $private_key_file, $private_key );
 
 			// Validate merchant.
@@ -557,7 +560,9 @@ class PaymentsController {
 			);
 
 			// Remove temporary files.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose -- Temporary files.
 			\fclose( $certificate_file );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose -- Temporary files.
 			\fclose( $private_key_file );
 
 			$body = \wp_remote_retrieve_body( $response );

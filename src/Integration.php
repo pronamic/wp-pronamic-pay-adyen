@@ -401,14 +401,16 @@ class Integration extends AbstractGatewayIntegration {
 			'section' => 'feedback',
 			'title'   => __( 'Authentication', 'pronamic_ideal' ),
 			'type'    => 'description',
-			'html'    => sprintf(
-				'For webhook authentication settings, please visit <a href="%2$s" title="Settings">%1$s settings</a>.',
-				__( 'Pronamic Pay', 'pronamic_ideal' ),
-				add_query_arg(
-					array(
-						'page' => 'pronamic_pay_settings',
-					),
-					admin_url( 'admin.php' )
+			'html'    => \sprintf(
+				/* translators: %s: Pronamic Pay settings URL. */
+				__( 'For webhook authentication settings, please visit <a href="%s">Pronamic Pay settings</a>.', 'pronamic_ideal' ),
+				\esc_url(
+					\add_query_arg(
+						array(
+							'page' => 'pronamic_pay_settings',
+						),
+						\admin_url( 'admin.php' )
+					)
 				)
 			),
 		);

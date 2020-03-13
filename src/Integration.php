@@ -612,16 +612,14 @@ class Integration extends AbstractGatewayIntegration {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = file_get_contents( $_FILES[ $name ]['tmp_name'], true );
 
-				if ( '_pronamic_gateway_adyen_apple_pay_merchant_id_certificate' === $meta_key ) {
-					$apple_pay_merchant_id_pkcs12 = $value;
-				}
-
 				update_post_meta( $post_id, $meta_key, $value );
 			}
 		}
 
 		// Update Apple Pay Merchant Identity certificate and private key from uploaded PKCS#12 file.
-		if ( isset( $apple_pay_merchant_id_pkcs12 ) ) {
+		$apple_pay_merchant_id_pkcs12 = get_post_meta( $post_id, '_pronamic_gateway_adyen_apple_pay_merchant_id_certificate', true );
+
+		if ( ! empty( $apple_pay_merchant_id_pkcs12 ) ) {
 			// Try to read file without using password.
 			$pkcs12_read = \openssl_pkcs12_read( $apple_pay_merchant_id_pkcs12, $certs, '' );
 

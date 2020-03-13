@@ -28,7 +28,9 @@ jobs:
       env: WP_VERSION=5.1.*
     - php: 7.3
       env: WP_VERSION=5.0.*
-    - php: 7.3
+    # WordPress 4.9 (or lower) will trigger PHP 7.3 (or higher) errors.
+    # @link https://core.trac.wordpress.org/ticket/44416
+    - php: 7.2
       env: WP_VERSION=4.9.*
     # WordPress 4.8 (or lower) will trigger PHP 7.2 (or higher) errors.
     # @link https://make.wordpress.org/core/2018/10/15/wordpress-and-php-7-3/

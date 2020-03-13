@@ -32,7 +32,7 @@ class Integration extends AbstractGatewayIntegration {
 	/**
 	 * Construct Adyen integration.
 	 *
-	 * @param array $args Arguments.
+	 * @param array<string, array<string>> $args Arguments.
 	 */
 	public function __construct( $args = array() ) {
 		$args = wp_parse_args(
@@ -208,7 +208,7 @@ class Integration extends AbstractGatewayIntegration {
 	/**
 	 * Get settings fields.
 	 *
-	 * @return array<int, array<string, int|string|bool|array<int,string>>>
+	 * @return array<int, array<string, callable|int|string|bool|array<int,string>>>
 	 */
 	public function get_settings_fields() {
 		$fields = array();
@@ -420,7 +420,7 @@ class Integration extends AbstractGatewayIntegration {
 	/**
 	 * Field certificate.
 	 *
-	 * @param array $field Field.
+	 * @param array<string> $field Field.
 	 * @return void
 	 */
 	public function field_certificate( $field ) {
@@ -428,7 +428,13 @@ class Integration extends AbstractGatewayIntegration {
 			return;
 		}
 
-		$certificate = \get_post_meta( get_the_ID(), $field['meta_key'], true );
+		$post_id = \get_the_ID();
+
+		if ( false === $post_id ) {
+			return;
+		}
+
+		$certificate = \get_post_meta( $post_id, $field['meta_key'], true );
 
 		if ( ! empty( $certificate ) ) {
 			$fingerprint = Security::get_sha_fingerprint( $certificate );
@@ -496,7 +502,7 @@ class Integration extends AbstractGatewayIntegration {
 	/**
 	 * Field private key.
 	 *
-	 * @param array $field Field.
+	 * @param array<string> $field Field.
 	 * @return void
 	 */
 	public function field_private_key( $field ) {
@@ -504,7 +510,13 @@ class Integration extends AbstractGatewayIntegration {
 			return;
 		}
 
-		$private_key = \get_post_meta( \get_the_ID(), $field['meta_key'], true );
+		$post_id = \get_the_ID();
+
+		if ( false === $post_id ) {
+			return;
+		}
+
+		$private_key = \get_post_meta( $post_id, $field['meta_key'], true );
 
 		?>
 		<p>

@@ -66,22 +66,24 @@ class Security {
 
 		$output = '';
 
-		$result = openssl_x509_export( $resource, $output );
+		$result = \openssl_x509_export( $resource, $output );
 
 		if ( false === $result ) {
 			return null;
 		}
 
-		$output = str_replace( self::CERTIFICATE_BEGIN, '', $output );
-		$output = str_replace( self::CERTIFICATE_END, '', $output );
+		$output = \str_replace( self::CERTIFICATE_BEGIN, '', $output );
+		$output = \str_replace( self::CERTIFICATE_END, '', $output );
+
+		$output = \strval( $output );
 
 		// Base64 decode.
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
-		$fingerprint = base64_decode( $output );
+		$fingerprint = \base64_decode( $output );
 
 		// Hash.
 		if ( null !== $hash ) {
-			$fingerprint = hash( $hash, $fingerprint );
+			$fingerprint = \hash( $hash, $fingerprint );
 		}
 
 		/*
@@ -93,7 +95,7 @@ class Security {
 		 *
 		 * @since 1.1.11
 		 */
-		$fingerprint = strtoupper( $fingerprint );
+		$fingerprint = \strtoupper( $fingerprint );
 
 		return $fingerprint;
 	}

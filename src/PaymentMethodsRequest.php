@@ -28,6 +28,13 @@ class PaymentMethodsRequest extends Request {
 	private $allowed_payment_methods;
 
 	/**
+	 * Blocked payment methods.
+	 *
+	 * @var array<int, string>|null
+	 */
+	private $blocked_payment_methods;
+
+	/**
 	 * The merchant account identifier, with which you want to process the transaction.
 	 *
 	 * @var string
@@ -74,6 +81,25 @@ class PaymentMethodsRequest extends Request {
 	 */
 	public function set_allowed_payment_methods( $allowed_payment_methods ) {
 		$this->allowed_payment_methods = $allowed_payment_methods;
+	}
+
+	/**
+	 * Get blocked payment methods.
+	 *
+	 * @return array<int, string>|null
+	 */
+	public function get_blocked_payment_methods() {
+		return $this->blocked_payment_methods;
+	}
+
+	/**
+	 * Set blocked payment methods.
+	 *
+	 * @param array<int, string> $blocked_payment_methods Blocked payment methods.
+	 * @return void
+	 */
+	public function set_blocked_payment_methods( $blocked_payment_methods ) {
+		$this->blocked_payment_methods = $blocked_payment_methods;
 	}
 
 	/**
@@ -125,6 +151,7 @@ class PaymentMethodsRequest extends Request {
 				'merchantAccount'       => $this->merchant_account,
 				'countryCode'           => $this->get_country_code(),
 				'allowedPaymentMethods' => $this->get_allowed_payment_methods(),
+				'blockedPaymentMethods' => $this->get_blocked_payment_methods(),
 			)
 		);
 

@@ -18,11 +18,44 @@
     return response.json();
   };
 
+  if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay) {
+    pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = function (resolve, reject, validationUrl) {
+      send_request(pronamicPayAdyenCheckout.applePayMerchantValidationUrl, {
+        validation_url: validationUrl
+      }).then(validate_http_status).then(get_json).then(function (response) {
+        // Handle Pronamic Pay error.
+        if (response.error) {
+          return Promise.reject(new Error(response.error));
+        } // Handle Adyen error.
+
+
+        if (response.statusMessage) {
+          return Promise.reject(new Error(response.statusMessage));
+        }
+
+        return resolve(response);
+      }).catch(function (error) {
+        dropin.setStatus('error', {
+          message: error.message
+        });
+        setTimeout(function () {
+          dropin.setStatus('ready');
+        }, 5000);
+        return reject();
+      });
+    };
+  }
+
   var dropin = checkout.create('dropin', {
     paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
     onSubmit: function onSubmit(state, dropin) {
       send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(validate_http_status).then(get_json).then(function (response) {
-        // Handle action object.
+        // Handle error.
+        if (response.error) {
+          return Promise.reject(new Error(response.error));
+        } // Handle action object.
+
+
         if (response.action) {
           dropin.handleAction(response.action);
         } // Handle result code.
@@ -32,10 +65,12 @@
           paymentResult(response);
         }
       }).catch(function (error) {
-        //alert( error );
-        //dropin.setStatus( 'error', { message: response.error } );
-        //setTimeout( function() { dropin.setStatus( 'ready' ); }, 5000 );
-        throw Error(error);
+        dropin.setStatus('error', {
+          message: error.message
+        });
+        setTimeout(function () {
+          dropin.setStatus('ready');
+        }, 5000);
       });
     },
     onAdditionalDetails: function onAdditionalDetails(state, dropin) {
@@ -140,10 +175,12 @@
           message: pronamicPayAdyenCheckout.paymentReceived
         });
         /*
-         * Inform the shopper that the payment was refused. Ask the shopper to try the payment again using a different payment method or card.
+         * Inform the shopper that you've received their order, and are waiting for the payment to clear.
          */
 
-        window.location.href = pronamicPayAdyenCheckout.paymentReturnUrl;
+        setTimeout(function () {
+          window.location.href = pronamicPayAdyenCheckout.paymentReturnUrl;
+        }, 3000);
         break;
     }
   };

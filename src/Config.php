@@ -50,6 +50,41 @@ class Config extends GatewayConfig {
 	public $origin_key;
 
 	/**
+	 * Apple Pay merchant identifier.
+	 *
+	 * @var string|null
+	 */
+	public $apple_pay_merchant_id;
+
+	/**
+	 * Apple Pay merchant identity certificate.
+	 *
+	 * @var string|null
+	 */
+	public $apple_pay_merchant_id_certificate;
+
+	/**
+	 * Apple Pay merchant identity private key.
+	 *
+	 * @var string|null
+	 */
+	public $apple_pay_merchant_id_private_key;
+
+	/**
+	 * Apple Pay merchant identity private key password.
+	 *
+	 * @var string|null
+	 */
+	public $apple_pay_merchant_id_private_key_password;
+
+	/**
+	 * Google Pay merchant identifier.
+	 *
+	 * @var string|null
+	 */
+	public $google_pay_merchant_identifier;
+
+	/**
 	 * Get API key.
 	 *
 	 * @return string|null
@@ -65,6 +100,51 @@ class Config extends GatewayConfig {
 	 */
 	public function get_merchant_account() {
 		return strval( $this->merchant_account );
+	}
+
+	/**
+	 * Get Apple Pay merchant identifier.
+	 *
+	 * @return string|null
+	 */
+	public function get_apple_pay_merchant_id() {
+		return $this->apple_pay_merchant_id;
+	}
+
+	/**
+	 * Get Apple Pay merchant identity certificate.
+	 *
+	 * @return string|null
+	 */
+	public function get_apple_pay_merchant_id_certificate() {
+		return $this->apple_pay_merchant_id_certificate;
+	}
+
+	/**
+	 * Get Apple Pay merchant identity private key.
+	 *
+	 * @return string|null
+	 */
+	public function get_apple_pay_merchant_id_private_key() {
+		return $this->apple_pay_merchant_id_private_key;
+	}
+
+	/**
+	 * Get Apple Pay merchant identity private key password.
+	 *
+	 * @return string|null
+	 */
+	public function get_apple_pay_merchant_id_private_key_password() {
+		return $this->apple_pay_merchant_id_private_key_password;
+	}
+
+	/**
+	 * Get Google Pay merchant identifier.
+	 *
+	 * @return string|null
+	 */
+	public function get_google_pay_merchant_identifier() {
+		return $this->google_pay_merchant_identifier;
 	}
 
 	/**

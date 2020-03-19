@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use JsonSchema\Exception\ValidationException;
+use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Plugin;
 use WP_REST_Request;
 
@@ -73,6 +74,22 @@ class PaymentsController {
 				),
 			)
 		);
+
+		// Register REST route `/payments/applepay/merchant-validation/`.
+		register_rest_route(
+			Integration::REST_ROUTE_NAMESPACE,
+			'/payments/applepay/merchant-validation/(?P<payment_id>\d+)',
+			array(
+				'methods'  => 'POST',
+				'callback' => array( $this, 'rest_api_applepay_merchant_validation' ),
+				'args'     => array(
+					'payment_id' => array(
+						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
+						'type'        => 'integer',
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -80,6 +97,7 @@ class PaymentsController {
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return object
+	 * @throws \Exception Throws exception on Adyen service exception response.
 	 */
 	public function rest_api_adyen_payments( WP_REST_Request $request ) {
 		$payment_id = $request->get_param( 'payment_id' );
@@ -171,11 +189,34 @@ class PaymentsController {
 				);
 			}
 
-			$response = $gateway->create_payment( $payment, $payment_method );
+			try {
+				$response = $gateway->create_payment( $payment, $payment_method );
+			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
+				$message = $service_exception->getMessage();
+
+				$error_code = $service_exception->get_error_code();
+
+				if ( ! empty( $error_code ) ) {
+					$message = sprintf(
+						/* translators: 1: error message, 2: error code */
+						__( '%1$s (error %2$s)', 'pronamic_ideal' ),
+						$service_exception->getMessage(),
+						$error_code
+					);
+				}
+
+				throw new \Exception( $message );
+			}
 		} catch ( \Exception $e ) {
-			return (object) array(
-				'error' => $e->getMessage(),
-			);
+			$error = $e->getMessage();
+
+			$error_code = $e->getCode();
+
+			if ( ! empty( $error_code ) ) {
+				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
+			}
+
+			return (object) array( 'error' => $error );
 		}
 
 		// Update payment status based on response.
@@ -207,6 +248,7 @@ class PaymentsController {
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return object
+	 * @throws \Exception Throws exception on Adyen service exception response.
 	 */
 	public function rest_api_adyen_payment_details( WP_REST_Request $request ) {
 		$payment_id = $request->get_param( 'payment_id' );
@@ -310,14 +352,37 @@ class PaymentsController {
 				);
 			}
 
-			$response = $gateway->send_payment_details( $payment_details_request );
+			try {
+				$response = $gateway->send_payment_details( $payment_details_request );
+			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
+				$message = $service_exception->getMessage();
+
+				$error_code = $service_exception->get_error_code();
+
+				if ( ! empty( $error_code ) ) {
+					$message = sprintf(
+					/* translators: 1: error message, 2: error code */
+						__( '%1$s (error %2$s)', 'pronamic_ideal' ),
+						$service_exception->getMessage(),
+						$error_code
+					);
+				}
+
+				throw new \Exception( $message );
+			}
 
 			// Update payment status based on response.
 			PaymentResponseHelper::update_payment( $payment, $response );
 		} catch ( \Exception $e ) {
-			return (object) array(
-				'error' => $e->getMessage(),
-			);
+			$error = $e->getMessage();
+
+			$error_code = $e->getCode();
+
+			if ( ! empty( $error_code ) ) {
+				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
+			}
+
+			return (object) array( 'error' => $error );
 		}
 
 		$result = array(
@@ -339,5 +404,220 @@ class PaymentsController {
 		}
 
 		return (object) $result;
+	}
+
+	/**
+	 * REST API Apple Pay merchant validation handler.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return object
+	 * @throws \Exception Throws exception on merchant identity files problems.
+	 */
+	public function rest_api_applepay_merchant_validation( WP_REST_Request $request ) {
+		$payment_id = $request->get_param( 'payment_id' );
+
+		// Payment ID.
+		if ( null === $payment_id ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-payment-id',
+				__( 'No payment ID given in `payment_id` parameter.', 'pronamic_ideal' )
+			);
+		}
+
+		$payment = \get_pronamic_payment( $payment_id );
+
+		if ( null === $payment ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-payment-not-found',
+				sprintf(
+					/* translators: %s: payment ID */
+					__( 'Could not find payment with ID `%s`.', 'pronamic_ideal' ),
+					$payment_id
+				),
+				$payment_id
+			);
+		}
+
+		// State data.
+		$data = \json_decode( $request->get_body() );
+
+		if ( null === $data ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-data',
+				__( 'No data given in request body.', 'pronamic_ideal' )
+			);
+		}
+
+		// Gateway.
+		$config_id = $payment->get_config_id();
+
+		if ( null === $config_id ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-config',
+				__( 'No gateway configuration ID given in payment.', 'pronamic_ideal' )
+			);
+		}
+
+		$gateway = Plugin::get_gateway( $config_id );
+
+		if ( empty( $gateway ) ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-gateway-not-found',
+				sprintf(
+					/* translators: %s: Gateway configuration ID */
+					__( 'Could not find gateway with ID `%s`.', 'pronamic_ideal' ),
+					$config_id
+				),
+				$config_id
+			);
+		}
+
+		if ( ! isset( $gateway->client ) ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-client-not-found',
+				sprintf(
+					/* translators: %s: Gateway configuration ID */
+					__( 'Could not find client in gateway with ID `%s`.', 'pronamic_ideal' ),
+					$config_id
+				),
+				$config_id
+			);
+		}
+
+		// Merchant identifier.
+		$integration = new Integration();
+
+		$config = $integration->get_config( $config_id );
+
+		$merchant_identifier = $config->get_apple_pay_merchant_id();
+
+		if ( empty( $merchant_identifier ) ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-applepay-no-merchant-identifier',
+				__( 'Apple Pay merchant identifier not configured in gateway settings.', 'pronamic_ideal' )
+			);
+		}
+
+		if ( ! isset( $data->validation_url ) ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-applepay-no-validation-url',
+				__( 'No Apple Pay merchant validation URL given.', 'pronamic_ideal' )
+			);
+		}
+
+		/*
+		 * Request an Apple Pay payment session.
+		 *
+		 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaysession/1778021-onvalidatemerchant
+		 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/apple_pay_js_api/requesting_an_apple_pay_payment_session
+		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#show-apple-pay-in-your-payment-form
+		 */
+		$request = array(
+			'merchantIdentifier' => $merchant_identifier,
+			'displayName'        => \get_bloginfo( 'name' ),
+			'initiative'         => 'web',
+			'initiativeContext'  => Server::get( 'HTTP_HOST', FILTER_SANITIZE_STRING ),
+		);
+
+		try {
+			add_action( 'http_api_curl', array( $this, 'http_curl_applepay_merchant_identity' ), 10, 3 );
+
+			$certificate = $config->get_apple_pay_merchant_id_certificate();
+			$private_key = $config->get_apple_pay_merchant_id_private_key();
+
+			if ( empty( $certificate ) || empty( $private_key ) ) {
+				throw new \Exception( __( 'Invalid Apple Pay Merchant Identity configuration.', 'pronamic_ideal' ) );
+			}
+
+			// Create temporary files for merchant validation.
+			$certificate_file = \tmpfile();
+			$private_key_file = \tmpfile();
+
+			if ( false === $certificate_file || false === $private_key_file ) {
+				throw new \Exception( __( 'Error creating merchant identity files.', 'pronamic_ideal' ) );
+			}
+
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite -- Temporary files.
+			\fwrite( $certificate_file, $certificate );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite -- Temporary files.
+			\fwrite( $private_key_file, $private_key );
+
+			// Validate merchant.
+			$response = \wp_remote_request(
+				$data->validation_url,
+				array(
+					'method'                           => 'POST',
+					'headers'                          => array(
+						'Content-Type' => 'application/json',
+					),
+					'body'                             => \wp_json_encode( (object) $request ),
+					'adyen_applepay_merchant_identity' => array(
+						'certificate_path'     => stream_get_meta_data( $certificate_file )['uri'],
+						'private_key_path'     => stream_get_meta_data( $private_key_file )['uri'],
+						'private_key_password' => $config->get_apple_pay_merchant_id_private_key_password(),
+					),
+				)
+			);
+
+			// Remove temporary files.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose -- Temporary files.
+			\fclose( $certificate_file );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose -- Temporary files.
+			\fclose( $private_key_file );
+
+			$body = \wp_remote_retrieve_body( $response );
+
+			$result = \json_decode( $body );
+		} catch ( \Exception $e ) {
+			$error = $e->getMessage();
+
+			$error_code = $e->getCode();
+
+			if ( ! empty( $error_code ) ) {
+				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
+			}
+
+			return (object) array( 'error' => $error );
+		}
+
+		return (object) $result;
+	}
+
+	/**
+	 * HTTP CURL options for Apple Pay merchant validation.
+	 *
+	 * @param resource             $handle      CURL handle.
+	 * @param array<array<string>> $parsed_args Parsed arguments.
+	 * @param string               $url         Request URL.
+	 * @return void
+	 * @throws \Exception Throws exception on error while reading temporary files.
+	 */
+	public function http_curl_applepay_merchant_identity( $handle, $parsed_args, $url ) {
+		if ( ! isset( $parsed_args['adyen_applepay_merchant_identity'] ) ) {
+			return;
+		}
+
+		$merchant_identity = $parsed_args['adyen_applepay_merchant_identity'];
+
+		$certificate_path     = $merchant_identity['certificate_path'];
+		$private_key_path     = $merchant_identity['private_key_path'];
+		$private_key_password = $merchant_identity['private_key_password'];
+
+		// Check temporary files existence.
+		if ( ! \is_readable( $certificate_path ) || ! \is_readable( $private_key_path ) ) {
+			throw new \Exception( __( 'Error reading merchant identity files.', 'pronamic_ideal' ) );
+		}
+
+		// Set merchant identity certificate and private key SSL options.
+		// phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_setopt
+		\curl_setopt( $handle, CURLOPT_SSLCERT, $certificate_path );
+		\curl_setopt( $handle, CURLOPT_SSLKEY, $private_key_path );
+
+		// Set merchant identity private key password.
+		if ( ! empty( $private_key_password ) ) {
+			\curl_setopt( $handle, CURLOPT_SSLKEYPASSWD, $private_key_password );
+		}
+
+		// phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_setopt
 	}
 }

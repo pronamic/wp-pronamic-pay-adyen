@@ -62,11 +62,13 @@ class DropInGateway extends AbstractGateway {
 	public function get_supported_payment_methods() {
 		return array(
 			PaymentMethods::ALIPAY,
+			PaymentMethods::APPLE_PAY,
 			PaymentMethods::BANCONTACT,
 			PaymentMethods::CREDIT_CARD,
 			PaymentMethods::DIRECT_DEBIT,
 			PaymentMethods::EPS,
 			PaymentMethods::GIROPAY,
+			PaymentMethods::GOOGLE_PAY,
 			PaymentMethods::IDEAL,
 			PaymentMethods::SOFORT,
 		);
@@ -142,9 +144,7 @@ class DropInGateway extends AbstractGateway {
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
 		// Only show drop-in checkout page if payment method does not redirect.
-		if ( is_string( $payment_response ) && '' !== $payment_response ) {
-			$payment_response = \json_decode( $payment_response );
-
+		if ( is_object( $payment_response ) ) {
 			$payment_response = PaymentResponse::from_object( $payment_response );
 
 			$redirect = $payment_response->get_redirect();
@@ -153,43 +153,6 @@ class DropInGateway extends AbstractGateway {
 				\wp_redirect( $redirect->get_url() );
 			}
 		}
-
-		$url_script = sprintf(
-			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.js',
-			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			self::SDK_VERSION
-		);
-
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
-		wp_register_script(
-			'pronamic-pay-adyen-checkout',
-			$url_script,
-			array(),
-			self::SDK_VERSION,
-			false
-		);
-
-		wp_register_script(
-			'pronamic-pay-adyen-checkout-drop-in',
-			plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
-			array( 'pronamic-pay-adyen-checkout' ),
-			\pronamic_pay_plugin()->get_version(),
-			true
-		);
-
-		$url_stylesheet = sprintf(
-			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.css',
-			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			self::SDK_VERSION
-		);
-
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
-		wp_register_style(
-			'pronamic-pay-adyen-checkout',
-			$url_stylesheet,
-			array(),
-			null
-		);
 
 		/**
 		 * Payment methods.
@@ -203,6 +166,13 @@ class DropInGateway extends AbstractGateway {
 			if ( null !== $payment_method_type ) {
 				$request->set_allowed_payment_methods( array( $payment_method_type ) );
 			}
+		}
+
+		// Prevent Apple Pay if no merchant identifier has been configured.
+		$apple_pay_merchant_id = $this->config->get_apple_pay_merchant_id();
+
+		if ( empty( $apple_pay_merchant_id ) ) {
+			$request->set_blocked_payment_methods( array( PaymentMethodType::APPLE_PAY ) );
 		}
 
 		$locale = Util::get_payment_locale( $payment );
@@ -220,6 +190,61 @@ class DropInGateway extends AbstractGateway {
 			exit;
 		}
 
+		$payment_method_types = $payment_methods->get_payment_method_types();
+
+		// Register scripts.
+		$url_script = sprintf(
+			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.js',
+			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+			self::SDK_VERSION
+		);
+
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
+		wp_register_script(
+			'pronamic-pay-adyen-checkout',
+			$url_script,
+			array(),
+			self::SDK_VERSION,
+			false
+		);
+
+		wp_register_script(
+			'pronamic-pay-adyen-google-pay',
+			'https://pay.google.com/gp/p/js/pay.js',
+			array(),
+			\pronamic_pay_plugin()->get_version(),
+			false
+		);
+
+		$dependencies = array( 'pronamic-pay-adyen-checkout' );
+
+		if ( \in_array( PaymentMethodType::GOOGLE_PAY, $payment_method_types, true ) ) {
+			$dependencies[] = 'pronamic-pay-adyen-google-pay';
+		}
+
+		wp_register_script(
+			'pronamic-pay-adyen-checkout-drop-in',
+			plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
+			$dependencies,
+			\pronamic_pay_plugin()->get_version(),
+			true
+		);
+
+		// Register styles.
+		$url_stylesheet = sprintf(
+			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.css',
+			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+			self::SDK_VERSION
+		);
+
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
+		wp_register_style(
+			'pronamic-pay-adyen-checkout',
+			$url_stylesheet,
+			array(),
+			null
+		);
+
 		/**
 		 * Adyen checkout configuration.
 		 *
@@ -227,12 +252,11 @@ class DropInGateway extends AbstractGateway {
 		 * @link https://docs.adyen.com/checkout/components-web
 		 */
 		$configuration = (object) array(
-			'locale'                      => Util::get_payment_locale( $payment ),
-			'environment'                 => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			'originKey'                   => $this->config->origin_key,
-			'paymentMethodsResponse'      => $payment_methods->get_original_object(),
-			'paymentMethodsConfiguration' => $this->get_checkout_payment_methods_configuration( $payment ),
-			'amount'                      => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
+			'locale'                 => Util::get_payment_locale( $payment ),
+			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+			'originKey'              => $this->config->origin_key,
+			'paymentMethodsResponse' => $payment_methods->get_original_object(),
+			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		);
 
 		/**
@@ -247,13 +271,15 @@ class DropInGateway extends AbstractGateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			array(
-				'paymentsUrl'        => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
-				'paymentsDetailsUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' ),
-				'paymentReturnUrl'   => $payment->get_return_url(),
-				'configuration'      => $configuration,
-				'paymentAuthorised'  => __( 'Payment completed successfully.', 'pronamic_ideal' ),
-				'paymentReceived'    => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
-				'paymentRefused'     => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
+				'paymentMethodsConfiguration'   => $this->get_checkout_payment_methods_configuration( $payment_method_types, $payment ),
+				'paymentsUrl'                   => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
+				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' ),
+				'applePayMerchantValidationUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
+				'paymentReturnUrl'              => $payment->get_return_url(),
+				'configuration'                 => $configuration,
+				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),
+				'paymentReceived'               => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
+				'paymentRefused'                => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
 			)
 		);
 
@@ -315,17 +341,10 @@ class DropInGateway extends AbstractGateway {
 		// Retrieve status from payment details.
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
-		if ( is_string( $payment_response ) && '' !== $payment_response ) {
-			$payment_response = \json_decode( $payment_response );
-
+		if ( is_object( $payment_response ) ) {
 			$payment_response = PaymentResponse::from_object( $payment_response );
 
 			$details_result = $payment->get_meta( 'adyen_details_result' );
-
-			// JSON decode details result meta.
-			if ( is_string( $details_result ) && '' !== $details_result ) {
-				$details_result = \json_decode( $details_result );
-			}
 
 			// Set details result meta from GET or POST request parameters.
 			if ( '' === $details_result ) {
@@ -477,21 +496,83 @@ class DropInGateway extends AbstractGateway {
 	/**
 	 * Get checkout payment methods configuration.
 	 *
-	 * @param Payment $payment Payment.
+	 * @param array<int, string> $payment_method_types Payment method types.
+	 * @param Payment            $payment              Payment.
 	 *
 	 * @return object
 	 */
-	public function get_checkout_payment_methods_configuration( Payment $payment ) {
+	public function get_checkout_payment_methods_configuration( $payment_method_types, Payment $payment ) {
 		$configuration = array();
 
-		// Cards.
-		$configuration['card'] = array(
-			'enableStoreDetails' => true,
-			'hasHolderName'      => true,
-			'holderNameRequired' => true,
-			'hideCVC'            => false,
-			'name'               => __( 'Credit or debit card', 'pronamic_ideal' ),
-		);
+		/*
+		 * Apple Pay.
+		 *
+		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#show-apple-pay-in-your-payment-form
+		 */
+		if ( \in_array( PaymentMethodType::APPLE_PAY, $payment_method_types, true ) ) {
+			$configuration['applepay'] = array(
+				'amount'        => $payment->get_total_amount()->get_minor_units(),
+				'currencyCode'  => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
+				'configuration' => array(
+					'merchantName'       => \get_bloginfo( 'name' ),
+					'merchantIdentifier' => $this->config->get_apple_pay_merchant_id(),
+				),
+			);
+
+			// Line items.
+			$lines = $payment->get_lines();
+
+			if ( null !== $lines ) {
+				$line_items = array();
+
+				foreach ( $lines as $line ) {
+					$line_items[] = array(
+						'label'  => $line->get_name(),
+						'amount' => (string) $line->get_total_amount()->get_value(),
+						'type'   => 'final',
+					);
+				}
+
+				$configuration['applepay']['lineItems'] = $line_items;
+			}
+		}
+
+		/*
+		 * Cards.
+		 *
+		 * @link https://docs.adyen.com/payment-methods/cards/web-drop-in#show-the-available-cards-in-your-payment-form
+		 */
+		if ( \in_array( PaymentMethodType::SCHEME, $payment_method_types, true ) ) {
+			$configuration['card'] = array(
+				'enableStoreDetails' => true,
+				'hasHolderName'      => true,
+				'holderNameRequired' => true,
+				'hideCVC'            => false,
+				'name'               => __( 'Credit or debit card', 'pronamic_ideal' ),
+			);
+		}
+
+		/*
+		 * Google Pay.
+		 *
+		 * @link https://docs.adyen.com/payment-methods/google-pay/web-drop-in#show-google-pay-in-your-payment-form
+		 */
+		if ( \in_array( PaymentMethodType::GOOGLE_PAY, $payment_method_types, true ) ) {
+			$configuration['paywithgoogle'] = array(
+				'environment'   => ( self::MODE_TEST === $this->config->mode ? 'TEST' : 'PRODUCTION' ),
+				'amount'        => array(
+					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
+					'value'    => $payment->get_total_amount()->get_minor_units(),
+				),
+				'configuration' => array(
+					'gatewayMerchantId' => $this->config->merchant_account,
+				),
+			);
+
+			if ( self::MODE_LIVE === $this->config->mode ) {
+				$configuration['paywithgoogle']['configuration']['merchantIdentifier'] = $this->config->get_google_pay_merchant_identifier();
+			}
+		}
 
 		return (object) $configuration;
 	}

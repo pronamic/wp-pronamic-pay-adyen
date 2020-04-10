@@ -422,6 +422,9 @@ class DropInGateway extends AbstractGateway {
 			$payment_method
 		);
 
+		// Merchant order reference.
+		$payment_request->set_merchant_order_reference( $payment->format_string( $this->config->get_merchant_order_reference() ) );
+
 		/**
 		 * Application info.
 		 *

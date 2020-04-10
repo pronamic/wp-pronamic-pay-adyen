@@ -43,6 +43,13 @@ class Config extends GatewayConfig {
 	public $merchant_account;
 
 	/**
+	 * Merchant Order Reference.
+	 *
+	 * @var string|null
+	 */
+	public $merchant_order_reference;
+
+	/**
 	 * Origin key.
 	 *
 	 * @var string|null
@@ -100,6 +107,15 @@ class Config extends GatewayConfig {
 	 */
 	public function get_merchant_account() {
 		return strval( $this->merchant_account );
+	}
+
+	/**
+	 * Get merchant order reference.
+	 *
+	 * @return string
+	 */
+	public function get_merchant_order_reference() {
+		return strval( $this->merchant_order_reference );
 	}
 
 	/**

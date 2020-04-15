@@ -47,7 +47,6 @@ class DropInGateway extends AbstractGateway {
 
 		// Supported features.
 		$this->supports = array(
-			'payment_status_request',
 			'webhook_log',
 			'webhook',
 		);

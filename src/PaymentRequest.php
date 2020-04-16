@@ -21,6 +21,14 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  */
 class PaymentRequest extends AbstractPaymentRequest {
 	/**
+	 * The shopper's browser information.
+	 * For 3D Secure 2 transactions, `browserInfo` is required for `channel` web (or `deviceChannel` browser).
+	 *
+	 * @var BrowserInformation|null
+	 */
+	private $browser_info;
+
+	/**
 	 * The collection that contains the type of the payment method and its
 	 * specific information (e.g. idealIssuer).
 	 *
@@ -53,6 +61,25 @@ class PaymentRequest extends AbstractPaymentRequest {
 	}
 
 	/**
+	 * Get browser info.
+	 *
+	 * @return BrowserInformation|null
+	 */
+	public function get_browser_info() {
+		return $this->browser_info;
+	}
+
+	/**
+	 * Set browser info.
+	 *
+	 * @param BrowserInformation|null $browser_info Browser info.
+	 * @return void
+	 */
+	public function set_browser_info( $browser_info ) {
+		$this->browser_info = $browser_info;
+	}
+
+	/**
 	 * Get JSON.
 	 *
 	 * @return object
@@ -61,6 +88,13 @@ class PaymentRequest extends AbstractPaymentRequest {
 		$object = parent::get_json();
 
 		$properties = (array) $object;
+
+		// Browser information.
+		$browser_info = $this->get_browser_info();
+
+		if ( null !== $browser_info ) {
+			$properties['browserInfo'] = $browser_info->get_json();
+		}
 
 		// Payment method.
 		$properties['paymentMethod'] = $this->get_payment_method()->get_json();

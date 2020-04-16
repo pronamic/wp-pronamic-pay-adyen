@@ -190,7 +190,7 @@ class PaymentsController {
 			}
 
 			try {
-				$response = $gateway->create_payment( $payment, $payment_method );
+				$response = $gateway->create_payment( $payment, $payment_method, $data );
 			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
 				$message = $service_exception->getMessage();
 

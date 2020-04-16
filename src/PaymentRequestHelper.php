@@ -122,5 +122,26 @@ class PaymentRequestHelper {
 				}
 			}
 		}
+
+		// Metadata.
+		$metadata = array();
+
+		/**
+		 * Filters the Adyen checkout configuration.
+		 *
+		 * @param array $metadata Payment request metadata.
+		 * @since 1.1.1
+		 */
+		$metadata = apply_filters( 'pronamic_pay_adyen_payment_metadata', $metadata, $payment );
+
+		/*
+		 * Maximum 20 key-value pairs per request. When exceeding, the "177" error occurs: "Metadata size exceeds limit".
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_metadata
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession__reqParam_metadata
+		 */
+		$metadata = \array_slice( $metadata, 0, 20, true );
+
+		$request->set_metadata( $metadata );
 	}
 }

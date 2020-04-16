@@ -107,6 +107,14 @@ abstract class AbstractPaymentRequest extends Request {
 	private $merchant_order_reference;
 
 	/**
+	 * Metadata consists of entries, each of which includes a key and a value. Limitations: Maximum 20 key-value
+	 * pairs per request. When exceeding, the "177" error occurs: "Metadata size exceeds limit".
+	 *
+	 * @var array<string,int|string>|null
+	 */
+	private $metadata;
+
+	/**
 	 * The reference to uniquely identify a payment. This reference is used in all communication
 	 * with you about the payment status. We recommend using a unique value per payment;
 	 * however, it is not a requirement. If you need to provide multiple references for
@@ -382,6 +390,25 @@ abstract class AbstractPaymentRequest extends Request {
 	}
 
 	/**
+	 * Get metadata.
+	 *
+	 * @return array<string,int|string>|null
+	 */
+	public function get_metadata() {
+		return $this->metadata;
+	}
+
+	/**
+	 * Set metadata.
+	 *
+	 * @param array<string,int|string>|null $metadata Metadata.
+	 * @return void
+	 */
+	public function set_metadata( $metadata ) {
+		$this->metadata = $metadata;
+	}
+
+	/**
 	 * Get reference.
 	 *
 	 * @return string
@@ -551,6 +578,7 @@ abstract class AbstractPaymentRequest extends Request {
 				'lineItems'              => is_null( $this->line_items ) ? null : $this->line_items->get_json(),
 				'merchantAccount'        => $this->get_merchant_account(),
 				'merchantOrderReference' => $this->get_merchant_order_reference(),
+				'metadata'               => $this->get_metadata(),
 				'reference'              => $this->get_reference(),
 				'returnUrl'              => $this->get_return_url(),
 				'shopperIP'              => $this->shopper_ip,

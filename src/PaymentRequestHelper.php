@@ -26,6 +26,7 @@ class PaymentRequestHelper {
 	 * @param Payment                $payment WordPress Pay payment to convert.
 	 * @param AbstractPaymentRequest $request Adyen payment request.
 	 * @return void
+	 * @throws \Exception Throws exception on invalid metadata.
 	 */
 	public static function complement( Payment $payment, AbstractPaymentRequest $request ) {
 		// Channel.

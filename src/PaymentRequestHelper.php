@@ -144,7 +144,13 @@ class PaymentRequestHelper {
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_metadata
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession__reqParam_metadata
 		 */
-		$metadata = \array_slice( $metadata, 0, 20, true );
+		if ( ! \is_array( $metadata ) ) {
+			throw new \Exception( 'Adyen metadata must be an array.' );
+		}
+
+		if ( count( $metadata ) > 20 ) {
+			throw new \Exception( 'Adyen metadata exceeds maximum of 20 items.' );
+		}
 
 		$request->set_metadata( $metadata );
 	}

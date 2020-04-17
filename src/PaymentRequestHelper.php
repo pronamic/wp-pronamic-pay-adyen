@@ -38,9 +38,13 @@ class PaymentRequestHelper {
 		$customer = $payment->get_customer();
 
 		if ( null !== $customer ) {
-			$user_id = $customer->get_user_id();
-
-			$request->set_shopper_reference( \is_null( $user_id ) ? null : \strval( $user_id ) );
+			/*
+			 * When sending in the shopper reference we always create a recurring contract. If you would not
+			 * like to store the details, we recommend to exclude the shopper reference.
+			 *
+			 * $user_id = $customer->get_user_id();
+			 * $request->set_shopper_reference( \is_null( $user_id ) ? null : \strval( $user_id ) );
+			 */
 			$request->set_shopper_ip( $customer->get_ip_address() );
 			$request->set_shopper_locale( $customer->get_locale() );
 			$request->set_telephone_number( $customer->get_phone() );

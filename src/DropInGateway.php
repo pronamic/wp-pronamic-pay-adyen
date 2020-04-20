@@ -10,7 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Locale;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Server;
@@ -24,7 +23,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 1.1.1
  * @since   1.0.0
  */
 class DropInGateway extends AbstractGateway {
@@ -47,7 +46,6 @@ class DropInGateway extends AbstractGateway {
 
 		// Supported features.
 		$this->supports = array(
-			'payment_status_request',
 			'webhook_log',
 			'webhook',
 		);
@@ -175,9 +173,20 @@ class DropInGateway extends AbstractGateway {
 			$request->set_blocked_payment_methods( array( PaymentMethodType::APPLE_PAY ) );
 		}
 
+		// Set country code.
 		$locale = Util::get_payment_locale( $payment );
 
-		$country_code = Locale::getRegion( $locale );
+		$country_code = \Locale::getRegion( $locale );
+
+		$billing_address = $payment->get_billing_address();
+
+		if ( null !== $billing_address ) {
+			$country = $billing_address->get_country_code();
+
+			if ( null !== $country ) {
+				$country_code = $country;
+			}
+		}
 
 		$request->set_country_code( $country_code );
 		$request->set_amount( AmountTransformer::transform( $payment->get_total_amount() ) );
@@ -405,12 +414,13 @@ class DropInGateway extends AbstractGateway {
 	 *
 	 * @param Payment       $payment        Payment.
 	 * @param PaymentMethod $payment_method Payment method.
+	 * @param object        $data           Adyen `state.data` object from drop-in.
 	 *
 	 * @return PaymentResponse
 	 * @throws \InvalidArgumentException Throws exception on invalid amount.
 	 * @throws \Exception Throws exception if payment creation request fails.
 	 */
-	public function create_payment( Payment $payment, PaymentMethod $payment_method ) {
+	public function create_payment( Payment $payment, PaymentMethod $payment_method, $data = null ) {
 		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment request.
@@ -421,6 +431,20 @@ class DropInGateway extends AbstractGateway {
 			$payment->get_return_url(),
 			$payment_method
 		);
+
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+
+		// Set browser info.
+		if ( \is_object( $data ) && isset( $data->browserInfo ) ) {
+			$browser_info = BrowserInformation::from_object( $data->browserInfo );
+
+			$payment_request->set_browser_info( $browser_info );
+		}
+
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+
+		// Merchant order reference.
+		$payment_request->set_merchant_order_reference( $payment->format_string( $this->config->get_merchant_order_reference() ) );
 
 		/**
 		 * Application info.
@@ -453,7 +477,7 @@ class DropInGateway extends AbstractGateway {
 		if ( null !== $billing_address ) {
 			$country = $billing_address->get_country_code();
 
-			if ( ! empty( $country ) ) {
+			if ( null !== $country ) {
 				$country_code = $country;
 			}
 		}

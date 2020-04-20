@@ -21,7 +21,7 @@ use WP_REST_Request;
  * @link https://docs.adyen.com/developers/checkout/web-sdk/customization/logic#beforecomplete
  *
  * @author  Reüel van der Steege
- * @version 1.1.0
+ * @version 1.1.1
  * @since   1.1.0
  */
 class PaymentsController {
@@ -190,7 +190,7 @@ class PaymentsController {
 			}
 
 			try {
-				$response = $gateway->create_payment( $payment, $payment_method );
+				$response = $gateway->create_payment( $payment, $payment_method, $data );
 			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
 				$message = $service_exception->getMessage();
 

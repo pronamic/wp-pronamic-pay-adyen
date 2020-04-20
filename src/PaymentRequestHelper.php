@@ -16,7 +16,7 @@ use Pronamic\WordPress\Pay\Payments\Payment;
  * Payment request helper
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 1.1.1
  * @since   1.0.0
  */
 class PaymentRequestHelper {
@@ -26,6 +26,7 @@ class PaymentRequestHelper {
 	 * @param Payment                $payment WordPress Pay payment to convert.
 	 * @param AbstractPaymentRequest $request Adyen payment request.
 	 * @return void
+	 * @throws \Exception Throws exception on invalid metadata.
 	 */
 	public static function complement( Payment $payment, AbstractPaymentRequest $request ) {
 		// Channel.
@@ -38,9 +39,13 @@ class PaymentRequestHelper {
 		$customer = $payment->get_customer();
 
 		if ( null !== $customer ) {
-			$user_id = $customer->get_user_id();
-
-			$request->set_shopper_reference( \is_null( $user_id ) ? null : \strval( $user_id ) );
+			/*
+			 * When sending in the shopper reference we always create a recurring contract. If you would not
+			 * like to store the details, we recommend to exclude the shopper reference.
+			 *
+			 * $user_id = $customer->get_user_id();
+			 * $request->set_shopper_reference( \is_null( $user_id ) ? null : \strval( $user_id ) );
+			 */
 			$request->set_shopper_ip( $customer->get_ip_address() );
 			$request->set_shopper_locale( $customer->get_locale() );
 			$request->set_telephone_number( $customer->get_phone() );
@@ -122,5 +127,32 @@ class PaymentRequestHelper {
 				}
 			}
 		}
+
+		// Metadata.
+		$metadata = array();
+
+		/**
+		 * Filters the Adyen checkout configuration.
+		 *
+		 * @param array $metadata Payment request metadata.
+		 * @since 1.1.1
+		 */
+		$metadata = apply_filters( 'pronamic_pay_adyen_payment_metadata', $metadata, $payment );
+
+		/*
+		 * Maximum 20 key-value pairs per request. When exceeding, the "177" error occurs: "Metadata size exceeds limit".
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_metadata
+		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession__reqParam_metadata
+		 */
+		if ( ! \is_array( $metadata ) ) {
+			throw new \Exception( 'Adyen metadata must be an array.' );
+		}
+
+		if ( count( $metadata ) > 20 ) {
+			throw new \Exception( 'Adyen metadata exceeds maximum of 20 items.' );
+		}
+
+		$request->set_metadata( $metadata );
 	}
 }

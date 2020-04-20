@@ -17,7 +17,7 @@ use Pronamic\WordPress\Pay\Core\GatewayConfig;
  * Config
  *
  * @author  Remco Tolsma
- * @version 1.0.4
+ * @version 1.1.1
  * @since   1.0.0
  */
 class Config extends GatewayConfig {
@@ -41,6 +41,13 @@ class Config extends GatewayConfig {
 	 * @var string|null
 	 */
 	public $merchant_account;
+
+	/**
+	 * Merchant Order Reference.
+	 *
+	 * @var string|null
+	 */
+	public $merchant_order_reference;
 
 	/**
 	 * Origin key.
@@ -100,6 +107,15 @@ class Config extends GatewayConfig {
 	 */
 	public function get_merchant_account() {
 		return strval( $this->merchant_account );
+	}
+
+	/**
+	 * Get merchant order reference.
+	 *
+	 * @return string
+	 */
+	public function get_merchant_order_reference() {
+		return strval( $this->merchant_order_reference );
 	}
 
 	/**

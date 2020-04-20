@@ -16,7 +16,7 @@ use WP_UnitTestCase;
  * Integration test
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.1.1
  * @since   1.0.0
  */
 class IntegrationTest extends WP_UnitTestCase {
@@ -128,6 +128,6 @@ class IntegrationTest extends WP_UnitTestCase {
 	public function test_settings_fields() {
 		$fields = $this->integration->get_settings_fields();
 
-		$this->assertCount( 13, $fields );
+		$this->assertCount( 14, $fields );
 	}
 }

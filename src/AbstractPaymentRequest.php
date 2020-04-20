@@ -20,7 +20,7 @@ use InvalidArgumentException;
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 1.1.1
  * @since   1.0.0
  */
 abstract class AbstractPaymentRequest extends Request {
@@ -95,6 +95,24 @@ abstract class AbstractPaymentRequest extends Request {
 	 * @var string
 	 */
 	private $merchant_account;
+
+	/**
+	 * This reference allows linking multiple transactions to each other for reporting
+	 * purposes (i.e. order auth-rate). The reference should be unique per billing cycle.
+	 * The same merchant order reference should never be reused after the first authorised
+	 * attempt. If used, this field should be supplied for all incoming authorisations.
+	 *
+	 * @var string|null
+	 */
+	private $merchant_order_reference;
+
+	/**
+	 * Metadata consists of entries, each of which includes a key and a value. Limitations: Maximum 20 key-value
+	 * pairs per request. When exceeding, the "177" error occurs: "Metadata size exceeds limit".
+	 *
+	 * @var array<string,int|string>|null
+	 */
+	private $metadata;
 
 	/**
 	 * The reference to uniquely identify a payment. This reference is used in all communication
@@ -351,6 +369,45 @@ abstract class AbstractPaymentRequest extends Request {
 		return $this->merchant_account;
 	}
 
+
+	/**
+	 * Get merchant order reference.
+	 *
+	 * @return mixed
+	 */
+	public function get_merchant_order_reference() {
+		return $this->merchant_order_reference;
+	}
+
+	/**
+	 * Set merchant order reference.
+	 *
+	 * @param mixed $merchant_order_reference Merchant order reference.
+	 * @return void
+	 */
+	public function set_merchant_order_reference( $merchant_order_reference ) {
+		$this->merchant_order_reference = $merchant_order_reference;
+	}
+
+	/**
+	 * Get metadata.
+	 *
+	 * @return array<string,int|string>|null
+	 */
+	public function get_metadata() {
+		return $this->metadata;
+	}
+
+	/**
+	 * Set metadata.
+	 *
+	 * @param array<string,int|string>|null $metadata Metadata.
+	 * @return void
+	 */
+	public function set_metadata( $metadata ) {
+		$this->metadata = $metadata;
+	}
+
 	/**
 	 * Get reference.
 	 *
@@ -511,24 +568,26 @@ abstract class AbstractPaymentRequest extends Request {
 	public function get_json() {
 		$properties = Util::filter_null(
 			array(
-				'amount'           => $this->get_amount()->get_json(),
-				'applicationInfo'  => $this->application_info,
-				'billingAddress'   => is_null( $this->billing_address ) ? null : $this->billing_address->get_json(),
-				'channel'          => $this->channel,
-				'countryCode'      => $this->country_code,
-				'dateOfBirth'      => is_null( $this->date_of_birth ) ? null : $this->date_of_birth->format( 'Y-m-d' ),
-				'deliveryAddress'  => is_null( $this->delivery_address ) ? null : $this->delivery_address->get_json(),
-				'lineItems'        => is_null( $this->line_items ) ? null : $this->line_items->get_json(),
-				'merchantAccount'  => $this->get_merchant_account(),
-				'reference'        => $this->get_reference(),
-				'returnUrl'        => $this->get_return_url(),
-				'shopperIP'        => $this->shopper_ip,
-				'shopperLocale'    => $this->shopper_locale,
-				'shopperName'      => is_null( $this->shopper_name ) ? null : $this->shopper_name->get_json(),
-				'shopperEmail'     => $this->shopper_email,
-				'shopperReference' => $this->shopper_reference,
-				'shopperStatement' => $this->shopper_statement,
-				'telephoneNumber'  => $this->telephone_number,
+				'amount'                 => $this->get_amount()->get_json(),
+				'applicationInfo'        => $this->application_info,
+				'billingAddress'         => is_null( $this->billing_address ) ? null : $this->billing_address->get_json(),
+				'channel'                => $this->channel,
+				'countryCode'            => $this->country_code,
+				'dateOfBirth'            => is_null( $this->date_of_birth ) ? null : $this->date_of_birth->format( 'Y-m-d' ),
+				'deliveryAddress'        => is_null( $this->delivery_address ) ? null : $this->delivery_address->get_json(),
+				'lineItems'              => is_null( $this->line_items ) ? null : $this->line_items->get_json(),
+				'merchantAccount'        => $this->get_merchant_account(),
+				'merchantOrderReference' => $this->get_merchant_order_reference(),
+				'metadata'               => $this->get_metadata(),
+				'reference'              => $this->get_reference(),
+				'returnUrl'              => $this->get_return_url(),
+				'shopperIP'              => $this->shopper_ip,
+				'shopperLocale'          => $this->shopper_locale,
+				'shopperName'            => is_null( $this->shopper_name ) ? null : $this->shopper_name->get_json(),
+				'shopperEmail'           => $this->shopper_email,
+				'shopperReference'       => $this->shopper_reference,
+				'shopperStatement'       => $this->shopper_statement,
+				'telephoneNumber'        => $this->telephone_number,
 			)
 		);
 

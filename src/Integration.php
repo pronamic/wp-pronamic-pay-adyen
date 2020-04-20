@@ -18,7 +18,7 @@ use Pronamic\WordPress\Pay\Util as Pay_Util;
  * Integration
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 1.1.1
  * @since   1.0.0
  */
 class Integration extends AbstractGatewayIntegration {
@@ -208,7 +208,7 @@ class Integration extends AbstractGatewayIntegration {
 	/**
 	 * Get settings fields.
 	 *
-	 * @return array<int, array<string, callable|int|string|bool|array<int,string>>>
+	 * @return array<int, array<string, callable|int|string|bool|array<int|string,int|string>>>
 	 */
 	public function get_settings_fields() {
 		$fields = array();
@@ -273,6 +273,38 @@ class Integration extends AbstractGatewayIntegration {
 				'<a href="%s" target="_blank">%s</a>',
 				esc_url( 'https://docs.adyen.com/user-management/how-to-get-an-origin-key' ),
 				esc_html__( 'Adyen documentation: "How to get an origin key".', 'pronamic_ideal' )
+			),
+		);
+
+		// Merchant Order Reference.
+		$fields[] = array(
+			'section'     => 'advanced',
+			'filter'      => array(
+				'filter' => \FILTER_SANITIZE_STRING,
+				'flags'  => \FILTER_FLAG_NO_ENCODE_QUOTES,
+			),
+			'meta_key'    => '_pronamic_gateway_adyen_merchant_order_reference',
+			'title'       => __( 'Merchant Order Reference', 'pronamic_ideal' ),
+			'type'        => 'text',
+			'classes'     => array( 'regular-text', 'code' ),
+			'tooltip'     => \sprintf(
+				/* translators: %s: <code>{orderId}</code> */
+				\__( 'The Adyen %s parameter.', 'pronamic_ideal' ),
+				\sprintf( '<code>%s</code>', 'merchantOrderReference' )
+			),
+			'description' => \sprintf(
+				'%s %s<br />%s',
+				\__( 'Available tags:', 'pronamic_ideal' ),
+				\sprintf(
+					'<code>%s</code> <code>%s</code>',
+					'{order_id}',
+					'{payment_id}'
+				),
+				\sprintf(
+					/* translators: %s: {payment_id} */
+					\__( 'Default: <code>%s</code>', 'pronamic_ideal' ),
+					'{payment_id}'
+				)
 			),
 		);
 
@@ -684,6 +716,7 @@ class Integration extends AbstractGatewayIntegration {
 		$config->api_live_url_prefix                        = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
 		$config->merchant_account                           = $this->get_meta( $post_id, 'adyen_merchant_account' );
 		$config->origin_key                                 = $this->get_meta( $post_id, 'adyen_origin_key' );
+		$config->merchant_order_reference                   = $this->get_meta( $post_id, 'adyen_merchant_order_reference' );
 		$config->apple_pay_merchant_id                      = $this->get_meta( $post_id, 'adyen_apple_pay_merchant_id' );
 		$config->apple_pay_merchant_id_certificate          = $this->get_meta( $post_id, 'adyen_apple_pay_merchant_id_certificate' );
 		$config->apple_pay_merchant_id_private_key          = $this->get_meta( $post_id, 'adyen_apple_pay_merchant_id_private_key' );

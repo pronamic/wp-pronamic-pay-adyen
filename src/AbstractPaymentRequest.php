@@ -20,7 +20,7 @@ use InvalidArgumentException;
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 1.1.1
  * @since   1.0.0
  */
 abstract class AbstractPaymentRequest extends Request {

@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [1.1.1] - 2020-04-20
+- Fixed not using billing address country code on drop-in payment redirect page.
+- Added support for payment metadata via `pronamic_pay_adyen_payment_metadata` filter.
+- Added advanced gateway configuration setting for `merchantOrderReference` parameter.
+- Added browser information to payment request.
+- Removed shopper reference from payment request.
+- Removed payment status request from drop-in gateway supported features.
+
 ## [1.1.0] - 2020-03-19
 - Fixed unnecessarily showing additional payment details screen in some cases.
 - Only create controllers and actions when dependencies are met.
@@ -40,7 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.1.0...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.1.1...HEAD
+[1.1.1]: https://github.com/wp-pay-gateways/adyen/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/wp-pay-gateways/adyen/compare/1.0.6...1.1.0
 [1.0.6]: https://github.com/wp-pay-gateways/adyen/compare/1.0.5...1.0.6
 [1.0.5]: https://github.com/wp-pay-gateways/adyen/compare/1.0.4...1.0.5

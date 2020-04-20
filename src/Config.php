@@ -17,7 +17,7 @@ use Pronamic\WordPress\Pay\Core\GatewayConfig;
  * Config
  *
  * @author  Remco Tolsma
- * @version 1.0.4
+ * @version 1.1.1
  * @since   1.0.0
  */
 class Config extends GatewayConfig {

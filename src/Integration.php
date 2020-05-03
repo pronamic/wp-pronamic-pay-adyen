@@ -96,7 +96,7 @@ class Integration extends AbstractGatewayIntegration {
 
 		// Settings.
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ), 15 );
 
 		// Actions.
 		add_action( 'current_screen', array( $this, 'maybe_download_certificate_or_key' ) );

@@ -64,5 +64,7 @@ class PaymentResultHelper {
 		if ( null !== $status ) {
 			$payment->set_status( $status );
 		}
+
+		$payment->save();
 	}
 }

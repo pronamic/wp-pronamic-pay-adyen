@@ -588,7 +588,6 @@ class PaymentsController {
 	 *
 	 * @param resource             $handle      CURL handle.
 	 * @param array<array<string>> $parsed_args Parsed arguments.
-	 * @param string               $url         Request URL.
 	 * @return void
 	 * @throws \Exception Throws exception on error while reading temporary files.
 	 */

@@ -520,7 +520,7 @@ class PaymentsController {
 		);
 
 		try {
-			add_action( 'http_api_curl', array( $this, 'http_curl_applepay_merchant_identity' ), 10, 3 );
+			add_action( 'http_api_curl', array( $this, 'http_curl_applepay_merchant_identity' ), 10, 2 );
 
 			$certificate = $config->get_apple_pay_merchant_id_certificate();
 			$private_key = $config->get_apple_pay_merchant_id_private_key();
@@ -592,7 +592,7 @@ class PaymentsController {
 	 * @return void
 	 * @throws \Exception Throws exception on error while reading temporary files.
 	 */
-	public function http_curl_applepay_merchant_identity( $handle, $parsed_args, $url ) {
+	public function http_curl_applepay_merchant_identity( $handle, $parsed_args ) {
 		if ( ! isset( $parsed_args['adyen_applepay_merchant_identity'] ) ) {
 			return;
 		}

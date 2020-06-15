@@ -52,9 +52,9 @@ class PaymentResultHelperTest extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertCount( 1, $comments );
+		$this->assertCount( 2, $comments );
 
-		$comment = array_pop( $comments );
+		$comment = array_shift( $comments );
 
 		$this->assertContains( 'Verified payment result.', $comment->comment_content );
 	}

@@ -46,11 +46,18 @@
     };
   }
 
+  var pronamicPayAdyenProcessing = false;
   var dropin = checkout.create('dropin', {
     paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
     onSubmit: function onSubmit(state, dropin) {
+      if (pronamicPayAdyenProcessing) {
+        return false;
+      }
+
+      pronamicPayAdyenProcessing = true;
       send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(validate_http_status).then(get_json).then(function (response) {
-        // Handle error.
+        pronamicPayAdyenProcessing = false; // Handle error.
+
         if (response.error) {
           return Promise.reject(new Error(response.error));
         } // Handle action object.

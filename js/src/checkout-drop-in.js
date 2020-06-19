@@ -42,13 +42,23 @@
 		};
 	}
 
+	let pronamicPayAdyenProcessing = false;
+
 	const dropin = checkout.create( 'dropin', {
 		paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
 		onSubmit: ( state, dropin ) => {
+			if ( pronamicPayAdyenProcessing ) {
+				return false;
+			}
+
+			pronamicPayAdyenProcessing = true;
+
 			send_request( pronamicPayAdyenCheckout.paymentsUrl, state.data )
 			.then( validate_http_status )
 			.then( get_json )
 			.then( response => {
+				pronamicPayAdyenProcessing = false;
+
 				// Handle error.
 				if ( response.error ) {
 					return Promise.reject( new Error( response.error ) );

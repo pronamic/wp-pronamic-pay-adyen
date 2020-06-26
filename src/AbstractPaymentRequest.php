@@ -566,6 +566,8 @@ abstract class AbstractPaymentRequest extends Request {
 	 * @return object
 	 */
 	public function get_json() {
+		$metadata = $this->get_metadata();
+
 		$properties = Util::filter_null(
 			array(
 				'amount'                 => $this->get_amount()->get_json(),
@@ -578,7 +580,7 @@ abstract class AbstractPaymentRequest extends Request {
 				'lineItems'              => is_null( $this->line_items ) ? null : $this->line_items->get_json(),
 				'merchantAccount'        => $this->get_merchant_account(),
 				'merchantOrderReference' => $this->get_merchant_order_reference(),
-				'metadata'               => $this->get_metadata(),
+				'metadata'               => empty( $metadata ) ? null : (object) $metadata,
 				'reference'              => $this->get_reference(),
 				'returnUrl'              => $this->get_return_url(),
 				'shopperIP'              => $this->shopper_ip,

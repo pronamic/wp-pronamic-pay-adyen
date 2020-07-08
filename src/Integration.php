@@ -18,7 +18,7 @@ use Pronamic\WordPress\Pay\Util as Pay_Util;
  * Integration
  *
  * @author  Remco Tolsma
- * @version 1.1.1
+ * @version 1.1.2
  * @since   1.0.0
  */
 class Integration extends AbstractGatewayIntegration {
@@ -96,7 +96,7 @@ class Integration extends AbstractGatewayIntegration {
 
 		// Settings.
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ), 15 );
 
 		// Actions.
 		add_action( 'current_screen', array( $this, 'maybe_download_certificate_or_key' ) );

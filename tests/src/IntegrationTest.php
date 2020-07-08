@@ -16,7 +16,7 @@ use WP_UnitTestCase;
  * Integration test
  *
  * @author  Remco Tolsma
- * @version 1.1.1
+ * @version 1.1.2
  * @since   1.0.0
  */
 class IntegrationTest extends WP_UnitTestCase {
@@ -47,7 +47,7 @@ class IntegrationTest extends WP_UnitTestCase {
 		$this->integration->setup();
 
 		$this->assertEquals( has_filter( 'init', array( $this->integration, 'init' ) ), 10 );
-		$this->assertEquals( has_filter( 'admin_init', array( $this->integration, 'admin_init' ) ), 10 );
+		$this->assertEquals( has_filter( 'admin_init', array( $this->integration, 'admin_init' ) ), 15 );
 	}
 
 	/**

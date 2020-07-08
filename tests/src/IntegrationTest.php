@@ -16,7 +16,7 @@ use WP_UnitTestCase;
  * Integration test
  *
  * @author  Remco Tolsma
- * @version 1.1.1
+ * @version 1.1.2
  * @since   1.0.0
  */
 class IntegrationTest extends WP_UnitTestCase {

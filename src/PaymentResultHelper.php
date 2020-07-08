@@ -16,7 +16,7 @@ use Pronamic\WordPress\Pay\Payments\Payment;
  * Payment result helper
  *
  * @author  Remco Tolsma
- * @version 1.0.0
+ * @version 1.1.2
  * @since   1.0.0
  */
 class PaymentResultHelper {

@@ -301,7 +301,7 @@ class Integration extends AbstractGatewayIntegration {
 					'{payment_id}'
 				),
 				\sprintf(
-					/* translators: %s: {payment_id} */
+					/* translators: %s: default code */
 					\__( 'Default: <code>%s</code>', 'pronamic_ideal' ),
 					'{payment_id}'
 				)
@@ -393,11 +393,8 @@ class Integration extends AbstractGatewayIntegration {
 			'value'    => rest_url( self::REST_ROUTE_NAMESPACE . '/notifications' ),
 			'readonly' => true,
 			'tooltip'  => sprintf(
-				/* translators: %s: Adyen */
-				__(
-					'Copy the Webhook URL to the %s dashboard to receive automatic transaction status updates.',
-					'pronamic_ideal'
-				),
+				/* translators: %s: payment provider name */
+				__( 'Copy the Webhook URL to the %s dashboard to receive automatic transaction status updates.', 'pronamic_ideal' ),
 				__( 'Adyen', 'pronamic_ideal' )
 			),
 		);

@@ -133,7 +133,7 @@ class WebSdkGateway extends AbstractGateway {
 			$payment_request = new PaymentRequest(
 				$amount,
 				$this->config->get_merchant_account(),
-				strval( $payment->get_id() ),
+				(string) $payment->get_id(),
 				$payment->get_return_url(),
 				new PaymentMethod( (object) $payment_method )
 			);
@@ -170,7 +170,7 @@ class WebSdkGateway extends AbstractGateway {
 		$payment_session_request = new PaymentSessionRequest(
 			$amount,
 			$this->config->get_merchant_account(),
-			strval( $payment->get_id() ),
+			(string) $payment->get_id(),
 			$payment->get_return_url(),
 			$country_code
 		);

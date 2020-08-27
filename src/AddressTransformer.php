@@ -52,7 +52,7 @@ class AddressTransformer {
 			$address = new Address(
 				$country_code,
 				$address->get_street_name(),
-				strval( $address->get_house_number() ),
+				(string) $address->get_house_number(),
 				$address->get_postal_code(),
 				$address->get_city(),
 				$state_or_province

@@ -221,8 +221,9 @@ class SiteHealthController {
 			Integration::REST_ROUTE_NAMESPACE,
 			'/http-authorization-test',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'rest_api_http_authorization_test' ),
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'rest_api_http_authorization_test' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 	}

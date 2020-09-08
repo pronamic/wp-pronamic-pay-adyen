@@ -48,9 +48,10 @@ class PaymentsController {
 			Integration::REST_ROUTE_NAMESPACE,
 			'/payments/(?P<payment_id>\d+)',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'rest_api_adyen_payments' ),
-				'args'     => array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'rest_api_adyen_payments' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
 					'payment_id' => array(
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
@@ -64,9 +65,10 @@ class PaymentsController {
 			Integration::REST_ROUTE_NAMESPACE,
 			'/payments/details/(?P<payment_id>\d+)',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'rest_api_adyen_payment_details' ),
-				'args'     => array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'rest_api_adyen_payment_details' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
 					'payment_id' => array(
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
@@ -80,9 +82,10 @@ class PaymentsController {
 			Integration::REST_ROUTE_NAMESPACE,
 			'/payments/applepay/merchant-validation/(?P<payment_id>\d+)',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'rest_api_applepay_merchant_validation' ),
-				'args'     => array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'rest_api_applepay_merchant_validation' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
 					'payment_id' => array(
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',

@@ -47,9 +47,10 @@ class PaymentsResultController {
 			Integration::REST_ROUTE_NAMESPACE,
 			'/payments/result/(?P<config_id>\d+)',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'rest_api_adyen_payments_result' ),
-				'args'     => array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'rest_api_adyen_payments_result' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
 					'config_id'  => array(
 						'description' => __( 'Gateway configuration ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',

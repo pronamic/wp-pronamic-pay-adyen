@@ -56,8 +56,8 @@ class PaymentRequestHelper {
 
 			if ( null !== $name ) {
 				$shopper_name = new Name(
-					strval( $name->get_first_name() ),
-					strval( $name->get_last_name() ),
+					(string) $name->get_first_name(),
+					(string) $name->get_last_name(),
 					GenderTransformer::transform( $customer->get_gender() )
 				);
 

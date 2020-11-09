@@ -427,7 +427,7 @@ class DropInGateway extends AbstractGateway {
 		$payment_request = new PaymentRequest(
 			$amount,
 			$this->config->get_merchant_account(),
-			strval( $payment->get_id() ),
+			(string) $payment->get_id(),
 			$payment->get_return_url(),
 			$payment_method
 		);

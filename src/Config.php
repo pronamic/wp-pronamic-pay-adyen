@@ -106,7 +106,7 @@ class Config extends GatewayConfig {
 	 * @return string
 	 */
 	public function get_merchant_account() {
-		return strval( $this->merchant_account );
+		return (string) $this->merchant_account;
 	}
 
 	/**
@@ -115,7 +115,7 @@ class Config extends GatewayConfig {
 	 * @return string
 	 */
 	public function get_merchant_order_reference() {
-		return strval( $this->merchant_order_reference );
+		return (string) $this->merchant_order_reference;
 	}
 
 	/**

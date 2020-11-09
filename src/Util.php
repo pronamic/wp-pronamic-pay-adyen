@@ -41,7 +41,7 @@ class Util {
 	}
 
 	/**
-	 * Get payment country code.
+	 * Get payment locale.
 	 *
 	 * @param Payment $payment Payment.
 	 * @return string
@@ -55,6 +55,6 @@ class Util {
 			$locale = $customer->get_locale();
 		}
 
-		return strval( $locale );
+		return (string) $locale;
 	}
 }

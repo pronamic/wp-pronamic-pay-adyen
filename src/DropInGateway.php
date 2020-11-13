@@ -568,7 +568,6 @@ class DropInGateway extends AbstractGateway {
 		 */
 		if ( \in_array( PaymentMethodType::SCHEME, $payment_method_types, true ) ) {
 			$configuration['card'] = array(
-				'enableStoreDetails' => true,
 				'hasHolderName'      => true,
 				'holderNameRequired' => true,
 				'hideCVC'            => false,

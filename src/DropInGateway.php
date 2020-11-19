@@ -23,7 +23,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
  * @author  Remco Tolsma
- * @version 1.1.1
+ * @version 1.2.1
  * @since   1.0.0
  */
 class DropInGateway extends AbstractGateway {

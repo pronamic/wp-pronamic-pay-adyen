@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [1.2.1] - 2020-11-19
+- Removed unused configuration to store card details.
+
 ## [1.2.0] - 2020-11-09
 - Added REST route permission callbacks.
 
@@ -55,7 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.2.0...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.2.1...HEAD
+[1.2.1]: https://github.com/wp-pay-gateways/adyen/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/wp-pay-gateways/adyen/compare/1.1.2...1.2.0
 [1.1.2]: https://github.com/wp-pay-gateways/adyen/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/wp-pay-gateways/adyen/compare/1.1.0...1.1.1

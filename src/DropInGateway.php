@@ -76,9 +76,7 @@ class DropInGateway extends AbstractGateway {
 	 * Start.
 	 *
 	 * @param Payment $payment Payment.
-	 *
 	 * @return void
-	 * @see Plugin::start()
 	 */
 	public function start( Payment $payment ) {
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
@@ -128,7 +126,6 @@ class DropInGateway extends AbstractGateway {
 	 * Payment redirect.
 	 *
 	 * @param Payment $payment Payment.
-	 *
 	 * @return void
 	 */
 	public function payment_redirect( Payment $payment ) {

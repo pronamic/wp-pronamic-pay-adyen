@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Facades\Http;
+
 /**
  * Adyen client
  *
@@ -48,7 +50,7 @@ class Client {
 		// Request.
 		$url = $this->config->get_api_url( $method );
 
-		$response = \wp_remote_request(
+		$response = Http::request(
 			$url,
 			array(
 				'method'  => 'POST',
@@ -60,54 +62,7 @@ class Client {
 			)
 		);
 
-		if ( $response instanceof \WP_Error ) {
-			throw new \Exception( $response->get_error_message() );
-		}
-
-		// Body.
-		$body = \wp_remote_retrieve_body( $response );
-
-		// Response.
-		$response_code    = \wp_remote_retrieve_response_code( $response );
-		$response_message = \wp_remote_retrieve_response_message( $response );
-
-		/**
-		 * On PHP 7 or higher the `json_decode` function will return `null` and
-		 * `json_last_error` will return `4` (Syntax error). On PHP 5.6 or lower
-		 * the `json_decode` will also return `null`, but json_last_error` will
-		 * return `0` (No error). Therefor we check if the HTTP response body
-		 * is an empty string.
-		 *
-		 * @link https://3v4l.org/
-		 */
-		if ( '' === $body ) {
-			throw new \Exception(
-				\sprintf(
-					'Adyen response is empty, HTTP response: "%s %s".',
-					$response_code,
-					$response_message
-				)
-			);
-		}
-
-		// JSON.
-		$data = json_decode( $body );
-
-		// JSON error.
-		$json_error = json_last_error();
-
-		if ( \JSON_ERROR_NONE !== $json_error ) {
-			throw new \Exception(
-				\sprintf(
-					'Could not JSON decode Adyen response, HTTP response: "%s %s", HTTP body length: "%d", JSON error: "%s".',
-					$response_code,
-					$response_message,
-					\strlen( $body ),
-					\json_last_error_msg()
-				),
-				$json_error
-			);
-		}
+		$data = $response->json();
 
 		// Object.
 		if ( ! \is_object( $data ) ) {

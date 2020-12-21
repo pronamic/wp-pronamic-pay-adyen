@@ -68,12 +68,11 @@ class Client {
 		if ( ! \is_object( $data ) ) {
 			throw new \Exception(
 				\sprintf(
-					'Could not JSON decode Adyen response to an object, HTTP response: "%s %s", HTTP body: "%s".',
-					$response_code,
-					$response_message,
-					$body
+					'Could not JSON decode Adyen response to an object, HTTP response: "%s", HTTP body: "%s".',
+					$response->status(),
+					$response->body()
 				),
-				\intval( $response_code )
+				\intval( $response->status() )
 			);
 		}
 

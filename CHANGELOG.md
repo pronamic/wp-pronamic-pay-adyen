@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [1.3.0] - 2021-01-14
+- Fix some calls.
+- Use new HTTP facade.
+- Removed @see Plugin::start() reference.
+- Use new filter for gateway configuration display value.
+
 ## [1.2.1] - 2020-11-19
 - Removed unused configuration to store card details.
 
@@ -58,7 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.2.1...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/wp-pay-gateways/adyen/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/wp-pay-gateways/adyen/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/wp-pay-gateways/adyen/compare/1.1.2...1.2.0
 [1.1.2]: https://github.com/wp-pay-gateways/adyen/compare/1.1.1...1.1.2

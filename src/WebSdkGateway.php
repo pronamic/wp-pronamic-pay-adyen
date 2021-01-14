@@ -76,8 +76,6 @@ class WebSdkGateway extends AbstractGateway {
 	/**
 	 * Start.
 	 *
-	 * @see Plugin::start()
-	 *
 	 * @param Payment $payment Payment.
 	 * @return void
 	 */
@@ -162,7 +160,7 @@ class WebSdkGateway extends AbstractGateway {
 			return;
 		}
 
-		/*
+		/**
 		 * SDK Integration
 		 *
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
@@ -215,7 +213,6 @@ class WebSdkGateway extends AbstractGateway {
 	 * Payment redirect.
 	 *
 	 * @param Payment $payment Payment.
-	 *
 	 * @return void
 	 */
 	public function payment_redirect( Payment $payment ) {

@@ -100,6 +100,8 @@ class Integration extends AbstractGatewayIntegration {
 
 		// Actions.
 		add_action( 'current_screen', array( $this, 'maybe_download_certificate_or_key' ) );
+
+		\add_filter( 'pronamic_gateway_configuration_display_value_' . $this->get_id(), array( $this, 'gateway_configuration_display_value' ), 10, 2 );
 	}
 
 	/**
@@ -622,6 +624,19 @@ class Integration extends AbstractGatewayIntegration {
 		echo get_post_meta( $post_id, $meta_key, true );
 
 		exit;
+	}
+
+	/**
+	 * Gateway configuration display value.
+	 *
+	 * @param string $display_value Display value.
+	 * @param int    $post_id       Gateway configuration post ID.
+	 * @return string
+	 */
+	public function gateway_configuration_display_value( $display_value, $post_id ) {
+		$config = $this->get_config( $post_id );
+
+		return $config->get_merchant_account();
 	}
 
 	/**

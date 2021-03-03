@@ -50,7 +50,7 @@ class PaymentSessionResponse extends ResponseObject {
 	}
 
 	/**
-	 * Create payment session repsonse from object.
+	 * Create payment session response from object.
 	 *
 	 * @param object $object Object.
 	 * @return PaymentSessionResponse

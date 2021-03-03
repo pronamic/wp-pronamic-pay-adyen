@@ -81,7 +81,7 @@ class PaymentMethodsResponse extends ResponseObject {
 	}
 
 	/**
-	 * Create payment methods repsonse from object.
+	 * Create payment methods response from object.
 	 *
 	 * @param object $object Object.
 	 * @return PaymentMethodsResponse

@@ -139,7 +139,7 @@ class PaymentResultResponse extends ResponseObject {
 	}
 
 	/**
-	 * Create payment result repsonse from object.
+	 * Create payment result response from object.
 	 *
 	 * @param object $object Object.
 	 * @return PaymentResultResponse

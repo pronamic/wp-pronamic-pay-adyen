@@ -90,9 +90,9 @@ class Integration extends AbstractGatewayIntegration {
 		$payments_result_controller->setup();
 
 		// Site Health controller.
-		$site_healht_controller = new SiteHealthController();
+		$site_health_controller = new SiteHealthController();
 
-		$site_healht_controller->setup();
+		$site_health_controller->setup();
 
 		// Settings.
 		add_action( 'init', array( $this, 'init' ) );

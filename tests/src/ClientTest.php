@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Http\Facades\Http;
+use Pronamic\WordPress\Http\Factory;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use WP_Error;
 use WP_Http;
@@ -26,62 +28,12 @@ use WP_UnitTestCase;
  */
 class ClientTest extends WP_UnitTestCase {
 	/**
-	 * Mock HTTP responses.
-	 *
-	 * @var array
-	 */
-	private $mock_http_responses;
-
-	/**
 	 * Setup.
 	 */
 	public function setUp() {
 		parent::setUp();
 
-		$this->mock_http_responses = array();
-
-		// Mock HTTP response.
-		add_filter( 'pre_http_request', array( $this, 'pre_http_request' ), 10, 3 );
-	}
-
-	/**
-	 * Mock HTTP response.
-	 *
-	 * @param string $url  URL.
-	 * @param string $file File with HTTP response.
-	 */
-	public function mock_http_response( $url, $file ) {
-		$this->mock_http_responses[ $url ] = $file;
-	}
-
-	/**
-	 * Pre HTTP request
-	 *
-	 * @link https://github.com/WordPress/WordPress/blob/3.9.1/wp-includes/class-http.php#L150-L164
-	 *
-	 * @param false|array|WP_Error $preempt Whether to preempt an HTTP request's return value. Default false.
-	 * @param array                $r       HTTP request arguments.
-	 * @param string               $url     The request URL.
-	 * @return array
-	 */
-	public function pre_http_request( $preempt, $r, $url ) {
-		if ( ! isset( $this->mock_http_responses[ $url ] ) ) {
-			return $preempt;
-		}
-
-		$file = $this->mock_http_responses[ $url ];
-
-		unset( $this->mock_http_responses[ $url ] );
-
-		$response = file_get_contents( $file, true );
-
-		$processed_response = WP_Http::processResponse( $response );
-
-		$processed_headers = WP_Http::processHeaders( $processed_response['headers'], $url );
-
-		$processed_headers['body'] = $processed_response['body'];
-
-		return $processed_headers;
+		$this->factory = new Factory();
 	}
 
 	/**
@@ -108,7 +60,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
 
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'HTTP Status Response - Unauthorized' );
@@ -128,7 +80,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
 
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'HTTP Status Response - Unauthorized' );
@@ -146,7 +98,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-forbidden-901.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-forbidden-901.http' );
 
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'Invalid Merchant Account' );
@@ -164,7 +116,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-ok.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-ok.http' );
 
 		$payment_methods_response = $client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 
@@ -181,7 +133,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v51/payments', __DIR__ . '/../http/checkout-test-adyen-com-v51-payments-ok.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v51/payments', __DIR__ . '/../http/checkout-test-adyen-com-v51-payments-ok.http' );
 
 		$payment_method = array(
 			'type'   => PaymentMethodType::IDEAL,
@@ -213,7 +165,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentSession', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentSession-ok.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v41/paymentSession', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentSession-ok.http' );
 
 		$amount = new Amount( 'EUR', 1000 );
 
@@ -241,7 +193,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/payments/result', __DIR__ . '/../http/checkout-test-adyen-com-v41-payments-result-ok.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v41/payments/result', __DIR__ . '/../http/checkout-test-adyen-com-v41-payments-result-ok.http' );
 
 		$request = new PaymentResultRequest( 'payload' );
 
@@ -265,7 +217,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-invalid.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-invalid.http' );
 
 		$this->expectException( \Exception::class );
 
@@ -282,7 +234,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->mock_http_response( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-array.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-array.http' );
 
 		$this->expectException( \Exception::class );
 

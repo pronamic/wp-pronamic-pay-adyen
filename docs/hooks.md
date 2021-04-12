@@ -9,7 +9,7 @@
 
 Argument | Type | Description
 -------- | ---- | -----------
-`$payment` | `` | 
+`$payment` |  | 
 
 Source: [src/NotificationsController.php](../src/NotificationsController.php), [line 157](../src/NotificationsController.php#L157-L157)
 
@@ -36,7 +36,7 @@ Source: [src/DropInGateway.php](../src/DropInGateway.php), [line 268](../src/Dro
 Argument | Type | Description
 -------- | ---- | -----------
 `$metadata` | `array` | Payment request metadata.
-`$payment` | `` | 
+`$payment` |  | 
 
 Source: [src/PaymentRequestHelper.php](../src/PaymentRequestHelper.php), [line 134](../src/PaymentRequestHelper.php#L134-L140)
 

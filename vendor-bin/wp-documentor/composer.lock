@@ -282,12 +282,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pronamic/wp-documentor.git",
-                "reference": "71290caf9875fb47e64a6baa9aa6c16d2f95d48e"
+                "reference": "3407937c325244cb52822185fef9f3d31d30914c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pronamic/wp-documentor/zipball/71290caf9875fb47e64a6baa9aa6c16d2f95d48e",
-                "reference": "71290caf9875fb47e64a6baa9aa6c16d2f95d48e",
+                "url": "https://api.github.com/repos/pronamic/wp-documentor/zipball/3407937c325244cb52822185fef9f3d31d30914c",
+                "reference": "3407937c325244cb52822185fef9f3d31d30914c",
                 "shasum": ""
             },
             "require": {
@@ -296,6 +296,10 @@
                 "symfony/console": "^5.2",
                 "symfony/filesystem": "^5.2",
                 "symfony/finder": "^5.2"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.4",
+                "roots/wordpress": "^5.7"
             },
             "default-branch": true,
             "bin": [
@@ -308,6 +312,23 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Pronamic",
+                    "email": "info@pronamic.eu",
+                    "homepage": "https://www.pronamic.eu/",
+                    "role": "Company"
+                },
+                {
+                    "name": "Remco Tolsma",
+                    "email": "info@remcotolsma.nl",
+                    "homepage": "https://www.remcotolsma.nl/",
+                    "role": "Developer"
+                }
+            ],
             "description": "Documentation Generator for WordPress.",
             "keywords": [
                 "api",
@@ -321,7 +342,7 @@
                 "issues": "https://github.com/pronamic/wp-documentor/issues",
                 "source": "https://github.com/pronamic/wp-documentor/tree/main"
             },
-            "time": "2021-04-12T18:40:39+00:00"
+            "time": "2021-04-14T09:00:00+00:00"
         },
         {
             "name": "psr/container",

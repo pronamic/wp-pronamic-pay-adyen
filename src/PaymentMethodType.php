@@ -144,11 +144,25 @@ class PaymentMethodType {
 	const SEPA_DIRECT_DEBIT = 'sepadirectdebit';
 
 	/**
+	 * Constant for the 'Swish' payment method type.
+	 *
+	 * @var string
+	 */
+	const SWISH = 'swish';
+
+	/**
 	 * Constant for the 'UnionPay' payment method type.
 	 *
 	 * @var string
 	 */
 	const UNIONPAY = 'unionpay';
+
+	/**
+	 * Constant for the 'Vipps' payment method type.
+	 *
+	 * @var string
+	 */
+	const VIPPS = 'vipps';
 
 	/**
 	 * Map payment methods to brand codes.
@@ -170,6 +184,8 @@ class PaymentMethodType {
 		PaymentMethods::MAESTRO          => self::MAESTRO,
 		PaymentMethods::PAYPAL           => self::PAYPAL,
 		PaymentMethods::SOFORT           => self::DIRECT_EBANKING,
+		PaymentMethods::SWISH            => self::SWISH,
+		PaymentMethods::VIPPS            => self::VIPPS,
 	);
 
 	/**

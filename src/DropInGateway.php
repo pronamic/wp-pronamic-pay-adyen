@@ -69,6 +69,8 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::GOOGLE_PAY,
 			PaymentMethods::IDEAL,
 			PaymentMethods::SOFORT,
+			PaymentMethods::SWISH,
+			PaymentMethods::VIPPS,
 		);
 	}
 
@@ -91,6 +93,8 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethodType::ALIPAY,
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,
+			PaymentMethodType::SWISH,
+			PaymentMethodType::VIPPS,
 		);
 
 		// Return early if API integration is not being used.

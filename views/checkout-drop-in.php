@@ -34,8 +34,34 @@
 
 	<body>
 		<div class="pronamic-pay-redirect-page">
-			<div class="pronamic-pay-redirect-container alignleft">
-				<div id="pronamic-pay-checkout"></div>
+			<div class="pronamic-pay-redirect-container">
+				<div class="pp-page-section-container">
+					<div class="pp-page-section-wrapper">
+						<div id="pronamic-pay-checkout"></div>
+					</div>
+				</div>
+
+				<?php if ( isset( $payment ) ) : ?>
+
+					<div class="pp-page-section-container">
+						<div class="pp-page-section-wrapper alignleft">
+							<h1><?php esc_html_e( 'Payment', 'pronamic_ideal' ); ?></h1>
+
+							<dl>
+								<dt><?php esc_html_e( 'Date', 'pronamic_ideal' ); ?></dt>
+								<dd><?php echo esc_html( $payment->get_date()->format_i18n() ); ?></dd>
+
+								<dt><?php esc_html_e( 'Description', 'pronamic_ideal' ); ?></dt>
+								<dd><?php echo esc_html( $payment->get_description() ); ?></dd>
+
+								<dt><?php esc_html_e( 'Amount', 'pronamic_ideal' ); ?></dt>
+								<dd><?php echo esc_html( $payment->get_total_amount()->format_i18n() ); ?></dd>
+							</dl>
+						</div>
+					</div>
+
+				<?php endif; ?>
+
 			</div>
 		</div>
 

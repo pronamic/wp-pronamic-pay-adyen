@@ -3,7 +3,7 @@
  * Payment session request test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -94,7 +94,7 @@ class PaymentSessionRequestTest extends TestCase {
 	public function test_invalid_country() {
 		$amount = new Amount( 'EUR', 1000 );
 
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new PaymentSessionRequest(
 			$amount,

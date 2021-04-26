@@ -3,7 +3,7 @@
  * Payment session response
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -50,7 +50,7 @@ class PaymentSessionResponse extends ResponseObject {
 	}
 
 	/**
-	 * Create payment session repsonse from object.
+	 * Create payment session response from object.
 	 *
 	 * @param object $object Object.
 	 * @return PaymentSessionResponse

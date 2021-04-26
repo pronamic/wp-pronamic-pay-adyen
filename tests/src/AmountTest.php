@@ -3,7 +3,7 @@
  * Amount test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -37,7 +37,7 @@ class AmountTest extends TestCase {
 	 * Test invalid currency.
 	 */
 	public function test_invalid_currency() {
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new Amount( 'TE', 12375 );
 	}
@@ -51,7 +51,7 @@ class AmountTest extends TestCase {
 	 */
 	public function test_from_object( $object ) {
 		if ( ! isset( $object->currency, $object->value ) ) {
-			$this->setExpectedException( 'JsonSchema\Exception\ValidationException' );
+			$this->expectException( 'JsonSchema\Exception\ValidationException' );
 		}
 
 		$amount = Amount::from_object( $object );

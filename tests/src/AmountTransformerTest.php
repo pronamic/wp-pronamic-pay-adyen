@@ -3,7 +3,7 @@
  * Amount transformer test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -42,7 +42,7 @@ class AmountTransformerTest extends TestCase {
 	public function test_invalid_currency() {
 		$money = new Money( 123.45, new Currency() );
 
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		AmountTransformer::transform( $money );
 	}

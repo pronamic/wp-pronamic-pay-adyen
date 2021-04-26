@@ -3,7 +3,7 @@
  * Payment methods response
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -81,7 +81,7 @@ class PaymentMethodsResponse extends ResponseObject {
 	}
 
 	/**
-	 * Create payment methods repsonse from object.
+	 * Create payment methods response from object.
 	 *
 	 * @param object $object Object.
 	 * @return PaymentMethodsResponse

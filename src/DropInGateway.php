@@ -3,7 +3,7 @@
  * Drop-in gateway
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -69,6 +69,8 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::GOOGLE_PAY,
 			PaymentMethods::IDEAL,
 			PaymentMethods::SOFORT,
+			PaymentMethods::SWISH,
+			PaymentMethods::VIPPS,
 		);
 	}
 
@@ -76,9 +78,7 @@ class DropInGateway extends AbstractGateway {
 	 * Start.
 	 *
 	 * @param Payment $payment Payment.
-	 *
 	 * @return void
-	 * @see Plugin::start()
 	 */
 	public function start( Payment $payment ) {
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
@@ -93,6 +93,8 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethodType::ALIPAY,
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,
+			PaymentMethodType::SWISH,
+			PaymentMethodType::VIPPS,
 		);
 
 		// Return early if API integration is not being used.
@@ -128,7 +130,6 @@ class DropInGateway extends AbstractGateway {
 	 * Payment redirect.
 	 *
 	 * @param Payment $payment Payment.
-	 *
 	 * @return void
 	 */
 	public function payment_redirect( Payment $payment ) {

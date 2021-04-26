@@ -3,7 +3,7 @@
  * Payment result response
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -139,7 +139,7 @@ class PaymentResultResponse extends ResponseObject {
 	}
 
 	/**
-	 * Create payment result repsonse from object.
+	 * Create payment result response from object.
 	 *
 	 * @param object $object Object.
 	 * @return PaymentResultResponse

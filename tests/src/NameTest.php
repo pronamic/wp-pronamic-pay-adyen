@@ -3,7 +3,7 @@
  * Name test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -45,7 +45,7 @@ class NameTest extends TestCase {
 	public function test_invalid_infix() {
 		$name = new Name( 'John', 'Doe', Gender::MALE );
 
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		$name->set_infix( '12345678901234567890test' );
 	}

@@ -31,6 +31,11 @@
 		<exclude name="WordPress.Security.SafeRedirect.wp_redirect_wp_redirect"/>
 	</rule>
 
+	<rule ref="VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable">
+		<exclude-pattern>views/checkout-drop-in.php</exclude-pattern>
+		<exclude-pattern>views/checkout-web-sdk.php</exclude-pattern>
+	</rule>
+
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_putenv">
 		<exclude-pattern>tests/bootstrap.php</exclude-pattern>
 	</rule>

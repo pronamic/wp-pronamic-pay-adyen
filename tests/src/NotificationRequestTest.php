@@ -3,7 +3,7 @@
  * Notification request test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -152,7 +152,7 @@ class NotificationRequestTest extends TestCase {
 			),
 		);
 
-		$this->setExpectedException( 'JsonSchema\Exception\ValidationException' );
+		$this->expectException( 'JsonSchema\Exception\ValidationException' );
 
 		NotificationRequest::from_object( $object );
 	}

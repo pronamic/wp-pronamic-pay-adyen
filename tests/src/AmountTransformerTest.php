@@ -42,7 +42,7 @@ class AmountTransformerTest extends TestCase {
 	public function test_invalid_currency() {
 		$money = new Money( 123.45, new Currency() );
 
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		AmountTransformer::transform( $money );
 	}

@@ -94,7 +94,7 @@ class PaymentSessionRequestTest extends TestCase {
 	public function test_invalid_country() {
 		$amount = new Amount( 'EUR', 1000 );
 
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new PaymentSessionRequest(
 			$amount,

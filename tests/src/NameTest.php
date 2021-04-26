@@ -45,7 +45,7 @@ class NameTest extends TestCase {
 	public function test_invalid_infix() {
 		$name = new Name( 'John', 'Doe', Gender::MALE );
 
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		$name->set_infix( '12345678901234567890test' );
 	}

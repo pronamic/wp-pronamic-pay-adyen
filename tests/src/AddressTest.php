@@ -82,7 +82,7 @@ class AddressTest extends TestCase {
 	 * Test invalid country.
 	 */
 	public function test_invalid_country() {
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new Address( 'A' );
 	}
@@ -91,7 +91,7 @@ class AddressTest extends TestCase {
 	 * Test required street.
 	 */
 	public function test_required_street() {
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new Address( 'NL', null, '39b' );
 	}
@@ -100,7 +100,7 @@ class AddressTest extends TestCase {
 	 * Test required street.
 	 */
 	public function test_required_postal_code() {
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new Address( 'NL', 'Burgemeester Wuiteweg', '39b', null );
 	}
@@ -109,7 +109,7 @@ class AddressTest extends TestCase {
 	 * Test invalid postal code.
 	 */
 	public function test_invalid_postal_code() {
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '1234567890 to long' );
 	}
@@ -118,7 +118,7 @@ class AddressTest extends TestCase {
 	 * Test required street.
 	 */
 	public function test_required_city() {
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new Address( 'NL', 'Burgemeester Wuiteweg', '39b', '9203 KA', null );
 	}
@@ -129,7 +129,7 @@ class AddressTest extends TestCase {
 	 * @link https://automattic.com/contact/
 	 */
 	public function test_required_state_or_province() {
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', null );
 	}
@@ -140,7 +140,7 @@ class AddressTest extends TestCase {
 	 * @link https://automattic.com/contact/
 	 */
 	public function test_invalid_state_or_province() {
-		$this->setExpectedException( 'InvalidArgumentException' );
+		$this->expectException( 'InvalidArgumentException' );
 
 		new Address( 'US', '60 29th Street', '343', '94110', 'San Francisco', 'CA to long' );
 	}

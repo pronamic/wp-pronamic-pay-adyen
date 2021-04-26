@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [1.3.1] - 2021-04-26
+- Added support for Swish and Vipps payment methods.
+- Updated redirect/checkout pages.
+- Started using `pronamic/wp-http`.
+
 ## [1.3.0] - 2021-01-14
 - Fix some calls.
 - Use new HTTP facade.
@@ -64,7 +69,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.3.0...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.3.1...HEAD
+[1.3.1]: https://github.com/wp-pay-gateways/adyen/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/wp-pay-gateways/adyen/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/wp-pay-gateways/adyen/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/wp-pay-gateways/adyen/compare/1.1.2...1.2.0

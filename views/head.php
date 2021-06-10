@@ -6,9 +6,14 @@
 <?php
 
 /**
- * Triggers on Adyen checkout page.
+ * Prints scripts or data in the head tag on the Adyen checkout page.
+ * 
+ * This action can be used, for example, to register and print a custom style.
  *
- * @link https://github.com/wp-pay-gateways/adyen#pronamic_pay_adyen_checkout_head
+ * See the following link for an example:
+ * https://github.com/wp-pay-gateways/adyen#pronamic_pay_adyen_checkout_head
+ *
+ * @link https://github.com/WordPress/WordPress/blob/5.7/wp-includes/general-template.php#L3004-L3009
  *
  * @since 1.1
  */

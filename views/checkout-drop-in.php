@@ -13,7 +13,7 @@
 
 <html <?php language_attributes(); ?>>
 	<head>
-		<?php include __DIR__ . '/head.php'; ?>
+		<?php require __DIR__ . '/head.php'; ?>
 	</head>
 
 	<body>

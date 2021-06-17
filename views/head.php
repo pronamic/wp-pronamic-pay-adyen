@@ -1,3 +1,14 @@
+<?php
+/**
+ * Checkout head.
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2021 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay
+ */
+
+?>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -7,7 +18,7 @@
 
 /**
  * Prints scripts or data in the head tag on the Adyen checkout page.
- * 
+ *
  * This action can be used, for example, to register and print a custom style.
  *
  * See the following link for an example:

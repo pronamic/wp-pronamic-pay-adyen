@@ -104,7 +104,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment( PaymentRequest $request ) {
-		$data = $this->send_request( 'v51/payments', $request );
+		$data = $this->send_request( 'v64/payments', $request );
 
 		return PaymentResponse::from_object( $data );
 	}
@@ -119,7 +119,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function request_payment_details( PaymentDetailsRequest $request ) {
-		$data = $this->send_request( 'v51/payments/details', $request );
+		$data = $this->send_request( 'v64/payments/details', $request );
 
 		return PaymentResponse::from_object( $data );
 	}
@@ -166,7 +166,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function get_payment_methods( PaymentMethodsRequest $request ) {
-		$data = $this->send_request( 'v51/paymentMethods', $request );
+		$data = $this->send_request( 'v64/paymentMethods', $request );
 
 		return PaymentMethodsResponse::from_object( $data );
 	}

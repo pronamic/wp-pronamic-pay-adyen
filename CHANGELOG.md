@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [1.3.2] - 2021-06-18
+- Updated to API version 64 and Drop-in SDK version 3.15.0 (adds support for ACH Direct Debit payment method).
+- Updated documentation of the `pronamic_pay_adyen_checkout_head` action.
+
 ## [1.3.1] - 2021-04-26
 - Added support for Swish and Vipps payment methods.
 - Updated redirect/checkout pages.
@@ -69,7 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.3.1...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.3.2...HEAD
+[1.3.2]: https://github.com/wp-pay-gateways/adyen/compare/1.3.1...1.3.2
 [1.3.1]: https://github.com/wp-pay-gateways/adyen/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/wp-pay-gateways/adyen/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/wp-pay-gateways/adyen/compare/1.2.0...1.2.1

@@ -111,10 +111,10 @@ class PaymentRequestHelper {
 				$item = $line_items->new_item(
 					(string) $description,
 					(int) $line->get_quantity(),
-					$line->get_total_amount()->get_including_tax()->get_minor_units()
+					$line->get_total_amount()->get_including_tax()->get_minor_units()->to_int()
 				);
 
-				$item->set_amount_excluding_tax( $line->get_total_amount()->get_excluding_tax()->get_minor_units() );
+				$item->set_amount_excluding_tax( $line->get_total_amount()->get_excluding_tax()->get_minor_units()->to_int() );
 
 				$item->set_id( $line->get_id() );
 
@@ -122,7 +122,7 @@ class PaymentRequestHelper {
 				$tax_amount = $line->get_total_amount()->get_tax_amount();
 
 				if ( null !== $tax_amount ) {
-					$item->set_tax_amount( $tax_amount->get_minor_units() );
+					$item->set_tax_amount( $tax_amount->get_minor_units()->to_int() );
 					$item->set_tax_percentage( (int) $line->get_total_amount()->get_tax_percentage() * 100 );
 				}
 			}

@@ -172,6 +172,9 @@ class PaymentRequestHelper {
 			}
 		}
 
+		// Line items.
+		$additional_data->set_line_items( $request->get_line_items() );
+
 		$request->set_additional_data( $additional_data );
 
 		// Metadata.

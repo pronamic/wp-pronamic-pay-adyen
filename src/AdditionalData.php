@@ -117,7 +117,7 @@ class AdditionalData implements \JsonSerializable {
 	 * Set line items.
 	 *
 	 * @param LineItems|null $line_items Line items.
-	 * @retrun void
+	 * @return void
 	 */
 	public function set_line_items( $line_items ) {
 		$this->line_items = $line_items;

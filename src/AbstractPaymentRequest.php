@@ -217,6 +217,7 @@ abstract class AbstractPaymentRequest extends Request {
 	 * Set additional data.
 	 *
 	 * @param AdditionalData|null $additional_data Additional data.
+	 * @return void
 	 */
 	public function set_additional_data( $additional_data ) {
 		$this->additional_data = $additional_data;

@@ -25,6 +25,13 @@ use InvalidArgumentException;
  */
 abstract class AbstractPaymentRequest extends Request {
 	/**
+	 * Additional data.
+	 *
+	 * @var AdditionalData|null
+	 */
+	private $additional_data;
+
+	/**
 	 * Amount.
 	 *
 	 * @var Amount
@@ -195,6 +202,24 @@ abstract class AbstractPaymentRequest extends Request {
 		$this->merchant_account = $merchant_account;
 		$this->reference        = $reference;
 		$this->return_url       = $return_url;
+	}
+
+	/**
+	 * Get additional data.
+	 *
+	 * @return AdditionalData|null
+	 */
+	public function get_additional_data() {
+		return $this->additional_data;
+	}
+
+	/**
+	 * Set additional data.
+	 *
+	 * @param AdditionalData|null $additional_data Additional data.
+	 */
+	public function set_additional_data( $additional_data ) {
+		$this->additional_data = $additional_data;
 	}
 
 	/**
@@ -570,6 +595,7 @@ abstract class AbstractPaymentRequest extends Request {
 
 		$properties = Util::filter_null(
 			array(
+				'additionalData'         => is_null( $this->additional_data ) ? null : $this->additional_data->get_json(),
 				'amount'                 => $this->get_amount()->get_json(),
 				'applicationInfo'        => $this->application_info,
 				'billingAddress'         => is_null( $this->billing_address ) ? null : $this->billing_address->get_json(),

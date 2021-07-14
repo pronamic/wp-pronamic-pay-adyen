@@ -128,6 +128,52 @@ class PaymentRequestHelper {
 			}
 		}
 
+		/*
+		 * Additional data.
+		 */
+		$additional_data = new AdditionalData();
+
+		// Order date.
+		$additional_data->esd_order_date = $payment->get_date();
+
+		// Customer reference (required for Level 2/3).
+		$additional_data->esd_customer_reference = '';
+
+		// Tax amount (required for Level 2/3).
+		$tax_amount = $payment->get_total_amount()->get_tax_amount();
+
+		if ( null !== $tax_amount ) {
+			$additional_data->esd_total_tax_amount = $tax_amount->get_minor_units()->get_value();
+		}
+
+		// Shipping amount.
+		$shipping_amount = $payment->get_shipping_amount();
+
+		if ( null !== $shipping_amount ) {
+			$additional_data->esd_freight_amount = $shipping_amount->get_minor_units()->get_value();
+		}
+
+		// Destination address.
+		$shipping_address = $payment->get_shipping_address();
+
+		if ( null !== $shipping_address ) {
+			// Postal code (required for Level 2/3 with Amex).
+			$postal_code = $shipping_address->get_postal_code();
+
+			if ( ! empty( $postal_code ) ) {
+				$additional_data->esd_destination_postal_code = $postal_code;
+			}
+
+			// Country code.
+			$country_code = $shipping_address->get_country_code();
+
+			if ( ! empty( $country_code ) ) {
+				$additional_data->esd_destination_country_code = $country_code;
+			}
+		}
+
+		$request->set_additional_data( $additional_data );
+
 		// Metadata.
 		$metadata = array();
 

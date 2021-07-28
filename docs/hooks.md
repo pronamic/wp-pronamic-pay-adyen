@@ -19,19 +19,21 @@ https://github.com/wp-pay-gateways/adyen#pronamic_pay_adyen_checkout_head
 
 Version | Description
 ------- | -----------
-`1.1` | 
+`1.1` | Added.
 
-Source: [./views/head.php](../views/head.php), [line 8](../views/head.php#L8-L20)
+Source: [./views/head.php](../views/head.php), [line 19](../views/head.php#L19-L31)
 
 ### `pronamic_pay_webhook_log_payment`
+
+*Log Adyen notification request for payment.*
 
 **Arguments**
 
 Argument | Type | Description
 -------- | ---- | -----------
-`$payment` |  | 
+`$payment` | `\Pronamic\WordPress\Pay\Payments\Payment` | Payment.
 
-Source: [./src/NotificationsController.php](../src/NotificationsController.php), [line 157](../src/NotificationsController.php#L157-L157)
+Source: [./src/NotificationsController.php](../src/NotificationsController.php), [line 158](../src/NotificationsController.php#L158-L163)
 
 ## Filters
 
@@ -49,28 +51,30 @@ Argument | Type | Description
 
 Version | Description
 ------- | -----------
-`1.2.0` | 
+`1.2.0` | Added.
 
-Source: [./src/DropInGateway.php](../src/DropInGateway.php), [line 272](../src/DropInGateway.php#L272-L278)
+Source: [./src/DropInGateway.php](../src/DropInGateway.php), [line 273](../src/DropInGateway.php#L273-L280)
 
 ### `pronamic_pay_adyen_payment_metadata`
 
-*Filters the Adyen checkout configuration.*
+*Filters the Adyen payment metadata.*
+
+Maximum 20 key-value pairs per request. When exceeding, the "177" error occurs: "Metadata size exceeds limit".
 
 **Arguments**
 
 Argument | Type | Description
 -------- | ---- | -----------
 `$metadata` | `array` | Payment request metadata.
-`$payment` |  | 
+`$payment` | `\Pronamic\WordPress\Pay\Payments\Payment` | Payment.
 
 **Changelog**
 
 Version | Description
 ------- | -----------
-`1.1.1` | 
+`1.1.1` | Added.
 
-Source: [./src/PaymentRequestHelper.php](../src/PaymentRequestHelper.php), [line 134](../src/PaymentRequestHelper.php#L134-L140)
+Source: [./src/PaymentRequestHelper.php](../src/PaymentRequestHelper.php), [line 183](../src/PaymentRequestHelper.php#L183-L193)
 
 ### `pronamic_pay_adyen_config_object`
 
@@ -86,7 +90,7 @@ Argument | Type | Description
 
 Version | Description
 ------- | -----------
-`1.1` | 
+`1.1` | Added.
 
 Source: [./src/WebSdkGateway.php](../src/WebSdkGateway.php), [line 257](../src/WebSdkGateway.php#L257-L269)
 

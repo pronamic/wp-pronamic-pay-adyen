@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use JsonSchema\Exception\ValidationException;
+use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus as PaymentStatus;
 use WP_Error;
 use WP_REST_Request;
@@ -154,6 +155,11 @@ class NotificationsController {
 
 			$payment->add_note( $note );
 
+			/**
+			 * Log Adyen notification request for payment.
+			 *
+			 * @param Payment $payment Payment.
+			 */
 			do_action( 'pronamic_pay_webhook_log_payment', $payment );
 
 			// Authorization.

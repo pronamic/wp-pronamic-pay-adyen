@@ -273,7 +273,8 @@ class DropInGateway extends AbstractGateway {
 		 * Filters the Adyen checkout configuration.
 		 *
 		 * @param object $configuration Adyen checkout configuration.
-		 * @since 1.2.0
+		 * @link https://docs.adyen.com/online-payments/drop-in-web#step-2-add-drop-in
+		 * @since 1.2.0 Added.
 		 */
 		$configuration = apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
 

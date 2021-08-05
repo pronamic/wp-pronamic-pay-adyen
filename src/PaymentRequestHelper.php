@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
@@ -119,11 +120,15 @@ class PaymentRequestHelper {
 				$item->set_id( $line->get_id() );
 
 				// Tax amount.
-				$tax_amount = $line->get_total_amount()->get_tax_amount();
+				$total_amount = $line->get_total_amount();
 
-				if ( null !== $tax_amount ) {
-					$item->set_tax_amount( $tax_amount->get_minor_units()->to_int() );
-					$item->set_tax_percentage( (int) $line->get_total_amount()->get_tax_percentage() * 100 );
+				if ( $total_amount instanceof TaxedMoney ) {
+					$tax_amount = $total_amount->get_tax_amount();
+
+					if ( null !== $tax_amount ) {
+						$item->set_tax_amount( $tax_amount->get_minor_units()->to_int() );
+						$item->set_tax_percentage( (int) $line->get_total_amount()->get_tax_percentage() * 100 );
+					}
 				}
 			}
 		}
@@ -140,10 +145,14 @@ class PaymentRequestHelper {
 		$additional_data->esd_customer_reference = '';
 
 		// Tax amount (required for Level 2/3).
-		$tax_amount = $payment->get_total_amount()->get_tax_amount();
+		$total_amount = $payment->get_total_amount();
 
-		if ( null !== $tax_amount ) {
-			$additional_data->esd_total_tax_amount = $tax_amount->get_minor_units()->get_value();
+		if ( $total_amount instanceof TaxedMoney ) {
+			$tax_amount = $total_amount->get_tax_amount();
+
+			if ( null !== $tax_amount ) {
+				$additional_data->esd_total_tax_amount = $tax_amount->get_minor_units()->get_value();
+			}
 		}
 
 		// Shipping amount.

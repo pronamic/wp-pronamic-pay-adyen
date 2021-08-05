@@ -48,6 +48,8 @@ class DropInGatewayTest extends TestCase {
 				PaymentMethods::GOOGLE_PAY,
 				PaymentMethods::IDEAL,
 				PaymentMethods::SOFORT,
+				PaymentMethods::SWISH,
+				PaymentMethods::VIPPS,
 			),
 			$gateway->get_supported_payment_methods()
 		);

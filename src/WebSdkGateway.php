@@ -264,7 +264,7 @@ class WebSdkGateway extends AbstractGateway {
 		 *
 		 * @param object $config_object Adyen config object.
 		 *
-		 * @since 1.1
+		 * @since 1.1 Added.
 		 */
 		$config_object = apply_filters( 'pronamic_pay_adyen_config_object', $config_object );
 

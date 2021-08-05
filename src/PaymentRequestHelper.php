@@ -10,6 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
@@ -108,34 +109,95 @@ class PaymentRequestHelper {
 					}
 				}
 
+				$total_amount = $line->get_total_amount();
+
 				$item = $line_items->new_item(
 					(string) $description,
 					(int) $line->get_quantity(),
-					$line->get_total_amount()->get_including_tax()->get_minor_units()
+					$total_amount->get_minor_units()->to_int()
 				);
-
-				$item->set_amount_excluding_tax( $line->get_total_amount()->get_excluding_tax()->get_minor_units() );
 
 				$item->set_id( $line->get_id() );
 
 				// Tax amount.
-				$tax_amount = $line->get_total_amount()->get_tax_amount();
+				if ( $total_amount instanceof TaxedMoney ) {
+					$item->set_amount_excluding_tax( $total_amount->get_excluding_tax()->get_minor_units()->to_int() );
 
-				if ( null !== $tax_amount ) {
-					$item->set_tax_amount( $tax_amount->get_minor_units() );
-					$item->set_tax_percentage( (int) $line->get_total_amount()->get_tax_percentage() * 100 );
+					$tax_amount = $total_amount->get_tax_amount();
+
+					if ( null !== $tax_amount ) {
+						$item->set_tax_amount( $tax_amount->get_minor_units()->to_int() );
+						$item->set_tax_percentage( (int) $total_amount->get_tax_percentage() * 100 );
+					}
 				}
 			}
 		}
+
+		/*
+		 * Additional data.
+		 */
+		$additional_data = new AdditionalData();
+
+		// Order date.
+		$additional_data->esd_order_date = $payment->get_date();
+
+		// Customer reference (required for Level 2/3).
+		$additional_data->esd_customer_reference = '';
+
+		// Tax amount (required for Level 2/3).
+		$total_amount = $payment->get_total_amount();
+
+		if ( $total_amount instanceof TaxedMoney ) {
+			$tax_amount = $total_amount->get_tax_amount();
+
+			if ( null !== $tax_amount ) {
+				$additional_data->esd_total_tax_amount = $tax_amount->get_minor_units()->get_value();
+			}
+		}
+
+		// Shipping amount.
+		$shipping_amount = $payment->get_shipping_amount();
+
+		if ( null !== $shipping_amount ) {
+			$additional_data->esd_freight_amount = $shipping_amount->get_minor_units()->get_value();
+		}
+
+		// Destination address.
+		$shipping_address = $payment->get_shipping_address();
+
+		if ( null !== $shipping_address ) {
+			// Postal code (required for Level 2/3 with Amex).
+			$postal_code = $shipping_address->get_postal_code();
+
+			if ( ! empty( $postal_code ) ) {
+				$additional_data->esd_destination_postal_code = $postal_code;
+			}
+
+			// Country code.
+			$country_code = $shipping_address->get_country_code();
+
+			if ( ! empty( $country_code ) ) {
+				$additional_data->esd_destination_country_code = $country_code;
+			}
+		}
+
+		// Line items.
+		$additional_data->set_line_items( $request->get_line_items() );
+
+		$request->set_additional_data( $additional_data );
 
 		// Metadata.
 		$metadata = array();
 
 		/**
-		 * Filters the Adyen checkout configuration.
+		 * Filters the Adyen payment metadata.
+		 *
+		 * Maximum 20 key-value pairs per request. When exceeding, the "177" error occurs: "Metadata size exceeds limit".
 		 *
 		 * @param array $metadata Payment request metadata.
-		 * @since 1.1.1
+		 * @param Payment $payment Payment.
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v64/post/payments__reqParam_metadata
+		 * @since 1.1.1 Added.
 		 */
 		$metadata = apply_filters( 'pronamic_pay_adyen_payment_metadata', $metadata, $payment );
 

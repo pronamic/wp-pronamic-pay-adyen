@@ -26,7 +26,7 @@
  *
  * @link https://github.com/WordPress/WordPress/blob/5.7/wp-includes/general-template.php#L3004-L3009
  *
- * @since 1.1
+ * @since 1.1 Added.
  */
 do_action( 'pronamic_pay_adyen_checkout_head' );
 

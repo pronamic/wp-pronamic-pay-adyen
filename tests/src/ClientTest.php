@@ -98,7 +98,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-forbidden-901.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v64/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v64-paymentMethods-forbidden-901.http' );
 
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'Invalid Merchant Account' );
@@ -116,7 +116,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-ok.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v64/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v64-paymentMethods-ok.http' );
 
 		$payment_methods_response = $client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 
@@ -133,7 +133,7 @@ class ClientTest extends WP_UnitTestCase {
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v51/payments', __DIR__ . '/../http/checkout-test-adyen-com-v51-payments-ok.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v64/payments', __DIR__ . '/../http/checkout-test-adyen-com-v64-payments-ok.http' );
 
 		$payment_method = array(
 			'type'   => PaymentMethodType::IDEAL,

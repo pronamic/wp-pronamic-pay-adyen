@@ -150,6 +150,8 @@ class DropInGateway extends AbstractGateway {
 
 			if ( null !== $redirect ) {
 				\wp_redirect( $redirect->get_url() );
+
+				exit;
 			}
 		}
 
@@ -273,7 +275,8 @@ class DropInGateway extends AbstractGateway {
 		 * Filters the Adyen checkout configuration.
 		 *
 		 * @param object $configuration Adyen checkout configuration.
-		 * @since 1.2.0
+		 * @link https://docs.adyen.com/online-payments/drop-in-web#step-2-add-drop-in
+		 * @since 1.2.0 Added.
 		 */
 		$configuration = apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
 
@@ -536,7 +539,7 @@ class DropInGateway extends AbstractGateway {
 		 */
 		if ( \in_array( PaymentMethodType::APPLE_PAY, $payment_method_types, true ) ) {
 			$configuration['applepay'] = array(
-				'amount'        => $payment->get_total_amount()->get_minor_units(),
+				'amount'        => $payment->get_total_amount()->get_minor_units()->to_int(),
 				'currencyCode'  => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 				'configuration' => array(
 					'merchantName'       => \get_bloginfo( 'name' ),
@@ -586,7 +589,7 @@ class DropInGateway extends AbstractGateway {
 				'environment'   => ( self::MODE_TEST === $this->config->mode ? 'TEST' : 'PRODUCTION' ),
 				'amount'        => array(
 					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
-					'value'    => $payment->get_total_amount()->get_minor_units(),
+					'value'    => $payment->get_total_amount()->get_minor_units()->to_int(),
 				),
 				'configuration' => array(
 					'gatewayMerchantId' => $this->config->merchant_account,

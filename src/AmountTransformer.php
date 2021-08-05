@@ -29,15 +29,9 @@ class AmountTransformer {
 	 * @throws InvalidArgumentException Throws invalid argument exception when WordPress money object does not contain a currency with an alphabetic code.
 	 */
 	public static function transform( Money $money ) {
-		$currency = $money->get_currency()->get_alphabetic_code();
-
-		if ( null === $currency ) {
-			throw new InvalidArgumentException( 'Can not transform WordPress money object to Adyen amount object due to empty currency code.' );
-		}
-
 		$amount = new Amount(
-			$currency,
-			$money->get_minor_units()
+			$money->get_currency()->get_alphabetic_code(),
+			$money->get_minor_units()->to_int()
 		);
 
 		return $amount;

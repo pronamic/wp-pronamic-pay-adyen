@@ -109,7 +109,7 @@ class LineItem implements \JsonSerializable {
 	}
 
 	/**
-	 * Get amount excluding tax.
+	 * Get amount including tax.
 	 *
 	 * @return int|null
 	 */

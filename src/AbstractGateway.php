@@ -85,7 +85,7 @@ abstract class AbstractGateway extends Core_Gateway {
 	 * Get issuers.
 	 *
 	 * @return array<int, array<string, array<string, string>>>
-	 * @see Pronamic_WP_Pay_Gateway::get_issuers()
+	 * @see Core_Gateway::get_issuers()
 	 */
 	public function get_issuers() {
 		$issuers = array();

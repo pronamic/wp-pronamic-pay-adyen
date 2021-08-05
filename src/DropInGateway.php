@@ -150,6 +150,8 @@ class DropInGateway extends AbstractGateway {
 
 			if ( null !== $redirect ) {
 				\wp_redirect( $redirect->get_url() );
+
+				exit;
 			}
 		}
 

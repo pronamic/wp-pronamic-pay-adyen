@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [2.0.0] - 2021-08-05
+- Updated to `pronamic/wp-pay-core`  version `3.0.0`.
+- Updated to `pronamic/wp-money`  version `2.0.0`.
+- Changed `TaxedMoney` to `Money`, no tax info.
+- Switched to `pronamic/wp-coding-standards`.
+
 ## [1.3.2] - 2021-06-18
 - Updated to API version 64 and Drop-in SDK version 3.15.0 (adds support for ACH Direct Debit payment method).
 - Updated documentation of the `pronamic_pay_adyen_checkout_head` action.
@@ -73,7 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/1.3.2...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/wp-pay-gateways/adyen/compare/1.3.2...2.0.0
 [1.3.2]: https://github.com/wp-pay-gateways/adyen/compare/1.3.1...1.3.2
 [1.3.1]: https://github.com/wp-pay-gateways/adyen/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/wp-pay-gateways/adyen/compare/1.2.1...1.3.0

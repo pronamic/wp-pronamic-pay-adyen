@@ -35,15 +35,4 @@ class AmountTransformerTest extends TestCase {
 		$this->assertEquals( 'EUR', $amount->get_currency() );
 		$this->assertEquals( 7599, $amount->get_value() );
 	}
-
-	/**
-	 * Test invalid currency.
-	 */
-	public function test_invalid_currency() {
-		$money = new Money( 123.45, new Currency() );
-
-		$this->expectException( 'InvalidArgumentException' );
-
-		AmountTransformer::transform( $money );
-	}
 }

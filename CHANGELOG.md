@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated to `pronamic/wp-money`  version `2.0.0`.
 - Changed `TaxedMoney` to `Money`, no tax info.
 - Switched to `pronamic/wp-coding-standards`.
+- Set additional data for Level 2/3 card payments (pronamic/wp-pronamic-pay#167).
+- Added (partial) line items to additional data (pronamic/wp-pronamic-pay#167).
+- Updated hooks documentation.
 
 ## [1.3.2] - 2021-06-18
 - Updated to API version 64 and Drop-in SDK version 3.15.0 (adds support for ACH Direct Debit payment method).

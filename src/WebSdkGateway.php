@@ -93,20 +93,7 @@ class WebSdkGateway extends AbstractGateway {
 		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
 
 		// Country.
-		$locale = Util::get_payment_locale( $payment );
-
-		$country_code = Locale::getRegion( $locale );
-
-		// Set country from billing address.
-		$billing_address = $payment->get_billing_address();
-
-		if ( null !== $billing_address ) {
-			$country = $billing_address->get_country_code();
-
-			if ( ! empty( $country ) ) {
-				$country_code = $country;
-			}
-		}
+		$country_code = Util::get_country_code( $payment );
 
 		/*
 		 * API Integration

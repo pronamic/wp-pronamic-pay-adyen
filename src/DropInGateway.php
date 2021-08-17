@@ -177,21 +177,8 @@ class DropInGateway extends AbstractGateway {
 		}
 
 		// Set country code.
-		$locale = Util::get_payment_locale( $payment );
+		$request->set_country_code( Util::get_country_code( $payment ) );
 
-		$country_code = \Locale::getRegion( $locale );
-
-		$billing_address = $payment->get_billing_address();
-
-		if ( null !== $billing_address ) {
-			$country = $billing_address->get_country_code();
-
-			if ( null !== $country ) {
-				$country_code = $country;
-			}
-		}
-
-		$request->set_country_code( $country_code );
 		$request->set_amount( AmountTransformer::transform( $payment->get_total_amount() ) );
 
 		try {
@@ -472,21 +459,7 @@ class DropInGateway extends AbstractGateway {
 		$payment_request->set_application_info( $application_info );
 
 		// Set country code.
-		$locale = Util::get_payment_locale( $payment );
-
-		$country_code = \Locale::getRegion( $locale );
-
-		$billing_address = $payment->get_billing_address();
-
-		if ( null !== $billing_address ) {
-			$country = $billing_address->get_country_code();
-
-			if ( null !== $country ) {
-				$country_code = $country;
-			}
-		}
-
-		$payment_request->set_country_code( $country_code );
+		$payment_request->set_country_code( Util::get_country_code( $payment ) );
 
 		// Complement payment request.
 		PaymentRequestHelper::complement( $payment, $payment_request );

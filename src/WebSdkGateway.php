@@ -136,6 +136,15 @@ class WebSdkGateway extends AbstractGateway {
 		}
 
 		/**
+		 * The shopper country is required.
+		 * 
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v67/post/paymentSession__reqParam_countryCode
+		 */
+		if ( null === $country_code ) {
+			throw new \Exception( 'Unable to determine shopper country.' );
+		}
+
+		/**
 		 * SDK Integration
 		 *
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession

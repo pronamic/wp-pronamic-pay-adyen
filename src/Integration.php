@@ -56,11 +56,6 @@ class Integration extends AbstractGatewayIntegration {
 		);
 
 		parent::__construct( $args );
-
-		// Dependencies.
-		$dependencies = $this->get_dependencies();
-
-		$dependencies->add( new PhpExtensionDependency( 'intl' ) );
 	}
 
 	/**

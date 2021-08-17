@@ -81,13 +81,7 @@ class WebSdkGateway extends AbstractGateway {
 	 */
 	public function start( Payment $payment ) {
 		// Amount.
-		try {
-			$amount = AmountTransformer::transform( $payment->get_total_amount() );
-		} catch ( InvalidArgumentException $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return;
-		}
+		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment method type.
 		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );

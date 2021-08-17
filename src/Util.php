@@ -16,7 +16,7 @@ use Pronamic\WordPress\Pay\Payments\Payment;
  * Util
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 2.0.1
  * @since   1.0.0
  */
 class Util {
@@ -61,6 +61,7 @@ class Util {
 	/**
 	 * Get country code.
 	 *
+	 * @since 2.0.1
 	 * @param Payment $payment Payment.
 	 * @return string|null
 	 */

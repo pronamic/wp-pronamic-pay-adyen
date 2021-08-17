@@ -26,7 +26,7 @@ use WP_Error;
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 2.0.1
  * @since   1.0.0
  */
 class WebSdkGateway extends AbstractGateway {
@@ -78,6 +78,7 @@ class WebSdkGateway extends AbstractGateway {
 	 *
 	 * @param Payment $payment Payment.
 	 * @return void
+	 * @throws \Exception Throws an exception when the shopper country cannot be determined.
 	 */
 	public function start( Payment $payment ) {
 		// Amount.

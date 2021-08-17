@@ -26,7 +26,7 @@ use WP_Error;
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 2.0.1
  * @since   1.0.0
  */
 class WebSdkGateway extends AbstractGateway {
@@ -78,35 +78,17 @@ class WebSdkGateway extends AbstractGateway {
 	 *
 	 * @param Payment $payment Payment.
 	 * @return void
+	 * @throws \Exception Throws an exception when the shopper country cannot be determined.
 	 */
 	public function start( Payment $payment ) {
 		// Amount.
-		try {
-			$amount = AmountTransformer::transform( $payment->get_total_amount() );
-		} catch ( InvalidArgumentException $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return;
-		}
+		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment method type.
 		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
 
 		// Country.
-		$locale = Util::get_payment_locale( $payment );
-
-		$country_code = Locale::getRegion( $locale );
-
-		// Set country from billing address.
-		$billing_address = $payment->get_billing_address();
-
-		if ( null !== $billing_address ) {
-			$country = $billing_address->get_country_code();
-
-			if ( ! empty( $country ) ) {
-				$country_code = $country;
-			}
-		}
+		$country_code = Util::get_country_code( $payment );
 
 		/*
 		 * API Integration
@@ -130,7 +112,7 @@ class WebSdkGateway extends AbstractGateway {
 			// API integration.
 			$payment_request = new PaymentRequest(
 				$amount,
-				$this->config->get_merchant_account(),
+				$this->adyen_config->get_merchant_account(),
 				(string) $payment->get_id(),
 				$payment->get_return_url(),
 				new PaymentMethod( (object) $payment_method )
@@ -140,13 +122,7 @@ class WebSdkGateway extends AbstractGateway {
 
 			PaymentRequestHelper::complement( $payment, $payment_request );
 
-			try {
-				$payment_response = $this->client->create_payment( $payment_request );
-			} catch ( Exception $e ) {
-				$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-				return;
-			}
+			$payment_response = $this->client->create_payment( $payment_request );
 
 			$payment->set_transaction_id( $payment_response->get_psp_reference() );
 
@@ -161,13 +137,22 @@ class WebSdkGateway extends AbstractGateway {
 		}
 
 		/**
+		 * The shopper country is required.
+		 * 
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v67/post/paymentSession__reqParam_countryCode
+		 */
+		if ( null === $country_code ) {
+			throw new \Exception( 'Unable to determine shopper country.' );
+		}
+
+		/**
 		 * SDK Integration
 		 *
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
 		 */
 		$payment_session_request = new PaymentSessionRequest(
 			$amount,
-			$this->config->get_merchant_account(),
+			$this->adyen_config->get_merchant_account(),
 			(string) $payment->get_id(),
 			$payment->get_return_url(),
 			$country_code

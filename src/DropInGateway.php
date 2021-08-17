@@ -158,7 +158,7 @@ class DropInGateway extends AbstractGateway {
 		/**
 		 * Payment methods.
 		 */
-		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
+		$request = new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() );
 
 		if ( null !== $payment->get_method() ) {
 			// Payment method type.
@@ -170,28 +170,15 @@ class DropInGateway extends AbstractGateway {
 		}
 
 		// Prevent Apple Pay if no merchant identifier has been configured.
-		$apple_pay_merchant_id = $this->config->get_apple_pay_merchant_id();
+		$apple_pay_merchant_id = $this->adyen_config->get_apple_pay_merchant_id();
 
 		if ( empty( $apple_pay_merchant_id ) ) {
 			$request->set_blocked_payment_methods( array( PaymentMethodType::APPLE_PAY ) );
 		}
 
 		// Set country code.
-		$locale = Util::get_payment_locale( $payment );
+		$request->set_country_code( Util::get_country_code( $payment ) );
 
-		$country_code = \Locale::getRegion( $locale );
-
-		$billing_address = $payment->get_billing_address();
-
-		if ( null !== $billing_address ) {
-			$country = $billing_address->get_country_code();
-
-			if ( null !== $country ) {
-				$country_code = $country;
-			}
-		}
-
-		$request->set_country_code( $country_code );
 		$request->set_amount( AmountTransformer::transform( $payment->get_total_amount() ) );
 
 		try {
@@ -266,7 +253,7 @@ class DropInGateway extends AbstractGateway {
 		$configuration = (object) array(
 			'locale'                 => Util::get_payment_locale( $payment ),
 			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			'originKey'              => $this->config->origin_key,
+			'originKey'              => $this->adyen_config->origin_key,
 			'paymentMethodsResponse' => $payment_methods->get_original_object(),
 			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		);
@@ -430,7 +417,7 @@ class DropInGateway extends AbstractGateway {
 		// Payment request.
 		$payment_request = new PaymentRequest(
 			$amount,
-			$this->config->get_merchant_account(),
+			$this->adyen_config->get_merchant_account(),
 			(string) $payment->get_id(),
 			$payment->get_return_url(),
 			$payment_method
@@ -448,7 +435,7 @@ class DropInGateway extends AbstractGateway {
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		// Merchant order reference.
-		$payment_request->set_merchant_order_reference( $payment->format_string( $this->config->get_merchant_order_reference() ) );
+		$payment_request->set_merchant_order_reference( $payment->format_string( $this->adyen_config->get_merchant_order_reference() ) );
 
 		/**
 		 * Application info.
@@ -472,21 +459,7 @@ class DropInGateway extends AbstractGateway {
 		$payment_request->set_application_info( $application_info );
 
 		// Set country code.
-		$locale = Util::get_payment_locale( $payment );
-
-		$country_code = \Locale::getRegion( $locale );
-
-		$billing_address = $payment->get_billing_address();
-
-		if ( null !== $billing_address ) {
-			$country = $billing_address->get_country_code();
-
-			if ( null !== $country ) {
-				$country_code = $country;
-			}
-		}
-
-		$payment_request->set_country_code( $country_code );
+		$payment_request->set_country_code( Util::get_country_code( $payment ) );
 
 		// Complement payment request.
 		PaymentRequestHelper::complement( $payment, $payment_request );
@@ -543,7 +516,7 @@ class DropInGateway extends AbstractGateway {
 				'currencyCode'  => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 				'configuration' => array(
 					'merchantName'       => \get_bloginfo( 'name' ),
-					'merchantIdentifier' => $this->config->get_apple_pay_merchant_id(),
+					'merchantIdentifier' => $this->adyen_config->get_apple_pay_merchant_id(),
 				),
 			);
 
@@ -592,12 +565,12 @@ class DropInGateway extends AbstractGateway {
 					'value'    => $payment->get_total_amount()->get_minor_units()->to_int(),
 				),
 				'configuration' => array(
-					'gatewayMerchantId' => $this->config->merchant_account,
+					'gatewayMerchantId' => $this->adyen_config->merchant_account,
 				),
 			);
 
 			if ( self::MODE_LIVE === $this->config->mode ) {
-				$configuration['paywithgoogle']['configuration']['merchantIdentifier'] = $this->config->get_google_pay_merchant_identifier();
+				$configuration['paywithgoogle']['configuration']['merchantIdentifier'] = $this->adyen_config->get_google_pay_merchant_identifier();
 			}
 		}
 

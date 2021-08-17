@@ -16,7 +16,7 @@ use Pronamic\WordPress\Pay\Payments\Payment;
  * Util
  *
  * @author  Remco Tolsma
- * @version 1.0.5
+ * @version 2.0.1
  * @since   1.0.0
  */
 class Util {
@@ -56,5 +56,35 @@ class Util {
 		}
 
 		return (string) $locale;
+	}
+
+	/**
+	 * Get country code.
+	 *
+	 * @since 2.0.1
+	 * @param Payment $payment Payment.
+	 * @return string|null
+	 */
+	public static function get_country_code( Payment $payment ) {
+		$country_code = null;
+
+		// Billing Address.
+		$billing_address = $payment->get_billing_address();
+
+		if ( null !== $billing_address ) {
+			$country = $billing_address->get_country_code();
+
+			if ( null !== $country ) {
+				$country_code = $country;
+			}
+		}
+
+		if ( null === $country_code && \method_exists( '\Locale', 'getRegion' ) ) {
+			$locale = self::get_payment_locale( $payment );
+
+			$country_code = \Locale::getRegion( $locale );
+		}
+
+		return $country_code;
 	}
 }

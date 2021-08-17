@@ -127,13 +127,7 @@ class WebSdkGateway extends AbstractGateway {
 
 			PaymentRequestHelper::complement( $payment, $payment_request );
 
-			try {
-				$payment_response = $this->client->create_payment( $payment_request );
-			} catch ( Exception $e ) {
-				$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-				return;
-			}
+			$payment_response = $this->client->create_payment( $payment_request );
 
 			$payment->set_transaction_id( $payment_response->get_psp_reference() );
 

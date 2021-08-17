@@ -23,6 +23,13 @@ use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
  */
 abstract class AbstractGateway extends Core_Gateway {
 	/**
+	 * Config.
+	 * 
+	 * @var Config
+	 */
+	protected $adyen_config;
+
+	/**
 	 * Client.
 	 *
 	 * @var Client
@@ -36,6 +43,8 @@ abstract class AbstractGateway extends Core_Gateway {
 	 */
 	public function __construct( Config $config ) {
 		parent::__construct( $config );
+
+		$this->adyen_config = $config;
 
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
 
@@ -56,7 +65,7 @@ abstract class AbstractGateway extends Core_Gateway {
 		$core_payment_methods = array();
 
 		try {
-			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() ) );
 		} catch ( \Exception $e ) {
 			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
 
@@ -91,7 +100,7 @@ abstract class AbstractGateway extends Core_Gateway {
 		$issuers = array();
 
 		try {
-			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() ) );
 		} catch ( \Exception $e ) {
 			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
 

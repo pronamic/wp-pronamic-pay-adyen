@@ -93,7 +93,7 @@ abstract class AbstractGateway extends Core_Gateway {
 	/**
 	 * Get issuers.
 	 *
-	 * @return array<int, array<string, array<string, string>>>
+	 * @return array<string, string>|array<int, array<string, array<string, string>>>
 	 * @see Core_Gateway::get_issuers()
 	 */
 	public function get_issuers() {

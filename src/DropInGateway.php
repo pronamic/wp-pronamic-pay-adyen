@@ -23,7 +23,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
  *
  * @author  Remco Tolsma
- * @version 1.2.1
+ * @version 2.0.2
  * @since   1.0.0
  */
 class DropInGateway extends AbstractGateway {
@@ -521,7 +521,13 @@ class DropInGateway extends AbstractGateway {
 				),
 			);
 
-			// Line items.
+			/**
+			 * Line Items.
+			 * 
+			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentrequest/1916120-lineitems
+			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaylineitem
+			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaylineitem/1916086-amount
+			 */
 			$lines = $payment->get_lines();
 
 			if ( null !== $lines ) {
@@ -530,7 +536,7 @@ class DropInGateway extends AbstractGateway {
 				foreach ( $lines as $line ) {
 					$line_items[] = array(
 						'label'  => $line->get_name(),
-						'amount' => (string) $line->get_total_amount()->get_value(),
+						'amount' => $line->get_total_amount()->number_format( null, '.', '' ),
 						'type'   => 'final',
 					);
 				}

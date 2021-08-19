@@ -68,6 +68,7 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::GIROPAY,
 			PaymentMethods::GOOGLE_PAY,
 			PaymentMethods::IDEAL,
+			PaymentMethods::KLARNA_PAY_LATER,
 			PaymentMethods::SOFORT,
 			PaymentMethods::SWISH,
 			PaymentMethods::VIPPS,

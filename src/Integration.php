@@ -96,7 +96,11 @@ class Integration extends AbstractGatewayIntegration {
 		// Actions.
 		add_action( 'current_screen', array( $this, 'maybe_download_certificate_or_key' ) );
 
-		\add_filter( 'pronamic_gateway_configuration_display_value_' . $this->get_id(), array( $this, 'gateway_configuration_display_value' ), 10, 2 );
+		$id = $this->get_id();
+
+		if ( null !== $id ) {
+			\add_filter( 'pronamic_gateway_configuration_display_value_' . $id, array( $this, 'gateway_configuration_display_value' ), 10, 2 );
+		}
 	}
 
 	/**

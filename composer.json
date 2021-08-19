@@ -52,6 +52,13 @@
 		"wp-phpunit/wp-phpunit": "^5.8"
 	},
 	"scripts": {
+		"ci": [
+			"@phplint",
+			"@phpcs",
+			"@coverage",
+			"@phpstan",
+			"@psalm"
+		],
 		"coveralls": "vendor/bin/php-coveralls -v",
 		"phpcbf": "vendor/bin/phpcbf",
 		"phpcs": "XDEBUG_MODE=off vendor/bin/phpcs -s -v",

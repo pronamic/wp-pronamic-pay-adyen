@@ -63,7 +63,7 @@ class PaymentResponseHelper {
 
 		$status = ResultCode::transform( $result_code );
 
-		if ( null !== $status && PaymentStatus::OPEN !== $status ) {
+		if ( null !== $status ) {
 			$payment->set_status( $status );
 		}
 

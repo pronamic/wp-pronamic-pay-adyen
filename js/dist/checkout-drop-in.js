@@ -46,6 +46,12 @@
     };
   }
 
+  if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal) {
+    pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal.onCancel = function (data, dropin) {
+      dropin.setStatus('ready');
+    };
+  }
+
   var pronamicPayAdyenProcessing = false;
   var dropin = checkout.create('dropin', {
     paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,

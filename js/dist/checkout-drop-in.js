@@ -71,6 +71,7 @@
 
         if (response.action) {
           dropin.handleAction(response.action);
+          return;
         } // Handle result code.
 
 

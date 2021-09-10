@@ -161,6 +161,18 @@ class PaymentsController {
 			);
 		}
 
+		if ( ! $gateway instanceof DropInGateway ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-drop-in',
+				sprintf(
+					/* translators: %s: Gateway configuration ID */
+					__( 'Unable to handle payment `%s` because it was not processed through the Adyen drop-in integration.', 'pronamic_ideal' ),
+					$payment_id
+				),
+				$payment_id
+			);
+		}
+
 		if ( ! isset( $gateway->client ) ) {
 			return new \WP_Error(
 				'pronamic-pay-adyen-client-not-found',
@@ -186,12 +198,6 @@ class PaymentsController {
 		$payment_method = PaymentMethod::from_object( $data->paymentMethod );
 
 		try {
-			if ( ! \is_callable( array( $gateway, 'create_payment' ) ) ) {
-				return (object) array(
-					'error' => __( 'Gateway does not support method to create payment.', 'pronamic_ideal' ),
-				);
-			}
-
 			try {
 				$response = $gateway->create_payment( $payment, $payment_method, $data );
 			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
@@ -312,6 +318,18 @@ class PaymentsController {
 			);
 		}
 
+		if ( ! $gateway instanceof DropInGateway ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-drop-in',
+				sprintf(
+					/* translators: %s: Gateway configuration ID */
+					__( 'Unable to handle payment `%s` because it was not processed through the Adyen drop-in integration.', 'pronamic_ideal' ),
+					$payment_id
+				),
+				$payment_id
+			);
+		}
+
 		if ( ! isset( $gateway->client ) ) {
 			return new \WP_Error(
 				'pronamic-pay-adyen-client-not-found',
@@ -331,12 +349,6 @@ class PaymentsController {
 		$payment_details_request->set_payment_data( $data->paymentData );
 
 		try {
-			if ( ! \is_callable( array( $gateway, 'send_payment_details' ) ) ) {
-				return (object) array(
-					'error' => __( 'Gateway does not support sending additional payment details.', 'pronamic_ideal' ),
-				);
-			}
-
 			try {
 				$response = $gateway->send_payment_details( $payment_details_request );
 			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {

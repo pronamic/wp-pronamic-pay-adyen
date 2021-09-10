@@ -261,45 +261,8 @@ class PaymentResponse extends ResponseObject {
 
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
+		$payment_response->set_original_object( $object );
+
 		return $payment_response;
-	}
-
-	/**
-	 * Get JSON.
-	 *
-	 * @return object
-	 */
-	public function get_json() {
-		// Redirect.
-		$redirect = $this->get_redirect();
-
-		if ( null !== $redirect ) {
-			$redirect = $redirect->get_json();
-		}
-
-		// Properties.
-		$properties = array(
-			'refusalReason' => $this->get_refusal_reason(),
-			'redirect'      => $redirect,
-			'resultCode'    => $this->get_result_code(),
-			'paymentData'   => $this->get_payment_data(),
-		);
-
-		// Details.
-		$details = $this->get_details();
-
-		if ( null !== $details ) {
-			$properties['details'] = array();
-
-			foreach ( $details as $detail ) {
-				$properties['details'][] = $detail->get_json();
-			}
-		}
-
-		$properties = Util::filter_null( $properties );
-
-		$object = (object) $properties;
-
-		return $object;
 	}
 }

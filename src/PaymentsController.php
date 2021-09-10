@@ -349,58 +349,19 @@ class PaymentsController {
 		$payment_details_request->set_payment_data( $data->paymentData );
 
 		try {
-			try {
-				$response = $gateway->send_payment_details( $payment_details_request );
-			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
-				$message = $service_exception->getMessage();
-
-				$error_code = $service_exception->get_error_code();
-
-				if ( ! empty( $error_code ) ) {
-					$message = sprintf(
-					/* translators: 1: error message, 2: error code */
-						__( '%1$s (error %2$s)', 'pronamic_ideal' ),
-						$service_exception->getMessage(),
-						$error_code
-					);
-				}
-
-				throw new \Exception( $message );
-			}
+			$response = $gateway->send_payment_details( $payment_details_request );
 
 			// Update payment status based on response.
 			PaymentResponseHelper::update_payment( $payment, $response );
+
+			return $response;
 		} catch ( \Exception $e ) {
-			$error = $e->getMessage();
-
-			$error_code = $e->getCode();
-
-			if ( ! empty( $error_code ) ) {
-				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
-			}
-
-			return (object) array( 'error' => $error );
+			return new \WP_Error(
+				'pronamic-pay-adyen-exception',
+				$e->getMessage(),
+				$e
+			);
 		}
-
-		$result = array(
-			'resultCode' => $response->get_result_code(),
-		);
-
-		// Return action if available.
-		$action = $response->get_action();
-
-		if ( null !== $action ) {
-			$result['action'] = $action->get_json();
-		}
-
-		// Return refusal reason if available.
-		$refusal_reason = $response->get_refusal_reason();
-
-		if ( null !== $refusal_reason ) {
-			$result['refusalReason'] = $refusal_reason;
-		}
-
-		return (object) $result;
 	}
 
 	/**

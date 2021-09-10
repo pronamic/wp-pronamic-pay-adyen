@@ -324,29 +324,11 @@ class PaymentsController {
 			);
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		if ( ! isset( $data->paymentMethod->type ) ) {
-			return new \WP_Error(
-				'pronamic-pay-adyen-no-payment-method',
-				__( 'No payment method given.', 'pronamic_ideal' )
-			);
-		}
-
 		// Send additional payment details.
 		$payment_details_request = new PaymentDetailsRequest();
 
-		// Set payment data from original payment response.
-		$payment_response = $payment->get_meta( 'adyen_payment_response' );
-
-		if ( is_string( $payment_response ) && '' !== $payment_response ) {
-			$payment_response = \json_decode( $payment_response );
-
-			$payment_response = PaymentResponse::from_object( $payment_response );
-
-			$payment_data = $payment_response->get_payment_data();
-
-			$payment_details_request->set_payment_data( $payment_data );
-		}
+		$payment_details_request->set_details( $data->details );
+		$payment_details_request->set_payment_data( $data->paymentData );
 
 		try {
 			if ( ! \is_callable( array( $gateway, 'send_payment_details' ) ) ) {

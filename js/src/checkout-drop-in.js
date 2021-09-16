@@ -19,18 +19,18 @@
 			send_request( pronamicPayAdyenCheckout.applePayMerchantValidationUrl, { validation_url: validationUrl } )
 				.then( validate_http_status )
 				.then( get_json )
-				.then( response => {
+				.then( data => {
 					// Handle Pronamic Pay error.
-					if ( response.error ) {
-						return Promise.reject( new Error( response.error ) );
+					if ( data.error ) {
+						return Promise.reject( new Error( data.error ) );
 					}
 
 					// Handle Adyen error.
-					if ( response.statusMessage ) {
-						return Promise.reject( new Error( response.statusMessage ) );
+					if ( data.statusMessage ) {
+						return Promise.reject( new Error( data.statusMessage ) );
 					}
 
-					return resolve( response );
+					return resolve( data );
 				} )
 				.catch( error => {
 					dropin.setStatus( 'error', { message: error.message } );
@@ -101,15 +101,15 @@
 			send_request( pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data )
 			.then( validate_http_status )
 			.then( get_json )
-			.then( response => {
+			.then( data => {
 				// Handle action object.
-				if ( response.action ) {
-					dropin.handleAction( response.action );
+				if ( data.action ) {
+					dropin.handleAction( data.action );
 				}
 
 				// Handle result code.
-				if ( response.resultCode ) {
-					paymentResult( response );
+				if ( data.resultCode ) {
+					paymentResult( data );
 				}
 			} )
 			.catch( error => {

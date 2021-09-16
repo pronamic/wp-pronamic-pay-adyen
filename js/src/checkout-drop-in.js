@@ -19,18 +19,18 @@
 			send_request( pronamicPayAdyenCheckout.applePayMerchantValidationUrl, { validation_url: validationUrl } )
 				.then( validate_http_status )
 				.then( get_json )
-				.then( response => {
+				.then( data => {
 					// Handle Pronamic Pay error.
-					if ( response.error ) {
-						return Promise.reject( new Error( response.error ) );
+					if ( data.error ) {
+						return Promise.reject( new Error( data.error ) );
 					}
 
 					// Handle Adyen error.
-					if ( response.statusMessage ) {
-						return Promise.reject( new Error( response.statusMessage ) );
+					if ( data.statusMessage ) {
+						return Promise.reject( new Error( data.statusMessage ) );
 					}
 
-					return resolve( response );
+					return resolve( data );
 				} )
 				.catch( error => {
 					dropin.setStatus( 'error', { message: error.message } );
@@ -42,7 +42,30 @@
 		};
 	}
 
+	if ( pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal ) {
+		pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal.onCancel = ( data, dropin ) => {
+			dropin.setStatus( 'ready' );
+		};
+	}
+
 	let pronamicPayAdyenProcessing = false;
+
+	/**
+	 * Parse JSON and check response status.
+	 * 
+	 * @link https://stackoverflow.com/questions/47267221/fetch-response-json-and-response-status
+	 */
+	const validate_response = response => {
+		return response.json().then( data => {
+			if ( 200 !== response.status ) {
+				throw new Error( data.message, {
+					cause: data
+				} );
+			}
+
+			return data;
+		} );
+	};
 
 	const dropin = checkout.create( 'dropin', {
 		paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
@@ -54,45 +77,39 @@
 			pronamicPayAdyenProcessing = true;
 
 			send_request( pronamicPayAdyenCheckout.paymentsUrl, state.data )
-			.then( validate_http_status )
-			.then( get_json )
-			.then( response => {
+			.then( validate_response )
+			.then( data => {
 				pronamicPayAdyenProcessing = false;
 
-				// Handle error.
-				if ( response.error ) {
-					return Promise.reject( new Error( response.error ) );
-				}
-
 				// Handle action object.
-				if ( response.action ) {
-					dropin.handleAction( response.action );
+				if ( data.action ) {
+					dropin.handleAction( data.action );
+
+					return;
 				}
 
 				// Handle result code.
-				if ( response.resultCode ) {
-					paymentResult( response );
+				if ( data.resultCode ) {
+					paymentResult( data );
 				}
 			} )
 			.catch( error => {
 				dropin.setStatus( 'error', { message: error.message } );
-
-				setTimeout( () => { dropin.setStatus( 'ready' ); }, 5000 );
 			} );
 		},
 		onAdditionalDetails: ( state, dropin ) => {
 			send_request( pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data )
 			.then( validate_http_status )
 			.then( get_json )
-			.then( response => {
+			.then( data => {
 				// Handle action object.
-				if ( response.action ) {
-					dropin.handleAction( response.action );
+				if ( data.action ) {
+					dropin.handleAction( data.action );
 				}
 
 				// Handle result code.
-				if ( response.resultCode ) {
-					paymentResult( response );
+				if ( data.resultCode ) {
+					paymentResult( data );
 				}
 			} )
 			.catch( error => {

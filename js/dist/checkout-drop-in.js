@@ -22,18 +22,18 @@
     pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = function (resolve, reject, validationUrl) {
       send_request(pronamicPayAdyenCheckout.applePayMerchantValidationUrl, {
         validation_url: validationUrl
-      }).then(validate_http_status).then(get_json).then(function (response) {
+      }).then(validate_http_status).then(get_json).then(function (data) {
         // Handle Pronamic Pay error.
-        if (response.error) {
-          return Promise.reject(new Error(response.error));
+        if (data.error) {
+          return Promise.reject(new Error(data.error));
         } // Handle Adyen error.
 
 
-        if (response.statusMessage) {
-          return Promise.reject(new Error(response.statusMessage));
+        if (data.statusMessage) {
+          return Promise.reject(new Error(data.statusMessage));
         }
 
-        return resolve(response);
+        return resolve(data);
       }).catch(function (error) {
         dropin.setStatus('error', {
           message: error.message
@@ -46,7 +46,31 @@
     };
   }
 
+  if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal) {
+    pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal.onCancel = function (data, dropin) {
+      dropin.setStatus('ready');
+    };
+  }
+
   var pronamicPayAdyenProcessing = false;
+  /**
+   * Parse JSON and check response status.
+   * 
+   * @link https://stackoverflow.com/questions/47267221/fetch-response-json-and-response-status
+   */
+
+  var validate_response = function validate_response(response) {
+    return response.json().then(function (data) {
+      if (200 !== response.status) {
+        throw new Error(data.message, {
+          cause: data
+        });
+      }
+
+      return data;
+    });
+  };
+
   var dropin = checkout.create('dropin', {
     paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
     onSubmit: function onSubmit(state, dropin) {
@@ -55,41 +79,34 @@
       }
 
       pronamicPayAdyenProcessing = true;
-      send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(validate_http_status).then(get_json).then(function (response) {
-        pronamicPayAdyenProcessing = false; // Handle error.
+      send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(validate_response).then(function (data) {
+        pronamicPayAdyenProcessing = false; // Handle action object.
 
-        if (response.error) {
-          return Promise.reject(new Error(response.error));
-        } // Handle action object.
-
-
-        if (response.action) {
-          dropin.handleAction(response.action);
+        if (data.action) {
+          dropin.handleAction(data.action);
+          return;
         } // Handle result code.
 
 
-        if (response.resultCode) {
-          paymentResult(response);
+        if (data.resultCode) {
+          paymentResult(data);
         }
       }).catch(function (error) {
         dropin.setStatus('error', {
           message: error.message
         });
-        setTimeout(function () {
-          dropin.setStatus('ready');
-        }, 5000);
       });
     },
     onAdditionalDetails: function onAdditionalDetails(state, dropin) {
-      send_request(pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data).then(validate_http_status).then(get_json).then(function (response) {
+      send_request(pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data).then(validate_http_status).then(get_json).then(function (data) {
         // Handle action object.
-        if (response.action) {
-          dropin.handleAction(response.action);
+        if (data.action) {
+          dropin.handleAction(data.action);
         } // Handle result code.
 
 
-        if (response.resultCode) {
-          paymentResult(response);
+        if (data.resultCode) {
+          paymentResult(data);
         }
       }).catch(function (error) {
         throw Error(error);

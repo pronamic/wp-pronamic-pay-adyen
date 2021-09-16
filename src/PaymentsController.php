@@ -161,6 +161,18 @@ class PaymentsController {
 			);
 		}
 
+		if ( ! $gateway instanceof DropInGateway ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-drop-in',
+				sprintf(
+					/* translators: %s: Gateway configuration ID */
+					__( 'Unable to handle payment `%s` because it was not processed through the Adyen drop-in integration.', 'pronamic_ideal' ),
+					$payment_id
+				),
+				$payment_id
+			);
+		}
+
 		if ( ! isset( $gateway->client ) ) {
 			return new \WP_Error(
 				'pronamic-pay-adyen-client-not-found',
@@ -186,12 +198,6 @@ class PaymentsController {
 		$payment_method = PaymentMethod::from_object( $data->paymentMethod );
 
 		try {
-			if ( ! \is_callable( array( $gateway, 'create_payment' ) ) ) {
-				return (object) array(
-					'error' => __( 'Gateway does not support method to create payment.', 'pronamic_ideal' ),
-				);
-			}
-
 			try {
 				$response = $gateway->create_payment( $payment, $payment_method, $data );
 			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
@@ -225,25 +231,7 @@ class PaymentsController {
 		// Update payment status based on response.
 		PaymentResponseHelper::update_payment( $payment, $response );
 
-		$result = array(
-			'resultCode' => $response->get_result_code(),
-		);
-
-		// Return action if available.
-		$action = $response->get_action();
-
-		if ( null !== $action ) {
-			$result['action'] = $action->get_json();
-		}
-
-		// Return refusal reason if available.
-		$refusal_reason = $response->get_refusal_reason();
-
-		if ( null !== $refusal_reason ) {
-			$result['refusalReason'] = $refusal_reason;
-		}
-
-		return (object) $result;
+		return $this->get_response_result( $response );
 	}
 
 	/**
@@ -312,6 +300,18 @@ class PaymentsController {
 			);
 		}
 
+		if ( ! $gateway instanceof DropInGateway ) {
+			return new \WP_Error(
+				'pronamic-pay-adyen-no-drop-in',
+				sprintf(
+					/* translators: %s: Gateway configuration ID */
+					__( 'Unable to handle payment `%s` because it was not processed through the Adyen drop-in integration.', 'pronamic_ideal' ),
+					$payment_id
+				),
+				$payment_id
+			);
+		}
+
 		if ( ! isset( $gateway->client ) ) {
 			return new \WP_Error(
 				'pronamic-pay-adyen-client-not-found',
@@ -324,89 +324,26 @@ class PaymentsController {
 			);
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		if ( ! isset( $data->paymentMethod->type ) ) {
-			return new \WP_Error(
-				'pronamic-pay-adyen-no-payment-method',
-				__( 'No payment method given.', 'pronamic_ideal' )
-			);
-		}
-
 		// Send additional payment details.
 		$payment_details_request = new PaymentDetailsRequest();
 
-		// Set payment data from original payment response.
-		$payment_response = $payment->get_meta( 'adyen_payment_response' );
-
-		if ( is_string( $payment_response ) && '' !== $payment_response ) {
-			$payment_response = \json_decode( $payment_response );
-
-			$payment_response = PaymentResponse::from_object( $payment_response );
-
-			$payment_data = $payment_response->get_payment_data();
-
-			$payment_details_request->set_payment_data( $payment_data );
-		}
+		$payment_details_request->set_details( $data->details );
+		$payment_details_request->set_payment_data( $data->paymentData );
 
 		try {
-			if ( ! \is_callable( array( $gateway, 'send_payment_details' ) ) ) {
-				return (object) array(
-					'error' => __( 'Gateway does not support sending additional payment details.', 'pronamic_ideal' ),
-				);
-			}
-
-			try {
-				$response = $gateway->send_payment_details( $payment_details_request );
-			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
-				$message = $service_exception->getMessage();
-
-				$error_code = $service_exception->get_error_code();
-
-				if ( ! empty( $error_code ) ) {
-					$message = sprintf(
-					/* translators: 1: error message, 2: error code */
-						__( '%1$s (error %2$s)', 'pronamic_ideal' ),
-						$service_exception->getMessage(),
-						$error_code
-					);
-				}
-
-				throw new \Exception( $message );
-			}
+			$response = $gateway->send_payment_details( $payment_details_request );
 
 			// Update payment status based on response.
 			PaymentResponseHelper::update_payment( $payment, $response );
+
+			return $this->get_response_result( $response );
 		} catch ( \Exception $e ) {
-			$error = $e->getMessage();
-
-			$error_code = $e->getCode();
-
-			if ( ! empty( $error_code ) ) {
-				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
-			}
-
-			return (object) array( 'error' => $error );
+			return new \WP_Error(
+				'pronamic-pay-adyen-exception',
+				$e->getMessage(),
+				$e
+			);
 		}
-
-		$result = array(
-			'resultCode' => $response->get_result_code(),
-		);
-
-		// Return action if available.
-		$action = $response->get_action();
-
-		if ( null !== $action ) {
-			$result['action'] = $action->get_json();
-		}
-
-		// Return refusal reason if available.
-		$refusal_reason = $response->get_refusal_reason();
-
-		if ( null !== $refusal_reason ) {
-			$result['refusalReason'] = $refusal_reason;
-		}
-
-		return (object) $result;
 	}
 
 	/**
@@ -621,5 +558,33 @@ class PaymentsController {
 		}
 
 		// phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_setopt
+	}
+
+	/**
+	 * Get payment response result for drop-in to handle.
+	 *
+	 * @param PaymentResponse $response Response.
+	 * @return object
+	 */
+	private function get_response_result( PaymentResponse $response ) {
+		$result = array(
+			'resultCode' => $response->get_result_code(),
+		);
+
+		// Set action.
+		$action = $response->get_action();
+
+		if ( null !== $action ) {
+			$result['action'] = $action->get_json();
+		}
+
+		// Set refusal reason.
+		$refusal_reason = $response->get_refusal_reason();
+
+		if ( null !== $refusal_reason ) {
+			$result['refusalReason'] = $refusal_reason;
+		}
+
+		return (object) $result;
 	}
 }

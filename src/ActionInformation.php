@@ -256,29 +256,8 @@ class ActionInformation extends ResponseObject {
 
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
+		$action->set_original_object( $object );
+
 		return $action;
-	}
-
-	/**
-	 * Get JSON.
-	 *
-	 * @return object
-	 */
-	public function get_json() {
-		$properties = Util::filter_null(
-			array(
-				'data'              => $this->get_data(),
-				'method'            => $this->get_method(),
-				'paymentData'       => $this->get_payment_data(),
-				'paymentMethodType' => $this->get_payment_method_type(),
-				'token'             => $this->get_token(),
-				'type'              => $this->get_type(),
-				'url'               => $this->get_url(),
-			)
-		);
-
-		$object = (object) $properties;
-
-		return $object;
 	}
 }

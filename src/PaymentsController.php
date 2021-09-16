@@ -231,25 +231,7 @@ class PaymentsController {
 		// Update payment status based on response.
 		PaymentResponseHelper::update_payment( $payment, $response );
 
-		$result = array(
-			'resultCode' => $response->get_result_code(),
-		);
-
-		// Return action if available.
-		$action = $response->get_action();
-
-		if ( null !== $action ) {
-			$result['action'] = $action->get_json();
-		}
-
-		// Return refusal reason if available.
-		$refusal_reason = $response->get_refusal_reason();
-
-		if ( null !== $refusal_reason ) {
-			$result['refusalReason'] = $refusal_reason;
-		}
-
-		return (object) $result;
+		return $this->get_response_result( $response );
 	}
 
 	/**
@@ -354,7 +336,7 @@ class PaymentsController {
 			// Update payment status based on response.
 			PaymentResponseHelper::update_payment( $payment, $response );
 
-			return $response;
+			return $this->get_response_result( $response );
 		} catch ( \Exception $e ) {
 			return new \WP_Error(
 				'pronamic-pay-adyen-exception',
@@ -576,5 +558,33 @@ class PaymentsController {
 		}
 
 		// phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_setopt
+	}
+
+	/**
+	 * Get payment response result for drop-in to handle.
+	 *
+	 * @param PaymentResponse $response Response.
+	 * @return object
+	 */
+	private function get_response_result( PaymentResponse $response ) {
+		$result = array(
+			'resultCode' => $response->get_result_code(),
+		);
+
+		// Set action.
+		$action = $response->get_action();
+
+		if ( null !== $action ) {
+			$result['action'] = $action->get_json();
+		}
+
+		// Set refusal reason.
+		$refusal_reason = $response->get_refusal_reason();
+
+		if ( null !== $refusal_reason ) {
+			$result['refusalReason'] = $refusal_reason;
+		}
+
+		return (object) $result;
 	}
 }

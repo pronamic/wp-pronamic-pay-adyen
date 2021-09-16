@@ -521,6 +521,13 @@ class DropInGateway extends AbstractGateway {
 				),
 			);
 
+			// Set country code.
+			$billing_address = $payment->get_billing_address();
+
+			if ( null !== $billing_address ) {
+				$configuration['applepay']['countryCode'] = $billing_address->get_country_code();
+			}
+
 			/**
 			 * Line Items.
 			 *

@@ -111,7 +111,7 @@ class DropInGateway extends AbstractGateway {
 		);
 
 		if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-			$payment_method['issuer'] = (string) $payment->get_issuer();
+			$payment_method['issuer'] = (string) $payment->get_meta( 'issuer' );
 		}
 
 		$payment_method = new PaymentMethod( (object) $payment_method );

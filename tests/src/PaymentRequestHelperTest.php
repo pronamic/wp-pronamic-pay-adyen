@@ -29,8 +29,9 @@ class PaymentRequestHelperTest extends TestCase {
 		/*
 		 * Payment.
 		 */
-		$payment              = new Payment();
-		$payment->description = 'Test';
+		$payment = new Payment();
+
+		$payment->set_description( 'Test' );
 
 		$customer = new Customer();
 		$customer->set_ip_address( '127.0.0.1' );

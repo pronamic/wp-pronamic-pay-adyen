@@ -85,7 +85,7 @@ class WebSdkGateway extends AbstractGateway {
 		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment method type.
-		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
+		$payment_method_type = PaymentMethodType::transform( $payment->get_payment_method() );
 
 		// Country.
 		$country_code = Util::get_country_code( $payment );

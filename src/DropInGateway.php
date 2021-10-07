@@ -99,7 +99,7 @@ class DropInGateway extends AbstractGateway {
 		);
 
 		// Return early if API integration is not being used.
-		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
+		$payment_method_type = PaymentMethodType::transform( $payment->get_payment_method() );
 
 		if ( ! in_array( $payment_method_type, $api_integration_payment_method_types, true ) ) {
 			return;
@@ -161,9 +161,11 @@ class DropInGateway extends AbstractGateway {
 		 */
 		$request = new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() );
 
-		if ( null !== $payment->get_method() ) {
+		$payment_method = $payment->get_payment_method();
+
+		if ( null !== $payment_method ) {
 			// Payment method type.
-			$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
+			$payment_method_type = PaymentMethodType::transform( $payment_method );
 
 			if ( null !== $payment_method_type ) {
 				$request->set_allowed_payment_methods( array( $payment_method_type ) );

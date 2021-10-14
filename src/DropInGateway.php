@@ -15,6 +15,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
 
 /**
@@ -139,6 +140,13 @@ class DropInGateway extends AbstractGateway {
 
 		if ( null === $payment_id ) {
 			return;
+		}
+
+		// Redirect if payment is already successful.
+		if ( PaymentStatus::SUCCESS === $payment->get_status() ) {
+			\wp_redirect( $payment->get_return_redirect_url() );
+
+			exit;
 		}
 
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );

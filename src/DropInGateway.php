@@ -95,8 +95,6 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethodType::ALIPAY,
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,
-			PaymentMethodType::SWISH,
-			PaymentMethodType::VIPPS,
 		);
 
 		// Return early if API integration is not being used.
@@ -261,13 +259,28 @@ class DropInGateway extends AbstractGateway {
 		 * @link https://docs.adyen.com/checkout/drop-in-web
 		 * @link https://docs.adyen.com/checkout/components-web
 		 */
-		$configuration = (object) array(
+		$configuration = array(
 			'locale'                 => Util::get_payment_locale( $payment ),
 			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
 			'originKey'              => $this->adyen_config->origin_key,
 			'paymentMethodsResponse' => $payment_methods->get_original_object(),
 			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		);
+
+		/**
+		 * Auto submit drop-in.
+		 */
+		$auto_submit_methods = array(
+			PaymentMethodType::SWISH,
+			PaymentMethodType::VIPPS,
+			PaymentMethodType::UNIONPAY,
+		);
+
+		if ( 1 === \count( $payment_method_types ) && \in_array( $payment_method_types[0], $auto_submit_methods ) ) {
+			$configuration[ 'showPayButton'] = false;
+		}
+
+		$configuration = (object) $configuration;
 
 		/**
 		 * Filters the Adyen checkout configuration.

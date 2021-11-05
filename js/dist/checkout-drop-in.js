@@ -73,6 +73,13 @@
 
   var dropin = checkout.create('dropin', {
     paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
+    onSelect: function onSelect(dropin) {
+      var configuration = pronamicPayAdyenCheckout.configuration;
+
+      if (configuration.hasOwnProperty('showPayButton') && false === configuration.showPayButton) {
+        dropin.submit();
+      }
+    },
     onSubmit: function onSubmit(state, dropin) {
       if (pronamicPayAdyenProcessing) {
         return false;

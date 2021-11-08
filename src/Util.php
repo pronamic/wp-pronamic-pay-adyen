@@ -79,12 +79,6 @@ class Util {
 			}
 		}
 
-		if ( null === $country_code && \class_exists( '\Locale' ) ) {
-			$locale = self::get_payment_locale( $payment );
-
-			$country_code = \Locale::getRegion( $locale );
-		}
-
 		return $country_code;
 	}
 }

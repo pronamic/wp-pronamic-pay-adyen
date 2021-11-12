@@ -10,7 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use JsonSchema\Exception\ValidationException;
 use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Plugin;
 use WP_REST_Request;
@@ -194,44 +193,35 @@ class PaymentsController {
 			);
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		$payment_method = PaymentMethod::from_object( $data->paymentMethod );
-
 		try {
-			try {
-				$response = $gateway->create_payment( $payment, $payment_method, $data );
-			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
-				$message = $service_exception->getMessage();
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+			$payment_method = PaymentMethod::from_object( $data->paymentMethod );
 
-				$error_code = $service_exception->get_error_code();
+			$response = $gateway->create_payment( $payment, $payment_method, $data );
 
-				if ( ! empty( $error_code ) ) {
-					$message = sprintf(
-						/* translators: 1: error message, 2: error code */
-						__( '%1$s (error %2$s)', 'pronamic_ideal' ),
-						$service_exception->getMessage(),
-						$error_code
-					);
-				}
+			// Update payment status based on response.
+			PaymentResponseHelper::update_payment( $payment, $response );
 
-				throw new \Exception( $message );
-			}
-		} catch ( \Exception $e ) {
-			$error = $e->getMessage();
+			return $this->get_response_result( $response );
+		} catch ( \Exception $exception ) {
+			$message = $exception->getMessage();
+			$code    = $exception->getCode();
 
-			$error_code = $e->getCode();
-
-			if ( ! empty( $error_code ) ) {
-				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
+			if ( $exception instanceof \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException ) {
+				$code = $exception->get_error_code();
 			}
 
-			return (object) array( 'error' => $error );
+			if ( ! empty( $code ) ) {
+				$message = sprintf(
+					/* translators: 1: error message, 2: error code */
+					__( '%1$s (error %2$s)', 'pronamic_ideal' ),
+					$message,
+					$code
+				);
+			}
+
+			return new \WP_Error( 'pronamic-pay-adyen-create-payment-failed', $message );
 		}
-
-		// Update payment status based on response.
-		PaymentResponseHelper::update_payment( $payment, $response );
-
-		return $this->get_response_result( $response );
 	}
 
 	/**

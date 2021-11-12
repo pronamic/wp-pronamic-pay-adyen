@@ -220,6 +220,17 @@ class PaymentsController {
 				);
 			}
 
+			// Add payment note with error message.
+			try {
+				$payment->add_note( $message );
+			} catch ( \Exception $e ) {
+				$message = \sprintf(
+					'%1$s. %2$s',
+					$message,
+					__( 'Error message could not be logged.', 'pronamic_ideal' )
+				);
+			}
+
 			return new \WP_Error( 'pronamic-pay-adyen-create-payment-failed', $message );
 		}
 	}

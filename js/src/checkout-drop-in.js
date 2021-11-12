@@ -70,7 +70,7 @@
 		onSelect: ( dropin ) => {
 			let configuration = pronamicPayAdyenCheckout.configuration;
 
-			if ( Object.prototype.hasOwnProperty.call( configuration, 'showPayButton' ) && false === configuration.showPayButton ) {
+			if ( false === configuration.showPayButton ) {
 				dropin.submit();
 			}
 		},

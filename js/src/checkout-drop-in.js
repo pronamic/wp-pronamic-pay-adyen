@@ -48,8 +48,6 @@
 		};
 	}
 
-	let pronamicPayAdyenProcessing = false;
-
 	/**
 	 * Parse JSON and check response status.
 	 * 
@@ -77,17 +75,12 @@
 			}
 		},
 		onSubmit: ( state, dropin ) => {
-			if ( pronamicPayAdyenProcessing ) {
-				return false;
-			}
-
-			pronamicPayAdyenProcessing = true;
+			// Set loading status to prevent duplicate submits.
+			dropin.setStatus( 'loading' );
 
 			send_request( pronamicPayAdyenCheckout.paymentsUrl, state.data )
 			.then( validate_response )
 			.then( data => {
-				pronamicPayAdyenProcessing = false;
-
 				// Handle action object.
 				if ( data.action ) {
 					dropin.handleAction( data.action );

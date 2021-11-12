@@ -51,13 +51,12 @@
       dropin.setStatus('ready');
     };
   }
-
-  var pronamicPayAdyenProcessing = false;
   /**
    * Parse JSON and check response status.
    * 
    * @link https://stackoverflow.com/questions/47267221/fetch-response-json-and-response-status
    */
+
 
   var validate_response = function validate_response(response) {
     return response.json().then(function (data) {
@@ -81,14 +80,10 @@
       }
     },
     onSubmit: function onSubmit(state, dropin) {
-      if (pronamicPayAdyenProcessing) {
-        return false;
-      }
-
-      pronamicPayAdyenProcessing = true;
+      // Set loading status to prevent duplicate submits.
+      dropin.setStatus('loading');
       send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(validate_response).then(function (data) {
-        pronamicPayAdyenProcessing = false; // Handle action object.
-
+        // Handle action object.
         if (data.action) {
           dropin.handleAction(data.action);
           return;

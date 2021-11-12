@@ -329,6 +329,8 @@ class PaymentsController {
 		$payment_details_request = new PaymentDetailsRequest();
 
 		$payment_details_request->set_details( $data->details );
+
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		$payment_details_request->set_payment_data( $data->paymentData );
 
 		try {

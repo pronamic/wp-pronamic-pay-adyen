@@ -49,7 +49,8 @@
 		"roots/wordpress": "^5.8",
 		"sirbrillig/phpcs-import-detection": "^1.2",
 		"sirbrillig/phpcs-variable-analysis": "^2.8",
-		"wp-phpunit/wp-phpunit": "^5.8"
+		"wp-phpunit/wp-phpunit": "^5.8",
+		"yoast/phpunit-polyfills": "^1.0"
 	},
 	"scripts": {
 		"ci": [

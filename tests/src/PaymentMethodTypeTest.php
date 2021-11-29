@@ -54,7 +54,7 @@ class PaymentMethodTypeTest extends TestCase {
 	 */
 	public function transform_test_provider() {
 		return array(
-			array( PaymentMethodType::AFTERPAY, PaymentMethods::AFTERPAY ),
+			array( PaymentMethodType::AFTERPAY, PaymentMethods::AFTERPAY_COM ),
 			array( PaymentMethodType::ALIPAY, PaymentMethods::ALIPAY ),
 			array( PaymentMethodType::BANCONTACT, PaymentMethods::BANCONTACT ),
 			array( PaymentMethodType::SCHEME, PaymentMethods::CREDIT_CARD ),

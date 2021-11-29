@@ -34,6 +34,8 @@ class PaymentMethodType {
 	/**
 	 * Constant for the 'afterpay_default' payment method type.
 	 *
+	 * Note: this is for Afterpay (afterpay.com) and not for the AfterPay (afterpay.nl).
+	 *
 	 * @var string
 	 */
 	const AFTERPAY = 'afterpay_default';
@@ -170,7 +172,7 @@ class PaymentMethodType {
 	 * @var array<string, string>
 	 */
 	private static $map = array(
-		PaymentMethods::AFTERPAY         => self::AFTERPAY,
+		PaymentMethods::AFTERPAY_COM     => self::AFTERPAY,
 		PaymentMethods::ALIPAY           => self::ALIPAY,
 		PaymentMethods::APPLE_PAY        => self::APPLE_PAY,
 		PaymentMethods::BANCONTACT       => self::BANCONTACT,

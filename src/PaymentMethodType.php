@@ -62,6 +62,13 @@ class PaymentMethodType {
 	const BANCONTACT = 'bcmc';
 
 	/**
+	 * Constant for the 'blik' payment method type.
+	 *
+	 * @var string
+	 */
+	const BLIK = 'blik';
+
+	/**
 	 * Constant for the 'sepadirectdebit' payment method type.
 	 *
 	 * @var string
@@ -125,6 +132,13 @@ class PaymentMethodType {
 	const MAESTRO = 'maestro';
 
 	/**
+	 * Constant for the 'mbway' payment method type.
+	 *
+	 * @var string
+	 */
+	const MB_WAY = 'mbway';
+
+	/**
 	 * Constant for the 'Multibanco' payment method type.
 	 *
 	 * @var string
@@ -176,6 +190,7 @@ class PaymentMethodType {
 		PaymentMethods::ALIPAY           => self::ALIPAY,
 		PaymentMethods::APPLE_PAY        => self::APPLE_PAY,
 		PaymentMethods::BANCONTACT       => self::BANCONTACT,
+		PaymentMethods::BLIK             => self::BLIK,
 		PaymentMethods::CREDIT_CARD      => self::SCHEME,
 		PaymentMethods::DIRECT_DEBIT     => self::SEPA_DIRECT_DEBIT,
 		PaymentMethods::EPS              => self::EPS,
@@ -184,6 +199,7 @@ class PaymentMethodType {
 		PaymentMethods::IDEAL            => self::IDEAL,
 		PaymentMethods::KLARNA_PAY_LATER => self::KLARNA,
 		PaymentMethods::MAESTRO          => self::MAESTRO,
+		PaymentMethods::MB_WAY           => self::MB_WAY,
 		PaymentMethods::PAYPAL           => self::PAYPAL,
 		PaymentMethods::SOFORT           => self::DIRECT_EBANKING,
 		PaymentMethods::SWISH            => self::SWISH,

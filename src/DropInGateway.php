@@ -74,6 +74,7 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::MB_WAY,
 			PaymentMethods::SOFORT,
 			PaymentMethods::SWISH,
+			PaymentMethods::TWINT,
 			PaymentMethods::VIPPS,
 		);
 	}

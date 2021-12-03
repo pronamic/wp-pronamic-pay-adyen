@@ -167,6 +167,13 @@ class PaymentMethodType {
 	const SWISH = 'swish';
 
 	/**
+	 * Constant for the 'TWINT' payment method type.
+	 *
+	 * @var string
+	 */
+	const TWINT = 'twint';
+
+	/**
 	 * Constant for the 'UnionPay' payment method type.
 	 *
 	 * @var string
@@ -203,6 +210,7 @@ class PaymentMethodType {
 		PaymentMethods::PAYPAL           => self::PAYPAL,
 		PaymentMethods::SOFORT           => self::DIRECT_EBANKING,
 		PaymentMethods::SWISH            => self::SWISH,
+		PaymentMethods::TWINT            => self::TWINT,
 		PaymentMethods::VIPPS            => self::VIPPS,
 	);
 

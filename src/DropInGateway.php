@@ -275,6 +275,7 @@ class DropInGateway extends AbstractGateway {
 		 */
 		$auto_submit_methods = array(
 			PaymentMethodType::SWISH,
+			PaymentMethodType::TWINT,
 			PaymentMethodType::VIPPS,
 			PaymentMethodType::UNIONPAY,
 		);

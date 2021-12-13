@@ -286,8 +286,8 @@ jobs:
           composer run-script coveralls
           bash <(curl -s https://codecov.io/bash)
 
-  es-sass-linting:
-    name: Scripts and Styles
+  es-linting:
+    name: Scripts
 
     runs-on: ubuntu-latest
 
@@ -311,6 +311,3 @@ jobs:
 
       - name: ESLint
         run: npm run-script eslint
-
-      - name: Sass Lint
-        run: npm run-script sass-lint

@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [3.0.0] - 2022-01-11
+### Changed
+- Updated to https://github.com/pronamic/wp-pay-core/releases/tag/4.0.0.
+- Make notifications only update payment status if not already completed (fixes [pronamic/wp-pronamic-pay#245](https://github.com/pronamic/wp-pronamic-pay/issues/245)).
+- Use Drop-in with auto submit for Swish payment method (instead of direct API integration, because of redirect to mobile app on desktop).
+- Removed guessing country code with `\Locale::getRegion()` (can result in e.g. `EN` as invalid country code).
+- Improved error handling on payment creation ([pronamic/wp-pronamic-pay#278](https://github.com/pronamic/wp-pronamic-pay/issues/278)).
+- Removed `pronamicPayAdyenProcessing` in favor of setting drop status to `loading`.
+- Clarified Afterpay.
+- Disable Application Passwords for routes within integration REST route namespace as it interferes with our HTTP Basic authorization permission check.
+
+### Added
+- Added BLIK and MB WAY payment methods.
+- Added support for TWINT payment method.
+
+### Fixed
+- Move script to inside HTML body.
+
 ## [2.0.4] - 2021-09-16
 - Added support for the PayPal payment method.
 - Added country code to Apple Pay payment method configuration.
@@ -96,7 +114,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/2.0.4...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/adyen/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/wp-pay-gateways/adyen/compare/2.0.4...3.0.0
 [2.0.4]: https://github.com/wp-pay-gateways/adyen/compare/2.0.3...2.0.4
 [2.0.3]: https://github.com/wp-pay-gateways/adyen/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/wp-pay-gateways/adyen/compare/2.0.1...2.0.2

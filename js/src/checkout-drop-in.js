@@ -48,8 +48,6 @@
 		};
 	}
 
-	let pronamicPayAdyenProcessing = false;
-
 	/**
 	 * Parse JSON and check response status.
 	 * 
@@ -69,18 +67,20 @@
 
 	const dropin = checkout.create( 'dropin', {
 		paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
-		onSubmit: ( state, dropin ) => {
-			if ( pronamicPayAdyenProcessing ) {
-				return false;
-			}
+		onSelect: ( dropin ) => {
+			let configuration = pronamicPayAdyenCheckout.configuration;
 
-			pronamicPayAdyenProcessing = true;
+			if ( false === configuration.showPayButton ) {
+				dropin.submit();
+			}
+		},
+		onSubmit: ( state, dropin ) => {
+			// Set loading status to prevent duplicate submits.
+			dropin.setStatus( 'loading' );
 
 			send_request( pronamicPayAdyenCheckout.paymentsUrl, state.data )
 			.then( validate_response )
 			.then( data => {
-				pronamicPayAdyenProcessing = false;
-
 				// Handle action object.
 				if ( data.action ) {
 					dropin.handleAction( data.action );

@@ -3,7 +3,7 @@
  * Web SDK gateway
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -85,7 +85,7 @@ class WebSdkGateway extends AbstractGateway {
 		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment method type.
-		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
+		$payment_method_type = PaymentMethodType::transform( $payment->get_payment_method() );
 
 		// Country.
 		$country_code = Util::get_country_code( $payment );
@@ -106,7 +106,7 @@ class WebSdkGateway extends AbstractGateway {
 			);
 
 			if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-				$payment_method['issuer'] = (string) $payment->get_issuer();
+				$payment_method['issuer'] = (string) $payment->get_meta( 'issuer' );
 			}
 
 			// API integration.

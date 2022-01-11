@@ -53,7 +53,7 @@ Version | Description
 ------- | -----------
 `1.2.0` | Added.
 
-Source: [./src/DropInGateway.php](../src/DropInGateway.php), [line 262](../src/DropInGateway.php#L262-L269)
+Source: [./src/DropInGateway.php](../src/DropInGateway.php), [line 285](../src/DropInGateway.php#L285-L292)
 
 ### `pronamic_pay_adyen_payment_metadata`
 

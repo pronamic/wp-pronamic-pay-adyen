@@ -1,6 +1,6 @@
 {
   "name": "adyen",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "Adyen driver for the WordPress payment processing library.",
   "repository": {
     "type": "git",

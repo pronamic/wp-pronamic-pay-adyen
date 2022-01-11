@@ -3,7 +3,7 @@
  * Drop-in gateway
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -15,6 +15,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
 
 /**
@@ -62,6 +63,7 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::ALIPAY,
 			PaymentMethods::APPLE_PAY,
 			PaymentMethods::BANCONTACT,
+			PaymentMethods::BLIK,
 			PaymentMethods::CREDIT_CARD,
 			PaymentMethods::DIRECT_DEBIT,
 			PaymentMethods::EPS,
@@ -69,8 +71,10 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::GOOGLE_PAY,
 			PaymentMethods::IDEAL,
 			PaymentMethods::KLARNA_PAY_LATER,
+			PaymentMethods::MB_WAY,
 			PaymentMethods::SOFORT,
 			PaymentMethods::SWISH,
+			PaymentMethods::TWINT,
 			PaymentMethods::VIPPS,
 		);
 	}
@@ -94,12 +98,10 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethodType::ALIPAY,
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,
-			PaymentMethodType::SWISH,
-			PaymentMethodType::VIPPS,
 		);
 
 		// Return early if API integration is not being used.
-		$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
+		$payment_method_type = PaymentMethodType::transform( $payment->get_payment_method() );
 
 		if ( ! in_array( $payment_method_type, $api_integration_payment_method_types, true ) ) {
 			return;
@@ -111,7 +113,7 @@ class DropInGateway extends AbstractGateway {
 		);
 
 		if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-			$payment_method['issuer'] = (string) $payment->get_issuer();
+			$payment_method['issuer'] = (string) $payment->get_meta( 'issuer' );
 		}
 
 		$payment_method = new PaymentMethod( (object) $payment_method );
@@ -141,6 +143,13 @@ class DropInGateway extends AbstractGateway {
 			return;
 		}
 
+		// Redirect if payment is already successful.
+		if ( PaymentStatus::SUCCESS === $payment->get_status() ) {
+			\wp_redirect( $payment->get_return_redirect_url() );
+
+			exit;
+		}
+
 		$payment_response = $payment->get_meta( 'adyen_payment_response' );
 
 		// Only show drop-in checkout page if payment method does not redirect.
@@ -161,9 +170,11 @@ class DropInGateway extends AbstractGateway {
 		 */
 		$request = new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() );
 
-		if ( null !== $payment->get_method() ) {
+		$payment_method = $payment->get_payment_method();
+
+		if ( null !== $payment_method ) {
 			// Payment method type.
-			$payment_method_type = PaymentMethodType::transform( $payment->get_method() );
+			$payment_method_type = PaymentMethodType::transform( $payment_method );
 
 			if ( null !== $payment_method_type ) {
 				$request->set_allowed_payment_methods( array( $payment_method_type ) );
@@ -251,13 +262,29 @@ class DropInGateway extends AbstractGateway {
 		 * @link https://docs.adyen.com/checkout/drop-in-web
 		 * @link https://docs.adyen.com/checkout/components-web
 		 */
-		$configuration = (object) array(
+		$configuration = array(
 			'locale'                 => Util::get_payment_locale( $payment ),
 			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
 			'originKey'              => $this->adyen_config->origin_key,
 			'paymentMethodsResponse' => $payment_methods->get_original_object(),
 			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		);
+
+		/**
+		 * Auto submit drop-in.
+		 */
+		$auto_submit_methods = array(
+			PaymentMethodType::SWISH,
+			PaymentMethodType::TWINT,
+			PaymentMethodType::VIPPS,
+			PaymentMethodType::UNIONPAY,
+		);
+
+		if ( 1 === \count( $payment_method_types ) && \in_array( $payment_method_types[0], $auto_submit_methods ) ) {
+			$configuration['showPayButton'] = false;
+		}
+
+		$configuration = (object) $configuration;
 
 		/**
 		 * Filters the Adyen checkout configuration.
@@ -595,8 +622,8 @@ class DropInGateway extends AbstractGateway {
 		 */
 		if ( \in_array( PaymentMethodType::PAYPAL, $payment_method_types, true ) ) {
 			$configuration['paypal'] = array(
-				'environment'   => ( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ),
-				'amount'        => array(
+				'environment' => ( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ),
+				'amount'      => array(
 					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 					'value'    => $payment->get_total_amount()->get_minor_units()->get_value(),
 				),

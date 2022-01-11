@@ -3,7 +3,7 @@
  * Payment method type
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -34,6 +34,8 @@ class PaymentMethodType {
 	/**
 	 * Constant for the 'afterpay_default' payment method type.
 	 *
+	 * Note: this is for Afterpay (afterpay.com) and not for the AfterPay (afterpay.nl).
+	 *
 	 * @var string
 	 */
 	const AFTERPAY = 'afterpay_default';
@@ -58,6 +60,13 @@ class PaymentMethodType {
 	 * @var string
 	 */
 	const BANCONTACT = 'bcmc';
+
+	/**
+	 * Constant for the 'blik' payment method type.
+	 *
+	 * @var string
+	 */
+	const BLIK = 'blik';
 
 	/**
 	 * Constant for the 'sepadirectdebit' payment method type.
@@ -123,6 +132,13 @@ class PaymentMethodType {
 	const MAESTRO = 'maestro';
 
 	/**
+	 * Constant for the 'mbway' payment method type.
+	 *
+	 * @var string
+	 */
+	const MB_WAY = 'mbway';
+
+	/**
 	 * Constant for the 'Multibanco' payment method type.
 	 *
 	 * @var string
@@ -151,6 +167,13 @@ class PaymentMethodType {
 	const SWISH = 'swish';
 
 	/**
+	 * Constant for the 'TWINT' payment method type.
+	 *
+	 * @var string
+	 */
+	const TWINT = 'twint';
+
+	/**
 	 * Constant for the 'UnionPay' payment method type.
 	 *
 	 * @var string
@@ -170,10 +193,11 @@ class PaymentMethodType {
 	 * @var array<string, string>
 	 */
 	private static $map = array(
-		PaymentMethods::AFTERPAY         => self::AFTERPAY,
+		PaymentMethods::AFTERPAY_COM     => self::AFTERPAY,
 		PaymentMethods::ALIPAY           => self::ALIPAY,
 		PaymentMethods::APPLE_PAY        => self::APPLE_PAY,
 		PaymentMethods::BANCONTACT       => self::BANCONTACT,
+		PaymentMethods::BLIK             => self::BLIK,
 		PaymentMethods::CREDIT_CARD      => self::SCHEME,
 		PaymentMethods::DIRECT_DEBIT     => self::SEPA_DIRECT_DEBIT,
 		PaymentMethods::EPS              => self::EPS,
@@ -182,9 +206,11 @@ class PaymentMethodType {
 		PaymentMethods::IDEAL            => self::IDEAL,
 		PaymentMethods::KLARNA_PAY_LATER => self::KLARNA,
 		PaymentMethods::MAESTRO          => self::MAESTRO,
+		PaymentMethods::MB_WAY           => self::MB_WAY,
 		PaymentMethods::PAYPAL           => self::PAYPAL,
 		PaymentMethods::SOFORT           => self::DIRECT_EBANKING,
 		PaymentMethods::SWISH            => self::SWISH,
+		PaymentMethods::TWINT            => self::TWINT,
 		PaymentMethods::VIPPS            => self::VIPPS,
 	);
 

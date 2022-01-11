@@ -3,7 +3,7 @@
  * Redirect message
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay
  */
@@ -45,47 +45,47 @@
 
 			</div>
 		</div>
-	</body>
 
-	<script type="text/javascript">
-		<?php
+		<script type="text/javascript">
+			<?php
 
-		/**
-		 * Initiate the Adyen Checkout form.
-		 *
-		 * @link https://docs.adyen.com/developers/checkout/web-sdk
-		 */
+			/**
+			 * Initiate the Adyen Checkout form.
+			 *
+			 * @link https://docs.adyen.com/developers/checkout/web-sdk
+			 */
 
-		?>
-		var checkout = chckt.checkout(
-			pronamicPayAdyenCheckout.paymentSession,
-			'#pronamic-pay-checkout',
-			pronamicPayAdyenCheckout.configObject
-		);
-
-		<?php
-
-		/**
-		 * Redirect once payment completes.
-		 *
-		 * @link https://docs.adyen.com/developers/checkout/web-sdk/customization/logic#beforecomplete
-		 * @link https://developer.mozilla.org/en-US/docs/Web/API/URL
-		 * @link https://caniuse.com/#search=URL
-		 * @link https://stackoverflow.com/questions/486896/adding-a-parameter-to-the-url-with-javascript
-		 * @link https://stackoverflow.com/questions/503093/how-do-i-redirect-to-another-webpage
-		 */
-
-		?>
-		chckt.hooks.beforeComplete = function( node, paymentData ) {
-			jQuery.post(
-				pronamicPayAdyenCheckout.paymentsResultUrl,
-				paymentData,
-				function() {
-					window.location.replace( pronamicPayAdyenCheckout.paymentReturnUrl );
-				}
+			?>
+			var checkout = chckt.checkout(
+				pronamicPayAdyenCheckout.paymentSession,
+				'#pronamic-pay-checkout',
+				pronamicPayAdyenCheckout.configObject
 			);
 
-			return false;
-		};
-	</script>
+			<?php
+
+			/**
+			 * Redirect once payment completes.
+			 *
+			 * @link https://docs.adyen.com/developers/checkout/web-sdk/customization/logic#beforecomplete
+			 * @link https://developer.mozilla.org/en-US/docs/Web/API/URL
+			 * @link https://caniuse.com/#search=URL
+			 * @link https://stackoverflow.com/questions/486896/adding-a-parameter-to-the-url-with-javascript
+			 * @link https://stackoverflow.com/questions/503093/how-do-i-redirect-to-another-webpage
+			 */
+
+			?>
+			chckt.hooks.beforeComplete = function( node, paymentData ) {
+				jQuery.post(
+					pronamicPayAdyenCheckout.paymentsResultUrl,
+					paymentData,
+					function() {
+						window.location.replace( pronamicPayAdyenCheckout.paymentReturnUrl );
+					}
+				);
+
+				return false;
+			};
+		</script>
+	</body>
 </html>

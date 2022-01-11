@@ -3,14 +3,13 @@
  * Payments controller
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use JsonSchema\Exception\ValidationException;
 use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Plugin;
 use WP_REST_Request;
@@ -194,44 +193,46 @@ class PaymentsController {
 			);
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		$payment_method = PaymentMethod::from_object( $data->paymentMethod );
-
 		try {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+			$payment_method = PaymentMethod::from_object( $data->paymentMethod );
+
+			$response = $gateway->create_payment( $payment, $payment_method, $data );
+
+			// Update payment status based on response.
+			PaymentResponseHelper::update_payment( $payment, $response );
+
+			return $this->get_response_result( $response );
+		} catch ( \Exception $exception ) {
+			$message = $exception->getMessage();
+			$code    = $exception->getCode();
+
+			if ( $exception instanceof \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException ) {
+				$code = $exception->get_error_code();
+			}
+
+			if ( ! empty( $code ) ) {
+				$message = sprintf(
+					/* translators: 1: error message, 2: error code */
+					__( '%1$s (error %2$s)', 'pronamic_ideal' ),
+					$message,
+					$code
+				);
+			}
+
+			// Add payment note with error message.
 			try {
-				$response = $gateway->create_payment( $payment, $payment_method, $data );
-			} catch ( \Pronamic\WordPress\Pay\Gateways\Adyen\ServiceException $service_exception ) {
-				$message = $service_exception->getMessage();
-
-				$error_code = $service_exception->get_error_code();
-
-				if ( ! empty( $error_code ) ) {
-					$message = sprintf(
-						/* translators: 1: error message, 2: error code */
-						__( '%1$s (error %2$s)', 'pronamic_ideal' ),
-						$service_exception->getMessage(),
-						$error_code
-					);
-				}
-
-				throw new \Exception( $message );
-			}
-		} catch ( \Exception $e ) {
-			$error = $e->getMessage();
-
-			$error_code = $e->getCode();
-
-			if ( ! empty( $error_code ) ) {
-				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
+				$payment->add_note( $message );
+			} catch ( \Exception $e ) {
+				$message = \sprintf(
+					'%1$s. %2$s',
+					$message,
+					__( 'Error message could not be logged.', 'pronamic_ideal' )
+				);
 			}
 
-			return (object) array( 'error' => $error );
+			return new \WP_Error( 'pronamic-pay-adyen-create-payment-failed', $message );
 		}
-
-		// Update payment status based on response.
-		PaymentResponseHelper::update_payment( $payment, $response );
-
-		return $this->get_response_result( $response );
 	}
 
 	/**
@@ -328,6 +329,8 @@ class PaymentsController {
 		$payment_details_request = new PaymentDetailsRequest();
 
 		$payment_details_request->set_details( $data->details );
+
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		$payment_details_request->set_payment_data( $data->paymentData );
 
 		try {

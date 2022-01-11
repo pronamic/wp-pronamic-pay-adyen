@@ -3,7 +3,7 @@
  * Payment method type test.
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -54,7 +54,7 @@ class PaymentMethodTypeTest extends TestCase {
 	 */
 	public function transform_test_provider() {
 		return array(
-			array( PaymentMethodType::AFTERPAY, PaymentMethods::AFTERPAY ),
+			array( PaymentMethodType::AFTERPAY, PaymentMethods::AFTERPAY_COM ),
 			array( PaymentMethodType::ALIPAY, PaymentMethods::ALIPAY ),
 			array( PaymentMethodType::BANCONTACT, PaymentMethods::BANCONTACT ),
 			array( PaymentMethodType::SCHEME, PaymentMethods::CREDIT_CARD ),

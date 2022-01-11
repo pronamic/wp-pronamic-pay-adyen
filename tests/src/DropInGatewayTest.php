@@ -3,7 +3,7 @@
  * Drop-in gateway test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -47,6 +47,7 @@ class DropInGatewayTest extends TestCase {
 				PaymentMethods::GIROPAY,
 				PaymentMethods::GOOGLE_PAY,
 				PaymentMethods::IDEAL,
+				PaymentMethods::KLARNA_PAY_LATER,
 				PaymentMethods::SOFORT,
 				PaymentMethods::SWISH,
 				PaymentMethods::VIPPS,

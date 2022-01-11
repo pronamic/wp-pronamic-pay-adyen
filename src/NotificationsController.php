@@ -3,7 +3,7 @@
  * Notifications controller
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use JsonSchema\Exception\ValidationException;
+use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus as PaymentStatus;
 use WP_Error;
@@ -32,7 +33,11 @@ class NotificationsController {
 	 * @return void
 	 */
 	public function setup() {
-		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
+		// Actions.
+		\add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
+
+		// Filters.
+		\add_filter( 'application_password_is_api_request', array( $this, 'maybe_disable_application_passwords_for_api_request' ), 10 );
 	}
 
 	/**
@@ -53,6 +58,27 @@ class NotificationsController {
 				'permission_callback' => array( $this, 'rest_api_adyen_permissions_check' ),
 			)
 		);
+	}
+
+	/**
+	 * Disable Application Passwords for routes within integration REST route namespace,
+	 * as it interferes with our HTTP Basic authorization permission check.
+	 *
+	 * @link https://github.com/WordPress/WordPress/blob/489b33c97a8942e43c92f3d4a5efe069fecccb32/wp-includes/user.php#L327-L336
+	 * @param bool $is_api_request If this is an acceptable API request.
+	 * @return bool
+	 */
+	public function maybe_disable_application_passwords_for_api_request( $is_api_request ) {
+		/*
+		 * Check if request URI contains the integration REST route namespace,
+		 * parsed REST request is not yet available at this point during WordPress bootstrap.
+		*/
+		if ( false === \stripos( Server::get( 'REQUEST_URI' ), Integration::REST_ROUTE_NAMESPACE ) ) {
+			return $is_api_request;
+		}
+
+		// Return `false` to disable application passwords validation for this request.
+		return false;
 	}
 
 	/**
@@ -163,7 +189,7 @@ class NotificationsController {
 			do_action( 'pronamic_pay_webhook_log_payment', $payment );
 
 			// Authorization.
-			if ( EventCode::AUTHORIZATION === $item->get_event_code() ) {
+			if ( EventCode::AUTHORIZATION === $item->get_event_code() && PaymentStatus::SUCCESS !== $payment->get_status() ) {
 				$payment->set_status( $item->is_success() ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE );
 
 				$payment->save();

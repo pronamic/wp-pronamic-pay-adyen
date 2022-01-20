@@ -60,6 +60,7 @@ class DropInGateway extends AbstractGateway {
 	 */
 	public function get_supported_payment_methods() {
 		return array(
+			PaymentMethods::AFTERPAY_COM,
 			PaymentMethods::ALIPAY,
 			PaymentMethods::APPLE_PAY,
 			PaymentMethods::BANCONTACT,

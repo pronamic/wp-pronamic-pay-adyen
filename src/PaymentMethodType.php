@@ -34,11 +34,24 @@ class PaymentMethodType {
 	/**
 	 * Constant for the 'afterpay_default' payment method type.
 	 *
-	 * Note: this is for Afterpay (afterpay.com) and not for the AfterPay (afterpay.nl).
+	 * Note: this is for Afterpay (afterpay.com) and not for AfterPay (afterpay.nl).
 	 *
+	 * @deprecated We have deprecated this constant because we can no longer find it in the Adyen documentation.
 	 * @var string
 	 */
 	const AFTERPAY = 'afterpay_default';
+
+	/**
+	 * Constant for the 'afterpaytouch' payment method type.
+	 *
+	 * Note: this is for Afterpay (afterpay.com) and not for AfterPay (afterpay.nl).
+	 *
+	 * @link https://en.wikipedia.org/wiki/Afterpay
+	 * @link https://docs.adyen.com/payment-methods/afterpaytouch/api-only
+	 * @link https://docs.adyen.com/payment-methods/afterpaytouch
+	 * @var string
+	 */
+	const AFTERPAY_TOUCH = 'afterpaytouch';
 
 	/**
 	 * Constant for the 'alipay' payment method type.
@@ -194,6 +207,7 @@ class PaymentMethodType {
 	 */
 	private static $map = array(
 		PaymentMethods::AFTERPAY_COM     => self::AFTERPAY,
+		PaymentMethods::AFTERPAY_COM     => self::AFTERPAY_TOUCH,
 		PaymentMethods::ALIPAY           => self::ALIPAY,
 		PaymentMethods::APPLE_PAY        => self::APPLE_PAY,
 		PaymentMethods::BANCONTACT       => self::BANCONTACT,

@@ -72,6 +72,8 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::GOOGLE_PAY,
 			PaymentMethods::IDEAL,
 			PaymentMethods::KLARNA_PAY_LATER,
+			PaymentMethods::KLARNA_PAY_NOW,
+			PaymentMethods::KLARNA_PAY_OVER_TIME,
 			PaymentMethods::MB_WAY,
 			PaymentMethods::SOFORT,
 			PaymentMethods::SWISH,

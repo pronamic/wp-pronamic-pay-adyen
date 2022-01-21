@@ -55,11 +55,12 @@
    * Parse JSON and check response status.
    * 
    * @link https://stackoverflow.com/questions/47267221/fetch-response-json-and-response-status
+   * @link https://stevenklambert.com/writing/fetch-json-text-fallback/
    */
 
 
   var validate_response = function validate_response(response) {
-    return response.json().then(function (data) {
+    return response.clone().json().then(function (data) {
       if (200 !== response.status) {
         throw new Error(data.message, {
           cause: data
@@ -67,6 +68,10 @@
       }
 
       return data;
+    }).catch(function (error) {
+      response.text().then(function (data) {// Log `data` to console or via `send_request()`.
+      });
+      return Promise.reject(new Error(pronamicPayAdyenCheckout.unknownError));
     });
   };
 

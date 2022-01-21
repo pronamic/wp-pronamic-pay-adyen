@@ -60,6 +60,7 @@ class DropInGateway extends AbstractGateway {
 	 */
 	public function get_supported_payment_methods() {
 		return array(
+			PaymentMethods::AFTERPAY_COM,
 			PaymentMethods::ALIPAY,
 			PaymentMethods::APPLE_PAY,
 			PaymentMethods::BANCONTACT,
@@ -71,6 +72,8 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::GOOGLE_PAY,
 			PaymentMethods::IDEAL,
 			PaymentMethods::KLARNA_PAY_LATER,
+			PaymentMethods::KLARNA_PAY_NOW,
+			PaymentMethods::KLARNA_PAY_OVER_TIME,
 			PaymentMethods::MB_WAY,
 			PaymentMethods::SOFORT,
 			PaymentMethods::SWISH,

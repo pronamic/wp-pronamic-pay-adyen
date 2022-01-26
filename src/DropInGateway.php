@@ -311,7 +311,7 @@ class DropInGateway extends AbstractGateway {
 				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),
 				'paymentReceived'               => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
 				'paymentRefused'                => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
-				'unknownError'                  => __( 'An unknown error occurred. Please try reloading this page.', 'pronamic_ideal' ),
+				'syntaxError'                   => __( 'Received an invalid response while processing your request. Please try reloading this page.', 'pronamic_ideal' ),
 			)
 		);
 

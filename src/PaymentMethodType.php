@@ -223,7 +223,6 @@ class PaymentMethodType {
 	 * @var array<string, string>
 	 */
 	private static $map = array(
-		PaymentMethods::AFTERPAY_COM         => self::AFTERPAY,
 		PaymentMethods::AFTERPAY_COM         => self::AFTERPAY_TOUCH,
 		PaymentMethods::ALIPAY               => self::ALIPAY,
 		PaymentMethods::APPLE_PAY            => self::APPLE_PAY,

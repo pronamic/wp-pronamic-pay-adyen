@@ -178,8 +178,10 @@
 				 * You'll receive a `refusalReason` in the same response, indicating the cause of the error.
 				 */
 				if ( response.refusalReason ) {
-					dropin.setStatus( 'error', { message: response.refusalReason } );
+					throw new Error( response.refusalReason );
 				}
+
+				throw new Error( pronamicPayAdyenCheckout.unknownError );
 
 				break;
 			case 'Pending':
@@ -208,14 +210,11 @@
 				/*
 				 * Inform the shopper that the payment was refused. Ask the shopper to try the payment again using a different payment method or card.
 				 */
-				dropin.setStatus( 'error', { message: pronamicPayAdyenCheckout.paymentRefused + ' (' + response.refusalReason + ')' } );
+				if ( response.refusalReason ) {
+					throw new Error( pronamicPayAdyenCheckout.paymentRefused + ' (' + response.refusalReason + ')' );
+				}
 
-				setTimeout(
-					() => {
-						dropin.setStatus( 'ready' );
-					},
-					8000
-				);
+				throw new Error( pronamicPayAdyenCheckout.paymentRefused );
 
 				break;
 			case 'Received':

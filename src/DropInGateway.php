@@ -360,7 +360,7 @@ class DropInGateway extends AbstractGateway {
 				PaymentResultHelper::update_payment( $payment, $payment_result_response );
 			} catch ( \Exception $e ) {
 				$note = sprintf(
-				/* translators: %s: exception message */
+					/* translators: %s: exception message */
 					__( 'Error getting payment result: %s', 'pronamic_ideal' ),
 					$e->getMessage()
 				);

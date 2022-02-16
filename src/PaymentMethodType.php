@@ -34,11 +34,24 @@ class PaymentMethodType {
 	/**
 	 * Constant for the 'afterpay_default' payment method type.
 	 *
-	 * Note: this is for Afterpay (afterpay.com) and not for the AfterPay (afterpay.nl).
+	 * Note: this is for Afterpay (afterpay.com) and not for AfterPay (afterpay.nl).
 	 *
+	 * @deprecated We have deprecated this constant because we can no longer find it in the Adyen documentation.
 	 * @var string
 	 */
 	const AFTERPAY = 'afterpay_default';
+
+	/**
+	 * Constant for the 'afterpaytouch' payment method type.
+	 *
+	 * Note: this is for Afterpay (afterpay.com) and not for AfterPay (afterpay.nl).
+	 *
+	 * @link https://en.wikipedia.org/wiki/Afterpay
+	 * @link https://docs.adyen.com/payment-methods/afterpaytouch/api-only
+	 * @link https://docs.adyen.com/payment-methods/afterpaytouch
+	 * @var string
+	 */
+	const AFTERPAY_TOUCH = 'afterpaytouch';
 
 	/**
 	 * Constant for the 'alipay' payment method type.
@@ -118,11 +131,28 @@ class PaymentMethodType {
 	const IDEAL = 'ideal';
 
 	/**
-	 * Constant for the 'klarna' payment method type.
+	 * Constant for the 'klarna' payment method type, for Klarna — Pay later.
 	 *
+	 * @link https://docs.adyen.com/payment-methods/klarna/api-only#make-a-payment
 	 * @var string
 	 */
 	const KLARNA = 'klarna';
+
+	/**
+	 * Constant for the 'klarna_paynow' payment method type, for Klarna — Pay Now.
+	 *
+	 * @link https://docs.adyen.com/payment-methods/klarna/api-only#make-a-payment
+	 * @var string
+	 */
+	const KLARNA_PAY_NOW = 'klarna_paynow';
+
+	/**
+	 * Constant for the 'klarna_account' payment method type, for Klarna — Pay over time.
+	 *
+	 * @link https://docs.adyen.com/payment-methods/klarna/api-only#make-a-payment
+	 * @var string
+	 */
+	const KLARNA_ACCOUNT = 'klarna_account';
 
 	/**
 	 * Constant for the 'maestro' payment method type.
@@ -193,25 +223,27 @@ class PaymentMethodType {
 	 * @var array<string, string>
 	 */
 	private static $map = array(
-		PaymentMethods::AFTERPAY_COM     => self::AFTERPAY,
-		PaymentMethods::ALIPAY           => self::ALIPAY,
-		PaymentMethods::APPLE_PAY        => self::APPLE_PAY,
-		PaymentMethods::BANCONTACT       => self::BANCONTACT,
-		PaymentMethods::BLIK             => self::BLIK,
-		PaymentMethods::CREDIT_CARD      => self::SCHEME,
-		PaymentMethods::DIRECT_DEBIT     => self::SEPA_DIRECT_DEBIT,
-		PaymentMethods::EPS              => self::EPS,
-		PaymentMethods::GIROPAY          => self::GIROPAY,
-		PaymentMethods::GOOGLE_PAY       => self::GOOGLE_PAY,
-		PaymentMethods::IDEAL            => self::IDEAL,
-		PaymentMethods::KLARNA_PAY_LATER => self::KLARNA,
-		PaymentMethods::MAESTRO          => self::MAESTRO,
-		PaymentMethods::MB_WAY           => self::MB_WAY,
-		PaymentMethods::PAYPAL           => self::PAYPAL,
-		PaymentMethods::SOFORT           => self::DIRECT_EBANKING,
-		PaymentMethods::SWISH            => self::SWISH,
-		PaymentMethods::TWINT            => self::TWINT,
-		PaymentMethods::VIPPS            => self::VIPPS,
+		PaymentMethods::AFTERPAY_COM         => self::AFTERPAY_TOUCH,
+		PaymentMethods::ALIPAY               => self::ALIPAY,
+		PaymentMethods::APPLE_PAY            => self::APPLE_PAY,
+		PaymentMethods::BANCONTACT           => self::BANCONTACT,
+		PaymentMethods::BLIK                 => self::BLIK,
+		PaymentMethods::CREDIT_CARD          => self::SCHEME,
+		PaymentMethods::DIRECT_DEBIT         => self::SEPA_DIRECT_DEBIT,
+		PaymentMethods::EPS                  => self::EPS,
+		PaymentMethods::GIROPAY              => self::GIROPAY,
+		PaymentMethods::GOOGLE_PAY           => self::GOOGLE_PAY,
+		PaymentMethods::IDEAL                => self::IDEAL,
+		PaymentMethods::KLARNA_PAY_LATER     => self::KLARNA,
+		PaymentMethods::KLARNA_PAY_NOW       => self::KLARNA_PAY_NOW,
+		PaymentMethods::KLARNA_PAY_OVER_TIME => self::KLARNA_ACCOUNT,
+		PaymentMethods::MAESTRO              => self::MAESTRO,
+		PaymentMethods::MB_WAY               => self::MB_WAY,
+		PaymentMethods::PAYPAL               => self::PAYPAL,
+		PaymentMethods::SOFORT               => self::DIRECT_EBANKING,
+		PaymentMethods::SWISH                => self::SWISH,
+		PaymentMethods::TWINT                => self::TWINT,
+		PaymentMethods::VIPPS                => self::VIPPS,
 	);
 
 	/**

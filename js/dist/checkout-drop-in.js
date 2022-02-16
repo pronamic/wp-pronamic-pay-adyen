@@ -3,57 +3,24 @@
 /* global AdyenCheckout, pronamicPayAdyenCheckout */
 (function () {
   'use strict';
+  /**
+   * Send request using Fetch API.
+   */
 
-  var checkout = new AdyenCheckout(pronamicPayAdyenCheckout.configuration);
-
-  var validate_http_status = function validate_http_status(response) {
-    if (response.status >= 200 && response.status < 300) {
-      return Promise.resolve(response);
-    }
-
-    return Promise.reject(new Error(response.statusText));
+  var send_request = function send_request(url, data) {
+    return fetch(url, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
   };
-
-  var get_json = function get_json(response) {
-    return response.json();
-  };
-
-  if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay) {
-    pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = function (resolve, reject, validationUrl) {
-      send_request(pronamicPayAdyenCheckout.applePayMerchantValidationUrl, {
-        validation_url: validationUrl
-      }).then(validate_http_status).then(get_json).then(function (data) {
-        // Handle Pronamic Pay error.
-        if (data.error) {
-          return Promise.reject(new Error(data.error));
-        } // Handle Adyen error.
-
-
-        if (data.statusMessage) {
-          return Promise.reject(new Error(data.statusMessage));
-        }
-
-        return resolve(data);
-      }).catch(function (error) {
-        dropin.setStatus('error', {
-          message: error.message
-        });
-        setTimeout(function () {
-          dropin.setStatus('ready');
-        }, 5000);
-        return reject();
-      });
-    };
-  }
-
-  if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal) {
-    pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal.onCancel = function (data, dropin) {
-      dropin.setStatus('ready');
-    };
-  }
   /**
    * Parse JSON and check response status.
-   * 
+   *
+   * @param response Fetch request response.
    * @link https://stackoverflow.com/questions/47267221/fetch-response-json-and-response-status
    */
 
@@ -69,9 +36,90 @@
       return data;
     });
   };
+  /**
+   * Process response.
+   *
+   * @param data Object from JSON response.
+   */
 
+
+  var process_response = function process_response(data) {
+    // Handle action object.
+    if (data.action) {
+      dropin.handleAction(data.action);
+      return;
+    } // Handle result code.
+
+
+    if (data.resultCode) {
+      paymentResult(data);
+    }
+  };
+  /**
+   * Handle error.
+   *
+   * @param error
+   */
+
+
+  var handle_error = function handle_error(error) {
+    // Check syntax error name.
+    if ('SyntaxError' === error.name) {
+      error.message = pronamicPayAdyenCheckout.syntaxError;
+    } // Show error message.
+
+
+    dropin.setStatus('error', {
+      message: error.message
+    });
+  };
+  /**
+   * Get payment methods configuration.
+   *
+   * @return object
+   */
+
+
+  var getPaymentMethodsConfiguration = function getPaymentMethodsConfiguration() {
+    // Compliment Apple Pay configuration.
+    if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay) {
+      pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = function (resolve, reject, validationUrl) {
+        send_request(pronamicPayAdyenCheckout.applePayMerchantValidationUrl, {
+          validation_url: validationUrl
+        }).then(validate_response).then(function (data) {
+          // Handle Apple error.
+          if (data.statusMessage) {
+            throw new Error(data.statusMessage, {
+              cause: data
+            });
+          }
+
+          resolve(data);
+        }).catch(function (error) {
+          handle_error(error); // Reject to dismiss Apple Pay overlay.
+
+          reject(error);
+        });
+      };
+    } // Compliment PayPal configuration.
+
+
+    if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal) {
+      pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal.onCancel = function (data, dropin) {
+        dropin.setStatus('ready');
+      };
+    }
+
+    return pronamicPayAdyenCheckout.paymentMethodsConfiguration;
+  };
+  /**
+   * Adyen Checkout.
+   */
+
+
+  var checkout = new AdyenCheckout(pronamicPayAdyenCheckout.configuration);
   var dropin = checkout.create('dropin', {
-    paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
+    paymentMethodsConfiguration: getPaymentMethodsConfiguration(),
     onSelect: function onSelect(dropin) {
       var configuration = pronamicPayAdyenCheckout.configuration;
 
@@ -79,60 +127,23 @@
         dropin.submit();
       }
     },
-    onSubmit: function onSubmit(state, dropin) {
+    onSubmit: function onSubmit(state) {
       // Set loading status to prevent duplicate submits.
       dropin.setStatus('loading');
-      send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(validate_response).then(function (data) {
-        // Handle action object.
-        if (data.action) {
-          dropin.handleAction(data.action);
-          return;
-        } // Handle result code.
-
-
-        if (data.resultCode) {
-          paymentResult(data);
-        }
-      }).catch(function (error) {
-        dropin.setStatus('error', {
-          message: error.message
-        });
-      });
+      send_request(pronamicPayAdyenCheckout.paymentsUrl, state.data).then(validate_response).then(process_response).catch(handle_error);
     },
-    onAdditionalDetails: function onAdditionalDetails(state, dropin) {
-      send_request(pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data).then(validate_http_status).then(get_json).then(function (data) {
-        // Handle action object.
-        if (data.action) {
-          dropin.handleAction(data.action);
-        } // Handle result code.
-
-
-        if (data.resultCode) {
-          paymentResult(data);
-        }
-      }).catch(function (error) {
-        throw Error(error);
-      });
+    onAdditionalDetails: function onAdditionalDetails(state) {
+      send_request(pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data).then(validate_response).then(process_response).catch(handle_error);
     }
   }).mount('#pronamic-pay-checkout');
-
-  var send_request = function send_request(url, data) {
-    return fetch(url, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-  };
+  /**
+   * Handle payment result.
+   *
+   * @param response Object from JSON response data.
+   * @link https://docs.adyen.com/checkout/drop-in-web#step-6-present-payment-result
+   */
 
   var paymentResult = function paymentResult(response) {
-    /*
-     * Handle payment result
-     *
-     * @link https://docs.adyen.com/checkout/drop-in-web#step-6-present-payment-result
-     */
     switch (response.resultCode) {
       case 'Authorised':
         // The payment was successful.
@@ -153,11 +164,10 @@
          * You'll receive a `refusalReason` in the same response, indicating the cause of the error.
          */
         if (response.refusalReason) {
-          dropin.setStatus('error', {
-            message: response.refusalReason
-          });
+          throw new Error(response.refusalReason);
         }
 
+        throw new Error(pronamicPayAdyenCheckout.unknownError);
         break;
 
       case 'Pending':
@@ -187,12 +197,11 @@
         /*
          * Inform the shopper that the payment was refused. Ask the shopper to try the payment again using a different payment method or card.
          */
-        dropin.setStatus('error', {
-          message: pronamicPayAdyenCheckout.paymentRefused + ' (' + response.refusalReason + ')'
-        });
-        setTimeout(function () {
-          dropin.setStatus('ready');
-        }, 8000);
+        if (response.refusalReason) {
+          throw new Error(pronamicPayAdyenCheckout.paymentRefused + ' (' + response.refusalReason + ')');
+        }
+
+        throw new Error(pronamicPayAdyenCheckout.paymentRefused);
         break;
 
       case 'Received':

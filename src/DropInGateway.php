@@ -60,6 +60,7 @@ class DropInGateway extends AbstractGateway {
 	 */
 	public function get_supported_payment_methods() {
 		return array(
+			PaymentMethods::AFTERPAY_COM,
 			PaymentMethods::ALIPAY,
 			PaymentMethods::APPLE_PAY,
 			PaymentMethods::BANCONTACT,
@@ -71,6 +72,8 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::GOOGLE_PAY,
 			PaymentMethods::IDEAL,
 			PaymentMethods::KLARNA_PAY_LATER,
+			PaymentMethods::KLARNA_PAY_NOW,
+			PaymentMethods::KLARNA_PAY_OVER_TIME,
 			PaymentMethods::MB_WAY,
 			PaymentMethods::SOFORT,
 			PaymentMethods::SWISH,
@@ -308,6 +311,8 @@ class DropInGateway extends AbstractGateway {
 				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),
 				'paymentReceived'               => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
 				'paymentRefused'                => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
+				'syntaxError'                   => __( 'Received an invalid response while processing your request. Please try reloading this page.', 'pronamic_ideal' ),
+				'unknownError'                  => __( 'An unknown error occurred while processing your request. Please try reloading this page.', 'pronamic_ideal' ),
 			)
 		);
 
@@ -355,7 +360,7 @@ class DropInGateway extends AbstractGateway {
 				PaymentResultHelper::update_payment( $payment, $payment_result_response );
 			} catch ( \Exception $e ) {
 				$note = sprintf(
-				/* translators: %s: exception message */
+					/* translators: %s: exception message */
 					__( 'Error getting payment result: %s', 'pronamic_ideal' ),
 					$e->getMessage()
 				);

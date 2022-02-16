@@ -2,123 +2,9 @@
 ( function () {
 	'use strict';
 
-	const checkout = new AdyenCheckout( pronamicPayAdyenCheckout.configuration );
-
-	const validate_http_status = response => {
-		if ( response.status >= 200 && response.status < 300 ) {
-			return Promise.resolve( response );
-		}
-
-		return Promise.reject( new Error( response.statusText ) );
-	};
-
-	const get_json = response => response.json();
-
-	if ( pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay ) {
-		pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = ( resolve, reject, validationUrl ) => {
-			send_request( pronamicPayAdyenCheckout.applePayMerchantValidationUrl, { validation_url: validationUrl } )
-				.then( validate_http_status )
-				.then( get_json )
-				.then( data => {
-					// Handle Pronamic Pay error.
-					if ( data.error ) {
-						return Promise.reject( new Error( data.error ) );
-					}
-
-					// Handle Adyen error.
-					if ( data.statusMessage ) {
-						return Promise.reject( new Error( data.statusMessage ) );
-					}
-
-					return resolve( data );
-				} )
-				.catch( error => {
-					dropin.setStatus( 'error', { message: error.message } );
-
-					setTimeout( () => {dropin.setStatus( 'ready' );}, 5000 );
-
-					return reject();
-				} );
-		};
-	}
-
-	if ( pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal ) {
-		pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal.onCancel = ( data, dropin ) => {
-			dropin.setStatus( 'ready' );
-		};
-	}
-
 	/**
-	 * Parse JSON and check response status.
-	 * 
-	 * @link https://stackoverflow.com/questions/47267221/fetch-response-json-and-response-status
+	 * Send request using Fetch API.
 	 */
-	const validate_response = response => {
-		return response.json().then( data => {
-			if ( 200 !== response.status ) {
-				throw new Error( data.message, {
-					cause: data
-				} );
-			}
-
-			return data;
-		} );
-	};
-
-	const dropin = checkout.create( 'dropin', {
-		paymentMethodsConfiguration: pronamicPayAdyenCheckout.paymentMethodsConfiguration,
-		onSelect: ( dropin ) => {
-			let configuration = pronamicPayAdyenCheckout.configuration;
-
-			if ( false === configuration.showPayButton ) {
-				dropin.submit();
-			}
-		},
-		onSubmit: ( state, dropin ) => {
-			// Set loading status to prevent duplicate submits.
-			dropin.setStatus( 'loading' );
-
-			send_request( pronamicPayAdyenCheckout.paymentsUrl, state.data )
-			.then( validate_response )
-			.then( data => {
-				// Handle action object.
-				if ( data.action ) {
-					dropin.handleAction( data.action );
-
-					return;
-				}
-
-				// Handle result code.
-				if ( data.resultCode ) {
-					paymentResult( data );
-				}
-			} )
-			.catch( error => {
-				dropin.setStatus( 'error', { message: error.message } );
-			} );
-		},
-		onAdditionalDetails: ( state, dropin ) => {
-			send_request( pronamicPayAdyenCheckout.paymentsDetailsUrl, state.data )
-			.then( validate_http_status )
-			.then( get_json )
-			.then( data => {
-				// Handle action object.
-				if ( data.action ) {
-					dropin.handleAction( data.action );
-				}
-
-				// Handle result code.
-				if ( data.resultCode ) {
-					paymentResult( data );
-				}
-			} )
-			.catch( error => {
-				throw Error( error );
-			} );
-		}
-	} )
-	.mount( '#pronamic-pay-checkout' );
-
 	const send_request = ( url, data ) => {
 		return fetch(
 			url,
@@ -131,12 +17,149 @@
 		);
 	};
 
-	const paymentResult = ( response ) => {
-		/*
-		 * Handle payment result
-		 *
-		 * @link https://docs.adyen.com/checkout/drop-in-web#step-6-present-payment-result
-		 */
+	/**
+	 * Parse JSON and check response status.
+	 *
+	 * @param response Fetch request response.
+	 * @link https://stackoverflow.com/questions/47267221/fetch-response-json-and-response-status
+	 */
+	const validate_response = response => {
+		return response.json()
+			.then( data => {
+				if ( 200 !== response.status ) {
+					throw new Error( data.message, {
+						cause: data
+					} );
+				}
+
+				return data;
+			} );
+	};
+
+	/**
+	 * Process response.
+	 *
+	 * @param data Object from JSON response.
+	 */
+	const process_response = data => {
+		// Handle action object.
+		if ( data.action ) {
+			dropin.handleAction( data.action );
+
+			return;
+		}
+
+		// Handle result code.
+		if ( data.resultCode ) {
+			paymentResult( data );
+		}
+	}
+
+	/**
+	 * Handle error.
+	 *
+	 * @param error
+	 */
+	const handle_error = error => {
+		// Check syntax error name.
+		if ( 'SyntaxError' === error.name ) {
+			error.message = pronamicPayAdyenCheckout.syntaxError;
+		}
+
+		// Show error message.
+		dropin.setStatus( 'error', { message: error.message } );
+	}
+
+	/**
+	 * Get payment methods configuration.
+	 *
+	 * @return object
+	 */
+	const getPaymentMethodsConfiguration = () => {
+		// Compliment Apple Pay configuration.
+		if ( pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay ) {
+			pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = ( resolve, reject, validationUrl ) => {
+				send_request(
+					pronamicPayAdyenCheckout.applePayMerchantValidationUrl,
+					{
+						validation_url: validationUrl
+					}
+				)
+				.then( validate_response )
+				.then( data => {
+					// Handle Apple error.
+					if ( data.statusMessage ) {
+						throw new Error( data.statusMessage, {
+							cause: data
+						} );
+					}
+
+					resolve( data );
+				} )
+				.catch( error => {
+					handle_error( error );
+
+					// Reject to dismiss Apple Pay overlay.
+					reject( error );
+				} );
+			};
+		}
+
+		// Compliment PayPal configuration.
+		if ( pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal ) {
+			pronamicPayAdyenCheckout.paymentMethodsConfiguration.paypal.onCancel = ( data, dropin ) => {
+				dropin.setStatus( 'ready' );
+			};
+		}
+
+		return pronamicPayAdyenCheckout.paymentMethodsConfiguration;
+	};
+
+	/**
+	 * Adyen Checkout.
+	 */
+	const checkout = new AdyenCheckout( pronamicPayAdyenCheckout.configuration );
+
+	const dropin = checkout.create( 'dropin', {
+		paymentMethodsConfiguration: getPaymentMethodsConfiguration(),
+		onSelect: dropin => {
+			let configuration = pronamicPayAdyenCheckout.configuration;
+
+			if ( false === configuration.showPayButton ) {
+				dropin.submit();
+			}
+		},
+		onSubmit: ( state ) => {
+			// Set loading status to prevent duplicate submits.
+			dropin.setStatus( 'loading' );
+
+			send_request(
+				pronamicPayAdyenCheckout.paymentsUrl,
+				state.data
+			)
+			.then( validate_response )
+			.then( process_response )
+			.catch( handle_error );
+		},
+		onAdditionalDetails: ( state ) => {
+			send_request(
+				pronamicPayAdyenCheckout.paymentsDetailsUrl,
+				state.data
+			)
+			.then( validate_response )
+			.then( process_response )
+			.catch( handle_error );
+		}
+	} )
+	.mount( '#pronamic-pay-checkout' );
+
+	/**
+	 * Handle payment result.
+	 *
+	 * @param response Object from JSON response data.
+	 * @link https://docs.adyen.com/checkout/drop-in-web#step-6-present-payment-result
+	 */
+	const paymentResult = response => {
 		switch ( response.resultCode ) {
 			case 'Authorised':
 				// The payment was successful.
@@ -155,8 +178,10 @@
 				 * You'll receive a `refusalReason` in the same response, indicating the cause of the error.
 				 */
 				if ( response.refusalReason ) {
-					dropin.setStatus( 'error', { message: response.refusalReason } );
+					throw new Error( response.refusalReason );
 				}
+
+				throw new Error( pronamicPayAdyenCheckout.unknownError );
 
 				break;
 			case 'Pending':
@@ -185,14 +210,11 @@
 				/*
 				 * Inform the shopper that the payment was refused. Ask the shopper to try the payment again using a different payment method or card.
 				 */
-				dropin.setStatus( 'error', { message: pronamicPayAdyenCheckout.paymentRefused + ' (' + response.refusalReason + ')' } );
+				if ( response.refusalReason ) {
+					throw new Error( pronamicPayAdyenCheckout.paymentRefused + ' (' + response.refusalReason + ')' );
+				}
 
-				setTimeout(
-					() => {
-						dropin.setStatus( 'ready' );
-					},
-					8000
-				);
+				throw new Error( pronamicPayAdyenCheckout.paymentRefused );
 
 				break;
 			case 'Received':

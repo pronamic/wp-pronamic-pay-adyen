@@ -64,13 +64,7 @@ abstract class AbstractGateway extends Core_Gateway {
 	public function get_available_payment_methods() {
 		$core_payment_methods = array();
 
-		try {
-			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() ) );
-		} catch ( \Exception $e ) {
-			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
-
-			return $core_payment_methods;
-		}
+		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() ) );
 
 		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
 			$type = $payment_method->get_type();
@@ -99,13 +93,7 @@ abstract class AbstractGateway extends Core_Gateway {
 	public function get_issuers() {
 		$issuers = array();
 
-		try {
-			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() ) );
-		} catch ( \Exception $e ) {
-			$this->error = new \WP_Error( 'adyen_error', $e->getMessage() );
-
-			return $issuers;
-		}
+		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() ) );
 
 		$payment_methods = $payment_methods_response->get_payment_methods();
 

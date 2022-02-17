@@ -40,13 +40,11 @@ class Integration extends AbstractGatewayIntegration {
 			array(
 				'id'            => 'adyen',
 				'name'          => 'Adyen',
+				'mode'          => 'live',
 				'provider'      => 'adyen',
 				'url'           => \__( 'https://www.adyen.com/', 'pronamic_ideal' ),
 				'product_url'   => \__( 'https://www.adyen.com/pricing', 'pronamic_ideal' ),
-				'dashboard_url' => array(
-					\__( 'test', 'pronamic_ideal' ) => 'https://ca-test.adyen.com/ca/ca/login.shtml',
-					\__( 'live', 'pronamic_ideal' ) => 'https://ca-live.adyen.com/ca/ca/login.shtml',
-				),
+				'dashboard_url' => 'https://ca-live.adyen.com/ca/ca/login.shtml',
 				'manual_url'    => \__( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ),
 				'supports'      => array(
 					'webhook',
@@ -241,21 +239,23 @@ class Integration extends AbstractGatewayIntegration {
 			),
 		);
 
-		// Live API URL prefix.
-		$fields[] = array(
-			'section'     => 'general',
-			'filter'      => FILTER_SANITIZE_STRING,
-			'meta_key'    => '_pronamic_gateway_adyen_api_live_url_prefix',
-			'title'       => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
-			'type'        => 'text',
-			'classes'     => array( 'regular-text', 'code' ),
-			'tooltip'     => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard.', 'pronamic_ideal' ),
-			'description' => sprintf(
-				'<a href="%s" target="_blank">%s</a>',
-				esc_url( 'https://docs.adyen.com/developers/development-resources/live-endpoints#liveurlprefix' ),
-				esc_html__( 'Adyen documentation: "Live URL prefix".', 'pronamic_ideal' )
-			),
-		);
+		if ( 'live' === $this->get_mode() ) {
+			// Live API URL prefix.
+			$fields[] = array(
+				'section'     => 'general',
+				'filter'      => FILTER_SANITIZE_STRING,
+				'meta_key'    => '_pronamic_gateway_adyen_api_live_url_prefix',
+				'title'       => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
+				'type'        => 'text',
+				'classes'     => array( 'regular-text', 'code' ),
+				'tooltip'     => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard.', 'pronamic_ideal' ),
+				'description' => sprintf(
+					'<a href="%s" target="_blank">%s</a>',
+					esc_url( 'https://docs.adyen.com/developers/development-resources/live-endpoints#liveurlprefix' ),
+					esc_html__( 'Adyen documentation: "Live URL prefix".', 'pronamic_ideal' )
+				),
+			);
+		}
 
 		// Origin Key.
 		$fields[] = array(
@@ -722,7 +722,8 @@ class Integration extends AbstractGatewayIntegration {
 	public function get_config( $post_id ) {
 		$config = new Config();
 
-		$config->mode                                       = $this->get_meta( $post_id, 'mode' );
+		$config->mode = $this->get_mode();
+
 		$config->api_key                                    = $this->get_meta( $post_id, 'adyen_api_key' );
 		$config->api_live_url_prefix                        = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
 		$config->merchant_account                           = $this->get_meta( $post_id, 'adyen_merchant_account' );

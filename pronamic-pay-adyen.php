@@ -28,7 +28,23 @@
 add_filter(
 	'pronamic_pay_gateways',
 	function( $gateways ) {
-		$gateways[] = new \Pronamic\WordPress\Pay\Gateways\Adyen\Integration();
+		$gateways[] = new \Pronamic\WordPress\Pay\Gateways\Adyen\Integration(
+			array(
+				'id'            => 'adyen',
+				'name'          => 'Adyen',
+				'mode'          => 'live',
+				'dashboard_url' => 'https://ca-live.adyen.com/ca/ca/login.shtml',
+			)
+		);
+
+        $gateways[] = new \Pronamic\WordPress\Pay\Gateways\Adyen\Integration(
+            array(
+                'id'            => 'adyen-test',
+                'name'          => 'Adyen - Test',
+                'mode'          => 'test',
+                'dashboard_url' => 'https://ca-test.adyen.com/ca/ca/login.shtml',
+            )
+        );
 
 		return $gateways;
 	}

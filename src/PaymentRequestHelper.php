@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Money\TaxedMoney;
+use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
@@ -51,6 +52,13 @@ class PaymentRequestHelper {
 			$request->set_shopper_locale( $customer->get_locale() );
 			$request->set_telephone_number( $customer->get_phone() );
 			$request->set_shopper_email( $customer->get_email() );
+
+			// Unset shopper IP if it exceeds BLIKs maximum length restriction.
+			$shopper_ip = $request->get_shopper_ip();
+
+			if ( PaymentMethods::BLIK === $payment->get_payment_method() && null !== $shopper_ip && strlen( $shopper_ip ) > 25 ) {
+				$request->set_shopper_ip( null );
+			}
 
 			// Shopper name.
 			$name = $customer->get_name();

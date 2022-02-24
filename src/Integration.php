@@ -748,9 +748,17 @@ class Integration extends AbstractGatewayIntegration {
 		$config = $this->get_config( $post_id );
 
 		if ( empty( $config->origin_key ) ) {
-			return new WebSdkGateway( $config );
+			$gateway = new WebSdkGateway( $config );
+
+			$gateway->set_mode( $this->get_mode() );
+
+			return $gateway;
 		}
 
-		return new DropInGateway( $config );
+		$gateway = new DropInGateway( $config );
+
+		$gateway->set_mode( $this->get_mode() );
+
+		return $gateway;
 	}
 }

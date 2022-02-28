@@ -605,7 +605,7 @@ class DropInGateway extends AbstractGateway {
 		 */
 		if ( \in_array( PaymentMethodType::GOOGLE_PAY, $payment_method_types, true ) ) {
 			$configuration['paywithgoogle'] = array(
-				'environment'   => ( self::MODE_TEST === $this->config->mode ? 'TEST' : 'PRODUCTION' ),
+				'environment'   => ( self::MODE_TEST === $this->get_mode() ? 'TEST' : 'PRODUCTION' ),
 				'amount'        => array(
 					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 					'value'    => $payment->get_total_amount()->get_minor_units()->to_int(),

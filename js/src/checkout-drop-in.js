@@ -76,8 +76,13 @@
 	 * @return object
 	 */
 	const getPaymentMethodsConfiguration = () => {
-		// Compliment Apple Pay configuration.
-		if ( pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay ) {
+		/**
+		 * Complement Apple Pay configuration with `onValidateMerchant`
+		 * callback when using your own Apple Pay certificate.
+		 * 
+		 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/5#issue-1154083692
+		 */
+		if ( pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay && pronamicPayAdyenCheckout.applePayMerchantValidationUrl ) {
 			pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = ( resolve, reject, validationUrl ) => {
 				send_request(
 					pronamicPayAdyenCheckout.applePayMerchantValidationUrl,

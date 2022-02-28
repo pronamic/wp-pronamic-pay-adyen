@@ -35,7 +35,7 @@ class DropInGateway extends AbstractGateway {
 	 *
 	 * @var string
 	 */
-	const SDK_VERSION = '3.15.0';
+	const SDK_VERSION = '3.23.0';
 
 	/**
 	 * Constructs and initializes an Adyen gateway.

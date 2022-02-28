@@ -112,7 +112,7 @@ class WebSdkGateway extends AbstractGateway {
 			// API integration.
 			$payment_request = new PaymentRequest(
 				$amount,
-				$this->adyen_config->get_merchant_account(),
+				$this->config->get_merchant_account(),
 				(string) $payment->get_id(),
 				$payment->get_return_url(),
 				new PaymentMethod( (object) $payment_method )
@@ -152,7 +152,7 @@ class WebSdkGateway extends AbstractGateway {
 		 */
 		$payment_session_request = new PaymentSessionRequest(
 			$amount,
-			$this->adyen_config->get_merchant_account(),
+			$this->config->get_merchant_account(),
 			(string) $payment->get_id(),
 			$payment->get_return_url(),
 			$country_code

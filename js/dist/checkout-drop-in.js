@@ -169,6 +169,10 @@
          * You'll receive a `refusalReason` in the same response, indicating the cause of the error.
          */
         if (response.refusalReason) {
+          if (pronamicPayAdyenCheckout.refusalRedirectUrl) {
+            window.location.href = pronamicPayAdyenCheckout.refusalRedirectUrl;
+          }
+
           throw new Error(response.refusalReason);
         }
 
@@ -197,10 +201,14 @@
 
       case 'Refused':
         // The payment was refused.
-
+        if (pronamicPayAdyenCheckout.refusalRedirectUrl) {
+          window.location.href = pronamicPayAdyenCheckout.refusalRedirectUrl;
+        }
         /*
          * Inform the shopper that the payment was refused. Ask the shopper to try the payment again using a different payment method or card.
          */
+
+
         if (response.refusalReason) {
           throw new Error(pronamicPayAdyenCheckout.paymentRefused + ' (' + response.refusalReason + ')');
         }

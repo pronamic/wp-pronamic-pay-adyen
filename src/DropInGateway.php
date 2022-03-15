@@ -298,6 +298,13 @@ class DropInGateway extends AbstractGateway {
 		 */
 		$configuration = apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
 
+		// Refused payment redirect URL.
+		$refusal_redirect_url = null;
+
+		if ( 'woocommerce' === $payment->get_source() ) {
+			$refusal_redirect_url = $payment->get_return_url();
+		}
+
 		wp_localize_script(
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
@@ -307,6 +314,7 @@ class DropInGateway extends AbstractGateway {
 				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' . $payment_id ),
 				'applePayMerchantValidationUrl' => empty( $this->config->apple_pay_merchant_id_certificate ) ? false : \rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
 				'paymentReturnUrl'              => $payment->get_return_url(),
+				'refusalRedirectUrl'            => $refusal_redirect_url,
 				'configuration'                 => $configuration,
 				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),
 				'paymentReceived'               => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),

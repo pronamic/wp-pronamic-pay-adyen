@@ -615,7 +615,7 @@ class DropInGateway extends AbstractGateway {
 				),
 			);
 
-			if ( self::MODE_LIVE === $this->config->mode ) {
+			if ( self::MODE_LIVE === $this->get_mode() ) {
 				$configuration['paywithgoogle']['configuration']['merchantIdentifier'] = $this->config->get_google_pay_merchant_identifier();
 			}
 		}
@@ -627,7 +627,7 @@ class DropInGateway extends AbstractGateway {
 		 */
 		if ( \in_array( PaymentMethodType::PAYPAL, $payment_method_types, true ) ) {
 			$configuration['paypal'] = array(
-				'environment' => ( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ),
+				'environment' => ( self::MODE_TEST === $this->get_mode() ? 'test' : 'live' ),
 				'amount'      => array(
 					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 					'value'    => $payment->get_total_amount()->get_minor_units()->get_value(),

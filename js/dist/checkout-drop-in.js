@@ -81,8 +81,13 @@
 
 
   var getPaymentMethodsConfiguration = function getPaymentMethodsConfiguration() {
-    // Compliment Apple Pay configuration.
-    if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay) {
+    /**
+     * Complement Apple Pay configuration with `onValidateMerchant`
+     * callback when using your own Apple Pay certificate.
+     * 
+     * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/5#issue-1154083692
+     */
+    if (pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay && pronamicPayAdyenCheckout.applePayMerchantValidationUrl) {
       pronamicPayAdyenCheckout.paymentMethodsConfiguration.applepay.onValidateMerchant = function (resolve, reject, validationUrl) {
         send_request(pronamicPayAdyenCheckout.applePayMerchantValidationUrl, {
           validation_url: validationUrl
@@ -164,11 +169,14 @@
          * You'll receive a `refusalReason` in the same response, indicating the cause of the error.
          */
         if (response.refusalReason) {
+          if (pronamicPayAdyenCheckout.refusalRedirectUrl) {
+            window.location.href = pronamicPayAdyenCheckout.refusalRedirectUrl;
+          }
+
           throw new Error(response.refusalReason);
         }
 
         throw new Error(pronamicPayAdyenCheckout.unknownError);
-        break;
 
       case 'Pending':
         // The shopper has completed the payment but the final result is not yet known.
@@ -193,16 +201,19 @@
 
       case 'Refused':
         // The payment was refused.
-
+        if (pronamicPayAdyenCheckout.refusalRedirectUrl) {
+          window.location.href = pronamicPayAdyenCheckout.refusalRedirectUrl;
+        }
         /*
          * Inform the shopper that the payment was refused. Ask the shopper to try the payment again using a different payment method or card.
          */
+
+
         if (response.refusalReason) {
           throw new Error(pronamicPayAdyenCheckout.paymentRefused + ' (' + response.refusalReason + ')');
         }
 
         throw new Error(pronamicPayAdyenCheckout.paymentRefused);
-        break;
 
       case 'Received':
         // For some payment methods, it can take some time before the final status of the payment is known.

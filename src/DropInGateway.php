@@ -35,7 +35,7 @@ class DropInGateway extends AbstractGateway {
 	 *
 	 * @var string
 	 */
-	const SDK_VERSION = '3.15.0';
+	const SDK_VERSION = '3.23.0';
 
 	/**
 	 * Constructs and initializes an Adyen gateway.
@@ -171,7 +171,7 @@ class DropInGateway extends AbstractGateway {
 		/**
 		 * Payment methods.
 		 */
-		$request = new PaymentMethodsRequest( $this->adyen_config->get_merchant_account() );
+		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
 
 		$payment_method = $payment->get_payment_method();
 
@@ -185,7 +185,7 @@ class DropInGateway extends AbstractGateway {
 		}
 
 		// Prevent Apple Pay if no merchant identifier has been configured.
-		$apple_pay_merchant_id = $this->adyen_config->get_apple_pay_merchant_id();
+		$apple_pay_merchant_id = $this->config->get_apple_pay_merchant_id();
 
 		if ( empty( $apple_pay_merchant_id ) ) {
 			$request->set_blocked_payment_methods( array( PaymentMethodType::APPLE_PAY ) );
@@ -268,7 +268,7 @@ class DropInGateway extends AbstractGateway {
 		$configuration = array(
 			'locale'                 => Util::get_payment_locale( $payment ),
 			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			'originKey'              => $this->adyen_config->origin_key,
+			'originKey'              => $this->config->origin_key,
 			'paymentMethodsResponse' => $payment_methods->get_original_object(),
 			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		);
@@ -298,6 +298,13 @@ class DropInGateway extends AbstractGateway {
 		 */
 		$configuration = apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
 
+		// Refused payment redirect URL.
+		$refusal_redirect_url = null;
+
+		if ( 'woocommerce' === $payment->get_source() ) {
+			$refusal_redirect_url = $payment->get_return_url();
+		}
+
 		wp_localize_script(
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
@@ -305,8 +312,9 @@ class DropInGateway extends AbstractGateway {
 				'paymentMethodsConfiguration'   => $this->get_checkout_payment_methods_configuration( $payment_method_types, $payment ),
 				'paymentsUrl'                   => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
 				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' . $payment_id ),
-				'applePayMerchantValidationUrl' => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
+				'applePayMerchantValidationUrl' => empty( $this->config->apple_pay_merchant_id_certificate ) ? false : \rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
 				'paymentReturnUrl'              => $payment->get_return_url(),
+				'refusalRedirectUrl'            => $refusal_redirect_url,
 				'configuration'                 => $configuration,
 				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),
 				'paymentReceived'               => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
@@ -450,7 +458,7 @@ class DropInGateway extends AbstractGateway {
 		// Payment request.
 		$payment_request = new PaymentRequest(
 			$amount,
-			$this->adyen_config->get_merchant_account(),
+			$this->config->get_merchant_account(),
 			(string) $payment->get_id(),
 			$payment->get_return_url(),
 			$payment_method
@@ -468,7 +476,7 @@ class DropInGateway extends AbstractGateway {
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		// Merchant order reference.
-		$payment_request->set_merchant_order_reference( $payment->format_string( $this->adyen_config->get_merchant_order_reference() ) );
+		$payment_request->set_merchant_order_reference( $payment->format_string( $this->config->get_merchant_order_reference() ) );
 
 		/**
 		 * Application info.
@@ -549,7 +557,7 @@ class DropInGateway extends AbstractGateway {
 				'currencyCode'  => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 				'configuration' => array(
 					'merchantName'       => \get_bloginfo( 'name' ),
-					'merchantIdentifier' => $this->adyen_config->get_apple_pay_merchant_id(),
+					'merchantIdentifier' => $this->config->get_apple_pay_merchant_id(),
 				),
 			);
 
@@ -605,18 +613,18 @@ class DropInGateway extends AbstractGateway {
 		 */
 		if ( \in_array( PaymentMethodType::GOOGLE_PAY, $payment_method_types, true ) ) {
 			$configuration['paywithgoogle'] = array(
-				'environment'   => ( self::MODE_TEST === $this->config->mode ? 'TEST' : 'PRODUCTION' ),
+				'environment'   => ( self::MODE_TEST === $this->get_mode() ? 'TEST' : 'PRODUCTION' ),
 				'amount'        => array(
 					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 					'value'    => $payment->get_total_amount()->get_minor_units()->to_int(),
 				),
 				'configuration' => array(
-					'gatewayMerchantId' => $this->adyen_config->merchant_account,
+					'gatewayMerchantId' => $this->config->merchant_account,
 				),
 			);
 
-			if ( self::MODE_LIVE === $this->config->mode ) {
-				$configuration['paywithgoogle']['configuration']['merchantIdentifier'] = $this->adyen_config->get_google_pay_merchant_identifier();
+			if ( self::MODE_LIVE === $this->get_mode() ) {
+				$configuration['paywithgoogle']['configuration']['merchantIdentifier'] = $this->config->get_google_pay_merchant_identifier();
 			}
 		}
 
@@ -627,7 +635,7 @@ class DropInGateway extends AbstractGateway {
 		 */
 		if ( \in_array( PaymentMethodType::PAYPAL, $payment_method_types, true ) ) {
 			$configuration['paypal'] = array(
-				'environment' => ( self::MODE_TEST === $this->config->mode ? 'test' : 'live' ),
+				'environment' => ( self::MODE_TEST === $this->get_mode() ? 'test' : 'live' ),
 				'amount'      => array(
 					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 					'value'    => $payment->get_total_amount()->get_minor_units()->get_value(),

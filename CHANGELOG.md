@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [3.1.0] - 2022-04-11
+- Set payment failure reason and redirect Drop-in on refusal (resolves #2).
+- Only set `applePayMerchantValidationUrl` when certificate is configured.
+
 ## [3.0.1] - 2022-02-16
 - Added support for Klarna Pay Now and Klarna Pay Over Time.
 - Added support for Afterpay and the Adyen `afterpaytouch` payment method indicator.
@@ -119,25 +123,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.0.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.0.0...3.0.1
-[3.0.0]: https://github.com/wp-pay-gateways/adyen/compare/2.0.4...3.0.0
-[2.0.4]: https://github.com/wp-pay-gateways/adyen/compare/2.0.3...2.0.4
-[2.0.3]: https://github.com/wp-pay-gateways/adyen/compare/2.0.2...2.0.3
-[2.0.2]: https://github.com/wp-pay-gateways/adyen/compare/2.0.1...2.0.2
-[2.0.1]: https://github.com/wp-pay-gateways/adyen/compare/2.0.0...2.0.1
-[2.0.0]: https://github.com/wp-pay-gateways/adyen/compare/1.3.2...2.0.0
-[1.3.2]: https://github.com/wp-pay-gateways/adyen/compare/1.3.1...1.3.2
-[1.3.1]: https://github.com/wp-pay-gateways/adyen/compare/1.3.0...1.3.1
-[1.3.0]: https://github.com/wp-pay-gateways/adyen/compare/1.2.1...1.3.0
-[1.2.1]: https://github.com/wp-pay-gateways/adyen/compare/1.2.0...1.2.1
-[1.2.0]: https://github.com/wp-pay-gateways/adyen/compare/1.1.2...1.2.0
-[1.1.2]: https://github.com/wp-pay-gateways/adyen/compare/1.1.1...1.1.2
-[1.1.1]: https://github.com/wp-pay-gateways/adyen/compare/1.1.0...1.1.1
-[1.1.0]: https://github.com/wp-pay-gateways/adyen/compare/1.0.6...1.1.0
-[1.0.6]: https://github.com/wp-pay-gateways/adyen/compare/1.0.5...1.0.6
-[1.0.5]: https://github.com/wp-pay-gateways/adyen/compare/1.0.4...1.0.5
-[1.0.4]: https://github.com/wp-pay-gateways/adyen/compare/1.0.3...1.0.4
-[1.0.3]: https://github.com/wp-pay-gateways/adyen/compare/1.0.2...1.0.3
-[1.0.2]: https://github.com/wp-pay-gateways/adyen/compare/1.0.1...1.0.2
-[1.0.1]: https://github.com/wp-pay-gateways/adyen/compare/1.0.0...1.0.1
+[3.0.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/2.0.4...3.0.0
+[2.0.4]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/2.0.3...2.0.4
+[2.0.3]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/2.0.2...2.0.3
+[2.0.2]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/2.0.1...2.0.2
+[2.0.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/2.0.0...2.0.1
+[2.0.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.3.2...2.0.0
+[1.3.2]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.3.1...1.3.2
+[1.3.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.3.0...1.3.1
+[1.3.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.2.1...1.3.0
+[1.2.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.2.0...1.2.1
+[1.2.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.1.2...1.2.0
+[1.1.2]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.1.1...1.1.2
+[1.1.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.1.0...1.1.1
+[1.1.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.0.6...1.1.0
+[1.0.6]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.0.5...1.0.6
+[1.0.5]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.0.4...1.0.5
+[1.0.4]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.0.3...1.0.4
+[1.0.3]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.0.2...1.0.3
+[1.0.2]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/1.0.0...1.0.1

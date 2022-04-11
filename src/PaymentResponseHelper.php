@@ -10,8 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Payments\FailureReason;
 use Pronamic\WordPress\Pay\Payments\Payment;
-use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 
 /**
  * Payment response helper
@@ -80,6 +80,23 @@ class PaymentResponseHelper {
 
 		if ( null !== $status ) {
 			$payment->set_status( $status );
+		}
+
+		// Refusal reason.
+		$refusal_reason = $response->get_refusal_reason();
+
+		if ( null !== $refusal_reason ) {
+			$failure_reason = new FailureReason();
+
+			$message = sprintf(
+				/* translators: %s: refusal reason */
+				__( 'The payment has been refused. (%s)', 'pronamic_ideal' ),
+				$refusal_reason
+			);
+
+			$failure_reason->set_message( $message );
+
+			$payment->set_failure_reason( $failure_reason );
 		}
 
 		$payment->save();

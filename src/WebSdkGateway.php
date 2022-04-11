@@ -112,7 +112,7 @@ class WebSdkGateway extends AbstractGateway {
 			// API integration.
 			$payment_request = new PaymentRequest(
 				$amount,
-				$this->adyen_config->get_merchant_account(),
+				$this->config->get_merchant_account(),
 				(string) $payment->get_id(),
 				$payment->get_return_url(),
 				new PaymentMethod( (object) $payment_method )
@@ -152,7 +152,7 @@ class WebSdkGateway extends AbstractGateway {
 		 */
 		$payment_session_request = new PaymentSessionRequest(
 			$amount,
-			$this->adyen_config->get_merchant_account(),
+			$this->config->get_merchant_account(),
 			(string) $payment->get_id(),
 			$payment->get_return_url(),
 			$country_code
@@ -180,13 +180,7 @@ class WebSdkGateway extends AbstractGateway {
 			$payment_session_request->set_allowed_payment_methods( array( $payment_method_type ) );
 		}
 
-		try {
-			$payment_session_response = $this->client->create_payment_session( $payment_session_request );
-		} catch ( Exception $e ) {
-			$this->error = new WP_Error( 'adyen_error', $e->getMessage() );
-
-			return;
-		}
+		$payment_session_response = $this->client->create_payment_session( $payment_session_request );
 
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
 		$payment->set_meta( 'adyen_payment_session', $payment_session_response->get_payment_session() );

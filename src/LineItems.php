@@ -31,7 +31,7 @@ class LineItems implements \JsonSerializable {
 	 * @param LineItem[] $items Line items.
 	 */
 	public function __construct( $items = null ) {
-		$this->line_items = array();
+		$this->line_items = [];
 
 		if ( is_array( $items ) ) {
 			foreach ( $items as $item ) {

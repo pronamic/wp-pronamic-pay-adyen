@@ -31,7 +31,7 @@ class PaymentsResultController {
 	 * @return void
 	 */
 	public function setup() {
-		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
+		add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
 	}
 
 	/**
@@ -46,29 +46,29 @@ class PaymentsResultController {
 		register_rest_route(
 			Integration::REST_ROUTE_NAMESPACE,
 			'/payments/result/(?P<config_id>\d+)',
-			array(
+			[
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'rest_api_adyen_payments_result' ),
+				'callback'            => [ $this, 'rest_api_adyen_payments_result' ],
 				'permission_callback' => '__return_true',
-				'args'                => array(
-					'config_id'  => array(
+				'args'                => [
+					'config_id'  => [
 						'description' => __( 'Gateway configuration ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
-					),
-					'payload'    => array(
+					],
+					'payload'    => [
 						'description' => __( 'Payload.', 'pronamic_ideal' ),
 						'type'        => 'string',
-					),
-					'resultCode' => array(
+					],
+					'resultCode' => [
 						'description' => __( 'Result code.', 'pronamic_ideal' ),
 						'type'        => 'string',
-					),
-					'resultText' => array(
+					],
+					'resultText' => [
 						'description' => __( 'Result text.', 'pronamic_ideal' ),
 						'type'        => 'string',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 	}
 

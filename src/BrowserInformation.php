@@ -325,7 +325,7 @@ class BrowserInformation implements \JsonSerializable {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'acceptHeader'      => $this->get_accept_header(),
 				'colorDepth'        => $this->get_color_depth(),
 				'javaEnabled'       => $this->get_java_enabled(),
@@ -335,7 +335,7 @@ class BrowserInformation implements \JsonSerializable {
 				'screenWidth'       => $this->get_screen_width(),
 				'timeZoneOffset'    => $this->get_timezone_offset(),
 				'userAgent'         => $this->get_user_agent(),
-			)
+			]
 		);
 
 		$object = (object) $properties;

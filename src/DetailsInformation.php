@@ -84,9 +84,9 @@ class DetailsInformation extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/details.json' ),
-			),
+			],
 			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
@@ -110,10 +110,10 @@ class DetailsInformation extends ResponseObject {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'key'  => $this->get_key(),
 				'type' => $this->get_type(),
-			)
+			]
 		);
 
 		$object = (object) $properties;

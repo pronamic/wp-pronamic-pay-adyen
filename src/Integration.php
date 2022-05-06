@@ -34,10 +34,10 @@ class Integration extends AbstractGatewayIntegration {
 	 *
 	 * @param array<string, array<string>> $args Arguments.
 	 */
-	public function __construct( $args = array() ) {
+	public function __construct( $args = [] ) {
 		$args = wp_parse_args(
 			$args,
-			array(
+			[
 				'id'            => 'adyen',
 				'name'          => 'Adyen',
 				'mode'          => 'live',
@@ -46,11 +46,11 @@ class Integration extends AbstractGatewayIntegration {
 				'product_url'   => \__( 'https://www.adyen.com/pricing', 'pronamic_ideal' ),
 				'dashboard_url' => 'https://ca-live.adyen.com/ca/ca/login.shtml',
 				'manual_url'    => \__( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ),
-				'supports'      => array(
+				'supports'      => [
 					'webhook',
 					'webhook_log',
-				),
-			)
+				],
+			]
 		);
 
 		parent::__construct( $args );
@@ -88,16 +88,16 @@ class Integration extends AbstractGatewayIntegration {
 		$site_health_controller->setup();
 
 		// Settings.
-		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'admin_init', array( $this, 'admin_init' ), 15 );
+		add_action( 'init', [ $this, 'init' ] );
+		add_action( 'admin_init', [ $this, 'admin_init' ], 15 );
 
 		// Actions.
-		add_action( 'current_screen', array( $this, 'maybe_download_certificate_or_key' ) );
+		add_action( 'current_screen', [ $this, 'maybe_download_certificate_or_key' ] );
 
 		$id = $this->get_id();
 
 		if ( null !== $id ) {
-			\add_filter( 'pronamic_gateway_configuration_display_value_' . $id, array( $this, 'gateway_configuration_display_value' ), 10, 2 );
+			\add_filter( 'pronamic_gateway_configuration_display_value_' . $id, [ $this, 'gateway_configuration_display_value' ], 10, 2 );
 		}
 	}
 
@@ -113,10 +113,10 @@ class Integration extends AbstractGatewayIntegration {
 		register_setting(
 			'pronamic_pay',
 			'pronamic_pay_adyen_notification_authentication_username',
-			array(
+			[
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
-			)
+			]
 		);
 
 		/*
@@ -125,10 +125,10 @@ class Integration extends AbstractGatewayIntegration {
 		register_setting(
 			'pronamic_pay',
 			'pronamic_pay_adyen_notification_authentication_password',
-			array(
+			[
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
-			)
+			]
 		);
 	}
 
@@ -142,30 +142,30 @@ class Integration extends AbstractGatewayIntegration {
 			'pronamic_pay_adyen_notification_authentication',
 			/* translators: Translate 'notification' the same as in the Adyen dashboard. */
 			_x( 'Adyen Notification Authentication', 'Adyen', 'pronamic_ideal' ),
-			array( $this, 'settings_section_notification_authentication' ),
+			[ $this, 'settings_section_notification_authentication' ],
 			'pronamic_pay'
 		);
 
 		add_settings_field(
 			'pronamic_pay_adyen_notification_authentication_username',
 			__( 'User Name', 'pronamic_ideal' ),
-			array( __CLASS__, 'input_element' ),
+			[ __CLASS__, 'input_element' ],
 			'pronamic_pay',
 			'pronamic_pay_adyen_notification_authentication',
-			array(
+			[
 				'label_for' => 'pronamic_pay_adyen_notification_authentication_username',
-			)
+			]
 		);
 
 		add_settings_field(
 			'pronamic_pay_adyen_notification_authentication_password',
 			__( 'Password', 'pronamic_ideal' ),
-			array( __CLASS__, 'input_element' ),
+			[ __CLASS__, 'input_element' ],
 			'pronamic_pay',
 			'pronamic_pay_adyen_notification_authentication',
-			array(
+			[
 				'label_for' => 'pronamic_pay_adyen_notification_authentication_password',
-			)
+			]
 		);
 	}
 
@@ -210,83 +210,83 @@ class Integration extends AbstractGatewayIntegration {
 	 * @return array<int, array<string, callable|int|string|bool|array<int|string,int|string>>>
 	 */
 	public function get_settings_fields() {
-		$fields = array();
+		$fields = [];
 
 		// Merchant Account.
-		$fields[] = array(
+		$fields[] = [
 			'section'  => 'general',
 			'filter'   => FILTER_SANITIZE_STRING,
 			'meta_key' => '_pronamic_gateway_adyen_merchant_account',
 			'title'    => _x( 'Merchant Account', 'adyen', 'pronamic_ideal' ),
 			'type'     => 'text',
-			'classes'  => array( 'regular-text', 'code' ),
+			'classes'  => [ 'regular-text', 'code' ],
 			'tooltip'  => __( 'The merchant account identifier, with which you want to process the transaction.', 'pronamic_ideal' ),
-		);
+		];
 
 		// API Key.
-		$fields[] = array(
+		$fields[] = [
 			'section'     => 'general',
 			'filter'      => FILTER_SANITIZE_STRING,
 			'meta_key'    => '_pronamic_gateway_adyen_api_key',
 			'title'       => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'textarea',
-			'classes'     => array( 'code' ),
+			'classes'     => [ 'code' ],
 			'tooltip'     => __( 'API key as mentioned in the payment provider dashboard.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
 				esc_url( 'https://docs.adyen.com/developers/user-management/how-to-get-the-api-key' ),
 				esc_html__( 'Adyen documentation: "How to get the API key".', 'pronamic_ideal' )
 			),
-		);
+		];
 
 		if ( 'live' === $this->get_mode() ) {
 			// Live API URL prefix.
-			$fields[] = array(
+			$fields[] = [
 				'section'     => 'general',
 				'filter'      => FILTER_SANITIZE_STRING,
 				'meta_key'    => '_pronamic_gateway_adyen_api_live_url_prefix',
 				'title'       => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
 				'type'        => 'text',
-				'classes'     => array( 'regular-text', 'code' ),
+				'classes'     => [ 'regular-text', 'code' ],
 				'tooltip'     => __( 'The unique prefix for the live API URL, as mentioned at <strong>Account » API URLs</strong> in the Adyen dashboard.', 'pronamic_ideal' ),
 				'description' => sprintf(
 					'<a href="%s" target="_blank">%s</a>',
 					esc_url( 'https://docs.adyen.com/developers/development-resources/live-endpoints#liveurlprefix' ),
 					esc_html__( 'Adyen documentation: "Live URL prefix".', 'pronamic_ideal' )
 				),
-			);
+			];
 		}
 
 		// Client Key.
-		$fields[] = array(
+		$fields[] = [
 			'section'     => 'general',
 			'filter'      => FILTER_SANITIZE_STRING,
 			'meta_key'    => '_pronamic_gateway_adyen_client_key',
 			'title'       => _x( 'Client Key', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
-			'classes'     => array(
+			'classes'     => [
 				'regular-text',
 				'code',
 				'pronamic-pay-form-control-lg',
-			),
+			],
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
 				esc_url( 'https://docs.adyen.com/development-resources/client-side-authentication#get-your-client-key' ),
 				esc_html__( 'Adyen documentation: "Get your client key".', 'pronamic_ideal' )
 			),
-		);
+		];
 
 		// Merchant Order Reference.
-		$fields[] = array(
+		$fields[] = [
 			'section'     => 'advanced',
-			'filter'      => array(
+			'filter'      => [
 				'filter' => \FILTER_SANITIZE_STRING,
 				'flags'  => \FILTER_FLAG_NO_ENCODE_QUOTES,
-			),
+			],
 			'meta_key'    => '_pronamic_gateway_adyen_merchant_order_reference',
 			'title'       => __( 'Merchant Order Reference', 'pronamic_ideal' ),
 			'type'        => 'text',
-			'classes'     => array( 'regular-text', 'code' ),
+			'classes'     => [ 'regular-text', 'code' ],
 			'tooltip'     => \sprintf(
 				/* translators: %s: <code>parameterName</code> */
 				\__( 'The Adyen %s parameter.', 'pronamic_ideal' ),
@@ -306,16 +306,16 @@ class Integration extends AbstractGatewayIntegration {
 					'{payment_id}'
 				)
 			),
-		);
+		];
 
 		// Apple Pay - Merchant identifier.
-		$fields[] = array(
+		$fields[] = [
 			'section'     => 'advanced',
 			'filter'      => \FILTER_SANITIZE_STRING,
 			'meta_key'    => '_pronamic_gateway_adyen_apple_pay_merchant_id',
 			'title'       => _x( 'Apple Pay Merchant ID', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
-			'classes'     => array( 'regular-text', 'code' ),
+			'classes'     => [ 'regular-text', 'code' ],
 			'tooltip'     => __( 'Your Apple Pay Merchant ID. Required for accepting live payments.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a><br /><a href="%s" target="_blank">%s</a>',
@@ -324,56 +324,56 @@ class Integration extends AbstractGatewayIntegration {
 				esc_url( 'https://developer.apple.com/documentation/apple_pay_on_the_web/configuring_your_environment' ),
 				esc_html__( 'Apple documentation: "Configuring your environment".', 'pronamic_ideal' )
 			),
-		);
+		];
 
 		// Apple Pay - Merchant Identity PKCS#12.
-		$fields[] = array(
+		$fields[] = [
 			'section'     => 'advanced',
 			'filter'      => \FILTER_SANITIZE_STRING,
 			'meta_key'    => '_pronamic_gateway_adyen_apple_pay_merchant_id_certificate',
 			'title'       => __( 'Apple Pay Merchant Identity Certificate', 'pronamic_ideal' ),
 			'type'        => 'textarea',
-			'callback'    => array( $this, 'field_certificate' ),
-			'classes'     => array( 'code' ),
+			'callback'    => [ $this, 'field_certificate' ],
+			'classes'     => [ 'code' ],
 			'tooltip'     => __( 'The Apple Pay Merchant Identity certificate required for secure communication with Apple.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
 				esc_url( 'https://docs.adyen.com/payment-methods/apple-pay/enable-apple-pay#create-merchant-identity-certificate' ),
 				esc_html__( 'Adyen documentation: "Enable Apple Pay - Create a merchant identity certificate".', 'pronamic_ideal' )
 			),
-		);
+		];
 
 		// Apple Pay - Merchant Identity private key.
-		$fields[] = array(
+		$fields[] = [
 			'section'  => 'advanced',
 			'filter'   => \FILTER_SANITIZE_STRING,
 			'meta_key' => '_pronamic_gateway_adyen_apple_pay_merchant_id_private_key',
 			'title'    => __( 'Apple Pay Merchant Identity Private Key', 'pronamic_ideal' ),
 			'type'     => 'textarea',
-			'callback' => array( $this, 'field_private_key' ),
-			'classes'  => array( 'code' ),
+			'callback' => [ $this, 'field_private_key' ],
+			'classes'  => [ 'code' ],
 			'tooltip'  => __( 'The private key of the Apple Pay Merchant Identity certificate for secure communication with Apple.', 'pronamic_ideal' ),
-		);
+		];
 
 		// Apple Pay - Merchant Identity certificate private key password.
-		$fields[] = array(
+		$fields[] = [
 			'section'  => 'advanced',
 			'filter'   => \FILTER_SANITIZE_STRING,
 			'meta_key' => '_pronamic_gateway_adyen_apple_pay_merchant_id_private_key_password',
 			'title'    => _x( 'Apple Pay Merchant Identity Private Key Password', 'adyen', 'pronamic_ideal' ),
 			'type'     => 'text',
-			'classes'  => array( 'regular-text', 'code' ),
+			'classes'  => [ 'regular-text', 'code' ],
 			'tooltip'  => __( 'Your Apple Pay Merchant Identity Certificate private key password.', 'pronamic_ideal' ),
-		);
+		];
 
 		// Google Pay - Merchant identifier.
-		$fields[] = array(
+		$fields[] = [
 			'section'     => 'advanced',
 			'filter'      => \FILTER_SANITIZE_STRING,
 			'meta_key'    => '_pronamic_gateway_adyen_google_pay_merchant_identifier',
 			'title'       => _x( 'Google Pay Merchant ID', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
-			'classes'     => array( 'regular-text', 'code' ),
+			'classes'     => [ 'regular-text', 'code' ],
 			'tooltip'     => __( 'Your Google Merchant ID. Required for accepting live payments.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a><br /><a href="%s" target="_blank">%s</a>',
@@ -382,14 +382,14 @@ class Integration extends AbstractGatewayIntegration {
 				esc_url( 'https://developers.google.com/pay/api/web/guides/test-and-deploy/deploy-production-environment' ),
 				esc_html__( 'Google documentation: "Deploy production environment".', 'pronamic_ideal' )
 			),
-		);
+		];
 
 		// Webhook URL.
-		$fields[] = array(
+		$fields[] = [
 			'section'  => 'feedback',
 			'title'    => __( 'Webhook URL', 'pronamic_ideal' ),
 			'type'     => 'text',
-			'classes'  => array( 'large-text', 'code' ),
+			'classes'  => [ 'large-text', 'code' ],
 			'value'    => rest_url( self::REST_ROUTE_NAMESPACE . '/notifications' ),
 			'readonly' => true,
 			'tooltip'  => sprintf(
@@ -397,7 +397,7 @@ class Integration extends AbstractGatewayIntegration {
 				__( 'Copy the Webhook URL to the %s dashboard to receive automatic transaction status updates.', 'pronamic_ideal' ),
 				__( 'Adyen', 'pronamic_ideal' )
 			),
-		);
+		];
 
 		/**
 		 * SSL Version.
@@ -405,12 +405,12 @@ class Integration extends AbstractGatewayIntegration {
 		 * @link https://docs.adyen.com/developers/development-resources/notifications/set-up-notifications#step3configurenotificationsinthecustomerarea
 		 * @link https://www.howsmyssl.com/a/check
 		 */
-		$fields[] = array(
+		$fields[] = [
 			'section' => 'feedback',
 			'title'   => __( 'SSL Version', 'pronamic_ideal' ),
 			'type'    => 'description',
 			'html'    => __( 'Choose the SSL Version of your server on the Adyen Customer Area.', 'pronamic_ideal' ),
-		);
+		];
 
 		/**
 		 * Method.
@@ -418,15 +418,15 @@ class Integration extends AbstractGatewayIntegration {
 		 * @link https://docs.adyen.com/developers/development-resources/notifications/set-up-notifications#step3configurenotificationsinthecustomerarea
 		 * @link https://www.howsmyssl.com/a/check
 		 */
-		$fields[] = array(
+		$fields[] = [
 			'section' => 'feedback',
 			'title'   => _x( 'Method', 'adyen notification', 'pronamic_ideal' ),
 			'type'    => 'description',
 			'html'    => __( 'JSON', 'pronamic_ideal' ),
-		);
+		];
 
 		// Webhook authentication settings.
-		$fields[] = array(
+		$fields[] = [
 			'section' => 'feedback',
 			'title'   => __( 'Authentication', 'pronamic_ideal' ),
 			'type'    => 'description',
@@ -435,14 +435,14 @@ class Integration extends AbstractGatewayIntegration {
 				__( 'Go to the <a href="%s">Pronamic Pay settings page</a> for webhook authentication settings.', 'pronamic_ideal' ),
 				\esc_url(
 					\add_query_arg(
-						array(
+						[
 							'page' => 'pronamic_pay_settings',
-						),
+						],
 						\admin_url( 'admin.php' )
 					)
 				)
 			),
-		);
+		];
 
 		// Return fields.
 		return $fields;
@@ -589,10 +589,10 @@ class Integration extends AbstractGatewayIntegration {
 	 */
 	public function maybe_download_certificate_or_key() {
 		// Certificate fields and download filename.
-		$fields = array(
+		$fields = [
 			'_pronamic_gateway_adyen_apple_pay_merchant_id_certificate' => 'apple-pay-merchant-identity-certificate-%s.pem',
 			'_pronamic_gateway_adyen_apple_pay_merchant_id_private_key' => 'apple-pay-merchant-identity-private-key-%s.pem',
-		);
+		];
 
 		// Check download actions.
 		$is_download_action = false;
@@ -645,10 +645,10 @@ class Integration extends AbstractGatewayIntegration {
 	 */
 	public function save_post( $post_id ) {
 		// Files.
-		$files = array(
+		$files = [
 			'_pronamic_gateway_adyen_apple_pay_merchant_id_certificate_file' => '_pronamic_gateway_adyen_apple_pay_merchant_id_certificate',
 			'_pronamic_gateway_adyen_apple_pay_merchant_id_private_key_file' => '_pronamic_gateway_adyen_apple_pay_merchant_id_private_key',
-		);
+		];
 
 		foreach ( $files as $name => $meta_key ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
@@ -692,7 +692,7 @@ class Integration extends AbstractGatewayIntegration {
 					}
 
 					if ( null !== $cipher && '' !== $password ) {
-						$args = array(
+						$args = [
 							'digest_alg'             => 'SHA256',
 							'private_key_bits'       => 2048,
 							'private_key_type'       => \OPENSSL_KEYTYPE_RSA,
@@ -701,7 +701,7 @@ class Integration extends AbstractGatewayIntegration {
 							'subjectKeyIdentifier'   => 'hash',
 							'authorityKeyIdentifier' => 'keyid:always,issuer:always',
 							'basicConstraints'       => 'CA:true',
-						);
+						];
 
 						\openssl_pkey_export( $certs['pkey'], $private_key, $password, $args );
 					}

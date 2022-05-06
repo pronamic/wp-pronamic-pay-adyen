@@ -61,9 +61,9 @@ class PaymentSessionResponse extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-session-response.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 

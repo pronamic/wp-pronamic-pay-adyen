@@ -64,7 +64,7 @@ class PaymentMethodsResponse extends ResponseObject {
 	 * @return array<int, string>
 	 */
 	public function get_payment_method_types() {
-		$types = array();
+		$types = [];
 
 		// Loop payment methods.
 		$payment_methods = $this->payment_methods;
@@ -92,20 +92,20 @@ class PaymentMethodsResponse extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-methods-response.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$payment_methods = array();
+		$payment_methods = [];
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		foreach ( $object->paymentMethods as $payment_method_object ) {
 			$payment_methods[] = PaymentMethod::from_object( $payment_method_object );
 		}
 
-		$groups = array();
+		$groups = [];
 
 		if ( isset( $object->groups ) ) {
 			$groups = $object->groups;

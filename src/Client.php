@@ -52,14 +52,14 @@ class Client {
 
 		$response = Http::request(
 			$url,
-			array(
+			[
 				'method'  => 'POST',
-				'headers' => array(
+				'headers' => [
 					'X-API-key'    => $this->config->get_api_key(),
 					'Content-Type' => 'application/json',
-				),
+				],
 				'body'    => \wp_json_encode( $request->get_json() ),
-			)
+			]
 		);
 
 		$data = $response->json();

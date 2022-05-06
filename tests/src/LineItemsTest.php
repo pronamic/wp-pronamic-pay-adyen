@@ -44,13 +44,13 @@ class LineItemsTest extends TestCase {
 	public function provider_line_items() {
 		$line_item = new LineItem( 'Test', 1, 12399 );
 
-		return array(
-			array( null, array() ),
-			array( 1, array() ),
-			array( '', array() ),
-			array( array(), array() ),
-			array( array( $line_item ), array( $line_item ) ),
-		);
+		return [
+			[ null, [] ],
+			[ 1, [] ],
+			[ '', [] ],
+			[ [], [] ],
+			[ [ $line_item ], [ $line_item ] ],
+		];
 	}
 
 	/**
@@ -61,9 +61,9 @@ class LineItemsTest extends TestCase {
 
 		$line_items->new_item( 'Test', 1, 12399 );
 
-		$expected = array(
+		$expected = [
 			new LineItem( 'Test', 1, 12399 ),
-		);
+		];
 
 		self::assertEquals( $expected, $line_items->get_line_items() );
 	}
@@ -73,10 +73,10 @@ class LineItemsTest extends TestCase {
 	 */
 	public function test_json() {
 		$line_items = new LineItems(
-			array(
+			[
 				new LineItem( 'Test', 1, 12399 ),
 				new LineItem( 'Test', 1, 12399 ),
-			)
+			]
 		);
 
 		$json_file = __DIR__ . '/../json/line-items.json';

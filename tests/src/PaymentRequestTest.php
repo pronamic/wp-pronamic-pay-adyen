@@ -26,10 +26,10 @@ class PaymentRequestTest extends TestCase {
 	public function test_payment_request() {
 		$json_file = __DIR__ . '/../json/payment-request.json';
 
-		$payment_method = array(
+		$payment_method = [
 			'type'   => PaymentMethodType::IDEAL,
 			'issuer' => '1121',
-		);
+		];
 
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),
@@ -47,16 +47,16 @@ class PaymentRequestTest extends TestCase {
 		 */
 		$application_info = new ApplicationInfo();
 
-		$application_info->merchant_application = (object) array(
+		$application_info->merchant_application = (object) [
 			'name'    => 'Pronamic Pay',
 			'version' => '5.9.0',
-		);
+		];
 
-		$application_info->external_platform = (object) array(
+		$application_info->external_platform = (object) [
 			'integrator' => 'Pronamic',
 			'name'       => 'WordPress',
 			'version'    => '5.3.2',
-		);
+		];
 
 		$payment_request->set_application_info( $application_info );
 

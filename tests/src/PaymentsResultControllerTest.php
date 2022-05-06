@@ -50,7 +50,7 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 	 * @link https://developer.wordpress.org/reference/functions/has_filter/
 	 */
 	public function test_filters() {
-		$this->assertEquals( \has_filter( 'rest_api_init', array( $this->controller, 'rest_api_init' ) ), 10 );
+		$this->assertEquals( \has_filter( 'rest_api_init', [ $this->controller, 'rest_api_init' ] ), 10 );
 	}
 
 	/**
@@ -89,22 +89,22 @@ class PaymentsResultControllerTest extends WP_UnitTestCase {
 	 * @link https://github.com/WordPress/wordpress-develop/blob/5.1.0/tests/phpunit/tests/rest-api/rest-blocks-controller.php#L127-L136
 	 */
 	public function test_no_body() {
-		$object = (object) array(
+		$object = (object) [
 			'payload' => '123',
-		);
+		];
 
 		$post_id = self::factory()->post->create(
-			array(
+			[
 				'post_type'   => 'pronamic_gateway',
 				'post_status' => 'publish',
 				'post_title'  => 'Adyen - test',
-				'meta_input'  => array(
+				'meta_input'  => [
 					'_pronamic_gateway_id'            => 'adyen',
 					'_pronamic_gateway_mode'          => 'test',
 					'_pronamic_gateway_adyen_api_key' => 'JPERWpuRAAvAj4mU',
 					'_pronamic_gateway_adyen_merchant_account' => 'Test',
-				),
-			)
+				],
+			]
 		);
 
 		$request = new WP_REST_Request( 'POST', '/pronamic-pay/adyen/v1/payments/result/' . $post_id );

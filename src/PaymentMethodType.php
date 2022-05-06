@@ -222,7 +222,7 @@ class PaymentMethodType {
 	 *
 	 * @var array<string, string>
 	 */
-	private static $map = array(
+	private static $map = [
 		PaymentMethods::AFTERPAY_COM         => self::AFTERPAY_TOUCH,
 		PaymentMethods::ALIPAY               => self::ALIPAY,
 		PaymentMethods::APPLE_PAY            => self::APPLE_PAY,
@@ -244,7 +244,7 @@ class PaymentMethodType {
 		PaymentMethods::SWISH                => self::SWISH,
 		PaymentMethods::TWINT                => self::TWINT,
 		PaymentMethods::VIPPS                => self::VIPPS,
-	);
+	];
 
 	/**
 	 * Transform WordPress payment method to Adyen brand code.

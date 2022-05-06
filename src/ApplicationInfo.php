@@ -76,14 +76,14 @@ class ApplicationInfo implements \JsonSerializable {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'adyenLibrary'             => $this->adyen_library,
 				'adyenPaymentSource'       => $this->adyen_payment_source,
 				'externalPlatform'         => $this->external_platform,
 				'merchantApplication'      => $this->merchant_application,
 				'merchantDevice'           => $this->merchant_device,
 				'shopperInteractionDevice' => $this->shopper_interaction_device,
-			)
+			]
 		);
 
 		$object = (object) $properties;

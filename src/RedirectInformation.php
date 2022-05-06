@@ -103,9 +103,9 @@ class RedirectInformation extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/redirect.json' ),
-			),
+			],
 			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
@@ -128,10 +128,10 @@ class RedirectInformation extends ResponseObject {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'method' => $this->get_method(),
 				'url'    => $this->get_url(),
-			)
+			]
 		);
 
 		$object = (object) $properties;

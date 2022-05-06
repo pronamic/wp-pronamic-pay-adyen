@@ -147,12 +147,12 @@ class PaymentMethodsRequest extends Request {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'merchantAccount'       => $this->merchant_account,
 				'countryCode'           => $this->get_country_code(),
 				'allowedPaymentMethods' => $this->get_allowed_payment_methods(),
 				'blockedPaymentMethods' => $this->get_blocked_payment_methods(),
-			)
+			]
 		);
 
 		// Amount.

@@ -126,12 +126,12 @@ class Name {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'firstName' => $this->get_first_name(),
 				'gender'    => $this->get_gender(),
 				'infix'     => $this->get_infix(),
 				'lastName'  => $this->get_last_name(),
-			)
+			]
 		);
 
 		$object = (object) $properties;

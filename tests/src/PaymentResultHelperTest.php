@@ -27,10 +27,10 @@ class PaymentResultHelperTest extends WP_UnitTestCase {
 	 */
 	public function test_update_payment() {
 		$post_id = self::factory()->post->create(
-			array(
+			[
 				'post_type'  => 'pronamic_payment',
 				'post_title' => 'Adyen - test',
-			)
+			]
 		);
 
 		$payment = get_pronamic_payment( $post_id );
@@ -46,10 +46,10 @@ class PaymentResultHelperTest extends WP_UnitTestCase {
 		$this->assertEquals( PaymentStatus::SUCCESS, $payment->get_status() );
 
 		$comments = get_comments(
-			array(
+			[
 				'post_id' => $post_id,
 				'type'    => 'payment_note',
-			)
+			]
 		);
 
 		$this->assertCount( 2, $comments );

@@ -30,16 +30,16 @@ class ApplicationInfoTest extends \PHPUnit\Framework\TestCase {
 		 */
 		$application_info = new ApplicationInfo();
 
-		$application_info->merchant_application = (object) array(
+		$application_info->merchant_application = (object) [
 			'name'    => 'Pronamic Pay',
 			'version' => '5.9.0',
-		);
+		];
 
-		$application_info->external_platform = (object) array(
+		$application_info->external_platform = (object) [
 			'integrator' => 'Pronamic',
 			'name'       => 'WordPress',
 			'version'    => '5.3.2',
-		);
+		];
 
 		$json_file = __DIR__ . '/../json/application-info.json';
 

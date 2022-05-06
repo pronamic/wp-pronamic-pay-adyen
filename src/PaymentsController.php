@@ -30,7 +30,7 @@ class PaymentsController {
 	 * @return void
 	 */
 	public function setup() {
-		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
+		add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
 	}
 
 	/**
@@ -46,51 +46,51 @@ class PaymentsController {
 		register_rest_route(
 			Integration::REST_ROUTE_NAMESPACE,
 			'/payments/(?P<payment_id>\d+)',
-			array(
+			[
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'rest_api_adyen_payments' ),
+				'callback'            => [ $this, 'rest_api_adyen_payments' ],
 				'permission_callback' => '__return_true',
-				'args'                => array(
-					'payment_id' => array(
+				'args'                => [
+					'payment_id' => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		// Register REST route `/payments/details/{payment_id}`.
 		register_rest_route(
 			Integration::REST_ROUTE_NAMESPACE,
 			'/payments/details/(?P<payment_id>\d+)',
-			array(
+			[
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'rest_api_adyen_payment_details' ),
+				'callback'            => [ $this, 'rest_api_adyen_payment_details' ],
 				'permission_callback' => '__return_true',
-				'args'                => array(
-					'payment_id' => array(
+				'args'                => [
+					'payment_id' => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		// Register REST route `/payments/applepay/merchant-validation/`.
 		register_rest_route(
 			Integration::REST_ROUTE_NAMESPACE,
 			'/payments/applepay/merchant-validation/(?P<payment_id>\d+)',
-			array(
+			[
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'rest_api_applepay_merchant_validation' ),
+				'callback'            => [ $this, 'rest_api_applepay_merchant_validation' ],
 				'permission_callback' => '__return_true',
-				'args'                => array(
-					'payment_id' => array(
+				'args'                => [
+					'payment_id' => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 	}
 
@@ -455,15 +455,15 @@ class PaymentsController {
 		 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/apple_pay_js_api/requesting_an_apple_pay_payment_session
 		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#show-apple-pay-in-your-payment-form
 		 */
-		$request = array(
+		$request = [
 			'merchantIdentifier' => $merchant_identifier,
 			'displayName'        => \get_bloginfo( 'name' ),
 			'initiative'         => 'web',
 			'initiativeContext'  => Server::get( 'HTTP_HOST', FILTER_SANITIZE_STRING ),
-		);
+		];
 
 		try {
-			add_action( 'http_api_curl', array( $this, 'http_curl_applepay_merchant_identity' ), 10, 2 );
+			add_action( 'http_api_curl', [ $this, 'http_curl_applepay_merchant_identity' ], 10, 2 );
 
 			$certificate = $config->get_apple_pay_merchant_id_certificate();
 			$private_key = $config->get_apple_pay_merchant_id_private_key();
@@ -488,18 +488,18 @@ class PaymentsController {
 			// Validate merchant.
 			$response = \wp_remote_request(
 				$data->validation_url,
-				array(
+				[
 					'method'                           => 'POST',
-					'headers'                          => array(
+					'headers'                          => [
 						'Content-Type' => 'application/json',
-					),
+					],
 					'body'                             => \wp_json_encode( (object) $request ),
-					'adyen_applepay_merchant_identity' => array(
+					'adyen_applepay_merchant_identity' => [
 						'certificate_path'     => stream_get_meta_data( $certificate_file )['uri'],
 						'private_key_path'     => stream_get_meta_data( $private_key_file )['uri'],
 						'private_key_password' => $config->get_apple_pay_merchant_id_private_key_password(),
-					),
-				)
+					],
+				]
 			);
 
 			// Remove temporary files.
@@ -520,7 +520,7 @@ class PaymentsController {
 				$error = sprintf( '%s - %s', $error_code, $e->getMessage() );
 			}
 
-			return (object) array( 'error' => $error );
+			return (object) [ 'error' => $error ];
 		}
 
 		return (object) $result;
@@ -570,9 +570,9 @@ class PaymentsController {
 	 * @return object
 	 */
 	private function get_response_result( PaymentResponse $response ) {
-		$result = array(
+		$result = [
 			'resultCode' => $response->get_result_code(),
-		);
+		];
 
 		// Set action.
 		$action = $response->get_action();

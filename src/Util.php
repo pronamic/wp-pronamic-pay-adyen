@@ -27,7 +27,7 @@ class Util {
 	 * @return array<int|string, mixed>
 	 */
 	public static function filter_null( $array ) {
-		return array_filter( $array, array( __CLASS__, 'is_not_null' ) );
+		return array_filter( $array, [ __CLASS__, 'is_not_null' ] );
 	}
 
 	/**

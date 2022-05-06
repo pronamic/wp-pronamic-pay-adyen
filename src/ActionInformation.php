@@ -216,9 +216,9 @@ class ActionInformation extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/action.json' ),
-			),
+			],
 			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 

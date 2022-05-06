@@ -129,7 +129,7 @@ class AdditionalData implements \JsonSerializable {
 	 * @return object
 	 */
 	public function get_json() {
-		$properties = array(
+		$properties = [
 			'enhancedSchemeData.customerReference'      => $this->esd_customer_reference,
 			'enhancedSchemeData.destinationCountryCode' => $this->esd_destination_country_code,
 			'enhancedSchemeData.destinationPostalCode'  => $this->esd_destination_postal_code,
@@ -139,7 +139,7 @@ class AdditionalData implements \JsonSerializable {
 			'enhancedSchemeData.orderDate'              => \is_null( $this->esd_order_date ) ? null : $this->esd_order_date->format( 'dmy' ),
 			'enhancedSchemeData.shipFromPostalCode'     => $this->esd_ship_from_postal_code,
 			'enhancedSchemeData.totalTaxAmount'         => $this->esd_total_tax_amount,
-		);
+		];
 
 		if ( null !== $this->line_items ) {
 			$line_items = $this->line_items->get_line_items();
@@ -147,7 +147,7 @@ class AdditionalData implements \JsonSerializable {
 			$index = 1;
 
 			foreach ( $line_items as $item ) {
-				$item_properties = array(
+				$item_properties = [
 					/**
 					 * Item description. Max length: 26 characters.
 					 *
@@ -179,7 +179,7 @@ class AdditionalData implements \JsonSerializable {
 					 * @var string|null
 					 */
 					'enhancedSchemeData.itemDetailLine' . $index . '.totalAmount' => $item->get_amount_including_tax(),
-				);
+				];
 
 				$item_properties = Util::filter_null( $item_properties );
 

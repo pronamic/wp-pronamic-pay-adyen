@@ -595,7 +595,7 @@ abstract class AbstractPaymentRequest extends Request {
 		$metadata = $this->get_metadata();
 
 		$properties = Util::filter_null(
-			array(
+			[
 				'additionalData'         => is_null( $this->additional_data ) ? null : $this->additional_data->get_json(),
 				'amount'                 => $this->get_amount()->get_json(),
 				'applicationInfo'        => $this->application_info,
@@ -617,7 +617,7 @@ abstract class AbstractPaymentRequest extends Request {
 				'shopperReference'       => $this->shopper_reference,
 				'shopperStatement'       => $this->shopper_statement,
 				'telephoneNumber'        => $this->telephone_number,
-			)
+			]
 		);
 
 		$object = (object) $properties;

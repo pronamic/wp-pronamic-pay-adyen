@@ -135,10 +135,10 @@ class ClientTest extends WP_UnitTestCase {
 
 		$this->factory->fake( 'https://checkout-test.adyen.com/v64/payments', __DIR__ . '/../http/checkout-test-adyen-com-v64-payments-ok.http' );
 
-		$payment_method = array(
+		$payment_method = [
 			'type'   => PaymentMethodType::IDEAL,
 			'issuer' => '1121',
-		);
+		];
 
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),

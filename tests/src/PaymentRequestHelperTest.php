@@ -43,10 +43,10 @@ class PaymentRequestHelperTest extends TestCase {
 		/**
 		 * Payment request.
 		 */
-		$payment_method = array(
+		$payment_method = [
 			'type'   => PaymentMethodType::IDEAL,
 			'issuer' => '1121',
-		);
+		];
 
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),

@@ -54,6 +54,6 @@ abstract class ResponseObject {
 			return $this->original_object;
 		}
 
-		return (object) array();
+		return (object) [];
 	}
 }

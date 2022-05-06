@@ -79,10 +79,10 @@ class PaymentDetailsRequest extends Request {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'details'     => $this->get_details(),
 				'paymentData' => $this->get_payment_data(),
-			)
+			]
 		);
 
 		$object = (object) $properties;

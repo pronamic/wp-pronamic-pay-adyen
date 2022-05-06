@@ -45,11 +45,11 @@ class NotificationRequestTest extends TestCase {
 		$this->assertEquals( '2018-01-01T01:02:01+02:00', $item->get_event_date()->format( DATE_W3C ) );
 		$this->assertEquals( 'TestMerchant', $item->get_merchant_account_code() );
 		$this->assertEquals(
-			array(
+			[
 				'CANCEL',
 				'CAPTURE',
 				'REFUND',
-			),
+			],
 			$item->get_operations()
 		);
 		$this->assertEquals( 'YourMerchantReference1', $item->get_merchant_reference() );
@@ -82,57 +82,57 @@ class NotificationRequestTest extends TestCase {
 	 * @return array
 	 */
 	public function provider_notification_tests() {
-		return array(
-			array(
+		return [
+			[
 				'notification-test-1.json',
-			),
-			array(
+			],
+			[
 				'notification-test-2.json',
-			),
-			array(
+			],
+			[
 				'notification-test-3.json',
-			),
-			array(
+			],
+			[
 				'notification-test-4.json',
-			),
-		);
+			],
+		];
 	}
 
 	/**
 	 * Test from object.
 	 */
 	public function test_from_object() {
-		$object = (object) array(
+		$object = (object) [
 			'live'              => 'false',
-			'notificationItems' => array(
-				(object) array(
-					'NotificationRequestItem' => (object) array(
-						'additionalData'      => (object) array(
+			'notificationItems' => [
+				(object) [
+					'NotificationRequestItem' => (object) [
+						'additionalData'      => (object) [
 							'authCode'    => '58747',
 							'cardSummary' => '1111',
 							'expiryDate'  => '8/2018',
-						),
-						'amount'              => (object) array(
+						],
+						'amount'              => (object) [
 							'value'    => 500,
 							'currency' => 'EUR',
-						),
+						],
 						'pspReference'        => '9313547924770610',
 						'eventCode'           => 'AUTHORISATION',
 						'eventDate'           => '2018-01-01T01:02:01.111+02:00',
 						'merchantAccountCode' => 'TestMerchant',
-						'operations'          => array(
+						'operations'          => [
 							'CANCEL',
 							'CAPTURE',
 							'REFUND',
-						),
+						],
 						'merchantReference'   => 'YourMerchantReference1',
 						'paymentMethod'       => 'visa',
 						'reason'              => '58747:1111:12/2012',
 						'success'             => 'true',
-					),
-				),
-			),
-		);
+					],
+				],
+			],
+		];
 
 		$notification_request = NotificationRequest::from_object( $object );
 
@@ -143,14 +143,14 @@ class NotificationRequestTest extends TestCase {
 	 * Test invalid object.
 	 */
 	public function test_invalid_object() {
-		$object = (object) array(
+		$object = (object) [
 			'live'              => 'false',
-			'notificationItems' => array(
-				(object) array(
-					'invalid' => (object) array(),
-				),
-			),
-		);
+			'notificationItems' => [
+				(object) [
+					'invalid' => (object) [],
+				],
+			],
+		];
 
 		$this->expectException( 'JsonSchema\Exception\ValidationException' );
 

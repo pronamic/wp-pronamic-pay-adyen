@@ -187,7 +187,7 @@ class PaymentRequestHelper {
 		$request->set_additional_data( $additional_data );
 
 		// Metadata.
-		$metadata = array();
+		$metadata = [];
 
 		/**
 		 * Filters the Adyen payment metadata.

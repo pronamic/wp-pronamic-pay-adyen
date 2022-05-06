@@ -110,9 +110,9 @@ class ServiceException extends Exception {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/service-exception.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 

@@ -131,11 +131,11 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 
 		// Optional.
 		$optional = Util::filter_null(
-			array(
+			[
 				'allowedPaymentMethods' => $this->allowed_payment_methods,
 				'origin'                => $this->origin,
 				'sdkVersion'            => $this->sdk_version,
-			)
+			]
 		);
 
 		$properties = array_merge( $properties, $optional );

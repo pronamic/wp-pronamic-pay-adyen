@@ -249,7 +249,7 @@ class LineItem implements \JsonSerializable {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'amountExcludingTax' => $this->amount_excluding_tax,
 				'amountIncludingTax' => $this->amount_including_tax,
 				'description'        => $this->description,
@@ -258,7 +258,7 @@ class LineItem implements \JsonSerializable {
 				'taxAmount'          => $this->tax_amount,
 				'taxCategory'        => $this->tax_category,
 				'taxPercentage'      => $this->tax_percentage,
-			)
+			]
 		);
 
 		$object = (object) $properties;

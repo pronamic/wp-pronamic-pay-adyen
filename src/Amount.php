@@ -80,10 +80,10 @@ class Amount implements \JsonSerializable {
 	 * @return object
 	 */
 	public function get_json() {
-		return (object) array(
+		return (object) [
 			'currency' => $this->get_currency(),
 			'value'    => $this->get_value(),
-		);
+		];
 	}
 
 	/**
@@ -108,9 +108,9 @@ class Amount implements \JsonSerializable {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/amount.json' ),
-			),
+			],
 			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 

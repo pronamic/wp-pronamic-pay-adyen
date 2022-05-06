@@ -219,9 +219,9 @@ class PaymentResponse extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-response.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
@@ -238,7 +238,7 @@ class PaymentResponse extends ResponseObject {
 		}
 
 		if ( isset( $object->details ) ) {
-			$details = array();
+			$details = [];
 
 			foreach ( $object->details as $detail ) {
 				$details[] = DetailsInformation::from_object( $detail );

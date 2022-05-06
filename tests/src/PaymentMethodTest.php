@@ -25,17 +25,17 @@ class PaymentMethodTest extends TestCase {
 	 */
 	public function test_payment_method() {
 		$payment_method = new PaymentMethod(
-			(object) array(
+			(object) [
 				'type' => PaymentMethodType::IDEAL,
-			)
+			]
 		);
 
 		$this->assertEquals( PaymentMethodType::IDEAL, $payment_method->get_type() );
 
 		$this->assertEquals(
-			(object) array(
+			(object) [
 				'type' => PaymentMethodType::IDEAL,
-			),
+			],
 			$payment_method->get_json()
 		);
 	}
@@ -45,14 +45,14 @@ class PaymentMethodTest extends TestCase {
 	 */
 	public function test_payment_method_details() {
 		$payment_method = new PaymentMethod(
-			(object) array(
+			(object) [
 				'type' => PaymentMethodType::IDEAL,
-			)
+			]
 		);
 
-		$payment_method->set_details( array() );
+		$payment_method->set_details( [] );
 
 		$this->assertEquals( PaymentMethodType::IDEAL, $payment_method->get_type() );
-		$this->assertEquals( array(), $payment_method->get_details() );
+		$this->assertEquals( [], $payment_method->get_details() );
 	}
 }

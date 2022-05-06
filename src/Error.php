@@ -82,9 +82,9 @@ class Error extends Exception {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/error.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 

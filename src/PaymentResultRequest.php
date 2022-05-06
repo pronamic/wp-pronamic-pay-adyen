@@ -42,8 +42,8 @@ class PaymentResultRequest extends Request {
 	 * @return object
 	 */
 	public function get_json() {
-		return (object) array(
+		return (object) [
 			'payload' => $this->payload,
-		);
+		];
 	}
 }

@@ -35,26 +35,26 @@ class RedirectInformationTest extends TestCase {
 	 */
 	public function test_redirect_data() {
 		$redirect_information = new RedirectInformation( 'POST', 'https://test.adyen.com/' );
-		$redirect_information->set_data( (object) array() );
+		$redirect_information->set_data( (object) [] );
 
 		$this->assertEquals( 'POST', $redirect_information->get_method() );
 		$this->assertEquals( 'https://test.adyen.com/', $redirect_information->get_url() );
-		$this->assertEquals( (object) array(), $redirect_information->get_data() );
+		$this->assertEquals( (object) [], $redirect_information->get_data() );
 	}
 
 	/**
 	 * Test JSON optional.
 	 */
 	public function test_from_object_optional() {
-		$object = (object) array(
-			'data'   => (object) array(),
+		$object = (object) [
+			'data'   => (object) [],
 			'method' => 'GET',
 			'url'    => 'https://test.adyen.com/hpp/redirectIdeal.shtml',
-		);
+		];
 
 		$redirect_information = RedirectInformation::from_object( $object );
 
-		$this->assertEquals( (object) array(), $redirect_information->get_data() );
+		$this->assertEquals( (object) [], $redirect_information->get_data() );
 		$this->assertEquals( 'GET', $redirect_information->get_method() );
 		$this->assertEquals( 'https://test.adyen.com/hpp/redirectIdeal.shtml', $redirect_information->get_url() );
 	}

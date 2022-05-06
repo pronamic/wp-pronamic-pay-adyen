@@ -40,12 +40,12 @@ class UtilTest extends TestCase {
 	 * @return array[]
 	 */
 	public function provider_test_country_code() {
-		$data = array();
+		$data = [];
 
 		// No country.
 		$payment = new Payment();
 
-		$data[] = array( $payment, null );
+		$data[] = [ $payment, null ];
 
 		// Country code 'NL'.
 		$payment = new Payment();
@@ -56,7 +56,7 @@ class UtilTest extends TestCase {
 
 		$billing_address->set_country_code( 'NL' );
 
-		$data[] = array( $payment, 'NL' );
+		$data[] = [ $payment, 'NL' ];
 
 		return $data;
 	}

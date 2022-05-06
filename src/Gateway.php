@@ -25,7 +25,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * @version 2.0.2
  * @since   1.0.0
  */
-class Gateway {
+class Gateway extends Core_Gateway {
 	/**
 	 * Web SDK version.
 	 *

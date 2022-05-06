@@ -234,8 +234,8 @@ class Integration extends AbstractGatewayIntegration {
 			'tooltip'     => __( 'API key as mentioned in the payment provider dashboard.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
-				esc_url( 'https://docs.adyen.com/developers/user-management/how-to-get-the-api-key' ),
-				esc_html__( 'Adyen documentation: "How to get the API key".', 'pronamic_ideal' )
+				esc_url( 'https://docs.adyen.com/development-resources/api-credentials' ),
+				esc_html__( 'Adyen documentation: "API credentials".', 'pronamic_ideal' )
 			),
 		];
 

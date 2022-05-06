@@ -1,6 +1,6 @@
 <?php
 /**
- * Drop-in gateway
+ * Gateway
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2022 Pronamic
@@ -19,23 +19,21 @@ use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
 
 /**
- * Drop-in gateway
- *
- * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
+ * Gateway
  *
  * @author  Remco Tolsma
  * @version 2.0.2
  * @since   1.0.0
  */
-class DropInGateway {
+class Gateway {
 	/**
 	 * Web SDK version.
 	 *
 	 * @link https://docs.adyen.com/developers/checkout/web-sdk/release-notes-web-sdk
-	 *
+	 * @link https://www.npmjs.com/package/@adyen/adyen-web
 	 * @var string
 	 */
-	const SDK_VERSION = '3.23.0';
+	const SDK_VERSION = '5.14.0';
 
 	/**
 	 * Config.

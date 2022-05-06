@@ -366,7 +366,7 @@ class DropInGateway {
 		$configuration = array(
 			'locale'                 => Util::get_payment_locale( $payment ),
 			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			'originKey'              => $this->config->origin_key,
+			'clientKey'              => $this->config->client_key,
 			'paymentMethodsResponse' => $payment_methods->get_original_object(),
 			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		);

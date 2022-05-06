@@ -22,13 +22,6 @@ use Pronamic\WordPress\Pay\Core\GatewayConfig;
  */
 class Config extends GatewayConfig {
 	/**
-	 * API Key.
-	 *
-	 * @var string|null
-	 */
-	public $api_key;
-
-	/**
 	 * API Live URL Prefix.
 	 *
 	 * @var string|null
@@ -50,11 +43,11 @@ class Config extends GatewayConfig {
 	public $merchant_order_reference;
 
 	/**
-	 * Origin key.
+	 * Client key.
 	 *
-	 * @var string|null
+	 * @var string
 	 */
-	public $origin_key;
+	public $client_key;
 
 	/**
 	 * Apple Pay merchant identifier.

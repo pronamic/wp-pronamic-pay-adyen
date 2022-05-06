@@ -32,7 +32,7 @@ class DropInGatewayTest extends TestCase {
 		$config->api_key             = 'JPERWpuRAAvAj4mU';
 		$config->merchant_account    = 'Test';
 		$config->api_live_url_prefix = '1797a841fbb37ca7-AdyenDemo';
-		$config->origin_key          = 'pub.v2.8025893400271126.xIS0cDevM7BheK50ZXN8.Rm4amiQPrJ1owm3yHjmmVFG12Oa6RIIShvqrMvDIbwx';
+		$config->client_key          = 'test_GLWQIBAUGNARTF574SAGD6HX6IDDHZSV';
 
 		$gateway = new DropInGateway( $config );
 

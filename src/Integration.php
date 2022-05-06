@@ -257,23 +257,22 @@ class Integration extends AbstractGatewayIntegration {
 			);
 		}
 
-		// Origin Key.
+		// Client Key.
 		$fields[] = array(
 			'section'     => 'general',
 			'filter'      => FILTER_SANITIZE_STRING,
-			'meta_key'    => '_pronamic_gateway_adyen_origin_key',
-			'title'       => _x( 'Origin Key', 'adyen', 'pronamic_ideal' ),
+			'meta_key'    => '_pronamic_gateway_adyen_client_key',
+			'title'       => _x( 'Client Key', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
 			'classes'     => array(
 				'regular-text',
 				'code',
 				'pronamic-pay-form-control-lg',
 			),
-			'tooltip'     => __( 'An origin key is a client-side key that is used to validate Adyen\'s JavaScript component library. It is required for the Drop-in and Component integrations.', 'pronamic_ideal' ),
 			'description' => sprintf(
 				'<a href="%s" target="_blank">%s</a>',
-				esc_url( 'https://docs.adyen.com/user-management/how-to-get-an-origin-key' ),
-				esc_html__( 'Adyen documentation: "How to get an origin key".', 'pronamic_ideal' )
+				esc_url( 'https://docs.adyen.com/development-resources/client-side-authentication#get-your-client-key' ),
+				esc_html__( 'Adyen documentation: "Get your client key".', 'pronamic_ideal' )
 			),
 		);
 
@@ -727,7 +726,7 @@ class Integration extends AbstractGatewayIntegration {
 		$config->api_key                                    = $this->get_meta( $post_id, 'adyen_api_key' );
 		$config->api_live_url_prefix                        = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
 		$config->merchant_account                           = $this->get_meta( $post_id, 'adyen_merchant_account' );
-		$config->origin_key                                 = $this->get_meta( $post_id, 'adyen_origin_key' );
+		$config->client_key                                 = $this->get_meta( $post_id, 'adyen_client_key' );
 		$config->merchant_order_reference                   = $this->get_meta( $post_id, 'adyen_merchant_order_reference' );
 		$config->apple_pay_merchant_id                      = $this->get_meta( $post_id, 'adyen_apple_pay_merchant_id' );
 		$config->apple_pay_merchant_id_certificate          = $this->get_meta( $post_id, 'adyen_apple_pay_merchant_id_certificate' );

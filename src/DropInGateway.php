@@ -27,7 +27,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * @version 2.0.2
  * @since   1.0.0
  */
-class DropInGateway extends AbstractGateway {
+class DropInGateway {
 	/**
 	 * Web SDK version.
 	 *
@@ -38,6 +38,13 @@ class DropInGateway extends AbstractGateway {
 	const SDK_VERSION = '3.23.0';
 
 	/**
+	 * Config.
+	 *
+	 * @var Config
+	 */
+	protected $config;
+
+	/**
 	 * Constructs and initializes an Adyen gateway.
 	 *
 	 * @param Config $config Config.
@@ -45,11 +52,16 @@ class DropInGateway extends AbstractGateway {
 	public function __construct( Config $config ) {
 		parent::__construct( $config );
 
-		// Supported features.
+		$this->config = $config;
+
+		$this->set_method( self::METHOD_HTTP_REDIRECT );
+
 		$this->supports = array(
 			'webhook_log',
 			'webhook',
 		);
+
+		$this->client = new Client( $config );
 	}
 
 	/**
@@ -79,6 +91,92 @@ class DropInGateway extends AbstractGateway {
 			PaymentMethods::SWISH,
 			PaymentMethods::TWINT,
 			PaymentMethods::VIPPS,
+		);
+	}
+
+	/**
+	 * Get available payment methods.
+	 *
+	 * @return array<int, string>
+	 * @see Core_Gateway::get_available_payment_methods()
+	 */
+	public function get_available_payment_methods() {
+		$core_payment_methods = array();
+
+		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+
+		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
+			$type = $payment_method->get_type();
+
+			if ( null === $type ) {
+				continue;
+			}
+
+			$core_payment_method = PaymentMethodType::to_wp( $type );
+
+			$core_payment_methods[] = $core_payment_method;
+		}
+
+		$core_payment_methods = array_filter( $core_payment_methods );
+		$core_payment_methods = array_unique( $core_payment_methods );
+
+		return $core_payment_methods;
+	}
+
+	/**
+	 * Get issuers.
+	 *
+	 * @return array<string, string>|array<int, array<string, array<string, string>>>
+	 * @see Core_Gateway::get_issuers()
+	 */
+	public function get_issuers() {
+		$issuers = array();
+
+		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+
+		$payment_methods = $payment_methods_response->get_payment_methods();
+
+		// Limit to iDEAL payment methods.
+		$payment_methods = array_filter(
+			$payment_methods,
+			/**
+			 * Check if payment method is iDEAL.
+			 *
+			 * @param PaymentMethod $payment_method Payment method.
+			 *
+			 * @return boolean True if payment method is iDEAL, false otherwise.
+			 */
+			function( $payment_method ) {
+				return ( PaymentMethodType::IDEAL === $payment_method->get_type() );
+			}
+		);
+
+		foreach ( $payment_methods as $payment_method ) {
+			$details = $payment_method->get_details();
+
+			if ( is_array( $details ) ) {
+				foreach ( $details as $detail ) {
+					if ( ! isset( $detail->key, $detail->type, $detail->items ) ) {
+						continue;
+					}
+
+					if ( 'issuer' === $detail->key && 'select' === $detail->type ) {
+						foreach ( $detail->items as $item ) {
+							$issuers[ \strval( $item->id ) ] = \strval( $item->name );
+						}
+					}
+				}
+			}
+		}
+
+		if ( empty( $issuers ) ) {
+			return $issuers;
+		}
+
+		return array(
+			array(
+				'options' => $issuers,
+			),
 		);
 	}
 

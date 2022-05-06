@@ -742,7 +742,7 @@ class Integration extends AbstractGatewayIntegration {
 	 * Get gateway.
 	 *
 	 * @param int $post_id Post ID.
-	 * @return AbstractGateway
+	 * @return DropInGateway
 	 */
 	public function get_gateway( $post_id ) {
 		$config = $this->get_config( $post_id );

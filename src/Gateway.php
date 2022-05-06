@@ -54,10 +54,10 @@ class Gateway {
 
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
 
-		$this->supports = array(
+		$this->supports = [
 			'webhook_log',
 			'webhook',
-		);
+		];
 
 		$this->client = new Client( $config );
 	}
@@ -69,7 +69,7 @@ class Gateway {
 	 * @see Core_Gateway::get_supported_payment_methods()
 	 */
 	public function get_supported_payment_methods() {
-		return array(
+		return [
 			PaymentMethods::AFTERPAY_COM,
 			PaymentMethods::ALIPAY,
 			PaymentMethods::APPLE_PAY,
@@ -89,7 +89,7 @@ class Gateway {
 			PaymentMethods::SWISH,
 			PaymentMethods::TWINT,
 			PaymentMethods::VIPPS,
-		);
+		];
 	}
 
 	/**
@@ -99,7 +99,7 @@ class Gateway {
 	 * @see Core_Gateway::get_available_payment_methods()
 	 */
 	public function get_available_payment_methods() {
-		$core_payment_methods = array();
+		$core_payment_methods = [];
 
 		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
 
@@ -128,7 +128,7 @@ class Gateway {
 	 * @see Core_Gateway::get_issuers()
 	 */
 	public function get_issuers() {
-		$issuers = array();
+		$issuers = [];
 
 		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
 
@@ -171,11 +171,11 @@ class Gateway {
 			return $issuers;
 		}
 
-		return array(
-			array(
+		return [
+			[
 				'options' => $issuers,
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -193,11 +193,11 @@ class Gateway {
 		 *
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
 		 */
-		$api_integration_payment_method_types = array(
+		$api_integration_payment_method_types = [
 			PaymentMethodType::ALIPAY,
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,
-		);
+		];
 
 		// Return early if API integration is not being used.
 		$payment_method_type = PaymentMethodType::transform( $payment->get_payment_method() );
@@ -207,9 +207,9 @@ class Gateway {
 		}
 
 		// Payment method.
-		$payment_method = array(
+		$payment_method = [
 			'type' => $payment_method_type,
-		);
+		];
 
 		if ( PaymentMethodType::IDEAL === $payment_method_type ) {
 			$payment_method['issuer'] = (string) $payment->get_meta( 'issuer' );
@@ -276,7 +276,7 @@ class Gateway {
 			$payment_method_type = PaymentMethodType::transform( $payment_method );
 
 			if ( null !== $payment_method_type ) {
-				$request->set_allowed_payment_methods( array( $payment_method_type ) );
+				$request->set_allowed_payment_methods( [ $payment_method_type ] );
 			}
 		}
 
@@ -284,7 +284,7 @@ class Gateway {
 		$apple_pay_merchant_id = $this->config->get_apple_pay_merchant_id();
 
 		if ( empty( $apple_pay_merchant_id ) ) {
-			$request->set_blocked_payment_methods( array( PaymentMethodType::APPLE_PAY ) );
+			$request->set_blocked_payment_methods( [ PaymentMethodType::APPLE_PAY ] );
 		}
 
 		// Set country code.
@@ -313,7 +313,7 @@ class Gateway {
 		wp_register_script(
 			'pronamic-pay-adyen-checkout',
 			$url_script,
-			array(),
+			[],
 			self::SDK_VERSION,
 			false
 		);
@@ -321,12 +321,12 @@ class Gateway {
 		wp_register_script(
 			'pronamic-pay-adyen-google-pay',
 			'https://pay.google.com/gp/p/js/pay.js',
-			array(),
+			[],
 			\pronamic_pay_plugin()->get_version(),
 			false
 		);
 
-		$dependencies = array( 'pronamic-pay-adyen-checkout' );
+		$dependencies = [ 'pronamic-pay-adyen-checkout' ];
 
 		if ( \in_array( PaymentMethodType::GOOGLE_PAY, $payment_method_types, true ) ) {
 			$dependencies[] = 'pronamic-pay-adyen-google-pay';
@@ -351,7 +351,7 @@ class Gateway {
 		wp_register_style(
 			'pronamic-pay-adyen-checkout',
 			$url_stylesheet,
-			array(),
+			[],
 			null
 		);
 
@@ -361,23 +361,23 @@ class Gateway {
 		 * @link https://docs.adyen.com/checkout/drop-in-web
 		 * @link https://docs.adyen.com/checkout/components-web
 		 */
-		$configuration = array(
+		$configuration = [
 			'locale'                 => Util::get_payment_locale( $payment ),
 			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
 			'clientKey'              => $this->config->client_key,
 			'paymentMethodsResponse' => $payment_methods->get_original_object(),
 			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
-		);
+		];
 
 		/**
 		 * Auto submit drop-in.
 		 */
-		$auto_submit_methods = array(
+		$auto_submit_methods = [
 			PaymentMethodType::SWISH,
 			PaymentMethodType::TWINT,
 			PaymentMethodType::VIPPS,
 			PaymentMethodType::UNIONPAY,
-		);
+		];
 
 		if ( 1 === \count( $payment_method_types ) && \in_array( $payment_method_types[0], $auto_submit_methods ) ) {
 			$configuration['showPayButton'] = false;
@@ -404,7 +404,7 @@ class Gateway {
 		wp_localize_script(
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
-			array(
+			[
 				'paymentMethodsConfiguration'   => $this->get_checkout_payment_methods_configuration( $payment_method_types, $payment ),
 				'paymentsUrl'                   => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
 				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' . $payment_id ),
@@ -417,11 +417,11 @@ class Gateway {
 				'paymentRefused'                => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
 				'syntaxError'                   => __( 'Received an invalid response while processing your request. Please try reloading this page.', 'pronamic_ideal' ),
 				'unknownError'                  => __( 'An unknown error occurred while processing your request. Please try reloading this page.', 'pronamic_ideal' ),
-			)
+			]
 		);
 
 		// Add checkout head action.
-		add_action( 'pronamic_pay_adyen_checkout_head', array( $this, 'checkout_head' ) );
+		add_action( 'pronamic_pay_adyen_checkout_head', [ $this, 'checkout_head' ] );
 
 		// No cache.
 		Core_Util::no_cache();
@@ -485,7 +485,7 @@ class Gateway {
 
 			// Set details result meta from GET or POST request parameters.
 			if ( '' === $details_result ) {
-				$details_result = array();
+				$details_result = [];
 
 				$details = $payment_response->get_details();
 
@@ -582,16 +582,16 @@ class Gateway {
 		 */
 		$application_info = new ApplicationInfo();
 
-		$application_info->merchant_application = (object) array(
+		$application_info->merchant_application = (object) [
 			'name'    => 'Pronamic Pay',
 			'version' => \pronamic_pay_plugin()->get_version(),
-		);
+		];
 
-		$application_info->external_platform = (object) array(
+		$application_info->external_platform = (object) [
 			'integrator' => 'Pronamic',
 			'name'       => 'WordPress',
 			'version'    => \get_bloginfo( 'version' ),
-		);
+		];
 
 		$payment_request->set_application_info( $application_info );
 
@@ -640,7 +640,7 @@ class Gateway {
 	 * @return object
 	 */
 	public function get_checkout_payment_methods_configuration( $payment_method_types, Payment $payment ) {
-		$configuration = array();
+		$configuration = [];
 
 		/*
 		 * Apple Pay.
@@ -648,14 +648,14 @@ class Gateway {
 		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#show-apple-pay-in-your-payment-form
 		 */
 		if ( \in_array( PaymentMethodType::APPLE_PAY, $payment_method_types, true ) ) {
-			$configuration['applepay'] = array(
+			$configuration['applepay'] = [
 				'amount'        => $payment->get_total_amount()->get_minor_units()->to_int(),
 				'currencyCode'  => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
-				'configuration' => array(
+				'configuration' => [
 					'merchantName'       => \get_bloginfo( 'name' ),
 					'merchantIdentifier' => $this->config->get_apple_pay_merchant_id(),
-				),
-			);
+				],
+			];
 
 			// Set country code.
 			$billing_address = $payment->get_billing_address();
@@ -674,14 +674,14 @@ class Gateway {
 			$lines = $payment->get_lines();
 
 			if ( null !== $lines ) {
-				$line_items = array();
+				$line_items = [];
 
 				foreach ( $lines as $line ) {
-					$line_items[] = array(
+					$line_items[] = [
 						'label'  => $line->get_name(),
 						'amount' => $line->get_total_amount()->number_format( null, '.', '' ),
 						'type'   => 'final',
-					);
+					];
 				}
 
 				$configuration['applepay']['lineItems'] = $line_items;
@@ -694,12 +694,12 @@ class Gateway {
 		 * @link https://docs.adyen.com/payment-methods/cards/web-drop-in#show-the-available-cards-in-your-payment-form
 		 */
 		if ( \in_array( PaymentMethodType::SCHEME, $payment_method_types, true ) ) {
-			$configuration['card'] = array(
+			$configuration['card'] = [
 				'hasHolderName'      => true,
 				'holderNameRequired' => true,
 				'hideCVC'            => false,
 				'name'               => __( 'Credit or debit card', 'pronamic_ideal' ),
-			);
+			];
 		}
 
 		/*
@@ -708,16 +708,16 @@ class Gateway {
 		 * @link https://docs.adyen.com/payment-methods/google-pay/web-drop-in#show-google-pay-in-your-payment-form
 		 */
 		if ( \in_array( PaymentMethodType::GOOGLE_PAY, $payment_method_types, true ) ) {
-			$configuration['paywithgoogle'] = array(
+			$configuration['paywithgoogle'] = [
 				'environment'   => ( self::MODE_TEST === $this->get_mode() ? 'TEST' : 'PRODUCTION' ),
-				'amount'        => array(
+				'amount'        => [
 					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 					'value'    => $payment->get_total_amount()->get_minor_units()->to_int(),
-				),
-				'configuration' => array(
+				],
+				'configuration' => [
 					'gatewayMerchantId' => $this->config->merchant_account,
-				),
-			);
+				],
+			];
 
 			if ( self::MODE_LIVE === $this->get_mode() ) {
 				$configuration['paywithgoogle']['configuration']['merchantIdentifier'] = $this->config->get_google_pay_merchant_identifier();
@@ -730,13 +730,13 @@ class Gateway {
 		 * @link https://docs.adyen.com/payment-methods/paypal/web-drop-in#show-paypal-in-your-payment-form
 		 */
 		if ( \in_array( PaymentMethodType::PAYPAL, $payment_method_types, true ) ) {
-			$configuration['paypal'] = array(
+			$configuration['paypal'] = [
 				'environment' => ( self::MODE_TEST === $this->get_mode() ? 'test' : 'live' ),
-				'amount'      => array(
+				'amount'      => [
 					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
 					'value'    => $payment->get_total_amount()->get_minor_units()->get_value(),
-				),
-			);
+				],
+			];
 
 			$billing_address = $payment->get_billing_address();
 

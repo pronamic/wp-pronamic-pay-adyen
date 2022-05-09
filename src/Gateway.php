@@ -664,27 +664,6 @@ class Gateway extends Core_Gateway {
 			}
 		}
 
-		/*
-		 * PayPal.
-		 *
-		 * @link https://docs.adyen.com/payment-methods/paypal/web-drop-in#show-paypal-in-your-payment-form
-		 */
-		if ( \in_array( PaymentMethodType::PAYPAL, $payment_method_types, true ) ) {
-			$configuration['paypal'] = [
-				'environment' => ( self::MODE_TEST === $this->get_mode() ? 'test' : 'live' ),
-				'amount'      => [
-					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
-					'value'    => $payment->get_total_amount()->get_minor_units()->get_value(),
-				],
-			];
-
-			$billing_address = $payment->get_billing_address();
-
-			if ( null !== $billing_address ) {
-				$configuration['paypal']['countryCode'] = $billing_address->get_country_code();
-			}
-		}
-
 		return (object) $configuration;
 	}
 }

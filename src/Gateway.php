@@ -595,31 +595,18 @@ class Gateway extends Core_Gateway {
 	public function get_checkout_payment_methods_configuration( $payment_method_types, Payment $payment ) {
 		$configuration = [];
 
-		/*
+		/**
 		 * Apple Pay.
 		 *
-		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#show-apple-pay-in-your-payment-form
+		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#drop-in-configuration
 		 */
 		if ( \in_array( PaymentMethodType::APPLE_PAY, $payment_method_types, true ) ) {
-			$configuration['applepay'] = [
-				'amount'        => $payment->get_total_amount()->get_minor_units()->to_int(),
-				'currencyCode'  => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
-				'configuration' => [
-					'merchantName'       => \get_bloginfo( 'name' ),
-					'merchantIdentifier' => $this->config->get_apple_pay_merchant_id(),
-				],
-			];
-
-			// Set country code.
-			$billing_address = $payment->get_billing_address();
-
-			if ( null !== $billing_address ) {
-				$configuration['applepay']['countryCode'] = $billing_address->get_country_code();
-			}
+			$configuration['applepay'] = [];
 
 			/**
 			 * Line Items.
 			 *
+			 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#ap-payment-request-data
 			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentrequest/1916120-lineitems
 			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaylineitem
 			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaylineitem/1916086-amount

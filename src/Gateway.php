@@ -325,14 +325,14 @@ class Gateway extends Core_Gateway {
 		 * @link https://docs.adyen.com/checkout/components-web
 		 */
 		$configuration = [
-			'locale'                 => Util::get_payment_locale( $payment ),
-			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			'session'                => (object) [
+			'locale'      => Util::get_payment_locale( $payment ),
+			'environment' => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+			'session'     => (object) [
 				'id'          => $payment_session->get_id(),
 				'sessionData' => $payment_session->get_data(),
 			],
-			'clientKey'              => $this->config->client_key,
-			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
+			'clientKey'   => $this->config->client_key,
+			'amount'      => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		];
 
 		$configuration = (object) $configuration;

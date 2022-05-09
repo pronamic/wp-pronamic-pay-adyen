@@ -16,13 +16,6 @@
 		},
 		onError: ( error, component ) => {
 			console.error( error.name, error.message, error.stack, component );
-		},
-		paymentMethodsConfiguration: {
-			card: {
-				hasHolderName: true,
-				holderNameRequired: true,
-				billingAddressRequired: true
-			}
 		}
 	};
 

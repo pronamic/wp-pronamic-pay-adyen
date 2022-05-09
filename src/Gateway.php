@@ -628,10 +628,10 @@ class Gateway extends Core_Gateway {
 			}
 		}
 
-		/*
+		/**
 		 * Cards.
 		 *
-		 * @link https://docs.adyen.com/payment-methods/cards/web-drop-in#show-the-available-cards-in-your-payment-form
+		 * @link https://docs.adyen.com/payment-methods/cards/web-drop-in#configuration
 		 */
 		if ( \in_array( PaymentMethodType::SCHEME, $payment_method_types, true ) ) {
 			$configuration['card'] = [

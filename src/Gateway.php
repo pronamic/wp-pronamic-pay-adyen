@@ -642,28 +642,6 @@ class Gateway extends Core_Gateway {
 			];
 		}
 
-		/*
-		 * Google Pay.
-		 *
-		 * @link https://docs.adyen.com/payment-methods/google-pay/web-drop-in#show-google-pay-in-your-payment-form
-		 */
-		if ( \in_array( PaymentMethodType::GOOGLE_PAY, $payment_method_types, true ) ) {
-			$configuration['paywithgoogle'] = [
-				'environment'   => ( self::MODE_TEST === $this->get_mode() ? 'TEST' : 'PRODUCTION' ),
-				'amount'        => [
-					'currency' => $payment->get_total_amount()->get_currency()->get_alphabetic_code(),
-					'value'    => $payment->get_total_amount()->get_minor_units()->to_int(),
-				],
-				'configuration' => [
-					'gatewayMerchantId' => $this->config->merchant_account,
-				],
-			];
-
-			if ( self::MODE_LIVE === $this->get_mode() ) {
-				$configuration['paywithgoogle']['configuration']['merchantIdentifier'] = $this->config->get_google_pay_merchant_identifier();
-			}
-		}
-
 		return (object) $configuration;
 	}
 }

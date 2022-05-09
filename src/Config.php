@@ -78,13 +78,6 @@ class Config extends GatewayConfig {
 	public $apple_pay_merchant_id_private_key_password;
 
 	/**
-	 * Google Pay merchant identifier.
-	 *
-	 * @var string|null
-	 */
-	public $google_pay_merchant_identifier;
-
-	/**
 	 * Get API key.
 	 *
 	 * @return string|null
@@ -145,15 +138,6 @@ class Config extends GatewayConfig {
 	 */
 	public function get_apple_pay_merchant_id_private_key_password() {
 		return $this->apple_pay_merchant_id_private_key_password;
-	}
-
-	/**
-	 * Get Google Pay merchant identifier.
-	 *
-	 * @return string|null
-	 */
-	public function get_google_pay_merchant_identifier() {
-		return $this->google_pay_merchant_identifier;
 	}
 
 	/**

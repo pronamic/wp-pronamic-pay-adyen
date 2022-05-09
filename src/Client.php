@@ -138,19 +138,6 @@ class Client {
 	}
 
 	/**
-	 * Get payment result.
-	 *
-	 * @param PaymentResultRequest $request Payment result request.
-	 * @return PaymentResultResponse
-	 * @throws \Exception Throws error if request fails.
-	 */
-	public function get_payment_result( PaymentResultRequest $request ) {
-		$data = $this->send_request( 'v68/payments/result', $request );
-
-		return PaymentResultResponse::from_object( $data );
-	}
-
-	/**
 	 * Get payment methods.
 	 *
 	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/paymentMethods

@@ -184,30 +184,6 @@ class ClientTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test get payment result.
-	 */
-	public function test_get_payment_result() {
-		$config = new Config();
-
-		$config->mode = Core_Gateway::MODE_TEST;
-
-		$client = new Client( $config );
-
-		$this->factory->fake( 'https://checkout-test.adyen.com/v41/payments/result', __DIR__ . '/../http/checkout-test-adyen-com-v41-payments-result-ok.http' );
-
-		$request = new PaymentResultRequest( 'payload' );
-
-		$response = $client->get_payment_result( $request );
-
-		$this->assertInstanceOf( PaymentResultResponse::class, $response );
-		$this->assertStringStartsWith( '8515520546807677', $response->get_psp_reference() );
-		$this->assertStringStartsWith( ResultCode::AUTHORIZED, $response->get_result_code() );
-		$this->assertStringStartsWith( '791', $response->get_merchant_reference() );
-		$this->assertStringStartsWith( PaymentMethodType::IDEAL, $response->get_payment_method() );
-		$this->assertStringStartsWith( 'nl_NL', $response->get_shopper_locale() );
-	}
-
-	/**
 	 * Test JSON invalid.
 	 */
 	public function test_json_invalid() {

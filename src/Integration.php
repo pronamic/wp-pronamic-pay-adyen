@@ -77,11 +77,6 @@ class Integration extends AbstractGatewayIntegration {
 
 		$payments_controller->setup();
 
-		// Payments result controller.
-		$payments_result_controller = new PaymentsResultController();
-
-		$payments_result_controller->setup();
-
 		// Site Health controller.
 		$site_health_controller = new SiteHealthController();
 

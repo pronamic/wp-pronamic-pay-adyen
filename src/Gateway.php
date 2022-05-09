@@ -252,17 +252,17 @@ class Gateway extends Core_Gateway {
 		 * 
 		 * @link https://docs.adyen.com/online-payments/web-drop-in#create-payment-session
 		 */
+		$return_url = \rest_url( Integration::REST_ROUTE_NAMESPACE . '/return/' . $payment_id );
+
+		$request = new PaymentSessionRequest(
+			AmountTransformer::transform( $payment->get_total_amount() ),
+			$this->config->get_merchant_account(),
+			$payment_id,
+			$return_url
+		);
+
 		try {
-			$request = new PaymentSessionRequest(
-				AmountTransformer::transform( $payment->get_total_amount() ),
-				$this->config->get_merchant_account(),
-				$payment_id,
-				$payment->get_return_redirect_url()
-			);
-
 			$payment_session = $this->client->create_payment_session( $request );
-
-
 		} catch ( \Exception $e ) {
 			Plugin::render_exception( $e );
 
@@ -350,7 +350,7 @@ class Gateway extends Core_Gateway {
 				'paymentsUrl'                   => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
 				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' . $payment_id ),
 				'applePayMerchantValidationUrl' => empty( $this->config->apple_pay_merchant_id_certificate ) ? false : \rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
-				'paymentReturnUrl'              => $payment->get_return_url(),
+				'paymentReturnUrl'              => $return_url,
 				'refusalRedirectUrl'            => $refusal_redirect_url,
 				'configuration'                 => $configuration,
 				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),

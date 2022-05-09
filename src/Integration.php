@@ -87,6 +87,11 @@ class Integration extends AbstractGatewayIntegration {
 
 		$site_health_controller->setup();
 
+		// Return controller.
+		$return_controller = new ReturnController();
+
+		$return_controller->setup();
+
 		// Settings.
 		add_action( 'init', [ $this, 'init' ] );
 		add_action( 'admin_init', [ $this, 'admin_init' ], 15 );

@@ -19,7 +19,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
             clientKey: pronamicPayAdyenCheckout.configuration.clientKey,
             session: pronamicPayAdyenCheckout.configuration.session,
             onPaymentCompleted: function onPaymentCompleted(result, component) {
-              console.info(result, component);
+              window.location.href = pronamicPayAdyenCheckout.paymentReturnUrl;
             },
             onError: function onError(error, component) {
               console.error(error.name, error.message, error.stack, component);

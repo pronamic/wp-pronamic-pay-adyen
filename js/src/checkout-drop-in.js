@@ -10,7 +10,7 @@
 	const configuration = {
 		environment: pronamicPayAdyenCheckout.configuration.environment,
 		clientKey: pronamicPayAdyenCheckout.configuration.clientKey,
-		session: pronamicPayAdyenCheckout.session,
+		session: pronamicPayAdyenCheckout.configuration.session,
 		onPaymentCompleted: ( result, component ) => {
 			console.info( result, component );
 		},

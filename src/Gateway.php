@@ -285,14 +285,6 @@ class Gateway extends Core_Gateway {
 			false
 		);
 
-		wp_register_script(
-			'pronamic-pay-adyen-google-pay',
-			'https://pay.google.com/gp/p/js/pay.js',
-			[],
-			\pronamic_pay_plugin()->get_version(),
-			false
-		);
-
 		$dependencies = [ 'pronamic-pay-adyen-checkout' ];
 
 		wp_register_script(

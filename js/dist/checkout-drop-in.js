@@ -17,19 +17,12 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
           configuration = {
             environment: pronamicPayAdyenCheckout.configuration.environment,
             clientKey: pronamicPayAdyenCheckout.configuration.clientKey,
-            session: pronamicPayAdyenCheckout.session,
+            session: pronamicPayAdyenCheckout.configuration.session,
             onPaymentCompleted: function onPaymentCompleted(result, component) {
               console.info(result, component);
             },
             onError: function onError(error, component) {
               console.error(error.name, error.message, error.stack, component);
-            },
-            paymentMethodsConfiguration: {
-              card: {
-                hasHolderName: true,
-                holderNameRequired: true,
-                billingAddressRequired: true
-              }
             }
           };
           _context.next = 3;

@@ -261,6 +261,18 @@ class Gateway extends Core_Gateway {
 			$return_url
 		);
 
+		// Payment method.
+		$payment_method = $payment->get_payment_method();
+
+		if ( null !== $payment_method ) {
+			// Payment method type.
+			$payment_method_type = PaymentMethodType::transform( $payment_method );
+
+			if ( null !== $payment_method_type ) {
+				$request->set_allowed_payment_methods( [ $payment_method_type ] );
+			}
+		}
+
 		try {
 			$payment_session = $this->client->create_payment_session( $request );
 		} catch ( \Exception $e ) {

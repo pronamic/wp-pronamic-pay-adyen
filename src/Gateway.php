@@ -247,58 +247,27 @@ class Gateway extends Core_Gateway {
 			exit;
 		}
 
-		$payment_response = $payment->get_meta( 'adyen_payment_response' );
-
-		// Only show drop-in checkout page if payment method does not redirect.
-		if ( is_object( $payment_response ) ) {
-			$payment_response = PaymentResponse::from_object( $payment_response );
-
-			$redirect = $payment_response->get_redirect();
-
-			if ( null !== $redirect ) {
-				\wp_redirect( $redirect->get_url() );
-
-				exit;
-			}
-		}
-
 		/**
-		 * Payment methods.
+		 * Step 1: Create a payment session
+		 * 
+		 * @link https://docs.adyen.com/online-payments/web-drop-in#create-payment-session
 		 */
-		$request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
-
-		$payment_method = $payment->get_payment_method();
-
-		if ( null !== $payment_method ) {
-			// Payment method type.
-			$payment_method_type = PaymentMethodType::transform( $payment_method );
-
-			if ( null !== $payment_method_type ) {
-				$request->set_allowed_payment_methods( [ $payment_method_type ] );
-			}
-		}
-
-		// Prevent Apple Pay if no merchant identifier has been configured.
-		$apple_pay_merchant_id = $this->config->get_apple_pay_merchant_id();
-
-		if ( empty( $apple_pay_merchant_id ) ) {
-			$request->set_blocked_payment_methods( [ PaymentMethodType::APPLE_PAY ] );
-		}
-
-		// Set country code.
-		$request->set_country_code( Util::get_country_code( $payment ) );
-
-		$request->set_amount( AmountTransformer::transform( $payment->get_total_amount() ) );
-
 		try {
-			$payment_methods = $this->client->get_payment_methods( $request );
+			$request = new PaymentSessionRequest(
+				AmountTransformer::transform( $payment->get_total_amount() ),
+				$this->config->get_merchant_account(),
+				$payment_id,
+				$payment->get_return_redirect_url()
+			);
+
+			$payment_session = $this->client->create_payment_session( $request );
+
+
 		} catch ( \Exception $e ) {
 			Plugin::render_exception( $e );
 
 			exit;
 		}
-
-		$payment_method_types = $payment_methods->get_payment_method_types();
 
 		// Register scripts.
 		$url_script = sprintf(
@@ -325,10 +294,6 @@ class Gateway extends Core_Gateway {
 		);
 
 		$dependencies = [ 'pronamic-pay-adyen-checkout' ];
-
-		if ( \in_array( PaymentMethodType::GOOGLE_PAY, $payment_method_types, true ) ) {
-			$dependencies[] = 'pronamic-pay-adyen-google-pay';
-		}
 
 		wp_register_script(
 			'pronamic-pay-adyen-checkout-drop-in',
@@ -362,24 +327,13 @@ class Gateway extends Core_Gateway {
 		$configuration = [
 			'locale'                 => Util::get_payment_locale( $payment ),
 			'environment'            => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+			'session'                => (object) [
+				'id'          => $payment_session->get_id(),
+				'sessionData' => $payment_session->get_data(),
+			],
 			'clientKey'              => $this->config->client_key,
-			'paymentMethodsResponse' => $payment_methods->get_original_object(),
 			'amount'                 => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		];
-
-		/**
-		 * Auto submit drop-in.
-		 */
-		$auto_submit_methods = [
-			PaymentMethodType::SWISH,
-			PaymentMethodType::TWINT,
-			PaymentMethodType::VIPPS,
-			PaymentMethodType::UNIONPAY,
-		];
-
-		if ( 1 === \count( $payment_method_types ) && \in_array( $payment_method_types[0], $auto_submit_methods ) ) {
-			$configuration['showPayButton'] = false;
-		}
 
 		$configuration = (object) $configuration;
 
@@ -403,7 +357,6 @@ class Gateway extends Core_Gateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			[
-				'paymentMethodsConfiguration'   => $this->get_checkout_payment_methods_configuration( $payment_method_types, $payment ),
 				'paymentsUrl'                   => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
 				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' . $payment_id ),
 				'applePayMerchantValidationUrl' => empty( $this->config->apple_pay_merchant_id_certificate ) ? false : \rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),

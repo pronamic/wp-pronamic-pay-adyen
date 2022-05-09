@@ -54,12 +54,9 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	 * @param string $merchant_account The merchant account identifier, with which you want to process the transaction.
 	 * @param string $reference        The reference to uniquely identify a payment.
 	 * @param string $return_url       The URL to return to.
-	 * @param string $country_code     The collection that contains the type of the payment method and its specific information (e.g. idealIssuer).
 	 */
-	public function __construct( Amount $amount, $merchant_account, $reference, $return_url, $country_code ) {
+	public function __construct( Amount $amount, $merchant_account, $reference, $return_url ) {
 		parent::__construct( $amount, $merchant_account, $reference, $return_url );
-
-		$this->set_country_code( $country_code );
 	}
 
 	/**

@@ -128,13 +128,11 @@ class Client {
 	 * Create payment session.
 	 *
 	 * @param PaymentSessionRequest $request Payment session request.
-	 *
 	 * @return PaymentSessionResponse
-	 *
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment_session( PaymentSessionRequest $request ) {
-		$data = $this->send_request( 'v68/paymentSession', $request );
+		$data = $this->send_request( 'v68/sessions', $request );
 
 		return PaymentSessionResponse::from_object( $data );
 	}
@@ -143,9 +141,7 @@ class Client {
 	 * Get payment result.
 	 *
 	 * @param PaymentResultRequest $request Payment result request.
-	 *
 	 * @return PaymentResultResponse
-	 *
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function get_payment_result( PaymentResultRequest $request ) {

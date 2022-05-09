@@ -628,20 +628,6 @@ class Gateway extends Core_Gateway {
 			}
 		}
 
-		/**
-		 * Cards.
-		 *
-		 * @link https://docs.adyen.com/payment-methods/cards/web-drop-in#configuration
-		 */
-		if ( \in_array( PaymentMethodType::SCHEME, $payment_method_types, true ) ) {
-			$configuration['card'] = [
-				'hasHolderName'      => true,
-				'holderNameRequired' => true,
-				'hideCVC'            => false,
-				'name'               => __( 'Credit or debit card', 'pronamic_ideal' ),
-			];
-		}
-
 		return (object) $configuration;
 	}
 }

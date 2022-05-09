@@ -143,7 +143,7 @@ class ReturnController {
 			);
 		}
 
-		// Redirect result
+		// Redirect result.
 		$redirect_result = $request->get_param( 'redirectResult' );
 
 		// OK.

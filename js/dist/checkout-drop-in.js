@@ -23,7 +23,8 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
             },
             onError: function onError(error, component) {
               console.error(error.name, error.message, error.stack, component);
-            }
+            },
+            paymentMethodsConfiguration: pronamicPayAdyenCheckout.configuration.paymentMethodsConfiguration
           };
           _context.next = 3;
           return AdyenCheckout(configuration);

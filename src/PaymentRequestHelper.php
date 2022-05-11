@@ -30,6 +30,28 @@ class PaymentRequestHelper {
 	 * @throws \Exception Throws exception on invalid metadata.
 	 */
 	public static function complement( Payment $payment, AbstractPaymentRequest $request ) {
+		/**
+		 * Application info.
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments__reqParam_applicationInfo
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/sessions__reqParam_applicationInfo
+		 * @link https://docs.adyen.com/development-resources/building-adyen-solutions
+		 */
+		$application_info = new ApplicationInfo();
+
+		$application_info->merchant_application = (object) [
+			'name'    => 'Pronamic Pay',
+			'version' => \pronamic_pay_plugin()->get_version(),
+		];
+
+		$application_info->external_platform = (object) [
+			'integrator' => 'Pronamic',
+			'name'       => 'WordPress',
+			'version'    => \get_bloginfo( 'version' ),
+		];
+
+		$request->set_application_info( $application_info );
+
 		// Channel.
 		$request->set_channel( Channel::WEB );
 

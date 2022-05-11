@@ -12,7 +12,6 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
-use Pronamic\WordPress\Pay\Core\Server;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
@@ -269,6 +268,9 @@ class Gateway extends Core_Gateway {
 			$return_url
 		);
 
+		// Complement payment request.
+		PaymentRequestHelper::complement( $payment, $request );
+
 		// Payment method.
 		$payment_method = $payment->get_payment_method();
 
@@ -407,16 +409,6 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
-	 * Update status of the specified payment.
-	 *
-	 * @param Payment $payment Payment.
-	 * @return void
-	 */
-	public function update_status( Payment $payment ) {
-
-	}
-
-	/**
 	 * Create payment.
 	 *
 	 * @param Payment              $payment        Payment.
@@ -456,27 +448,6 @@ class Gateway extends Core_Gateway {
 
 		// Merchant order reference.
 		$payment_request->set_merchant_order_reference( $payment->format_string( $this->config->get_merchant_order_reference() ) );
-
-		/**
-		 * Application info.
-		 *
-		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_applicationInfo
-		 * @link https://docs.adyen.com/development-resources/building-adyen-solutions
-		 */
-		$application_info = new ApplicationInfo();
-
-		$application_info->merchant_application = (object) [
-			'name'    => 'Pronamic Pay',
-			'version' => \pronamic_pay_plugin()->get_version(),
-		];
-
-		$application_info->external_platform = (object) [
-			'integrator' => 'Pronamic',
-			'name'       => 'WordPress',
-			'version'    => \get_bloginfo( 'version' ),
-		];
-
-		$payment_request->set_application_info( $application_info );
 
 		// Set country code.
 		$payment_request->set_country_code( Util::get_country_code( $payment ) );

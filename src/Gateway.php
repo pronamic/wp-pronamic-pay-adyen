@@ -498,7 +498,7 @@ class Gateway extends Core_Gateway {
 	 * @throws \InvalidArgumentException Throws exception on invalid amount.
 	 * @throws \Exception Throws exception if payment creation request fails.
 	 */
-	public function create_payment( Payment $payment, PaymentMethod $payment_method, $data = null ) {
+	private function create_payment( Payment $payment, PaymentMethod $payment_method, $data = null ) {
 		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment request.

@@ -140,11 +140,8 @@ class Client {
 	/**
 	 * Get payment methods.
 	 *
-	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/paymentMethods
-	 * @link https://docs.adyen.com/checkout/drop-in-web#step-1-get-available-payment-methods
-	 *
+	 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/paymentMethods
 	 * @param PaymentMethodsRequest $request Payment methods request.
-	 *
 	 * @return PaymentMethodsResponse
 	 * @throws \Exception Throws error if request fails.
 	 */

@@ -25,13 +25,6 @@ use JsonSchema\Validator;
  */
 class PaymentMethodsResponse extends ResponseObject {
 	/**
-	 * Groups of payment methods.
-	 *
-	 * @var array<string, string|array<int, string>>
-	 */
-	private $groups;
-
-	/**
 	 * Detailed list of payment methods required to generate payment forms.
 	 *
 	 * @var PaymentMethod[]
@@ -39,13 +32,11 @@ class PaymentMethodsResponse extends ResponseObject {
 	private $payment_methods;
 
 	/**
-	 * Construct payment session response object.
+	 * Construct payment methods response object.
 	 *
-	 * @param array<string, string|array<int, string>> $groups          Groups.
-	 * @param PaymentMethod[]                          $payment_methods Payment methods.
+	 * @param PaymentMethod[] $payment_methods Payment methods.
 	 */
-	public function __construct( $groups, $payment_methods ) {
-		$this->groups          = $groups;
+	public function __construct( $payment_methods ) {
 		$this->payment_methods = $payment_methods;
 	}
 
@@ -105,13 +96,7 @@ class PaymentMethodsResponse extends ResponseObject {
 			$payment_methods[] = PaymentMethod::from_object( $payment_method_object );
 		}
 
-		$groups = [];
-
-		if ( isset( $object->groups ) ) {
-			$groups = $object->groups;
-		}
-
-		$response = new self( $groups, $payment_methods );
+		$response = new self( $payment_methods );
 
 		$response->set_original_object( $object );
 

@@ -50,28 +50,6 @@ class PaymentMethodsResponse extends ResponseObject {
 	}
 
 	/**
-	 * Get payment method types.
-	 *
-	 * @return array<int, string>
-	 */
-	public function get_payment_method_types() {
-		$types = [];
-
-		// Loop payment methods.
-		$payment_methods = $this->payment_methods;
-
-		foreach ( $payment_methods as $payment_method ) {
-			$type = $payment_method->get_type();
-
-			if ( null !== $type ) {
-				$types[] = $type;
-			}
-		}
-
-		return $types;
-	}
-
-	/**
 	 * Create payment methods response from object.
 	 *
 	 * @param object $object Object.

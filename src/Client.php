@@ -98,9 +98,7 @@ class Client {
 	 * Create payment.
 	 *
 	 * @param PaymentRequest $request Payment request.
-	 *
 	 * @return PaymentResponse
-	 *
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment( PaymentRequest $request ) {
@@ -113,9 +111,7 @@ class Client {
 	 * Submit additional payment details.
 	 *
 	 * @param PaymentDetailsRequest $request Payment request.
-	 *
 	 * @return PaymentResponse
-	 *
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function request_payment_details( PaymentDetailsRequest $request ) {

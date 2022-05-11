@@ -32,20 +32,20 @@ class PaymentRequest extends AbstractPaymentRequest {
 	 * The collection that contains the type of the payment method and its
 	 * specific information (e.g. idealIssuer).
 	 *
-	 * @var PaymentMethod
+	 * @var PaymentMethodDetails
 	 */
 	private $payment_method;
 
 	/**
 	 * Construct a payment request object.
 	 *
-	 * @param Amount        $amount           The amount information for the transaction.
-	 * @param string        $merchant_account The merchant account identifier, with which you want to process the transaction.
-	 * @param string        $reference        The reference to uniquely identify a payment.
-	 * @param string        $return_url       The URL to return to.
-	 * @param PaymentMethod $payment_method   The collection that contains the type of the payment method and its specific information (e.g. idealIssuer).
+	 * @param Amount               $amount           The amount information for the transaction.
+	 * @param string               $merchant_account The merchant account identifier, with which you want to process the transaction.
+	 * @param string               $reference        The reference to uniquely identify a payment.
+	 * @param string               $return_url       The URL to return to.
+	 * @param PaymentMethodDetails $payment_method   The collection that contains the type of the payment method and its specific information (e.g. idealIssuer).
 	 */
-	public function __construct( Amount $amount, $merchant_account, $reference, $return_url, PaymentMethod $payment_method ) {
+	public function __construct( Amount $amount, $merchant_account, $reference, $return_url, PaymentMethodDetails $payment_method ) {
 		parent::__construct( $amount, $merchant_account, $reference, $return_url );
 
 		$this->payment_method = $payment_method;
@@ -54,7 +54,7 @@ class PaymentRequest extends AbstractPaymentRequest {
 	/**
 	 * Get payment method.
 	 *
-	 * @return PaymentMethod
+	 * @return PaymentMethodDetails
 	 */
 	public function get_payment_method() {
 		return $this->payment_method;
@@ -97,7 +97,7 @@ class PaymentRequest extends AbstractPaymentRequest {
 		}
 
 		// Payment method.
-		$properties['paymentMethod'] = $this->get_payment_method()->get_json();
+		$properties['paymentMethod'] = $this->get_payment_method()->jsonSerialize();
 
 		// Return object.
 		$object = (object) $properties;

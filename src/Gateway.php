@@ -199,25 +199,39 @@ class Gateway extends Core_Gateway {
 		}
 
 		// Payment method.
-		$payment_method = [
-			'type' => $payment_method_type,
-		];
+		$payment_method_details = new PaymentMethodDetails( $payment_method_type );
 
 		if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-			$payment_method['issuer'] = (string) $payment->get_meta( 'issuer' );
+			$payment_method_details->issuer = (string) $payment->get_meta( 'issuer' );
 		}
-
-		$payment_method = new PaymentMethod( (object) $payment_method );
 
 		// Create payment.
-		$payment_response = $this->create_payment( $payment, $payment_method );
+		$payment_response = $this->create_payment( $payment, $payment_method_details );
 
-		// Set payment action URL.
-		$redirect = $payment_response->get_redirect();
+		$result_code =  $payment_response->get_result_code();
 
-		if ( null !== $redirect ) {
-			$payment->set_action_url( $redirect->get_url() );
+		if ( ResultCode::REDIRECT_SHOPPER !== $result_code ) {
+			throw new \Exception(
+				\sprintf(
+					'The handling of the `%s` result code is not implemented.',
+					$result_code
+				)
+			);
 		}
+
+		$action = $payment_response->get_action();
+
+		if ( null === $action ) {
+			throw new \Exception( 'Adyen did not provide an action to take for completing the payment.' );
+		}
+
+		$url = $action->get_url();
+
+		if ( null === $url ) {
+			throw new \Exception( 'Adyen did not provide an action URL.' );
+		}
+
+		$payment->set_action_url( $url );
 	}
 
 	/**
@@ -332,8 +346,6 @@ class Gateway extends Core_Gateway {
 			'paymentMethodsConfiguration' => $this->get_payment_methods_configuration( [], $payment ),
 		];
 
-
-
 		$configuration = (object) $configuration;
 
 		/**
@@ -398,115 +410,36 @@ class Gateway extends Core_Gateway {
 	 * Update status of the specified payment.
 	 *
 	 * @param Payment $payment Payment.
-	 *
 	 * @return void
 	 */
 	public function update_status( Payment $payment ) {
-		// Process payload on return.
-		if ( filter_has_var( INPUT_GET, 'payload' ) ) {
-			$payload = filter_input( INPUT_GET, 'payload', FILTER_SANITIZE_STRING );
 
-			$payment_result_request = new PaymentResultRequest( $payload );
-
-			try {
-				$payment_result_response = $this->client->get_payment_result( $payment_result_request );
-
-				PaymentResultHelper::update_payment( $payment, $payment_result_response );
-			} catch ( \Exception $e ) {
-				$note = sprintf(
-					/* translators: %s: exception message */
-					__( 'Error getting payment result: %s', 'pronamic_ideal' ),
-					$e->getMessage()
-				);
-
-				$payment->add_note( $note );
-			}
-
-			return;
-		}
-
-		// Retrieve status from payment details.
-		$payment_response = $payment->get_meta( 'adyen_payment_response' );
-
-		if ( is_object( $payment_response ) ) {
-			$payment_response = PaymentResponse::from_object( $payment_response );
-
-			$details_result = $payment->get_meta( 'adyen_details_result' );
-
-			// Set details result meta from GET or POST request parameters.
-			if ( '' === $details_result ) {
-				$details_result = [];
-
-				$details = $payment_response->get_details();
-
-				if ( null !== $details ) {
-					$input_type = ( 'POST' === Server::get( 'REQUEST_METHOD' ) ? INPUT_POST : INPUT_GET );
-
-					foreach ( $details as $detail ) {
-						$key = (string) $detail->get_key();
-
-						$details_result[ $key ] = \filter_input( $input_type, $key, FILTER_SANITIZE_STRING );
-					}
-
-					$details_result = Util::filter_null( $details_result );
-				}
-
-				if ( ! empty( $details_result ) ) {
-					$payment->set_meta( 'adyen_details_result', \wp_json_encode( (object) $details_result ) );
-				}
-			}
-
-			$payment_data = $payment_response->get_payment_data();
-
-			// Do not attempt to retrieve status without any request data,
-			// payment status already updated when additional details were submitted (i.e. cards).
-			if ( empty( $details_result ) && empty( $payment_data ) ) {
-				return;
-			}
-
-			// Update payment status from payment details.
-			$payment_details_request = new PaymentDetailsRequest();
-
-			$payment_details_request->set_details( (object) $details_result );
-
-			$payment_details_request->set_payment_data( $payment_data );
-
-			try {
-				$payment_details_response = $this->client->request_payment_details( $payment_details_request );
-
-				PaymentResponseHelper::update_payment( $payment, $payment_details_response );
-			} catch ( \Exception $e ) {
-				$note = sprintf(
-					/* translators: %s: exception message */
-					__( 'Error getting payment details: %s', 'pronamic_ideal' ),
-					$e->getMessage()
-				);
-
-				$payment->add_note( $note );
-			}
-		}
 	}
 
 	/**
 	 * Create payment.
 	 *
-	 * @param Payment       $payment        Payment.
-	 * @param PaymentMethod $payment_method Payment method.
-	 * @param object        $data           Adyen `state.data` object from drop-in.
+	 * @param Payment              $payment        Payment.
+	 * @param PaymentMethodDetails $payment_method Payment method.
+	 * @param object               $data           Adyen `state.data` object from drop-in.
 	 *
 	 * @return PaymentResponse
 	 * @throws \InvalidArgumentException Throws exception on invalid amount.
 	 * @throws \Exception Throws exception if payment creation request fails.
 	 */
-	private function create_payment( Payment $payment, PaymentMethod $payment_method, $data = null ) {
+	private function create_payment( Payment $payment, PaymentMethodDetails $payment_method, $data = null ) {
 		$amount = AmountTransformer::transform( $payment->get_total_amount() );
 
 		// Payment request.
+		$payment_id = (string) $payment->get_id();
+
+		$return_url = \rest_url( Integration::REST_ROUTE_NAMESPACE . '/return/' . $payment_id );
+
 		$payment_request = new PaymentRequest(
 			$amount,
 			$this->config->get_merchant_account(),
-			(string) $payment->get_id(),
-			$payment->get_return_url(),
+			$payment_id,
+			$return_url,
 			$payment_method
 		);
 

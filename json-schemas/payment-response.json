@@ -5,27 +5,25 @@
 	"type": "object",
 	"properties": {
 		"action": {
-			"$ref": "action.json"
-		},
-		"details": {
-			"type": "array",
-			"description": "When non-empty, contains all the fields that you must submit to the /payments/details endpoint.",
-			"items": {
-				"anyOf": [
-					{
-						"$ref": "details.json"
-					}
-				]
-			}
+			"$ref": "payment-response-action.json"
 		},
 		"resultCode": {
 			"type": "string",
 			"description": "The result of the payment.",
-			"enum": ["Authorised", "Refused", "RedirectShopper", "Received", "Cancelled", "Pending", "Error"]
-		},
-		"paymentData": {
-			"type": "string",
-			"description": "When non-empty, contains a value that you must submit to the `/payments/details` endpoint."
+			"enum": [
+				"AuthenticationFinished",
+				"AuthenticationNotRequired",
+				"Authorised",
+				"Cancelled",
+				"ChallengeShopper",
+				"Error",
+				"IdentifyShopper",
+				"Pending",
+				"PresentToShopper",
+				"Received",
+				"RedirectShopper",
+				"Refused"
+			]
 		},
 		"pspReference": {
 			"type": "string",
@@ -33,8 +31,13 @@
 			"minLength": 16,
 			"maxLength": 16
 		},
-		"redirect": {
-			"$ref": "redirect.json"
+		"refusalReason": {
+			"type": "string",
+			"description": "If the payment's authorisation is refused or an error occurs during authorisation, this field holds Adyen's mapped reason for the refusal or a description of the error."
+		},
+		"refusalReasonCode": {
+			"type": "string",
+			"description": "Code that specifies the refusal reason."
 		}
 	},
 	"required": [

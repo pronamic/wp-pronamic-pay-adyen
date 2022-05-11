@@ -25,13 +25,6 @@ use JsonSchema\Validator;
  */
 class PaymentResponse extends ResponseObject {
 	/**
-	 * Details.
-	 *
-	 * @var array<int, DetailsInformation>|null
-	 */
-	private $details;
-
-	/**
 	 * Adyen's 16-character string reference associated with the transaction/request. This value is globally unique; quote it when communicating with us about this request.
 	 *
 	 * `pspReference` is returned only for non-redirect payment methods.
@@ -41,25 +34,11 @@ class PaymentResponse extends ResponseObject {
 	private $psp_reference;
 
 	/**
-	 * When the payment flow requires a redirect, this object contains information about the redirect URL.
-	 *
-	 * @var RedirectInformation|null
-	 */
-	private $redirect;
-
-	/**
 	 * The action.
 	 *
-	 * @var ActionInformation|null
+	 * @var PaymentResponseAction|null
 	 */
 	private $action;
-
-	/**
-	 * Payment data.
-	 *
-	 * @var string|null
-	 */
-	private $payment_data;
 
 	/**
 	 * Refusal reason.
@@ -82,44 +61,6 @@ class PaymentResponse extends ResponseObject {
 	 */
 	public function __construct( $result_code ) {
 		$this->result_code = $result_code;
-	}
-
-	/**
-	 * Get details.
-	 *
-	 * @return array<int, DetailsInformation>|null
-	 */
-	public function get_details() {
-		return $this->details;
-	}
-
-	/**
-	 * Set details.
-	 *
-	 * @param array<int, DetailsInformation>|null $details Details.
-	 * @return void
-	 */
-	public function set_details( $details ) {
-		$this->details = $details;
-	}
-
-	/**
-	 * Get payment data.
-	 *
-	 * @return string|null
-	 */
-	public function get_payment_data() {
-		return $this->payment_data;
-	}
-
-	/**
-	 * Set payment data.
-	 *
-	 * @param string|null $payment_data Payment data.
-	 * @return void
-	 */
-	public function set_payment_data( $payment_data ) {
-		$this->payment_data = $payment_data;
 	}
 
 	/**
@@ -170,28 +111,9 @@ class PaymentResponse extends ResponseObject {
 	}
 
 	/**
-	 * Get redirect.
-	 *
-	 * @return RedirectInformation|null
-	 */
-	public function get_redirect() {
-		return $this->redirect;
-	}
-
-	/**
-	 * Set redirect.
-	 *
-	 * @param RedirectInformation|null $redirect Redirect information.
-	 * @return void
-	 */
-	public function set_redirect( RedirectInformation $redirect = null ) {
-		$this->redirect = $redirect;
-	}
-
-	/**
 	 * Get action.
 	 *
-	 * @return ActionInformation|null
+	 * @return PaymentResponseAction|null
 	 */
 	public function get_action() {
 		return $this->action;
@@ -200,10 +122,10 @@ class PaymentResponse extends ResponseObject {
 	/**
 	 * Set action.
 	 *
-	 * @param ActionInformation|null $action Action information.
+	 * @param PaymentResponseAction|null $action Action information.
 	 * @return void
 	 */
-	public function set_action( ActionInformation $action = null ) {
+	public function set_action( PaymentResponseAction $action = null ) {
 		$this->action = $action;
 	}
 
@@ -234,29 +156,11 @@ class PaymentResponse extends ResponseObject {
 		}
 
 		if ( isset( $object->action ) ) {
-			$payment_response->set_action( ActionInformation::from_object( $object->action ) );
-		}
-
-		if ( isset( $object->details ) ) {
-			$details = [];
-
-			foreach ( $object->details as $detail ) {
-				$details[] = DetailsInformation::from_object( $detail );
-			}
-
-			$payment_response->set_details( $details );
+			$payment_response->set_action( PaymentResponseAction::from_object( $object->action ) );
 		}
 
 		if ( isset( $object->refusalReason ) ) {
 			$payment_response->set_refusal_reason( $object->refusalReason );
-		}
-
-		if ( isset( $object->redirect ) ) {
-			$payment_response->set_redirect( RedirectInformation::from_object( $object->redirect ) );
-		}
-
-		if ( isset( $object->paymentData ) ) {
-			$payment_response->set_payment_data( $object->paymentData );
 		}
 
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.

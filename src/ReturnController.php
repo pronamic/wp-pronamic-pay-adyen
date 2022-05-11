@@ -64,7 +64,7 @@ class ReturnController {
 					'sessionId'      => [
 						'description' => __( 'The unique identifier for the shopper\'s payment session.', 'pronamic_ideal' ),
 						'type'        => 'string',
-						'required'    => true,
+						'required'    => false,
 					],
 					'redirectResult' => [
 						'description' => __( 'Details you need to submit to handle the redirect.', 'pronamic_ideal' ),

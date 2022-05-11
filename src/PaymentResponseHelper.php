@@ -51,21 +51,6 @@ class PaymentResponseHelper {
 
 		$payment->add_note( $note );
 
-		// Payment method.
-		$action = $response->get_action();
-
-		if ( null !== $action ) {
-			$payment_method_type = $action->get_payment_method_type();
-
-			if ( null !== $payment_method_type ) {
-				$payment_method = PaymentMethodType::to_wp( $payment_method_type );
-
-				if ( null !== $payment_method ) {
-					$payment->set_payment_method( $payment_method );
-				}
-			}
-		}
-
 		// PSP reference.
 		$psp_reference = $response->get_psp_reference();
 

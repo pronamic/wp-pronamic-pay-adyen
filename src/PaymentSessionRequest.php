@@ -48,18 +48,6 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	private $sdk_version;
 
 	/**
-	 * Construct a payment request object.
-	 *
-	 * @param Amount $amount           The amount information for the transaction.
-	 * @param string $merchant_account The merchant account identifier, with which you want to process the transaction.
-	 * @param string $reference        The reference to uniquely identify a payment.
-	 * @param string $return_url       The URL to return to.
-	 */
-	public function __construct( Amount $amount, $merchant_account, $reference, $return_url ) {
-		parent::__construct( $amount, $merchant_account, $reference, $return_url );
-	}
-
-	/**
 	 * Get allowed payment methods.
 	 *
 	 * @return array<int, string>|null

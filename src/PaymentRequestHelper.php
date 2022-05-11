@@ -26,10 +26,27 @@ class PaymentRequestHelper {
 	 *
 	 * @param Payment                $payment WordPress Pay payment to convert.
 	 * @param AbstractPaymentRequest $request Adyen payment request.
+	 * @param Config                 $config  Configuration object.
 	 * @return void
 	 * @throws \Exception Throws exception on invalid metadata.
 	 */
-	public static function complement( Payment $payment, AbstractPaymentRequest $request ) {
+	public static function complement( Payment $payment, AbstractPaymentRequest $request, Config $config ) {
+		/**
+		 * Merchant order reference.
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments__reqParam_merchantOrderReference
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/sessions__reqParam_merchantOrderReference
+		 */
+		$request->set_merchant_order_reference( $payment->format_string( $config->get_merchant_order_reference() ) );
+
+		/**
+		 * Country code.
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments__reqParam_countryCode
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/sessions__resParam_countryCode
+		 */
+		$request->set_country_code( Util::get_country_code( $payment ) );
+
 		/**
 		 * Application info.
 		 *

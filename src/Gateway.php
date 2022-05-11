@@ -174,6 +174,7 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @param Payment $payment Payment.
 	 * @return void
+	 * @throws \Exception Throws an exception if Adyen's resposne cannot be handled.
 	 */
 	public function start( Payment $payment ) {
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
@@ -207,7 +208,7 @@ class Gateway extends Core_Gateway {
 		// Create payment.
 		$payment_response = $this->create_payment( $payment, $payment_method_details );
 
-		$result_code =  $payment_response->get_result_code();
+		$result_code = $payment_response->get_result_code();
 
 		if ( ResultCode::REDIRECT_SHOPPER !== $result_code ) {
 			throw new \Exception(
@@ -231,6 +232,16 @@ class Gateway extends Core_Gateway {
 		}
 
 		$payment->set_action_url( $url );
+	}
+
+	/**
+	 * Get payment return URL.
+	 *
+	 * @param string $payment_id Payment ID.
+	 * @return string
+	 */
+	private function get_payment_return_url( $payment_id ) {
+		return \rest_url( Integration::REST_ROUTE_NAMESPACE . '/return/' . $payment_id );
 	}
 
 	/**
@@ -259,17 +270,15 @@ class Gateway extends Core_Gateway {
 		 * 
 		 * @link https://docs.adyen.com/online-payments/web-drop-in#create-payment-session
 		 */
-		$return_url = \rest_url( Integration::REST_ROUTE_NAMESPACE . '/return/' . $payment_id );
-
 		$request = new PaymentSessionRequest(
 			AmountTransformer::transform( $payment->get_total_amount() ),
 			$this->config->get_merchant_account(),
 			$payment_id,
-			$return_url
+			$this->get_payment_return_url( $payment_id )
 		);
 
 		// Complement payment request.
-		PaymentRequestHelper::complement( $payment, $request );
+		PaymentRequestHelper::complement( $payment, $request, $this->config );
 
 		// Payment method.
 		$payment_method = $payment->get_payment_method();
@@ -413,59 +422,32 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @param Payment              $payment        Payment.
 	 * @param PaymentMethodDetails $payment_method Payment method.
-	 * @param object               $data           Adyen `state.data` object from drop-in.
-	 *
 	 * @return PaymentResponse
 	 * @throws \InvalidArgumentException Throws exception on invalid amount.
 	 * @throws \Exception Throws exception if payment creation request fails.
 	 */
-	private function create_payment( Payment $payment, PaymentMethodDetails $payment_method, $data = null ) {
-		$amount = AmountTransformer::transform( $payment->get_total_amount() );
-
-		// Payment request.
+	private function create_payment( Payment $payment, PaymentMethodDetails $payment_method ) {
 		$payment_id = (string) $payment->get_id();
 
-		$return_url = \rest_url( Integration::REST_ROUTE_NAMESPACE . '/return/' . $payment_id );
-
 		$payment_request = new PaymentRequest(
-			$amount,
+			AmountTransformer::transform( $payment->get_total_amount() ),
 			$this->config->get_merchant_account(),
 			$payment_id,
-			$return_url,
+			$this->get_payment_return_url( $payment_id ),
 			$payment_method
 		);
 
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
+		PaymentRequestHelper::complement( $payment, $payment_request, $this->config );
 
-		// Set browser info.
-		if ( \is_object( $data ) && isset( $data->browserInfo ) ) {
-			$browser_info = BrowserInformation::from_object( $data->browserInfo );
-
-			$payment_request->set_browser_info( $browser_info );
-		}
-
-		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-
-		// Merchant order reference.
-		$payment_request->set_merchant_order_reference( $payment->format_string( $this->config->get_merchant_order_reference() ) );
-
-		// Set country code.
-		$payment_request->set_country_code( Util::get_country_code( $payment ) );
-
-		// Complement payment request.
-		PaymentRequestHelper::complement( $payment, $payment_request );
-
-		// Create payment.
 		$payment_response = $this->client->create_payment( $payment_request );
 
-		/*
+		/**
 		 * Store payment response for later requests to `/payments/details`.
 		 *
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments/details
 		 */
 		$payment->set_meta( 'adyen_payment_response', $payment_response->get_json() );
 
-		// Update payment status based on response.
 		PaymentResponseHelper::update_payment( $payment, $payment_response );
 
 		return $payment_response;

@@ -316,11 +316,13 @@ class Gateway extends Core_Gateway {
 			false
 		);
 
-		wp_register_script(
+		$file = '../js/dist/checkout-drop-in.js';
+
+		\wp_register_script(
 			'pronamic-pay-adyen-checkout-drop-in',
-			plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
+			\plugins_url( $file, __FILE__ ),
 			[ 'pronamic-pay-adyen-checkout' ],
-			\pronamic_pay_plugin()->get_version(),
+			\hash_file( 'crc32b', __DIR__ . '/' . $file ),
 			true
 		);
 
@@ -382,7 +384,7 @@ class Gateway extends Core_Gateway {
 				'paymentsUrl'                   => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
 				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' . $payment_id ),
 				'applePayMerchantValidationUrl' => empty( $this->config->apple_pay_merchant_id_certificate ) ? false : \rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
-				'paymentReturnUrl'              => $return_url,
+				'paymentReturnUrl'              => $request->get_return_url(),
 				'refusalRedirectUrl'            => $refusal_redirect_url,
 				'configuration'                 => $configuration,
 				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),

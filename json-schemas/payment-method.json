@@ -4,17 +4,14 @@
 	"title": "Adyen payment method.",
 	"type": "object",
 	"properties": {
-		"type": {
-			"type": "string"
-		},
 		"name": {
 			"type": "string"
 		},
-		"details": {
+		"type": {
+			"type": "string"
+		},
+		"issuers": {
 			"type": "array"
 		}
-	},
-	"required": [
-		"type"
-	]
+	}
 }

@@ -1,0 +1,24 @@
+{
+	"$id": "https://github.com/wp-pay-gateways/adyen/blob/master/json-schemas/payment-method-issuer.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Adyen payment method issuer.",
+	"type": "object",
+	"properties": {
+		"disabled": {
+			"type": "boolean",
+			"description": "A boolean value indicating whether this issuer is unavailable. Can be true whenever the issuer is offline."
+		},
+		"id": {
+			"type": "string",
+			"description": "The unique identifier of this issuer, to submit in requests to /payments."
+		},
+		"name": {
+			"type": "string",
+			"description": "A localized name of the issuer."
+		}
+	},
+	"required": [
+		"id",
+		"name"
+	]
+}

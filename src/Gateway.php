@@ -139,7 +139,6 @@ class Gateway extends Core_Gateway {
 			 * Check if payment method is iDEAL.
 			 *
 			 * @param PaymentMethod $payment_method Payment method.
-			 *
 			 * @return boolean True if payment method is iDEAL, false otherwise.
 			 */
 			function( $payment_method ) {
@@ -148,19 +147,14 @@ class Gateway extends Core_Gateway {
 		);
 
 		foreach ( $payment_methods as $payment_method ) {
-			$details = $payment_method->get_details();
+			$payment_method_issuers = $payment_method->get_issuers();
 
-			if ( is_array( $details ) ) {
-				foreach ( $details as $detail ) {
-					if ( ! isset( $detail->key, $detail->type, $detail->items ) ) {
-						continue;
-					}
+			if ( is_array( $payment_method_issuers ) ) {
+				foreach ( $payment_method_issuers as $payment_method_issuer ) {
+					$id   = $payment_method_issuer->get_id();
+					$name = $payment_method_issuer->get_name();
 
-					if ( 'issuer' === $detail->key && 'select' === $detail->type ) {
-						foreach ( $detail->items as $item ) {
-							$issuers[ \strval( $item->id ) ] = \strval( $item->name );
-						}
-					}
+					$issuers[ $id ] = $name;
 				}
 			}
 		}

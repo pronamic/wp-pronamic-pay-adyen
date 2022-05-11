@@ -50,9 +50,6 @@ class PaymentMethodTest extends TestCase {
 			]
 		);
 
-		$payment_method->set_details( [] );
-
 		$this->assertEquals( PaymentMethodType::IDEAL, $payment_method->get_type() );
-		$this->assertEquals( [], $payment_method->get_details() );
 	}
 }

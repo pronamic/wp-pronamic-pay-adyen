@@ -30,11 +30,11 @@ class PaymentMethod extends ResponseObject {
 	private $type;
 
 	/**
-	 * Details.
+	 * A list of issuers for this payment method.
 	 *
-	 * @var array<int, object>|null
+	 * @var PaymentMethodIssuer[]|null
 	 */
-	private $details;
+	private $issuers;
 
 	/**
 	 * Construct a payment method.
@@ -60,22 +60,12 @@ class PaymentMethod extends ResponseObject {
 	}
 
 	/**
-	 * Get details.
+	 * Get issuers.
 	 *
-	 * @return array<int, object>|null
+	 * @return PaymentMethodIssuer[]|null
 	 */
-	public function get_details() {
-		return $this->details;
-	}
-
-	/**
-	 * Set details.
-	 *
-	 * @param array<int, object> $details Details.
-	 * @return void
-	 */
-	public function set_details( $details ) {
-		$this->details = $details;
+	public function get_issuers() {
+		return $this->issuers;
 	}
 
 	/**
@@ -98,8 +88,12 @@ class PaymentMethod extends ResponseObject {
 
 		$payment_method = new self( $object );
 
-		if ( isset( $object->details ) ) {
-			$payment_method->set_details( $object->details );
+		if ( \property_exists( $object, 'issuers' ) ) {
+			$payment_method->issuers = [];
+
+			foreach ( $object->issuers as $issuer_object ) {
+				$payment_method->issuers[] = PaymentMethodIssuer::from_object( $issuer_object );
+			}
 		}
 
 		$payment_method->set_original_object( $object );

@@ -381,17 +381,9 @@ class Gateway extends Core_Gateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			[
-				'paymentsUrl'                   => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/' . $payment_id ),
-				'paymentsDetailsUrl'            => rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/details/' . $payment_id ),
-				'applePayMerchantValidationUrl' => empty( $this->config->apple_pay_merchant_id_certificate ) ? false : \rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
-				'paymentReturnUrl'              => $request->get_return_url(),
-				'refusalRedirectUrl'            => $refusal_redirect_url,
 				'configuration'                 => $configuration,
-				'paymentAuthorised'             => __( 'Payment completed successfully.', 'pronamic_ideal' ),
-				'paymentReceived'               => __( 'The order has been received and we are waiting for the payment to clear.', 'pronamic_ideal' ),
-				'paymentRefused'                => __( 'The payment has been refused. Please try again using a different method or card.', 'pronamic_ideal' ),
-				'syntaxError'                   => __( 'Received an invalid response while processing your request. Please try reloading this page.', 'pronamic_ideal' ),
-				'unknownError'                  => __( 'An unknown error occurred while processing your request. Please try reloading this page.', 'pronamic_ideal' ),
+				'paymentReturnUrl'              => $request->get_return_url(),
+				'applePayMerchantValidationUrl' => empty( $this->config->apple_pay_merchant_id_certificate ) ? false : \rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
 			]
 		);
 

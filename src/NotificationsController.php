@@ -192,6 +192,16 @@ class NotificationsController {
 			if ( EventCode::AUTHORIZATION === $item->get_event_code() && PaymentStatus::SUCCESS !== $payment->get_status() ) {
 				$payment->set_status( $item->is_success() ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE );
 
+				$adyen_payment_method = $item->get_payment_method();
+
+				if ( null !== $adyen_payment_method ) {
+					$pronamic_payment_method = PaymentMethodType::to_wp( $adyen_payment_method );
+
+					if ( null !== $pronamic_payment_method ) {
+						$payment->set_payment_method( $$pronamic_payment_method );
+					}
+				}
+
 				$payment->save();
 			}
 		}

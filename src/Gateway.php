@@ -379,10 +379,8 @@ class Gateway extends Core_Gateway {
 			]
 		);
 
-		// Add checkout head action.
 		add_action( 'pronamic_pay_adyen_checkout_head', [ $this, 'checkout_head' ] );
 
-		// No cache.
 		Core_Util::no_cache();
 
 		require __DIR__ . '/../views/checkout-drop-in.php';

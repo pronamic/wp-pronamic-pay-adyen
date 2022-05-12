@@ -388,11 +388,11 @@ class Integration extends AbstractGatewayIntegration {
 
 		$config->mode = $this->get_mode();
 
-		$config->api_key                                    = $this->get_meta( $post_id, 'adyen_api_key' );
-		$config->api_live_url_prefix                        = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
-		$config->merchant_account                           = $this->get_meta( $post_id, 'adyen_merchant_account' );
-		$config->client_key                                 = $this->get_meta( $post_id, 'adyen_client_key' );
-		$config->merchant_order_reference                   = $this->get_meta( $post_id, 'adyen_merchant_order_reference' );
+		$config->api_key                  = $this->get_meta( $post_id, 'adyen_api_key' );
+		$config->api_live_url_prefix      = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );
+		$config->merchant_account         = $this->get_meta( $post_id, 'adyen_merchant_account' );
+		$config->client_key               = $this->get_meta( $post_id, 'adyen_client_key' );
+		$config->merchant_order_reference = $this->get_meta( $post_id, 'adyen_merchant_order_reference' );
 
 		return $config;
 	}

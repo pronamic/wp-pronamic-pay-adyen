@@ -30,12 +30,20 @@ class Client {
 	private $config;
 
 	/**
+	 * Endpoint.
+	 *
+	 * @var Endpoint
+	 */
+	private $endpoint;
+
+	/**
 	 * Constructs and initializes an Adyen client object.
 	 *
 	 * @param Config $config Adyen config.
 	 */
 	public function __construct( Config $config ) {
-		$this->config = $config;
+		$this->config   = $config;
+		$this->endpoint = new Endpoint( $config->mode, $config->api_live_url_prefix );
 	}
 
 	/**
@@ -48,7 +56,7 @@ class Client {
 	 */
 	private function send_request( $method, $request ) {
 		// Request.
-		$url = $this->config->get_api_url( $method );
+		$url = $this->endpoint->get_api_url( 'v68', $method );
 
 		$response = Http::request(
 			$url,
@@ -103,7 +111,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment( PaymentRequest $request ) {
-		$data = $this->send_request( 'v68/payments', $request );
+		$data = $this->send_request( 'payments', $request );
 
 		return PaymentResponse::from_object( $data );
 	}
@@ -116,7 +124,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function request_payment_details( PaymentDetailsRequest $request ) {
-		$data = $this->send_request( 'v68/payments/details', $request );
+		$data = $this->send_request( 'payments/details', $request );
 
 		return PaymentDetailsResponse::from_object( $data );
 	}
@@ -129,7 +137,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment_session( PaymentSessionRequest $request ) {
-		$data = $this->send_request( 'v68/sessions', $request );
+		$data = $this->send_request( 'sessions', $request );
 
 		return PaymentSessionResponse::from_object( $data );
 	}
@@ -143,7 +151,7 @@ class Client {
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function get_payment_methods( PaymentMethodsRequest $request ) {
-		$data = $this->send_request( 'v68/paymentMethods', $request );
+		$data = $this->send_request( 'paymentMethods', $request );
 
 		return PaymentMethodsResponse::from_object( $data );
 	}

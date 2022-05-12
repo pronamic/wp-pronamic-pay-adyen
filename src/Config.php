@@ -22,6 +22,13 @@ use Pronamic\WordPress\Pay\Core\GatewayConfig;
  */
 class Config extends GatewayConfig {
 	/**
+	 * Mode.
+	 *
+	 * @var string
+	 */
+	public $mode;
+
+	/**
 	 * API Live URL Prefix.
 	 *
 	 * @var string|null
@@ -81,24 +88,5 @@ class Config extends GatewayConfig {
 	 */
 	public function get_merchant_order_reference() {
 		return (string) $this->merchant_order_reference;
-	}
-
-	/**
-	 * Get API URL.
-	 *
-	 * @param string $method API method.
-	 * @return string
-	 * @throws \Exception Throws exception when mode is live and API live URL prefix is empty.
-	 */
-	public function get_api_url( $method ) {
-		if ( Core_Gateway::MODE_TEST === $this->mode ) {
-			return sprintf( Endpoint::API_URL_TEST, $method );
-		}
-
-		if ( empty( $this->api_live_url_prefix ) ) {
-			throw new \Exception( 'Adyen API Live URL prefix is required for live configurations.' );
-		}
-
-		return sprintf( Endpoint::API_URL_LIVE, $this->api_live_url_prefix, $method );
 	}
 }

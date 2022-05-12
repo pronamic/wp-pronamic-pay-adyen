@@ -46,7 +46,7 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @var Client
 	 */
-	private $client;
+	public $client;
 
 	/**
 	 * Constructs and initializes an Adyen gateway.
@@ -206,10 +206,13 @@ class Gateway extends Core_Gateway {
 		}
 
 		// Payment method.
-		$payment_method_details = new PaymentMethodDetails( $payment_method_type );
+		switch ( $payment_method_type ) {
+			case PaymentMethodType::IDEAL:
+				$payment_method_details = new PaymentMethodIDealDetails( (string) $payment->get_meta( 'issuer' ) );
 
-		if ( PaymentMethodType::IDEAL === $payment_method_type ) {
-			$payment_method_details->issuer = (string) $payment->get_meta( 'issuer' );
+				break;
+			default:
+				$payment_method_details = new PaymentMethodDetails( $payment_method_type );
 		}
 
 		// Create payment.

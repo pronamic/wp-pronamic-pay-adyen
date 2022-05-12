@@ -105,42 +105,6 @@ class Config extends GatewayConfig {
 	}
 
 	/**
-	 * Get Apple Pay merchant identifier.
-	 *
-	 * @return string|null
-	 */
-	public function get_apple_pay_merchant_id() {
-		return $this->apple_pay_merchant_id;
-	}
-
-	/**
-	 * Get Apple Pay merchant identity certificate.
-	 *
-	 * @return string|null
-	 */
-	public function get_apple_pay_merchant_id_certificate() {
-		return $this->apple_pay_merchant_id_certificate;
-	}
-
-	/**
-	 * Get Apple Pay merchant identity private key.
-	 *
-	 * @return string|null
-	 */
-	public function get_apple_pay_merchant_id_private_key() {
-		return $this->apple_pay_merchant_id_private_key;
-	}
-
-	/**
-	 * Get Apple Pay merchant identity private key password.
-	 *
-	 * @return string|null
-	 */
-	public function get_apple_pay_merchant_id_private_key_password() {
-		return $this->apple_pay_merchant_id_private_key_password;
-	}
-
-	/**
 	 * Get API URL.
 	 *
 	 * @param string $method API method.

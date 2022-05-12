@@ -370,13 +370,6 @@ class Gateway extends Core_Gateway {
 		 */
 		$configuration = apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
 
-		// Refused payment redirect URL.
-		$refusal_redirect_url = null;
-
-		if ( 'woocommerce' === $payment->get_source() ) {
-			$refusal_redirect_url = $payment->get_return_url();
-		}
-
 		wp_localize_script(
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',

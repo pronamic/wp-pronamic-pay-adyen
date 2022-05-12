@@ -116,7 +116,13 @@ class ServiceException extends Exception {
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		return new self( $object->status, $object->errorCode, $object->message, $object->errorType );
+		$data = new ObjectAccess( $object );
+
+		return new self(
+			$data->get_property( 'status' ),
+			$data->get_property( 'errorCode' ),
+			$data->get_property( 'message' ),
+			$data->get_property( 'errorType' )
+		);
 	}
 }

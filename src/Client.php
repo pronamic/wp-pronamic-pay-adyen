@@ -97,6 +97,7 @@ class Client {
 	/**
 	 * Create payment.
 	 *
+	 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments
 	 * @param PaymentRequest $request Payment request.
 	 * @return PaymentResponse
 	 * @throws \Exception Throws error if request fails.
@@ -117,7 +118,7 @@ class Client {
 	public function request_payment_details( PaymentDetailsRequest $request ) {
 		$data = $this->send_request( 'v68/payments/details', $request );
 
-		return PaymentResponse::from_object( $data );
+		return PaymentDetailsResponse::from_object( $data );
 	}
 
 	/**

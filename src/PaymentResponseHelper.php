@@ -24,12 +24,11 @@ class PaymentResponseHelper {
 	/**
 	 * Update payment to the payment response.
 	 *
-	 * @param Payment         $payment  Payment.
-	 * @param PaymentResponse $response Response.
-	 *
+	 * @param Payment                 $payment  Payment.
+	 * @param AbstractPaymentResponse $response Response.
 	 * @return void
 	 */
-	public static function update_payment( Payment $payment, PaymentResponse $response ) {
+	public static function update_payment( Payment $payment, AbstractPaymentResponse $response ) {
 		// Add note.
 		$note = sprintf(
 			'<p>%s</p>',

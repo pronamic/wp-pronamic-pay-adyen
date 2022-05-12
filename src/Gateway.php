@@ -381,9 +381,8 @@ class Gateway extends Core_Gateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			[
-				'configuration'                 => $configuration,
-				'paymentReturnUrl'              => $request->get_return_url(),
-				'applePayMerchantValidationUrl' => empty( $this->config->apple_pay_merchant_id_certificate ) ? false : \rest_url( Integration::REST_ROUTE_NAMESPACE . '/payments/applepay/merchant-validation/' . $payment_id ),
+				'configuration'    => $configuration,
+				'paymentReturnUrl' => $request->get_return_url(),
 			]
 		);
 

@@ -356,7 +356,7 @@ class Gateway extends Core_Gateway {
 			],
 			'clientKey'                   => $this->config->client_key,
 			'amount'                      => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
-			'paymentMethodsConfiguration' => $this->get_payment_methods_configuration( [], $payment ),
+			'paymentMethodsConfiguration' => $this->get_payment_methods_configuration( $payment ),
 		];
 
 		$configuration = (object) $configuration;
@@ -454,12 +454,10 @@ class Gateway extends Core_Gateway {
 	/**
 	 * Get checkout payment methods configuration.
 	 *
-	 * @param array<int, string> $payment_method_types Payment method types.
-	 * @param Payment            $payment              Payment.
-	 *
+	 * @param Payment $payment Payment.
 	 * @return object
 	 */
-	private function get_payment_methods_configuration( $payment_method_types, Payment $payment ) {
+	private function get_payment_methods_configuration( Payment $payment ) {
 		$configuration = [];
 
 		/**
@@ -467,32 +465,30 @@ class Gateway extends Core_Gateway {
 		 *
 		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#drop-in-configuration
 		 */
-		if ( \in_array( PaymentMethodType::APPLE_PAY, $payment_method_types, true ) ) {
-			$configuration['applepay'] = [];
+		$configuration['applepay'] = [];
 
-			/**
-			 * Line Items.
-			 *
-			 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#ap-payment-request-data
-			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentrequest/1916120-lineitems
-			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaylineitem
-			 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaylineitem/1916086-amount
-			 */
-			$lines = $payment->get_lines();
+		/**
+		 * Line Items.
+		 *
+		 * @link https://docs.adyen.com/payment-methods/apple-pay/web-drop-in#ap-payment-request-data
+		 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentrequest/1916120-lineitems
+		 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaylineitem
+		 * @link https://developer.apple.com/documentation/apple_pay_on_the_web/applepaylineitem/1916086-amount
+		 */
+		$lines = $payment->get_lines();
 
-			if ( null !== $lines ) {
-				$line_items = [];
+		if ( null !== $lines ) {
+			$line_items = [];
 
-				foreach ( $lines as $line ) {
-					$line_items[] = [
-						'label'  => $line->get_name(),
-						'amount' => $line->get_total_amount()->number_format( null, '.', '' ),
-						'type'   => 'final',
-					];
-				}
-
-				$configuration['applepay']['lineItems'] = $line_items;
+			foreach ( $lines as $line ) {
+				$line_items[] = [
+					'label'  => $line->get_name(),
+					'amount' => $line->get_total_amount()->number_format( null, '.', '' ),
+					'type'   => 'final',
+				];
 			}
+
+			$configuration['applepay']['lineItems'] = $line_items;
 		}
 
 		return (object) $configuration;

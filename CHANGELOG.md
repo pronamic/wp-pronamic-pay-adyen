@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased][unreleased]
+
+## [4.0.0-RC-1] - 2022-05-12
 ### Removed
 - ⚠️ Removed the web SDK gateway, which functioned without origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!
 - ⚠️ Removed support for Adyen origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!
@@ -142,7 +144,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.0.0-RC-1...HEAD
+[4.0.0-RC-1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.1...4.0.0-RC-1
 [3.1.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.0.0...3.0.1

@@ -1,6 +1,6 @@
 <?php
 /**
- * Line items.
+ * Line items
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2022 Pronamic
@@ -11,11 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Line items.
- *
- * @author  Reüel van der Steege
- * @version 1.0.5
- * @since   1.0.0
+ * Line items class
  */
 class LineItems implements \JsonSerializable {
 	/**

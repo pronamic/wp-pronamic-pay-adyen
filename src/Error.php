@@ -16,11 +16,7 @@ use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 
 /**
- * Error
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
+ * Error class
  */
 class Error extends Exception {
 	/**

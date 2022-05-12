@@ -11,14 +11,10 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Application info
+ * Application info class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_applicationInfo
  * @link https://docs.adyen.com/development-resources/building-adyen-solutions
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class ApplicationInfo implements \JsonSerializable {
 	/**

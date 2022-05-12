@@ -11,11 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Response object
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
+ * Response object class
  */
 abstract class ResponseObject {
 	/**

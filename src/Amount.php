@@ -11,13 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Amount
+ * Amount class
  *
  * @link https://docs.adyen.com/developers/api-reference/common-api/amount
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class Amount implements \JsonSerializable {
 	/**

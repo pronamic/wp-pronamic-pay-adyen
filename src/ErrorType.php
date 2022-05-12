@@ -11,13 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Error type
+ * Error type class
  *
  * @link https://docs.adyen.com/developers/api-reference/common-api/serviceexception
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class ErrorType {
 	/**

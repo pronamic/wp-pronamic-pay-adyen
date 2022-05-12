@@ -14,11 +14,7 @@ use WP_Error;
 use WP_REST_Request;
 
 /**
- * Site Health controller
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.5
+ * Site Health controller class
  */
 class SiteHealthController {
 	/**

@@ -11,13 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Details information
+ * Details information class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
- *
- * @author  Reüel van der Steege
- * @version 1.1.0
- * @since   1.1.0
  */
 class DetailsInformation extends ResponseObject {
 	/**

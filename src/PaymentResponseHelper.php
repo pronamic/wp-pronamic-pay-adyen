@@ -14,11 +14,7 @@ use Pronamic\WordPress\Pay\Payments\FailureReason;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
- * Payment response helper
- *
- * @author  Reüel van der Steege
- * @version 1.1.0
- * @since   1.1.0
+ * Payment response helper class
  */
 class PaymentResponseHelper {
 	/**

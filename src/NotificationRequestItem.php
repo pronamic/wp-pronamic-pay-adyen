@@ -13,13 +13,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use DateTime;
 
 /**
- * Notification request item
+ * Notification request item class
  *
  * @link https://docs.adyen.com/developers/api-reference/notifications-api#notificationrequestitem
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class NotificationRequestItem extends ResponseObject {
 	/**

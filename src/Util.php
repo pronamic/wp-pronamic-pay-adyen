@@ -13,11 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
- * Util
- *
- * @author  Remco Tolsma
- * @version 2.0.1
- * @since   1.0.0
+ * Util class
  */
 class Util {
 	/**

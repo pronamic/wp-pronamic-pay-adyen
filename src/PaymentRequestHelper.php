@@ -14,11 +14,7 @@ use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
- * Payment request helper
- *
- * @author  Remco Tolsma
- * @version 1.1.1
- * @since   1.0.0
+ * Payment request helper class
  */
 class PaymentRequestHelper {
 	/**

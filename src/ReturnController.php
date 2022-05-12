@@ -15,11 +15,7 @@ use WP_Error;
 use WP_REST_Request;
 
 /**
- * Return controller
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
+ * Return controller class
  */
 class ReturnController {
 	/**

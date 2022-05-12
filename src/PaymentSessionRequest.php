@@ -11,13 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Payment session request
+ * Payment session request class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**

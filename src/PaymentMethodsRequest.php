@@ -11,13 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Payment methods request
+ * Payment methods request class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/paymentMethods
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class PaymentMethodsRequest extends Request {
 	/**

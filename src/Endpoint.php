@@ -11,7 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Endpoint
+ * Endpoint class
  *
  * @link https://docs.adyen.com/developers/development-resources/live-endpoints
  */

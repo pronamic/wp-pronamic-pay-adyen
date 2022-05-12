@@ -15,13 +15,9 @@ use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 
 /**
- * Payment session response
+ * Payment session response class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class PaymentSessionResponse extends ResponseObject {
 	/**

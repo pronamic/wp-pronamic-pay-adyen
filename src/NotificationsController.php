@@ -18,13 +18,9 @@ use WP_Error;
 use WP_REST_Request;
 
 /**
- * Notification controller
+ * Notification controller class
  *
  * @link https://docs.adyen.com/developers/api-reference/notifications-api#notificationrequest
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class NotificationsController {
 	/**

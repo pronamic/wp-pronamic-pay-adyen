@@ -15,11 +15,7 @@ use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 
 /**
- * Payment method issuer
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
+ * Payment method issuer class
  */
 class PaymentMethodIssuer {
 	/**

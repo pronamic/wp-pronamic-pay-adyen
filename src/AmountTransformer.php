@@ -14,11 +14,7 @@ use InvalidArgumentException;
 use Pronamic\WordPress\Money\Money;
 
 /**
- * Amount transformer
- *
- * @author  Reüel van der Steege
- * @version 1.0.0
- * @since   1.0.0
+ * Amount transformer class
  */
 class AmountTransformer {
 	/**

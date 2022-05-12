@@ -18,11 +18,7 @@ use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
 
 /**
- * Gateway
- *
- * @author  Remco Tolsma
- * @version 2.0.2
- * @since   1.0.0
+ * Gateway class
  */
 class Gateway extends Core_Gateway {
 	/**

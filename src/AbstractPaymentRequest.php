@@ -14,14 +14,10 @@ use DateTime;
 use InvalidArgumentException;
 
 /**
- * Abstract payment request
+ * Abstract payment request class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
- *
- * @author  Remco Tolsma
- * @version 1.1.2
- * @since   1.0.0
  */
 abstract class AbstractPaymentRequest extends Request {
 	/**

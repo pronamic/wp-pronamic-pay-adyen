@@ -13,11 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use JsonSerializable;
 
 /**
- * Payment method details
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
+ * Payment method details class
  */
 class PaymentMethodDetails implements JsonSerializable {
 	/**

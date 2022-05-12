@@ -11,10 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Payment response action
- *
- * @version 1.1.0
- * @since   1.1.0
+ * Payment response action class
  */
 class PaymentResponseAction extends ResponseObject {
 	/**

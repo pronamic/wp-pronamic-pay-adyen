@@ -13,13 +13,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 
 /**
- * Payment method type
+ * Payment method type class
  *
  * @link https://docs.adyen.com/developers/classic-integration/directory-lookup#DirectoryLookup-Step2:Displaylocalpaymentmethods
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class PaymentMethodType {
 	/**

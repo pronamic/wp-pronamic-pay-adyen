@@ -11,14 +11,10 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Browser information
+ * Browser information class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_browserInfo
  * @link https://docs.adyen.com/development-resources/building-adyen-solutions
- *
- * @author  Reüel van der Steege
- * @version 1.1.1
- * @since   1.1.1
  */
 class BrowserInformation implements \JsonSerializable {
 	/**

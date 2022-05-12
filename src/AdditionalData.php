@@ -1,6 +1,6 @@
 <?php
 /**
- * Additional data.
+ * Additional data
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2022 Pronamic
@@ -11,15 +11,11 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Additional data.
+ * Additional data class
  *
  * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v67/post/payments__reqParam_additionalData
  * @link https://docs.adyen.com/payment-methods/cards/send-additional-data-for-cards
  * @link https://docs.adyen.com/development-resources/test-cards/test-card-numbers#test-submitting-level-2-3-data
- *
- * @author  Reüel van der Steege
- * @version 1.4.0
- * @since   1.4.0
  */
 class AdditionalData implements \JsonSerializable {
 	/**

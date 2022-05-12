@@ -13,13 +13,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use InvalidArgumentException;
 
 /**
- * Name
+ * Name class
  *
  * @link https://docs.adyen.com/developers/api-reference/common-api/name
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class Name {
 	/**

@@ -112,7 +112,7 @@ class Client {
 	 * Submit additional payment details.
 	 *
 	 * @param PaymentDetailsRequest $request Payment request.
-	 * @return PaymentResponse
+	 * @return PaymentDetailsResponse
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function request_payment_details( PaymentDetailsRequest $request ) {

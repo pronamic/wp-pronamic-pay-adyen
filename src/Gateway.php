@@ -42,6 +42,13 @@ class Gateway extends Core_Gateway {
 	private $config;
 
 	/**
+	 * Client.
+	 *
+	 * @var Client
+	 */
+	private $client;
+
+	/**
 	 * Constructs and initializes an Adyen gateway.
 	 *
 	 * @param Config $config Config.
@@ -257,6 +264,8 @@ class Gateway extends Core_Gateway {
 		if ( null === $payment_id ) {
 			return;
 		}
+
+		$payment_id = (string) $payment_id;
 
 		// Redirect if payment is already successful.
 		if ( PaymentStatus::SUCCESS === $payment->get_status() ) {

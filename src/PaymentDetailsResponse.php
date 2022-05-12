@@ -24,7 +24,7 @@ class PaymentDetailsResponse extends AbstractPaymentResponse {
 	 * Create payment details response from object.
 	 *
 	 * @param object $object Object.
-	 * @return PaymentResponse
+	 * @return self
 	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
 	 */
 	public static function from_object( $object ) {

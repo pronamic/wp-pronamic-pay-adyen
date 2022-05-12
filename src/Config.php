@@ -43,39 +43,18 @@ class Config extends GatewayConfig {
 	public $merchant_order_reference;
 
 	/**
+	 * API key.
+	 *
+	 * @var string
+	 */
+	public $api_key;
+
+	/**
 	 * Client key.
 	 *
 	 * @var string
 	 */
 	public $client_key;
-
-	/**
-	 * Apple Pay merchant identifier.
-	 *
-	 * @var string|null
-	 */
-	public $apple_pay_merchant_id;
-
-	/**
-	 * Apple Pay merchant identity certificate.
-	 *
-	 * @var string|null
-	 */
-	public $apple_pay_merchant_id_certificate;
-
-	/**
-	 * Apple Pay merchant identity private key.
-	 *
-	 * @var string|null
-	 */
-	public $apple_pay_merchant_id_private_key;
-
-	/**
-	 * Apple Pay merchant identity private key password.
-	 *
-	 * @var string|null
-	 */
-	public $apple_pay_merchant_id_private_key_password;
 
 	/**
 	 * Get API key.

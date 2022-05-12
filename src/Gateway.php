@@ -39,7 +39,7 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @var Config
 	 */
-	protected $config;
+	private $config;
 
 	/**
 	 * Constructs and initializes an Adyen gateway.

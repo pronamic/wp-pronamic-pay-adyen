@@ -447,20 +447,6 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
-	 * Send payment details.
-	 *
-	 * @param PaymentDetailsRequest $payment_details_request Payment details request.
-	 *
-	 * @return PaymentResponse
-	 * @throws \Exception Throws error if request fails.
-	 */
-	public function send_payment_details( PaymentDetailsRequest $payment_details_request ) {
-		$payment_response = $this->client->request_payment_details( $payment_details_request );
-
-		return $payment_response;
-	}
-
-	/**
 	 * Get checkout payment methods configuration.
 	 *
 	 * @param Payment $payment Payment.

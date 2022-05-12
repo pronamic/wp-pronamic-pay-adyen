@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased][unreleased]
+### Removed
+- ⚠️ Removed the web SDK gateway, which functioned without origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!
+- ⚠️ Removed support for Adyen origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!
+- ⚠️ Removed support for your own Apple Pay certificate, because the [benefits of using Adyen's Apple Pay certificate](https://docs.adyen.com/payment-methods/apple-pay/web-drop-in):
+  - A faster way to add Apple Pay to your integration.
+  - There is less configuration required.
+  - You get access to new features.
+  - Apple Pay enabled by default for your Pay by Link integration, if you have one.
+
+### Changed
+- Switched to [Adyen web drop-in version `v5.14.0`](https://github.com/Adyen/adyen-web/releases/tag/v5.14.0).
+- Switched to [Adyen Checkout API version `v68`](https://docs.adyen.com/api-explorer/#/CheckoutService/v68/overview).
+- The Pronamic Pay payment method is updated from the Adyen webhook notification item.
+
+### Added
+- Added REST API endpoint `pronamic-pay/adyen/v1/return/<<payment_id>`, to handle customers who come back after payment.
 
 ## [3.1.1] - 2022-04-12
 - Updated version number in `readme.txt`.

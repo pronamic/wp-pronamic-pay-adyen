@@ -312,7 +312,7 @@ class Gateway extends Core_Gateway {
 			'pronamic-pay-adyen-checkout',
 			$url_script,
 			[],
-			self::SDK_VERSION,
+			null,
 			false
 		);
 

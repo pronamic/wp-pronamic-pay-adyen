@@ -229,7 +229,11 @@ class ReturnController {
 			);
 		}
 
-		// Result code.
+		/**
+		 * Result code.
+		 * 
+		 * @link https://docs.adyen.com/online-payments/payment-result-codes
+		 */
 		$result_code = $request->get_param( 'resultCode' );
 
 		$status = ResultCode::transform( $result_code );

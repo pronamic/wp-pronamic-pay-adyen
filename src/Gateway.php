@@ -431,13 +431,6 @@ class Gateway extends Core_Gateway {
 
 		$payment_response = $this->client->create_payment( $payment_request );
 
-		/**
-		 * Store payment response for later requests to `/payments/details`.
-		 *
-		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments/details
-		 */
-		$payment->set_meta( 'adyen_payment_response', $payment_response->get_json() );
-
 		PaymentResponseHelper::update_payment( $payment, $payment_response );
 
 		return $payment_response;

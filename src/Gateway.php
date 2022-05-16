@@ -128,23 +128,13 @@ class Gateway extends Core_Gateway {
 	public function get_issuers() {
 		$issuers = [];
 
-		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+		$payment_methods_request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
+
+		$payment_methods_request->set_allowed_payment_methods( [ PaymentMethodType::IDEAL ] );
+		
+		$payment_methods_response = $this->client->get_payment_methods( $payment_methods_request );
 
 		$payment_methods = $payment_methods_response->get_payment_methods();
-
-		// Limit to iDEAL payment methods.
-		$payment_methods = array_filter(
-			$payment_methods,
-			/**
-			 * Check if payment method is iDEAL.
-			 *
-			 * @param PaymentMethod $payment_method Payment method.
-			 * @return boolean True if payment method is iDEAL, false otherwise.
-			 */
-			function( $payment_method ) {
-				return ( PaymentMethodType::IDEAL === $payment_method->get_type() );
-			}
-		);
 
 		foreach ( $payment_methods as $payment_method ) {
 			$payment_method_issuers = $payment_method->get_issuers();

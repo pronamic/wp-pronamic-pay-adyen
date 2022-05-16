@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The Pronamic Pay payment method is updated from the Adyen webhook notification item.
 
 ### Added
-- Added REST API endpoint `pronamic-pay/adyen/v1/return/<<payment_id>`, to handle customers who come back after payment.
+- Added REST API endpoint `pronamic-pay/adyen/v1/return/<payment_id>`, to handle customers who come back after payment.
 
 ## [3.1.1] - 2022-04-12
 - Updated version number in `readme.txt`.

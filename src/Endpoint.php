@@ -31,13 +31,20 @@ class Endpoint {
 	const API_URL_LIVE = 'https://[prefix]-checkout-live.adyenpayments.com/checkout/[version]/[method]';
 
 	/**
-	 * Mode.
+	 * Web URL.
+	 *
+	 * @var string
+	 */
+	const WEB_URL = 'https://checkoutshopper-[environment].adyen.com/checkoutshopper/sdk/[version]/[file]';
+
+	/**
+	 * Environment.
 	 *
 	 * These endpoints differ for test and live accounts.
 	 *
 	 * @var string
 	 */
-	private $mode;
+	private $environment;
 
 	/**
 	 * Live URL prefix.
@@ -53,11 +60,11 @@ class Endpoint {
 	/**
 	 * Construct endpoint.
 	 *
-	 * @param string      $mode            Mode.
+	 * @param string      $environment     Environment.
 	 * @param string|null $live_url_prefix Live URL prefix.
 	 */
-	public function __construct( $mode, $live_url_prefix ) {
-		$this->mode            = $mode;
+	public function __construct( $environment, $live_url_prefix ) {
+		$this->environment     = $environment;
 		$this->live_url_prefix = $live_url_prefix;
 	}
 
@@ -67,10 +74,10 @@ class Endpoint {
 	 * @param string $version Version.
 	 * @param string $method  API method.
 	 * @return string
-	 * @throws \Exception Throws exception when mode is live and API live URL prefix is empty.
+	 * @throws \Exception Throws exception when environment is live and API live URL prefix is empty.
 	 */
 	public function get_api_url( $version, $method ) {
-		if ( 'test' === $this->mode ) {
+		if ( 'test' === $this->environment ) {
 			return \strtr(
 				self::API_URL_TEST,
 				[
@@ -90,6 +97,26 @@ class Endpoint {
 				'[prefix]'  => $this->live_url_prefix,
 				'[version]' => $version,
 				'[method]'  => $method,
+			]
+		);
+	}
+
+	/**
+	 * Get front-end URL.
+	 * 
+	 * @link https://docs.adyen.com/online-payments/web-drop-in?tab=embed_script_and_stylesheet_2
+	 * @link https://docs.adyen.com/development-resources/live-endpoints#checkout-js-endpoints
+	 * @param string $version Version.
+	 * @param string $file    File.
+	 * @return string
+	 */
+	public function get_web_url( $version, $file ) {
+		return \strtr(
+			self::WEB_URL,
+			[
+				'[environment]' => $this->environment,
+				'[version]'     => $version,
+				'[file]'        => $file,
 			]
 		);
 	}

@@ -296,12 +296,11 @@ class Gateway extends Core_Gateway {
 			exit;
 		}
 
+		// Endpoint.
+		$endpoint = new Endpoint( $this->config->environment, $this->config->api_live_url_prefix );
+
 		// Register scripts.
-		$url_script = sprintf(
-			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.js',
-			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			self::SDK_VERSION
-		);
+		$url_script = $endpoint->get_web_url( self::SDK_VERSION, 'adyen.js' );
 
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
 		wp_register_script(
@@ -323,11 +322,7 @@ class Gateway extends Core_Gateway {
 		);
 
 		// Register styles.
-		$url_stylesheet = sprintf(
-			'https://checkoutshopper-%s.adyen.com/checkoutshopper/sdk/%s/adyen.css',
-			( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
-			self::SDK_VERSION
-		);
+		$url_stylesheet = $endpoint->get_web_url( self::SDK_VERSION, 'adyen.css' );
 
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
 		wp_register_style(
@@ -345,7 +340,7 @@ class Gateway extends Core_Gateway {
 		 */
 		$configuration = [
 			'locale'                      => Util::get_payment_locale( $payment ),
-			'environment'                 => ( self::MODE_TEST === $payment->get_mode() ? 'test' : 'live' ),
+			'environment'                 => $this->config->environment,
 			'session'                     => (object) [
 				'id'          => $payment_session->get_id(),
 				'sessionData' => $payment_session->get_data(),

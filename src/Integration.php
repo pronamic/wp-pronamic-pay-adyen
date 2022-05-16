@@ -228,6 +228,25 @@ class Integration extends AbstractGatewayIntegration {
 		];
 
 		if ( 'live' === $this->get_mode() ) {
+			// Environment.
+			$fields[] = [
+				'section'  => 'general',
+				'filter'   => \FILTER_SANITIZE_STRING,
+				'meta_key' => '_pronamic_gateway_adyen_environment',
+				'title'    => \_x( 'Environment', 'adyen', 'pronamic_ideal' ),
+				'type'     => 'select',
+				'options'  => [
+					[
+						'options' => [
+							'live'      => \__( 'Live - Europe', 'pronamic_ideal' ),
+							'live-apse' => \__( 'Live - Asia Pacific South East', 'pronamic_ideal' ),
+							'live-au'   => \__( 'Live - Australia', 'pronamic_ideal' ),
+							'live-us'   => \__( 'Live - United States', 'pronamic_ideal' ),
+						],
+					],
+				],
+			];
+
 			// Live API URL prefix.
 			$fields[] = [
 				'section'     => 'general',
@@ -382,7 +401,7 @@ class Integration extends AbstractGatewayIntegration {
 	public function get_config( $post_id ) {
 		$config = new Config();
 
-		$config->mode = $this->get_mode();
+		$config->environment = ( 'test' === $this->get_mode() ) ? 'test' : $this->get_meta( $post_id, 'adyen_environment' );
 
 		$config->api_key                  = $this->get_meta( $post_id, 'adyen_api_key' );
 		$config->api_live_url_prefix      = $this->get_meta( $post_id, 'adyen_api_live_url_prefix' );

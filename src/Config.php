@@ -18,11 +18,11 @@ use Pronamic\WordPress\Pay\Core\GatewayConfig;
  */
 class Config extends GatewayConfig {
 	/**
-	 * Mode.
-	 *
+	 * Environment.
+	 * 
 	 * @var string
 	 */
-	public $mode;
+	public $environment;
 
 	/**
 	 * API Live URL Prefix.

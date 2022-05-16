@@ -39,7 +39,7 @@ class Client {
 	 */
 	public function __construct( Config $config ) {
 		$this->config   = $config;
-		$this->endpoint = new Endpoint( $config->mode, $config->api_live_url_prefix );
+		$this->endpoint = new Endpoint( $config->environment, $config->api_live_url_prefix );
 	}
 
 	/**

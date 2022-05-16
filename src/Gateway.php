@@ -110,9 +110,7 @@ class Gateway extends Core_Gateway {
 				continue;
 			}
 
-			$core_payment_method = PaymentMethodType::to_wp( $type );
-
-			$core_payment_methods[] = $core_payment_method;
+			$core_payment_methods[] = PaymentMethodType::to_wp( $type );
 		}
 
 		$core_payment_methods = array_filter( $core_payment_methods );

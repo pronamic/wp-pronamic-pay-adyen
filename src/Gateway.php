@@ -303,7 +303,7 @@ class Gateway extends Core_Gateway {
 		$url_script = $endpoint->get_web_url( self::SDK_VERSION, 'adyen.js' );
 
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
-		wp_register_script(
+		\wp_register_script(
 			'pronamic-pay-adyen-checkout',
 			$url_script,
 			[],
@@ -325,7 +325,7 @@ class Gateway extends Core_Gateway {
 		$url_stylesheet = $endpoint->get_web_url( self::SDK_VERSION, 'adyen.css' );
 
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
-		wp_register_style(
+		\wp_register_style(
 			'pronamic-pay-adyen-checkout',
 			$url_stylesheet,
 			[],
@@ -359,9 +359,9 @@ class Gateway extends Core_Gateway {
 		 * @link https://docs.adyen.com/online-payments/drop-in-web#step-2-add-drop-in
 		 * @since 1.2.0 Added.
 		 */
-		$configuration = apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
+		$configuration = \apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
 
-		wp_localize_script(
+		\wp_localize_script(
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			[
@@ -370,7 +370,7 @@ class Gateway extends Core_Gateway {
 			]
 		);
 
-		add_action( 'pronamic_pay_adyen_checkout_head', [ $this, 'checkout_head' ] );
+		\add_action( 'pronamic_pay_adyen_checkout_head', [ $this, 'checkout_head' ] );
 
 		Core_Util::no_cache();
 
@@ -385,11 +385,11 @@ class Gateway extends Core_Gateway {
 	 * @return void
 	 */
 	public function checkout_head() {
-		wp_print_styles( 'pronamic-pay-redirect' );
+		\wp_print_styles( 'pronamic-pay-redirect' );
 
-		wp_print_scripts( 'pronamic-pay-adyen-checkout' );
+		\wp_print_scripts( 'pronamic-pay-adyen-checkout' );
 
-		wp_print_styles( 'pronamic-pay-adyen-checkout' );
+		\wp_print_styles( 'pronamic-pay-adyen-checkout' );
 	}
 
 	/**

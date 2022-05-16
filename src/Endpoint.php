@@ -40,8 +40,6 @@ class Endpoint {
 	/**
 	 * Environment.
 	 *
-	 * These endpoints differ for test and live accounts.
-	 *
 	 * @var string
 	 */
 	private $environment;

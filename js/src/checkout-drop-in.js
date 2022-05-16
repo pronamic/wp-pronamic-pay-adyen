@@ -13,7 +13,7 @@
 			window.location.href = pronamicPayAdyenCheckout.paymentReturnUrl;
 		},
 		onError: ( error, component ) => {
-			console.error( error.name, error.message, error.stack, component );
+			dropinComponent.setStatus( 'error', { message: error.message } );
 		}
 	};
 

@@ -194,7 +194,7 @@ class NotificationsController {
 					$pronamic_payment_method = PaymentMethodType::to_wp( $adyen_payment_method );
 
 					if ( null !== $pronamic_payment_method ) {
-						$payment->set_payment_method( $$pronamic_payment_method );
+						$payment->set_payment_method( $pronamic_payment_method );
 					}
 				}
 

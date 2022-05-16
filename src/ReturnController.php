@@ -70,10 +70,38 @@ class ReturnController {
 				],
 			]
 		);
+
+		/**
+		 * Adyen redirect route.
+		 * 
+		 * @link https://docs.adyen.com/online-payments/web-drop-in#handle-redirect-result
+		 */
+		\register_rest_route(
+			Integration::REST_ROUTE_NAMESPACE,
+			'/redirect/(?P<payment_id>\d+)',
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'rest_api_adyen_redirect' ],
+				'permission_callback' => function() {
+					return true;
+				},
+				'args'                => [
+					'payment_id' => [
+						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
+						'type'        => 'integer',
+						'required'    => true,
+					],
+					'resultCode' => [
+						'type'     => 'string',
+						'required' => true,
+					],
+				],
+			]
+		);
 	}
 
 	/**
-	 * REST API Adyen notifications handler.
+	 * REST API Adyen return handler.
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return object
@@ -160,6 +188,54 @@ class ReturnController {
 				'pronamic-pay-adyen-payment-details-exception',
 				$e->getMessage()
 			);
+		}
+
+		/**
+		 * 303 See Other.
+		 *
+		 * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+		 */
+		return new \WP_REST_Response( null, 303, [ 'Location' => $payment->get_return_redirect_url() ] );
+	}
+
+	/**
+	 * REST API Adyen redirect handler.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return object
+	 */
+	public function rest_api_adyen_redirect( WP_REST_Request $request ) {
+		$payment_id = $request->get_param( 'payment_id' );
+
+		// Payment ID.
+		if ( null === $payment_id ) {
+			return new WP_Error(
+				'pronamic-pay-adyen-no-payment-id',
+				__( 'No payment ID given in `payment_id` parameter.', 'pronamic_ideal' )
+			);
+		}
+
+		$payment = \get_pronamic_payment( $payment_id );
+
+		if ( null === $payment ) {
+			return new WP_Error(
+				'pronamic-pay-adyen-payment-not-found',
+				sprintf(
+					/* translators: %s: payment ID */
+					__( 'Could not find payment with ID `%s`.', 'pronamic_ideal' ),
+					$payment_id
+				),
+				$payment_id
+			);
+		}
+
+		// Result code.
+		$result_code = $request->get_param( 'resultCode' );
+
+		$status = ResultCode::transform( $result_code );
+
+		if ( null !== $status ) {
+			$payment->set_status( $status );
 		}
 
 		/**

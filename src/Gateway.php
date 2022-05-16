@@ -380,8 +380,8 @@ class Gateway extends Core_Gateway {
 			'pronamic-pay-adyen-checkout',
 			'pronamicPayAdyenCheckout',
 			[
-				'configuration'    => $configuration,
-				'paymentReturnUrl' => $request->get_return_url(),
+				'configuration'      => $configuration,
+				'paymentRedirectUrl' => \rest_url( Integration::REST_ROUTE_NAMESPACE . '/redirect/' . $payment_id ),
 			]
 		);
 

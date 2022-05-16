@@ -10,7 +10,11 @@
 	const configuration = {
 		...pronamicPayAdyenCheckout.configuration,
 		onPaymentCompleted: ( result, component ) => {
-			window.location.href = pronamicPayAdyenCheckout.paymentReturnUrl;
+			let redirectUrl = new URL( pronamicPayAdyenCheckout.paymentRedirectUrl );
+
+			redirectUrl.searchParams.set( 'resultCode', result.resultCode );
+
+			window.location.href = redirectUrl;
 		},
 		onError: ( error, component ) => {
 			dropinComponent.setStatus( 'error', { message: error.message } );

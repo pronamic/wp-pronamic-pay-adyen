@@ -22,10 +22,14 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
            */
           configuration = _objectSpread(_objectSpread({}, pronamicPayAdyenCheckout.configuration), {}, {
             onPaymentCompleted: function onPaymentCompleted(result, component) {
-              window.location.href = pronamicPayAdyenCheckout.paymentReturnUrl;
+              var redirectUrl = new URL(pronamicPayAdyenCheckout.paymentRedirectUrl);
+              redirectUrl.searchParams.set('resultCode', result.resultCode);
+              window.location.href = redirectUrl;
             },
             onError: function onError(error, component) {
-              console.error(error.name, error.message, error.stack, component);
+              dropinComponent.setStatus('error', {
+                message: error.message
+              });
             }
           });
           _context.next = 3;

@@ -432,6 +432,7 @@ class Gateway extends Core_Gateway {
 			$payment_method_type,
 			[
 				PaymentMethodType::SWISH,
+				PaymentMethodType::UNIONPAY,
 			],
 			true
 		);

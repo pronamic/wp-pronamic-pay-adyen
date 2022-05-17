@@ -282,6 +282,7 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @param Payment $payment Payment.
 	 * @return void
+	 * @throws \Exception When something goes wrong.
 	 */
 	public function payment_redirect( Payment $payment ) {
 		// Check payment ID.
@@ -312,7 +313,6 @@ class Gateway extends Core_Gateway {
 			$this->get_payment_return_url( $payment_id )
 		);
 
-		// Complement payment request.
 		PaymentRequestHelper::complement( $payment, $request, $this->config );
 
 		// Payment method.

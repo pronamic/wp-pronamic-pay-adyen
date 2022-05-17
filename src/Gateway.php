@@ -183,6 +183,11 @@ class Gateway extends Core_Gateway {
 			 * @link https://docs.adyen.com/payment-methods/alipay/api-only
 			 */
 			PaymentMethodType::ALIPAY,
+			/**
+			 * Payment method type iDEAL.
+			 *
+			 * @link https://docs.adyen.com/payment-methods/ideal/api-only
+			 */
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,
 			/**

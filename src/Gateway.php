@@ -329,6 +329,18 @@ class Gateway extends Core_Gateway {
 		}
 
 		try {
+			if ( empty( $this->config->environment ) ) {
+				throw new \Exception(
+					'No Adyen environment configured.'
+				);
+			}
+
+			if ( empty( $this->config->client_key ) ) {
+				throw new \Exception(
+					'No Adyen client key configured.'
+				);
+			}
+
 			$payment_session = $this->client->create_payment_session( $request );
 		} catch ( \Exception $e ) {
 			Plugin::render_exception( $e );

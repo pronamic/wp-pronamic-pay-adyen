@@ -172,9 +172,7 @@ class Gateway extends Core_Gateway {
 		$payment->set_action_url( $payment->get_pay_redirect_url() );
 
 		/**
-		 * API Integration
-		 *
-		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
+		 * API only.
 		 */
 		$api_integration_payment_method_types = [
 			/**

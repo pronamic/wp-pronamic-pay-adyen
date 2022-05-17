@@ -321,7 +321,6 @@ class Gateway extends Core_Gateway {
 		$payment_method_type = null;
 
 		if ( null !== $payment_method ) {
-			// Payment method type.
 			$payment_method_type = PaymentMethodType::transform( $payment_method );
 
 			if ( null !== $payment_method_type ) {

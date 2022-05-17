@@ -171,7 +171,7 @@ class Gateway extends Core_Gateway {
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
 		$payment->set_action_url( $payment->get_pay_redirect_url() );
 
-		/*
+		/**
 		 * API Integration
 		 *
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
@@ -200,7 +200,21 @@ class Gateway extends Core_Gateway {
 		}
 
 		// Create payment.
-		$payment_response = $this->create_payment( $payment, $payment_method_details );
+		$payment_id = (string) $payment->get_id();
+
+		$payment_request = new PaymentRequest(
+			AmountTransformer::transform( $payment->get_total_amount() ),
+			$this->config->get_merchant_account(),
+			$payment_id,
+			$this->get_payment_return_url( $payment_id ),
+			$payment_method_details
+		);
+
+		PaymentRequestHelper::complement( $payment, $payment_request, $this->config );
+
+		$payment_response = $this->client->create_payment( $payment_request );
+
+		PaymentResponseHelper::update_payment( $payment, $payment_response );
 
 		$result_code = $payment_response->get_result_code();
 
@@ -390,35 +404,6 @@ class Gateway extends Core_Gateway {
 		\wp_print_scripts( 'pronamic-pay-adyen-checkout' );
 
 		\wp_print_styles( 'pronamic-pay-adyen-checkout' );
-	}
-
-	/**
-	 * Create payment.
-	 *
-	 * @param Payment              $payment        Payment.
-	 * @param PaymentMethodDetails $payment_method Payment method.
-	 * @return PaymentResponse
-	 * @throws \InvalidArgumentException Throws exception on invalid amount.
-	 * @throws \Exception Throws exception if payment creation request fails.
-	 */
-	private function create_payment( Payment $payment, PaymentMethodDetails $payment_method ) {
-		$payment_id = (string) $payment->get_id();
-
-		$payment_request = new PaymentRequest(
-			AmountTransformer::transform( $payment->get_total_amount() ),
-			$this->config->get_merchant_account(),
-			$payment_id,
-			$this->get_payment_return_url( $payment_id ),
-			$payment_method
-		);
-
-		PaymentRequestHelper::complement( $payment, $payment_request, $this->config );
-
-		$payment_response = $this->client->create_payment( $payment_request );
-
-		PaymentResponseHelper::update_payment( $payment, $payment_response );
-
-		return $payment_response;
 	}
 
 	/**

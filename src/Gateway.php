@@ -177,6 +177,11 @@ class Gateway extends Core_Gateway {
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
 		 */
 		$api_integration_payment_method_types = [
+			/**
+			 * Alipay.
+			 *
+			 * @link https://docs.adyen.com/payment-methods/alipay/api-only
+			 */
 			PaymentMethodType::ALIPAY,
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,

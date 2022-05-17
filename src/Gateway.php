@@ -180,6 +180,12 @@ class Gateway extends Core_Gateway {
 			PaymentMethodType::ALIPAY,
 			PaymentMethodType::IDEAL,
 			PaymentMethodType::DIRECT_EBANKING,
+			/**
+			 * TWINT.
+			 *
+			 * @link https://docs.adyen.com/payment-methods/twint/api-only
+			 */
+			PaymentMethodType::TWINT,
 		];
 
 		// Return early if API integration is not being used.

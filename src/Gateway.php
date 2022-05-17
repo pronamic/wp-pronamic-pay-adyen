@@ -178,7 +178,7 @@ class Gateway extends Core_Gateway {
 		 */
 		$api_integration_payment_method_types = [
 			/**
-			 * Alipay.
+			 * Payment method type Alipay.
 			 *
 			 * @link https://docs.adyen.com/payment-methods/alipay/api-only
 			 */
@@ -196,13 +196,13 @@ class Gateway extends Core_Gateway {
 			 */
 			PaymentMethodType::DIRECT_EBANKING,
 			/**
-			 * TWINT.
+			 * Payment method type TWINT.
 			 *
 			 * @link https://docs.adyen.com/payment-methods/twint/api-only
 			 */
 			PaymentMethodType::TWINT,
 			/**
-			 * Vipps.
+			 * Payment method type Vipps.
 			 *
 			 * @link https://docs.adyen.com/payment-methods/vipps/api-only
 			 */

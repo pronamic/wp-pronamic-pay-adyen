@@ -171,46 +171,10 @@ class Gateway extends Core_Gateway {
 		$payment->set_meta( 'adyen_sdk_version', self::SDK_VERSION );
 		$payment->set_action_url( $payment->get_pay_redirect_url() );
 
-		/**
-		 * API only.
-		 */
-		$api_integration_payment_method_types = [
-			/**
-			 * Payment method type Alipay.
-			 *
-			 * @link https://docs.adyen.com/payment-methods/alipay/api-only
-			 */
-			PaymentMethodType::ALIPAY,
-			/**
-			 * Payment method type iDEAL.
-			 *
-			 * @link https://docs.adyen.com/payment-methods/ideal/api-only
-			 */
-			PaymentMethodType::IDEAL,
-			/**
-			 * Payment method type Sofort.
-			 *
-			 * @link https://docs.adyen.com/payment-methods/sofort/api-only
-			 */
-			PaymentMethodType::DIRECT_EBANKING,
-			/**
-			 * Payment method type TWINT.
-			 *
-			 * @link https://docs.adyen.com/payment-methods/twint/api-only
-			 */
-			PaymentMethodType::TWINT,
-			/**
-			 * Payment method type Vipps.
-			 *
-			 * @link https://docs.adyen.com/payment-methods/vipps/api-only
-			 */
-			PaymentMethodType::VIPPS,
-		];
-
-		// Return early if API integration is not being used.
+		// API only.
 		$payment_method_type = PaymentMethodType::transform( $payment->get_payment_method() );
 
-		if ( ! in_array( $payment_method_type, $api_integration_payment_method_types, true ) ) {
+		if ( ! $this->can_api_only( $payment_method_type ) ) {
 			return;
 		}
 
@@ -419,7 +383,7 @@ class Gateway extends Core_Gateway {
 			[
 				'configuration'      => $configuration,
 				'paymentRedirectUrl' => \rest_url( Integration::REST_ROUTE_NAMESPACE . '/redirect/' . $payment_id ),
-				'autoSubmit'         => $this->should_auto_submit( $payment_method_type ),
+				'autoSubmit'         => $this->can_auto_submit( $payment_method_type ),
 			]
 		);
 
@@ -433,13 +397,58 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
+	 * Check if payment method type can be used API only.
+	 *
+	 * @param string|null $payment_method_type Adyen payment method type.
+	 * @return bool True if payment method type can be used API only, false otherwise.
+	 */
+	private function can_api_only( $payment_method_type ) {
+		return \in_array(
+			$payment_method_type,
+			[
+				/**
+				 * Payment method type Alipay.
+				 *
+				 * @link https://docs.adyen.com/payment-methods/alipay/api-only
+				 */
+				PaymentMethodType::ALIPAY,
+				/**
+				 * Payment method type iDEAL.
+				 *
+				 * @link https://docs.adyen.com/payment-methods/ideal/api-only
+				 */
+				PaymentMethodType::IDEAL,
+				/**
+				 * Payment method type Sofort.
+				 *
+				 * @link https://docs.adyen.com/payment-methods/sofort/api-only
+				 */
+				PaymentMethodType::DIRECT_EBANKING,
+				/**
+				 * Payment method type TWINT.
+				 *
+				 * @link https://docs.adyen.com/payment-methods/twint/api-only
+				 */
+				PaymentMethodType::TWINT,
+				/**
+				 * Payment method type Vipps.
+				 *
+				 * @link https://docs.adyen.com/payment-methods/vipps/api-only
+				 */
+				PaymentMethodType::VIPPS,
+			],
+			true
+		);
+	}
+
+	/**
 	 * Check if drop-in should auto submit.
 	 *
 	 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/9
 	 * @param string|null $payment_method_type Adyen payment method type.
 	 * @return bool True if drop-in should auto submit, false otherwise.
 	 */
-	private function should_auto_submit( $payment_method_type ) {
+	private function can_auto_submit( $payment_method_type ) {
 		return \in_array(
 			$payment_method_type,
 			[

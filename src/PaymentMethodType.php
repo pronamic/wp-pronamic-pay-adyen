@@ -87,6 +87,7 @@ class PaymentMethodType {
 	/**
 	 * Constant for the 'directEbanking' payment method type.
 	 *
+	 * @link https://docs.adyen.com/payment-methods/sofort/api-only
 	 * @var string
 	 */
 	const DIRECT_EBANKING = 'directEbanking';

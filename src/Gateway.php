@@ -189,6 +189,11 @@ class Gateway extends Core_Gateway {
 			 * @link https://docs.adyen.com/payment-methods/ideal/api-only
 			 */
 			PaymentMethodType::IDEAL,
+			/**
+			 * Payment method type Sofort.
+			 *
+			 * @link https://docs.adyen.com/payment-methods/sofort/api-only
+			 */
 			PaymentMethodType::DIRECT_EBANKING,
 			/**
 			 * TWINT.

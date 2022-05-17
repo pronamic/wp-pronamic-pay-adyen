@@ -214,7 +214,7 @@ class Integration extends AbstractGatewayIntegration {
 		// API Key.
 		$fields[] = [
 			'section'     => 'general',
-			'filter'      => FILTER_SANITIZE_STRING,
+			'filter'      => \FILTER_UNSAFE_RAW,
 			'meta_key'    => '_pronamic_gateway_adyen_api_key',
 			'title'       => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'textarea',

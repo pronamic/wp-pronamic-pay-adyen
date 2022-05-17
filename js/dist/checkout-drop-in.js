@@ -37,7 +37,20 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
 
         case 3:
           checkout = _context.sent;
-          dropinComponent = checkout.create('dropin').mount('#pronamic-pay-checkout');
+          dropinComponent = checkout.create('dropin', {
+            /**
+             * The onSelect and onReady events, since they're not generic events,
+             * should be defined when creating the Drop-in component.
+             *
+             * @link https://github.com/Adyen/adyen-web/issues/973#issuecomment-821148830
+             * @link https://docs.adyen.com/online-payments/migrate-to-web-4-0-0#dropin-configuration
+             */
+            onSelect: function onSelect(dropin) {
+              if (pronamicPayAdyenCheckout.autoSubmit) {
+                dropin.submit();
+              }
+            }
+          }).mount('#pronamic-pay-checkout');
 
         case 5:
         case "end":

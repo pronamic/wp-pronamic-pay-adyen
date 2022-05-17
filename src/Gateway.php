@@ -318,6 +318,8 @@ class Gateway extends Core_Gateway {
 		// Payment method.
 		$payment_method = $payment->get_payment_method();
 
+		$payment_method_type = null;
+
 		if ( null !== $payment_method ) {
 			// Payment method type.
 			$payment_method_type = PaymentMethodType::transform( $payment_method );
@@ -406,6 +408,7 @@ class Gateway extends Core_Gateway {
 			[
 				'configuration'      => $configuration,
 				'paymentRedirectUrl' => \rest_url( Integration::REST_ROUTE_NAMESPACE . '/redirect/' . $payment_id ),
+				'autoSubmit'         => $this->should_auto_submit( $payment_method_type ),
 			]
 		);
 
@@ -416,6 +419,23 @@ class Gateway extends Core_Gateway {
 		require __DIR__ . '/../views/checkout-drop-in.php';
 
 		exit;
+	}
+
+	/**
+	 * Check if drop-in should auto submit.
+	 *
+	 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/9
+	 * @param string|null $payment_method_type Adyen payment method type.
+	 * @return bool True if drop-in should auto submit, false otherwise.
+	 */
+	private function should_auto_submit( $payment_method_type ) {
+		return \in_array(
+			$payment_method_type,
+			[
+				PaymentMethodType::SWISH,
+			],
+			true
+		);
 	}
 
 	/**

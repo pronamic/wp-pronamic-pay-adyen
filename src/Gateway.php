@@ -186,6 +186,12 @@ class Gateway extends Core_Gateway {
 			 * @link https://docs.adyen.com/payment-methods/twint/api-only
 			 */
 			PaymentMethodType::TWINT,
+			/**
+			 * Vipps.
+			 *
+			 * @link https://docs.adyen.com/payment-methods/vipps/api-only
+			 */
+			PaymentMethodType::VIPPS,
 		];
 
 		// Return early if API integration is not being used.

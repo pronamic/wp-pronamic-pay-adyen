@@ -10,14 +10,20 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Pay\Dependencies\PhpExtensionDependency;
 use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
-use Pronamic\WordPress\Pay\Util as Pay_Util;
+use WP_Query;
 
 /**
  * Integration class
  */
 class Integration extends AbstractGatewayIntegration {
+	/**
+	 * Flag for singles.
+	 *
+	 * @var bool
+	 */
+	private static $singles = false;
+
 	/**
 	 * REST route namespace.
 	 *
@@ -63,6 +69,25 @@ class Integration extends AbstractGatewayIntegration {
 			return;
 		}
 
+		$id = $this->get_id();
+
+		if ( null !== $id ) {
+			\add_filter( 'pronamic_gateway_configuration_display_value_' . $id, [ $this, 'gateway_configuration_display_value' ], 10, 2 );
+		}
+
+		if ( false === self::$singles ) {
+			$this->setup_singles();
+
+			self::$singles = true;
+		}
+	}
+
+	/**
+	 * Setup singles.
+	 *
+	 * @return void
+	 */
+	private function setup_singles() {
 		// Notifications controller.
 		$notifications_controller = new NotificationsController();
 
@@ -82,11 +107,13 @@ class Integration extends AbstractGatewayIntegration {
 		add_action( 'init', [ $this, 'init' ] );
 		add_action( 'admin_init', [ $this, 'admin_init' ], 15 );
 
-		$id = $this->get_id();
-
-		if ( null !== $id ) {
-			\add_filter( 'pronamic_gateway_configuration_display_value_' . $id, [ $this, 'gateway_configuration_display_value' ], 10, 2 );
-		}
+		/**
+		 * Backward compatibility.
+		 *
+		 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/10
+		 */
+		\add_action( 'admin_notices', [ $this, 'maybe_display_migrate_client_key_admin_notice' ] );
+		\add_action( 'save_post_pronamic_gateway', [ $this, 'delete_migrate_client_key_query_transient' ] );
 	}
 
 	/**
@@ -209,6 +236,7 @@ class Integration extends AbstractGatewayIntegration {
 			'type'     => 'text',
 			'classes'  => [ 'regular-text', 'code' ],
 			'tooltip'  => __( 'The merchant account identifier, with which you want to process the transaction.', 'pronamic_ideal' ),
+			'required' => true,
 		];
 
 		// API Key.
@@ -225,6 +253,7 @@ class Integration extends AbstractGatewayIntegration {
 				esc_url( 'https://docs.adyen.com/development-resources/api-credentials' ),
 				esc_html__( 'Adyen documentation: "API credentials".', 'pronamic_ideal' )
 			),
+			'required'    => true,
 		];
 
 		if ( 'live' === $this->get_mode() ) {
@@ -245,6 +274,7 @@ class Integration extends AbstractGatewayIntegration {
 						],
 					],
 				],
+				'required' => true,
 			];
 
 			// Live API URL prefix.
@@ -261,6 +291,7 @@ class Integration extends AbstractGatewayIntegration {
 					esc_url( 'https://docs.adyen.com/developers/development-resources/live-endpoints#liveurlprefix' ),
 					esc_html__( 'Adyen documentation: "Live URL prefix".', 'pronamic_ideal' )
 				),
+				'required'    => true,
 			];
 		}
 
@@ -281,6 +312,7 @@ class Integration extends AbstractGatewayIntegration {
 				esc_url( 'https://docs.adyen.com/development-resources/client-side-authentication#get-your-client-key' ),
 				esc_html__( 'Adyen documentation: "Get your client key".', 'pronamic_ideal' )
 			),
+			'required'    => true,
 		];
 
 		// Merchant Order Reference.
@@ -426,5 +458,97 @@ class Integration extends AbstractGatewayIntegration {
 		$gateway->set_mode( $this->get_mode() );
 
 		return $gateway;
+	}
+
+	/**
+	 * Maybe display migrate client key admin notice.
+	 *
+	 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/10
+	 * @link https://developer.wordpress.org/apis/handbook/transients/
+	 * @return void
+	 */
+	public function maybe_display_migrate_client_key_admin_notice() {
+		if ( ! \current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$query = \get_transient( 'pronamic_pay_adyen_migrate_client_key_query' );
+
+		if ( false === $query ) {
+			$query = new WP_Query(
+				[
+					'post_type'      => 'pronamic_gateway',
+					'posts_per_page' => 10,
+					'meta_query'     => [
+						'relation' => 'AND',
+						[
+							'key'     => '_pronamic_gateway_id',
+							'compare' => 'IN',
+							'value'   => [
+								'adyen',
+								'adyen-test',
+							],
+						],
+						[
+							'relation' => 'OR',
+							[
+								'key'     => '_pronamic_gateway_adyen_client_key',
+								'compare' => '=',
+								'value'   => '',
+							],
+							[
+								'key'     => '_pronamic_gateway_adyen_client_key',
+								'compare' => 'NOT EXISTS',
+							],
+						],
+					],
+					'no_found_rows'  => true,
+				]
+			);
+
+			\set_transient( 'pronamic_pay_adyen_migrate_client_key_query', $query, WEEK_IN_SECONDS );
+		}
+
+		if ( empty( $query->posts ) ) {
+			return;
+		}
+
+		?>
+		<div class="error notice">
+			<p>
+				<strong><?php esc_html_e( 'Pronamic Pay', 'pronamic_ideal' ); ?></strong> —
+				<?php \esc_html_e( 'The following Ayden configurations must be migrated to a client key:', 'pronamic_ideal' ); ?>
+			</p>
+
+			<ul>
+
+				<?php foreach ( $query->posts as $adyen_config_post ) : ?>
+
+					<li>
+						<?php
+
+						printf(
+							'<a href="%s">%s</a>',
+							esc_url( get_edit_post_link( $adyen_config_post ) ),
+							esc_html( get_the_title( $adyen_config_post ) )
+						);
+
+						?>
+					</li>
+
+				<?php endforeach; ?>
+
+			</ul>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Delete the migrate client key query transient.
+	 *
+	 * @return void
+	 */
+	public function delete_migrate_client_key_query_transient() {
+		\delete_transient( 'pronamic_pay_adyen_migrate_client_key_query' );
 	}
 }

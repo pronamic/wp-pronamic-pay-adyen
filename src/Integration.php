@@ -516,7 +516,7 @@ class Integration extends AbstractGatewayIntegration {
 		?>
 		<div class="error notice">
 			<p>
-				<strong><?php esc_html_e( 'Pronamic Pay', 'pronamic_ideal' ); ?></strong> —
+				<strong><?php \esc_html_e( 'Pronamic Pay', 'pronamic_ideal' ); ?></strong> —
 				<?php \esc_html_e( 'The following Ayden configurations must be migrated to a client key:', 'pronamic_ideal' ); ?>
 			</p>
 
@@ -527,10 +527,10 @@ class Integration extends AbstractGatewayIntegration {
 					<li>
 						<?php
 
-						printf(
+						\printf(
 							'<a href="%s">%s</a>',
-							esc_url( get_edit_post_link( $adyen_config_post ) ),
-							esc_html( get_the_title( $adyen_config_post ) )
+							\esc_url( \get_edit_post_link( $adyen_config_post ) ),
+							\esc_html( \get_the_title( $adyen_config_post ) )
 						);
 
 						?>

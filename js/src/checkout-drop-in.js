@@ -16,8 +16,24 @@
 
 			window.location.href = redirectUrl;
 		},
-		onError: ( error, component ) => {
-			dropinComponent.setStatus( 'error', { message: error.message } );
+		/**
+		 * Error handler.
+		 *
+		 * @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+		 * @link https://github.com/Adyen/adyen-web/blob/v5.15.0/packages/lib/src/core/Errors/AdyenCheckoutError.ts
+		 * @link https://github.com/Adyen/adyen-web/blob/v5.15.0/packages/lib/src/components/UIElement.tsx#L115-L126
+		 * @param AdyenCheckoutError error Adyen checkout error.
+		 */
+		onError: ( error ) => {
+			if ( 'CANCEL' === error.name ) {
+				return;
+			}
+
+			let redirectUrl = new URL( pronamicPayAdyenCheckout.paymentErrorUrl );
+
+			redirectUrl.searchParams.set( 'name', error.name );
+
+			window.location.href = redirectUrl;
 		}
 	};
 

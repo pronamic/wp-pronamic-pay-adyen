@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
+use Pronamic\WordPress\Pay\Payments\FailureReason;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
 use WP_Error;
 use WP_REST_Request;
@@ -82,18 +84,53 @@ class ReturnController {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'rest_api_adyen_redirect' ],
-				'permission_callback' => function() {
-					return true;
-				},
+				'permission_callback' => [ $this, 'rest_api_adyen_permission' ],
 				'args'                => [
 					'payment_id' => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
 						'required'    => true,
 					],
+					'hash'       => [
+						'description' => \__( 'Hash.', 'pronamic_ideal' ),
+						'type'        => 'string',
+						'required'    => true,
+					],
 					'resultCode' => [
 						'type'     => 'string',
 						'required' => true,
+					],
+				],
+			]
+		);
+
+		/**
+		 * Adyen error route.
+		 *
+		 * @link https://docs.adyen.com/online-payments/web-drop-in#handle-redirect-result
+		 */
+		\register_rest_route(
+			Integration::REST_ROUTE_NAMESPACE,
+			'/error/(?P<payment_id>\d+)',
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'rest_api_adyen_error' ],
+				'permission_callback' => [ $this, 'rest_api_adyen_permission' ],
+				'args'                => [
+					'payment_id' => [
+						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
+						'type'        => 'integer',
+						'required'    => true,
+					],
+					'hash'       => [
+						'description' => \__( 'Hash.', 'pronamic_ideal' ),
+						'type'        => 'string',
+						'required'    => true,
+					],
+					'name'       => [
+						'description' => __( 'Error name.', 'pronamic_ideal' ),
+						'type'        => 'string',
+						'required'    => true,
 					],
 				],
 			]
@@ -241,6 +278,85 @@ class ReturnController {
 		if ( null !== $status ) {
 			$payment->set_status( $status );
 		}
+
+		/**
+		 * 303 See Other.
+		 *
+		 * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+		 */
+		return new \WP_REST_Response( null, 303, [ 'Location' => $payment->get_return_redirect_url() ] );
+	}
+
+	/**
+	 * REST API Adyen permission handler.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return bool
+	 */
+	public function rest_api_adyen_permission( WP_REST_Request $request ) {
+		$payment_id = $request->get_param( 'payment_id' );
+
+		if ( empty( $payment_id ) ) {
+			return false;
+		}
+
+		$hash = $request->get_param( 'hash' );
+
+		if ( empty( $hash ) ) {
+			return false;
+		}
+
+		return \wp_hash( $payment_id ) === $hash;
+	}
+
+	/**
+	 * REST API Adyen error handler.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return object
+	 */
+	public function rest_api_adyen_error( WP_REST_Request $request ) {
+		$payment_id = $request->get_param( 'payment_id' );
+
+		// Payment ID.
+		if ( null === $payment_id ) {
+			return new WP_Error(
+				'pronamic-pay-adyen-no-payment-id',
+				__( 'No payment ID given in `payment_id` parameter.', 'pronamic_ideal' )
+			);
+		}
+
+		$payment = \get_pronamic_payment( $payment_id );
+
+		if ( null === $payment ) {
+			return new WP_Error(
+				'pronamic-pay-adyen-payment-not-found',
+				sprintf(
+				/* translators: %s: payment ID */
+					__( 'Could not find payment with ID `%s`.', 'pronamic_ideal' ),
+					$payment_id
+				),
+				$payment_id
+			);
+		}
+
+		/**
+		 * Error name.
+		 *
+		 * @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+		 * @link https://github.com/Adyen/adyen-web/blob/v5.15.0/packages/lib/src/core/Errors/AdyenCheckoutError.ts
+		 */
+		$error_name = $request->get_param( 'name' );
+
+		$failure_reason = new FailureReason();
+
+		$failure_reason->set_message( $error_name );
+
+		$payment->set_failure_reason( $failure_reason );
+
+		$payment->set_status( PaymentStatus::FAILURE );
+
+		$payment->save();
 
 		/**
 		 * 303 See Other.

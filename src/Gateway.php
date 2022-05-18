@@ -382,7 +382,16 @@ class Gateway extends Core_Gateway {
 			'pronamicPayAdyenCheckout',
 			[
 				'configuration'      => $configuration,
-				'paymentRedirectUrl' => \rest_url( Integration::REST_ROUTE_NAMESPACE . '/redirect/' . $payment_id ),
+				'paymentRedirectUrl' => \add_query_arg(
+					'hash',
+					\wp_hash( (string) $payment->get_id() ),
+					\rest_url( Integration::REST_ROUTE_NAMESPACE . '/redirect/' . $payment_id )
+				),
+				'paymentErrorUrl'    => \add_query_arg(
+					'hash',
+					\wp_hash( (string) $payment->get_id() ),
+					\rest_url( Integration::REST_ROUTE_NAMESPACE . '/error/' . $payment_id )
+				),
 				'autoSubmit'         => $this->can_auto_submit( $payment_method_type ),
 			]
 		);

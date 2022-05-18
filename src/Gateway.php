@@ -259,7 +259,7 @@ class Gateway extends Core_Gateway {
 		$payment_id = (string) $payment_id;
 
 		// Redirect if payment is already successful.
-		if ( PaymentStatus::OPEN === $payment->get_status() ) {
+		if ( PaymentStatus::SUCCESS === $payment->get_status() ) {
 			\wp_redirect( $payment->get_return_redirect_url() );
 
 			exit;

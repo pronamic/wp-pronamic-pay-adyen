@@ -222,7 +222,11 @@ class PaymentRequestHelper {
 		$request->set_additional_data( $additional_data );
 
 		// Metadata.
-		$metadata = [];
+		$metadata = [
+			'network_id' => \get_current_network_id(),
+			'blog_id'    => \get_current_blog_id(),
+			'payment_id' => $payment->get_id(),
+		];
 
 		/**
 		 * Filters the Adyen payment metadata.

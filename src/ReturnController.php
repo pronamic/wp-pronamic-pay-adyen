@@ -306,6 +306,14 @@ class ReturnController {
 			$payment->set_status( $status );
 		}
 
+		$payment->add_note(
+			\sprintf(
+				/* translators: %s: Adyen payment result code. */
+				\__( 'Result code `%s` was received via the Adyen web drop-in, awaiting the webhook to update payment status.', 'pronamic_ideal' ),
+				$result_code
+			)
+		);
+
 		/**
 		 * 303 See Other.
 		 *
@@ -383,9 +391,27 @@ class ReturnController {
 
 		$payment->set_failure_reason( $failure_reason );
 
-		$payment->set_status( PaymentStatus::FAILURE );
+		$note = sprintf(
+			'<p>%s</p>',
+			\sprintf(
+				/* translators: %s: Adyen error name. */
+				\__( 'An `%s` error occurred while processing payment.', 'pronamic_ideal' ),
+				$error_name
+			)
+		);
 
-		$payment->save();
+		$note .= sprintf(
+			'<blockquote>%s</blockquote>',
+			$error_message
+		);
+
+		$payment->add_note( $note );
+
+		if ( PaymentStatus::OPEN === $payment->get_status() ) {
+			$payment->set_status( PaymentStatus::FAILURE );
+
+			$payment->save();
+		}
 
 		/**
 		 * 303 See Other.

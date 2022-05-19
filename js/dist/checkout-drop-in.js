@@ -42,6 +42,7 @@ _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
 
               var redirectUrl = new URL(pronamicPayAdyenCheckout.paymentErrorUrl);
               redirectUrl.searchParams.set('name', error.name);
+              redirectUrl.searchParams.set('message', error.message);
               window.location.href = redirectUrl;
             }
           });

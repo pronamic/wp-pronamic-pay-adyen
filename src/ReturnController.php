@@ -132,6 +132,11 @@ class ReturnController {
 						'type'        => 'string',
 						'required'    => true,
 					],
+					'message'    => [
+						'description' => __( 'Error message.', 'pronamic_ideal' ),
+						'type'        => 'string',
+						'required'    => true,
+					],
 				],
 			]
 		);
@@ -346,11 +351,13 @@ class ReturnController {
 		 * @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 		 * @link https://github.com/Adyen/adyen-web/blob/v5.15.0/packages/lib/src/core/Errors/AdyenCheckoutError.ts
 		 */
-		$error_name = $request->get_param( 'name' );
+		$error_name    = $request->get_param( 'name' );
+		$error_message = $request->get_param( 'message' );
 
 		$failure_reason = new FailureReason();
 
-		$failure_reason->set_message( $error_name );
+		$failure_reason->set_code( $error_name );
+		$failure_reason->set_message( $error_message );
 
 		$payment->set_failure_reason( $failure_reason );
 

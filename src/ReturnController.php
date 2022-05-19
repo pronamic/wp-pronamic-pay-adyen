@@ -84,15 +84,15 @@ class ReturnController {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'rest_api_adyen_redirect' ],
-				'permission_callback' => [ $this, 'rest_api_adyen_permission' ],
+				'permission_callback' => [ $this, 'rest_api_adyen_redirect_permission' ],
 				'args'                => [
 					'payment_id' => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
 						'required'    => true,
 					],
-					'hash'       => [
-						'description' => \__( 'Hash.', 'pronamic_ideal' ),
+					'nonce'      => [
+						'description' => \__( 'Nonce.', 'pronamic_ideal' ),
 						'type'        => 'string',
 						'required'    => true,
 					],
@@ -115,15 +115,15 @@ class ReturnController {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'rest_api_adyen_error' ],
-				'permission_callback' => [ $this, 'rest_api_adyen_permission' ],
+				'permission_callback' => [ $this, 'rest_api_adyen_error_permission' ],
 				'args'                => [
 					'payment_id' => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
 						'type'        => 'integer',
 						'required'    => true,
 					],
-					'hash'       => [
-						'description' => \__( 'Hash.', 'pronamic_ideal' ),
+					'nonce'      => [
+						'description' => \__( 'Nonce.', 'pronamic_ideal' ),
 						'type'        => 'string',
 						'required'    => true,
 					],
@@ -241,6 +241,28 @@ class ReturnController {
 	}
 
 	/**
+	 * REST API Adyen permission handler.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return bool
+	 */
+	public function rest_api_adyen_redirect_permission( WP_REST_Request $request ) {
+		$payment_id = $request->get_param( 'payment_id' );
+
+		if ( empty( $payment_id ) ) {
+			return false;
+		}
+
+		$nonce = $request->get_param( 'nonce' );
+
+		if ( empty( $nonce ) ) {
+			return false;
+		}
+
+		return \wp_verify_nonce( $nonce, 'pronamic-pay-adyen-payment-redirect-' . $payment_id );
+	}
+
+	/**
 	 * REST API Adyen redirect handler.
 	 *
 	 * @param WP_REST_Request $request Request.
@@ -298,20 +320,20 @@ class ReturnController {
 	 * @param WP_REST_Request $request Request.
 	 * @return bool
 	 */
-	public function rest_api_adyen_permission( WP_REST_Request $request ) {
+	public function rest_api_adyen_error_permission( WP_REST_Request $request ) {
 		$payment_id = $request->get_param( 'payment_id' );
 
 		if ( empty( $payment_id ) ) {
 			return false;
 		}
 
-		$hash = $request->get_param( 'hash' );
+		$nonce = $request->get_param( 'nonce' );
 
-		if ( empty( $hash ) ) {
+		if ( empty( $nonce ) ) {
 			return false;
 		}
 
-		return \wp_hash( $payment_id ) === $hash;
+		return \wp_verify_nonce( $nonce, 'pronamic-pay-adyen-payment-error-' . $payment_id );
 	}
 
 	/**

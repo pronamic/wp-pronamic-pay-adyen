@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.0.0-RC-2] - 2022-05-25
+### Changed
+- Improved return controller for more payment methods.
+- Improved return controller security with hash.
+
 ## [4.0.0-RC-1] - 2022-05-12
 ### Removed
 - ⚠️ Removed the web SDK gateway, which functioned without origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!

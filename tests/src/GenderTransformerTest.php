@@ -42,12 +42,12 @@ class GenderTransformerTest extends TestCase {
 	 * @return array
 	 */
 	public function transform_provider() {
-		return array(
-			array( Pay_Gender::FEMALE, Gender::FEMALE ),
-			array( Pay_Gender::MALE, Gender::MALE ),
-			array( Pay_Gender::OTHER, Gender::UNKNOWN ),
-			array( 'not existing result code', Gender::UNKNOWN ),
-			array( null, Gender::UNKNOWN ),
-		);
+		return [
+			[ Pay_Gender::FEMALE, Gender::FEMALE ],
+			[ Pay_Gender::MALE, Gender::MALE ],
+			[ Pay_Gender::OTHER, Gender::UNKNOWN ],
+			[ 'not existing result code', Gender::UNKNOWN ],
+			[ null, Gender::UNKNOWN ],
+		];
 	}
 }

@@ -18,13 +18,9 @@ use WP_Error;
 use WP_REST_Request;
 
 /**
- * Notification controller
+ * Notification controller class
  *
  * @link https://docs.adyen.com/developers/api-reference/notifications-api#notificationrequest
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class NotificationsController {
 	/**
@@ -34,10 +30,10 @@ class NotificationsController {
 	 */
 	public function setup() {
 		// Actions.
-		\add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
+		\add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
 
 		// Filters.
-		\add_filter( 'application_password_is_api_request', array( $this, 'maybe_disable_application_passwords_for_api_request' ), 10 );
+		\add_filter( 'application_password_is_api_request', [ $this, 'maybe_disable_application_passwords_for_api_request' ], 10 );
 	}
 
 	/**
@@ -52,11 +48,11 @@ class NotificationsController {
 		register_rest_route(
 			Integration::REST_ROUTE_NAMESPACE,
 			'/notifications',
-			array(
+			[
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'rest_api_adyen_notifications' ),
-				'permission_callback' => array( $this, 'rest_api_adyen_permissions_check' ),
-			)
+				'callback'            => [ $this, 'rest_api_adyen_notifications' ],
+				'permission_callback' => [ $this, 'rest_api_adyen_permissions_check' ],
+			]
 		);
 	}
 
@@ -114,7 +110,7 @@ class NotificationsController {
 					__( 'HTTP Authorization header is missing, read %s for more information.', 'pronamic_ideal' ),
 					'https://www.wp-pay.org/http-authorization-header-missing/'
 				),
-				array( 'status' => rest_authorization_required_code() )
+				[ 'status' => rest_authorization_required_code() ]
 			);
 		}
 
@@ -127,7 +123,7 @@ class NotificationsController {
 			'rest_forbidden_context',
 			/* translators: Translate 'notification' the same as in the Adyen dashboard. */
 			_x( 'Sorry, you are not allowed to post Adyen notifications.', 'Adyen', 'pronamic_ideal' ),
-			array( 'status' => rest_authorization_required_code() )
+			[ 'status' => rest_authorization_required_code() ]
 		);
 	}
 
@@ -149,7 +145,7 @@ class NotificationsController {
 				'adyen_invalid_notification',
 				/* translators: Translate 'notification' the same as in the Adyen dashboard. */
 				_x( 'Cannot parse JSON notification.', 'Adyen', 'pronamic_ideal' ),
-				array( 'status' => 500 )
+				[ 'status' => 500 ]
 			);
 		}
 
@@ -192,13 +188,23 @@ class NotificationsController {
 			if ( EventCode::AUTHORIZATION === $item->get_event_code() && PaymentStatus::SUCCESS !== $payment->get_status() ) {
 				$payment->set_status( $item->is_success() ? PaymentStatus::SUCCESS : PaymentStatus::FAILURE );
 
+				$adyen_payment_method = $item->get_payment_method();
+
+				if ( null !== $adyen_payment_method ) {
+					$pronamic_payment_method = PaymentMethodType::to_wp( $adyen_payment_method );
+
+					if ( null !== $pronamic_payment_method ) {
+						$payment->set_payment_method( $pronamic_payment_method );
+					}
+				}
+
 				$payment->save();
 			}
 		}
 
-		$response = (object) array(
+		$response = (object) [
 			'notificationResponse' => '[accepted]',
-		);
+		];
 
 		return $response;
 	}

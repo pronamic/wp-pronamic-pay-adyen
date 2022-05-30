@@ -4,7 +4,7 @@
  * Plugin URI: https://www.pronamic.eu/plugins/pronamic-pay-adyen/
  * Description: Extend the Pronamic Pay plugin with the Adyen gateway to receive payments with Adyen through a variety of WordPress plugins.
  *
- * Version: 3.1.1
+ * Version: 4.0.0-RC-2
  * Requires at least: 4.7
  *
  * Author: Pronamic
@@ -29,21 +29,21 @@ add_filter(
 	'pronamic_pay_gateways',
 	function( $gateways ) {
 		$gateways[] = new \Pronamic\WordPress\Pay\Gateways\Adyen\Integration(
-			array(
+			[
 				'id'            => 'adyen',
 				'name'          => 'Adyen',
 				'mode'          => 'live',
 				'dashboard_url' => 'https://ca-live.adyen.com/ca/ca/login.shtml',
-			)
+			]
 		);
 
 		$gateways[] = new \Pronamic\WordPress\Pay\Gateways\Adyen\Integration(
-			array(
+			[
 				'id'            => 'adyen-test',
 				'name'          => 'Adyen - Test',
 				'mode'          => 'test',
 				'dashboard_url' => 'https://ca-test.adyen.com/ca/ca/login.shtml',
-			)
+			]
 		);
 
 		return $gateways;

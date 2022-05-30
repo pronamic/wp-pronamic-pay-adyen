@@ -14,11 +14,7 @@ use InvalidArgumentException;
 use Pronamic\WordPress\Pay\Address as Pay_Address;
 
 /**
- * Address transformer
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
+ * Address transformer class
  */
 class AddressTransformer {
 	/**

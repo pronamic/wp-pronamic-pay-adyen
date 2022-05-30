@@ -4,12 +4,42 @@
 	"title": "Adyen payment session response.",
 	"type": "object",
 	"properties": {
-		"paymentSession": {
+		"amount": {
+			"$ref": "amount.json",
+			"description": "The amount of the payment."
+		},
+		"expiresAt": {
 			"type": "string",
-			"description": "The encoded payment session that you need to pass to the SDK"
+			"format": "date-time",
+			"description": "The date the session expires in ISO8601 format."
+		},
+		"id": {
+			"type": "string",
+			"description": "A unique identifier of the session."
+		},
+		"merchantAccount": {
+			"type": "string",
+			"description": "The merchant account identifier, with which you want to process the transaction."
+		},
+		"reference": {
+			"type": "string",
+			"description": "The reference to uniquely identify a payment."
+		},
+		"returnUrl": {
+			"type": "string",
+			"description": "The URL to return to when a redirect payment is completed."
+		},
+		"sessionData": {
+			"type": "string",
+			"description": "The payment session data you need to pass to your front end."
 		}
 	},
 	"required": [
-		"paymentSession"
+		"amount",
+		"expiresAt",
+		"id",
+		"merchantAccount",
+		"reference",
+		"returnUrl"
 	]
 }

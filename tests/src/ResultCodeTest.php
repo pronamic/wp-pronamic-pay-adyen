@@ -39,15 +39,15 @@ class ResultCodeTest extends TestCase {
 	 * @return array
 	 */
 	public function result_code_matrix_provider() {
-		return array(
-			array( ResultCode::AUTHORIZED, \Pronamic\WordPress\Pay\Payments\PaymentStatus::SUCCESS ),
-			array( ResultCode::CANCELLED, \Pronamic\WordPress\Pay\Payments\PaymentStatus::CANCELLED ),
-			array( ResultCode::ERROR, \Pronamic\WordPress\Pay\Payments\PaymentStatus::FAILURE ),
-			array( ResultCode::PENDING, \Pronamic\WordPress\Pay\Payments\PaymentStatus::OPEN ),
-			array( ResultCode::RECEIVED, \Pronamic\WordPress\Pay\Payments\PaymentStatus::OPEN ),
-			array( ResultCode::REDIRECT_SHOPPER, \Pronamic\WordPress\Pay\Payments\PaymentStatus::OPEN ),
-			array( ResultCode::REFUSED, \Pronamic\WordPress\Pay\Payments\PaymentStatus::FAILURE ),
-			array( 'not existing result code', null ),
-		);
+		return [
+			[ ResultCode::AUTHORIZED, \Pronamic\WordPress\Pay\Payments\PaymentStatus::SUCCESS ],
+			[ ResultCode::CANCELLED, \Pronamic\WordPress\Pay\Payments\PaymentStatus::CANCELLED ],
+			[ ResultCode::ERROR, \Pronamic\WordPress\Pay\Payments\PaymentStatus::FAILURE ],
+			[ ResultCode::PENDING, \Pronamic\WordPress\Pay\Payments\PaymentStatus::OPEN ],
+			[ ResultCode::RECEIVED, \Pronamic\WordPress\Pay\Payments\PaymentStatus::OPEN ],
+			[ ResultCode::REDIRECT_SHOPPER, \Pronamic\WordPress\Pay\Payments\PaymentStatus::OPEN ],
+			[ ResultCode::REFUSED, \Pronamic\WordPress\Pay\Payments\PaymentStatus::FAILURE ],
+			[ 'not existing result code', null ],
+		];
 	}
 }

@@ -11,14 +11,10 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Application info
+ * Application info class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_applicationInfo
  * @link https://docs.adyen.com/development-resources/building-adyen-solutions
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class ApplicationInfo implements \JsonSerializable {
 	/**
@@ -76,14 +72,14 @@ class ApplicationInfo implements \JsonSerializable {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'adyenLibrary'             => $this->adyen_library,
 				'adyenPaymentSource'       => $this->adyen_payment_source,
 				'externalPlatform'         => $this->external_platform,
 				'merchantApplication'      => $this->merchant_application,
 				'merchantDevice'           => $this->merchant_device,
 				'shopperInteractionDevice' => $this->shopper_interaction_device,
-			)
+			]
 		);
 
 		$object = (object) $properties;

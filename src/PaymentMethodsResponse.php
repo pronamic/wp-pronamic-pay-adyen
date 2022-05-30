@@ -15,22 +15,11 @@ use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 
 /**
- * Payment methods response
+ * Payment methods response class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class PaymentMethodsResponse extends ResponseObject {
-	/**
-	 * Groups of payment methods.
-	 *
-	 * @var array<string, string|array<int, string>>
-	 */
-	private $groups;
-
 	/**
 	 * Detailed list of payment methods required to generate payment forms.
 	 *
@@ -39,13 +28,11 @@ class PaymentMethodsResponse extends ResponseObject {
 	private $payment_methods;
 
 	/**
-	 * Construct payment session response object.
+	 * Construct payment methods response object.
 	 *
-	 * @param array<string, string|array<int, string>> $groups          Groups.
-	 * @param PaymentMethod[]                          $payment_methods Payment methods.
+	 * @param PaymentMethod[] $payment_methods Payment methods.
 	 */
-	public function __construct( $groups, $payment_methods ) {
-		$this->groups          = $groups;
+	public function __construct( $payment_methods ) {
 		$this->payment_methods = $payment_methods;
 	}
 
@@ -56,28 +43,6 @@ class PaymentMethodsResponse extends ResponseObject {
 	 */
 	public function get_payment_methods() {
 		return $this->payment_methods;
-	}
-
-	/**
-	 * Get payment method types.
-	 *
-	 * @return array<int, string>
-	 */
-	public function get_payment_method_types() {
-		$types = array();
-
-		// Loop payment methods.
-		$payment_methods = $this->payment_methods;
-
-		foreach ( $payment_methods as $payment_method ) {
-			$type = $payment_method->get_type();
-
-			if ( null !== $type ) {
-				$types[] = $type;
-			}
-		}
-
-		return $types;
 	}
 
 	/**
@@ -92,26 +57,20 @@ class PaymentMethodsResponse extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-methods-response.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$payment_methods = array();
+		$payment_methods = [];
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		foreach ( $object->paymentMethods as $payment_method_object ) {
 			$payment_methods[] = PaymentMethod::from_object( $payment_method_object );
 		}
 
-		$groups = array();
-
-		if ( isset( $object->groups ) ) {
-			$groups = $object->groups;
-		}
-
-		$response = new self( $groups, $payment_methods );
+		$response = new self( $payment_methods );
 
 		$response->set_original_object( $object );
 

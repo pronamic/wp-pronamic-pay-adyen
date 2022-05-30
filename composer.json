@@ -81,7 +81,7 @@
 			"@xmllint-phpcs"
 		],
 		"build-docs": [
-			"vendor/bin/wp-documentor parse . --exclude=tests --exclude=vendor --exclude=wordpress --format=markdown --relative=docs > docs/hooks.md"
+			"vendor/bin/wp-documentor parse . --exclude=tests --exclude=vendor --exclude=wordpress --exclude=wp-content --format=markdown --relative=docs > docs/hooks.md"
 		]
 	}
 }

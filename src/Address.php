@@ -13,13 +13,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use InvalidArgumentException;
 
 /**
- * Address
+ * Address class
  *
  * @link https://docs.adyen.com/developers/api-reference/common-api/address
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class Address {
 	/**
@@ -98,7 +94,7 @@ class Address {
 		 *
 		 * Required if either `houseNumberOrName`, `city`, `postalCode`, or `stateOrProvince` are provided.
 		 */
-		$fields = array_filter( array( $house_number_or_name, $city, $postal_code, $state_or_province ) );
+		$fields = array_filter( [ $house_number_or_name, $city, $postal_code, $state_or_province ] );
 
 		if ( empty( $street ) && ! empty( $fields ) ) {
 			throw new InvalidArgumentException(
@@ -113,7 +109,7 @@ class Address {
 		 *
 		 * Required if either `houseNumberOrName`, `street`, `city`, or `stateOrProvince` are provided.
 		 */
-		$fields = array_filter( array( $house_number_or_name, $street, $city, $state_or_province ) );
+		$fields = array_filter( [ $house_number_or_name, $street, $city, $state_or_province ] );
 
 		if ( empty( $postal_code ) && ! empty( $fields ) ) {
 			throw new InvalidArgumentException(
@@ -140,7 +136,7 @@ class Address {
 		 *
 		 * Required if either `houseNumberOrName`, `street`, `postalCode`, or `stateOrProvince` are provided.
 		 */
-		$fields = array_filter( array( $house_number_or_name, $street, $postal_code, $state_or_province ) );
+		$fields = array_filter( [ $house_number_or_name, $street, $postal_code, $state_or_province ] );
 
 		if ( empty( $city ) && ! empty( $fields ) ) {
 			throw new InvalidArgumentException(
@@ -153,16 +149,16 @@ class Address {
 		 *
 		 * Required for an address in the USA or Canada if either `houseNumberOrName`, `street`, `city`, or `postalCode` are provided.
 		 */
-		$fields = array_filter( array( $house_number_or_name, $street, $city, $postal_code ) );
+		$fields = array_filter( [ $house_number_or_name, $street, $city, $postal_code ] );
 
-		if ( empty( $state_or_province ) && in_array( $country, array( 'CA', 'US' ), true ) && ! empty( $fields ) ) {
+		if ( empty( $state_or_province ) && in_array( $country, [ 'CA', 'US' ], true ) && ! empty( $fields ) ) {
 			throw new InvalidArgumentException(
 				'State or province is required for an address in the USA or Canada if either `houseNumberOrName`, `street`, `city`, or `postalCode` are provided.'
 			);
 		}
 
 		if ( ! empty( $state_or_province ) ) {
-			$max = in_array( $country, array( 'CA', 'US' ), true ) ? 2 : 3;
+			$max = in_array( $country, [ 'CA', 'US' ], true ) ? 2 : 3;
 
 			if ( strlen( $state_or_province ) > $max ) {
 				throw new InvalidArgumentException(
@@ -245,14 +241,14 @@ class Address {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'country'           => $this->country,
 				'city'              => $this->city,
 				'houseNumberOrName' => $this->house_number_or_name,
 				'postalCode'        => $this->postal_code,
 				'stateOrProvince'   => $this->state_or_province,
 				'street'            => $this->street,
-			)
+			]
 		);
 
 		$object = (object) $properties;

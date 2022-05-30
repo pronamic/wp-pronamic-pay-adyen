@@ -14,11 +14,7 @@ use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
- * Payment request helper
- *
- * @author  Remco Tolsma
- * @version 1.1.1
- * @since   1.0.0
+ * Payment request helper class
  */
 class PaymentRequestHelper {
 	/**
@@ -26,10 +22,49 @@ class PaymentRequestHelper {
 	 *
 	 * @param Payment                $payment WordPress Pay payment to convert.
 	 * @param AbstractPaymentRequest $request Adyen payment request.
+	 * @param Config                 $config  Configuration object.
 	 * @return void
 	 * @throws \Exception Throws exception on invalid metadata.
 	 */
-	public static function complement( Payment $payment, AbstractPaymentRequest $request ) {
+	public static function complement( Payment $payment, AbstractPaymentRequest $request, Config $config ) {
+		/**
+		 * Merchant order reference.
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments__reqParam_merchantOrderReference
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/sessions__reqParam_merchantOrderReference
+		 */
+		$request->set_merchant_order_reference( $payment->format_string( $config->get_merchant_order_reference() ) );
+
+		/**
+		 * Country code.
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments__reqParam_countryCode
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/sessions__resParam_countryCode
+		 */
+		$request->set_country_code( Util::get_country_code( $payment ) );
+
+		/**
+		 * Application info.
+		 *
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments__reqParam_applicationInfo
+		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/sessions__reqParam_applicationInfo
+		 * @link https://docs.adyen.com/development-resources/building-adyen-solutions
+		 */
+		$application_info = new ApplicationInfo();
+
+		$application_info->merchant_application = (object) [
+			'name'    => 'Pronamic Pay',
+			'version' => \pronamic_pay_plugin()->get_version(),
+		];
+
+		$application_info->external_platform = (object) [
+			'integrator' => 'Pronamic',
+			'name'       => 'WordPress',
+			'version'    => \get_bloginfo( 'version' ),
+		];
+
+		$request->set_application_info( $application_info );
+
 		// Channel.
 		$request->set_channel( Channel::WEB );
 
@@ -187,7 +222,11 @@ class PaymentRequestHelper {
 		$request->set_additional_data( $additional_data );
 
 		// Metadata.
-		$metadata = array();
+		$metadata = [
+			'network_id' => \get_current_network_id(),
+			'blog_id'    => \get_current_blog_id(),
+			'payment_id' => $payment->get_id(),
+		];
 
 		/**
 		 * Filters the Adyen payment metadata.

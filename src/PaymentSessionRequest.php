@@ -11,13 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Payment session request
+ * Payment session request class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class PaymentSessionRequest extends AbstractPaymentRequest {
 	/**
@@ -46,21 +42,6 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 	 * @var string|null
 	 */
 	private $sdk_version;
-
-	/**
-	 * Construct a payment request object.
-	 *
-	 * @param Amount $amount           The amount information for the transaction.
-	 * @param string $merchant_account The merchant account identifier, with which you want to process the transaction.
-	 * @param string $reference        The reference to uniquely identify a payment.
-	 * @param string $return_url       The URL to return to.
-	 * @param string $country_code     The collection that contains the type of the payment method and its specific information (e.g. idealIssuer).
-	 */
-	public function __construct( Amount $amount, $merchant_account, $reference, $return_url, $country_code ) {
-		parent::__construct( $amount, $merchant_account, $reference, $return_url );
-
-		$this->set_country_code( $country_code );
-	}
 
 	/**
 	 * Get allowed payment methods.
@@ -131,11 +112,11 @@ class PaymentSessionRequest extends AbstractPaymentRequest {
 
 		// Optional.
 		$optional = Util::filter_null(
-			array(
+			[
 				'allowedPaymentMethods' => $this->allowed_payment_methods,
 				'origin'                => $this->origin,
 				'sdkVersion'            => $this->sdk_version,
-			)
+			]
 		);
 
 		$properties = array_merge( $properties, $optional );

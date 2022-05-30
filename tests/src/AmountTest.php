@@ -66,21 +66,21 @@ class AmountTest extends TestCase {
 	 * @return array
 	 */
 	public function provider_from_object() {
-		return array(
-			array(
-				(object) array(),
-			),
-			array(
-				(object) array(
+		return [
+			[
+				(object) [],
+			],
+			[
+				(object) [
 					'currency' => 'EUR',
-				),
-			),
-			array(
-				(object) array(
+				],
+			],
+			[
+				(object) [
 					'currency' => 'EUR',
 					'value'    => 12375,
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 }

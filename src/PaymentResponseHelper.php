@@ -14,22 +14,17 @@ use Pronamic\WordPress\Pay\Payments\FailureReason;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
- * Payment response helper
- *
- * @author  Reüel van der Steege
- * @version 1.1.0
- * @since   1.1.0
+ * Payment response helper class
  */
 class PaymentResponseHelper {
 	/**
 	 * Update payment to the payment response.
 	 *
-	 * @param Payment         $payment  Payment.
-	 * @param PaymentResponse $response Response.
-	 *
+	 * @param Payment                 $payment  Payment.
+	 * @param AbstractPaymentResponse $response Response.
 	 * @return void
 	 */
-	public static function update_payment( Payment $payment, PaymentResponse $response ) {
+	public static function update_payment( Payment $payment, AbstractPaymentResponse $response ) {
 		// Add note.
 		$note = sprintf(
 			'<p>%s</p>',
@@ -50,21 +45,6 @@ class PaymentResponseHelper {
 		}
 
 		$payment->add_note( $note );
-
-		// Payment method.
-		$action = $response->get_action();
-
-		if ( null !== $action ) {
-			$payment_method_type = $action->get_payment_method_type();
-
-			if ( null !== $payment_method_type ) {
-				$payment_method = PaymentMethodType::to_wp( $payment_method_type );
-
-				if ( null !== $payment_method ) {
-					$payment->set_payment_method( $payment_method );
-				}
-			}
-		}
 
 		// PSP reference.
 		$psp_reference = $response->get_psp_reference();

@@ -13,13 +13,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Http\Facades\Http;
 
 /**
- * Adyen client
+ * Adyen client class
  *
  * @link https://github.com/adyenpayments/php/blob/master/generatepaymentform.php
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class Client {
 	/**
@@ -30,12 +26,20 @@ class Client {
 	private $config;
 
 	/**
+	 * Endpoint.
+	 *
+	 * @var Endpoint
+	 */
+	private $endpoint;
+
+	/**
 	 * Constructs and initializes an Adyen client object.
 	 *
 	 * @param Config $config Adyen config.
 	 */
 	public function __construct( Config $config ) {
-		$this->config = $config;
+		$this->config   = $config;
+		$this->endpoint = new Endpoint( $config->environment, $config->api_live_url_prefix );
 	}
 
 	/**
@@ -48,18 +52,18 @@ class Client {
 	 */
 	private function send_request( $method, $request ) {
 		// Request.
-		$url = $this->config->get_api_url( $method );
+		$url = $this->endpoint->get_api_url( 'v68', $method );
 
 		$response = Http::request(
 			$url,
-			array(
+			[
 				'method'  => 'POST',
-				'headers' => array(
+				'headers' => [
 					'X-API-key'    => $this->config->get_api_key(),
 					'Content-Type' => 'application/json',
-				),
+				],
 				'body'    => \wp_json_encode( $request->get_json() ),
-			)
+			]
 		);
 
 		$data = $response->json();
@@ -97,14 +101,13 @@ class Client {
 	/**
 	 * Create payment.
 	 *
+	 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments
 	 * @param PaymentRequest $request Payment request.
-	 *
 	 * @return PaymentResponse
-	 *
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment( PaymentRequest $request ) {
-		$data = $this->send_request( 'v64/payments', $request );
+		$data = $this->send_request( 'payments', $request );
 
 		return PaymentResponse::from_object( $data );
 	}
@@ -113,60 +116,38 @@ class Client {
 	 * Submit additional payment details.
 	 *
 	 * @param PaymentDetailsRequest $request Payment request.
-	 *
-	 * @return PaymentResponse
-	 *
+	 * @return PaymentDetailsResponse
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function request_payment_details( PaymentDetailsRequest $request ) {
-		$data = $this->send_request( 'v64/payments/details', $request );
+		$data = $this->send_request( 'payments/details', $request );
 
-		return PaymentResponse::from_object( $data );
+		return PaymentDetailsResponse::from_object( $data );
 	}
 
 	/**
 	 * Create payment session.
 	 *
 	 * @param PaymentSessionRequest $request Payment session request.
-	 *
 	 * @return PaymentSessionResponse
-	 *
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function create_payment_session( PaymentSessionRequest $request ) {
-		$data = $this->send_request( 'v41/paymentSession', $request );
+		$data = $this->send_request( 'sessions', $request );
 
 		return PaymentSessionResponse::from_object( $data );
 	}
 
 	/**
-	 * Get payment result.
-	 *
-	 * @param PaymentResultRequest $request Payment result request.
-	 *
-	 * @return PaymentResultResponse
-	 *
-	 * @throws \Exception Throws error if request fails.
-	 */
-	public function get_payment_result( PaymentResultRequest $request ) {
-		$data = $this->send_request( 'v41/payments/result', $request );
-
-		return PaymentResultResponse::from_object( $data );
-	}
-
-	/**
 	 * Get payment methods.
 	 *
-	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/paymentMethods
-	 * @link https://docs.adyen.com/checkout/drop-in-web#step-1-get-available-payment-methods
-	 *
+	 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/paymentMethods
 	 * @param PaymentMethodsRequest $request Payment methods request.
-	 *
 	 * @return PaymentMethodsResponse
 	 * @throws \Exception Throws error if request fails.
 	 */
 	public function get_payment_methods( PaymentMethodsRequest $request ) {
-		$data = $this->send_request( 'v64/paymentMethods', $request );
+		$data = $this->send_request( 'paymentMethods', $request );
 
 		return PaymentMethodsResponse::from_object( $data );
 	}

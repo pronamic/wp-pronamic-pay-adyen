@@ -4,17 +4,13 @@
 	"title": "Adyen payment methods response.",
 	"type": "object",
 	"properties": {
-		"groups": {
-			"type": "array",
-			"description": "Groups of payment methods."
-		},
-		"oneClickPaymentMethods": {
-			"type": "array",
-			"description": "Detailed list of one-click payment methods"
-		},
 		"paymentMethods": {
 			"type": "array",
 			"description": "Detailed list of payment methods required to generate payment forms."
+		},
+		"storedPaymentMethods": {
+			"type": "array",
+			"description": "List of all stored payment methods."
 		}
 	},
 	"required": [

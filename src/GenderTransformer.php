@@ -13,11 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Gender as Pay_Gender;
 
 /**
- * Gender transformer
- *
- * @author  Reüel van der Steege
- * @version 1.0.0
- * @since   1.0.0
+ * Gender transformer class
  */
 class GenderTransformer {
 	/**

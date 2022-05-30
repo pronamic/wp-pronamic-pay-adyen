@@ -16,11 +16,7 @@ use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 
 /**
- * Error
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
+ * Error class
  */
 class Error extends Exception {
 	/**
@@ -82,9 +78,9 @@ class Error extends Exception {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/error.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 

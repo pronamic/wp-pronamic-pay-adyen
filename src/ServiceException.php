@@ -16,13 +16,9 @@ use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 
 /**
- * Service exception
+ * Service exception class
  *
  * @link https://docs.adyen.com/developers/api-reference/common-api/serviceexception
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class ServiceException extends Exception {
 	/**
@@ -110,13 +106,19 @@ class ServiceException extends Exception {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/service-exception.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		return new self( $object->status, $object->errorCode, $object->message, $object->errorType );
+		$data = new ObjectAccess( $object );
+
+		return new self(
+			$data->get_property( 'status' ),
+			$data->get_property( 'errorCode' ),
+			$data->get_property( 'message' ),
+			$data->get_property( 'errorType' )
+		);
 	}
 }

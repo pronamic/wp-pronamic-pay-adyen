@@ -15,38 +15,52 @@ use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 
 /**
- * Payment session response
+ * Payment session response class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class PaymentSessionResponse extends ResponseObject {
 	/**
-	 * The encoded payment session that you need to pass to the SDK.
+	 * A unique identifier of the session.
 	 *
 	 * @var string
 	 */
-	private $payment_session;
+	private $id;
+
+	/**
+	 * The payment session data you need to pass to your front end.
+	 *
+	 * @var string|null
+	 */
+	private $data;
 
 	/**
 	 * Construct payment session response object.
 	 *
-	 * @param string $payment_session The encoded payment session.
+	 * @param string $id   A unique identifier of the session.
+	 * @param string $data The payment session data you need to pass to your front end.
 	 */
-	public function __construct( $payment_session ) {
-		$this->payment_session = $payment_session;
+	public function __construct( $id, $data ) {
+		$this->id   = $id;
+		$this->data = $data;
 	}
 
 	/**
-	 * Get payment session.
+	 * Get unique identifier of the session.
 	 *
 	 * @return string
 	 */
-	public function get_payment_session() {
-		return $this->payment_session;
+	public function get_id() {
+		return $this->id;
+	}
+
+	/**
+	 * Get payment session data.
+	 *
+	 * @return string|null
+	 */
+	public function get_data() {
+		return $this->data;
 	}
 
 	/**
@@ -61,13 +75,17 @@ class PaymentSessionResponse extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-session-response.json' ),
-			),
+			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		return new self( $object->paymentSession );
+		$data = new ObjectAccess( $object );
+
+		return new self(
+			$data->get_property( 'id' ),
+			$data->get_property( 'sessionData' )
+		);
 	}
 }

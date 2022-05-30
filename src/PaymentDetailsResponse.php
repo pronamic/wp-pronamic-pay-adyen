@@ -1,6 +1,6 @@
 <?php
 /**
- * Payment response
+ * Payment details response
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2022 Pronamic
@@ -15,29 +15,13 @@ use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 
 /**
- * Payment response class
+ * Payment details response class
  *
- * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
+ * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments/details__section_resParams
  */
-class PaymentResponse extends AbstractPaymentResponse {
+class PaymentDetailsResponse extends AbstractPaymentResponse {
 	/**
-	 * The action.
-	 *
-	 * @var PaymentResponseAction|null
-	 */
-	private $action;
-
-	/**
-	 * Get action.
-	 *
-	 * @return PaymentResponseAction|null
-	 */
-	public function get_action() {
-		return $this->action;
-	}
-
-	/**
-	 * Create payment response from object.
+	 * Create payment details response from object.
 	 *
 	 * @param object $object Object.
 	 * @return self
@@ -49,7 +33,7 @@ class PaymentResponse extends AbstractPaymentResponse {
 		$validator->validate(
 			$object,
 			(object) [
-				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-response.json' ),
+				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-details-response.json' ),
 			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
@@ -61,10 +45,6 @@ class PaymentResponse extends AbstractPaymentResponse {
 		$payment_response->result_code    = $data->get_property( 'resultCode' );
 		$payment_response->refusal_reason = $data->get_property( 'refusalReason' );
 		$payment_response->psp_reference  = $data->get_property( 'pspReference' );
-
-		if ( $data->has_property( 'action' ) ) {
-			$payment_response->action = PaymentResponseAction::from_object( $data->get_property( 'action' ) );
-		}
 
 		$payment_response->set_original_object( $object );
 

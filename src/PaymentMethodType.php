@@ -13,13 +13,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 
 /**
- * Payment method type
+ * Payment method type class
  *
  * @link https://docs.adyen.com/developers/classic-integration/directory-lookup#DirectoryLookup-Step2:Displaylocalpaymentmethods
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.0
  */
 class PaymentMethodType {
 	/**
@@ -91,6 +87,7 @@ class PaymentMethodType {
 	/**
 	 * Constant for the 'directEbanking' payment method type.
 	 *
+	 * @link https://docs.adyen.com/payment-methods/sofort/api-only
 	 * @var string
 	 */
 	const DIRECT_EBANKING = 'directEbanking';
@@ -222,7 +219,7 @@ class PaymentMethodType {
 	 *
 	 * @var array<string, string>
 	 */
-	private static $map = array(
+	private static $map = [
 		PaymentMethods::AFTERPAY_COM         => self::AFTERPAY_TOUCH,
 		PaymentMethods::ALIPAY               => self::ALIPAY,
 		PaymentMethods::APPLE_PAY            => self::APPLE_PAY,
@@ -244,7 +241,7 @@ class PaymentMethodType {
 		PaymentMethods::SWISH                => self::SWISH,
 		PaymentMethods::TWINT                => self::TWINT,
 		PaymentMethods::VIPPS                => self::VIPPS,
-	);
+	];
 
 	/**
 	 * Transform WordPress payment method to Adyen brand code.

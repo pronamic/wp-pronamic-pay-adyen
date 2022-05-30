@@ -13,13 +13,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use InvalidArgumentException;
 
 /**
- * Name
+ * Name class
  *
  * @link https://docs.adyen.com/developers/api-reference/common-api/name
- *
- * @author  Remco Tolsma
- * @version 1.0.0
- * @since   1.0.0
  */
 class Name {
 	/**
@@ -126,12 +122,12 @@ class Name {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'firstName' => $this->get_first_name(),
 				'gender'    => $this->get_gender(),
 				'infix'     => $this->get_infix(),
 				'lastName'  => $this->get_last_name(),
-			)
+			]
 		);
 
 		$object = (object) $properties;

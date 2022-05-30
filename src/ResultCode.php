@@ -13,13 +13,9 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 
 /**
- * Result code
+ * Result code class
  *
  * @link https://docs.adyen.com/developers/checkout/payment-result-codes
- *
- * @author  Reüel van der Steege
- * @version 1.0.0
- * @since   1.0.0
  */
 class ResultCode {
 	/**

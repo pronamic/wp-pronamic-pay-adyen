@@ -59,9 +59,9 @@ class NotificationsControllerTest extends WP_UnitTestCase {
 		$this->assertEquals( 200, $response->get_status() );
 
 		$this->assertEquals(
-			(object) array(
+			(object) [
 				'notificationResponse' => '[accepted]',
-			),
+			],
 			$response->get_data()
 		);
 	}
@@ -93,9 +93,9 @@ class NotificationsControllerTest extends WP_UnitTestCase {
 		$this->assertEquals( 200, $response->get_status() );
 
 		$this->assertEquals(
-			(object) array(
+			(object) [
 				'notificationResponse' => '[accepted]',
-			),
+			],
 			$response->get_data()
 		);
 	}

@@ -46,8 +46,8 @@ class IntegrationTest extends WP_UnitTestCase {
 	public function test_filters() {
 		$this->integration->setup();
 
-		$this->assertEquals( has_filter( 'init', array( $this->integration, 'init' ) ), 10 );
-		$this->assertEquals( has_filter( 'admin_init', array( $this->integration, 'admin_init' ) ), 15 );
+		$this->assertEquals( has_filter( 'init', [ $this->integration, 'init' ] ), 10 );
+		$this->assertEquals( has_filter( 'admin_init', [ $this->integration, 'admin_init' ] ), 15 );
 	}
 
 	/**
@@ -74,29 +74,29 @@ class IntegrationTest extends WP_UnitTestCase {
 		$this->integration->admin_init();
 
 		$this->assertArraySubset(
-			array(
-				'pronamic_pay' => array(
-					'pronamic_pay_adyen_notification_authentication' => array(
+			[
+				'pronamic_pay' => [
+					'pronamic_pay_adyen_notification_authentication' => [
 						'id' => 'pronamic_pay_adyen_notification_authentication',
-					),
-				),
-			),
+					],
+				],
+			],
 			$wp_settings_sections
 		);
 
 		$this->assertArraySubset(
-			array(
-				'pronamic_pay' => array(
-					'pronamic_pay_adyen_notification_authentication' => array(
-						'pronamic_pay_adyen_notification_authentication_username' => array(
+			[
+				'pronamic_pay' => [
+					'pronamic_pay_adyen_notification_authentication' => [
+						'pronamic_pay_adyen_notification_authentication_username' => [
 							'id' => 'pronamic_pay_adyen_notification_authentication_username',
-						),
-						'pronamic_pay_adyen_notification_authentication_password' => array(
+						],
+						'pronamic_pay_adyen_notification_authentication_password' => [
 							'id' => 'pronamic_pay_adyen_notification_authentication_password',
-						),
-					),
-				),
-			),
+						],
+					],
+				],
+			],
 			$wp_settings_fields
 		);
 	}

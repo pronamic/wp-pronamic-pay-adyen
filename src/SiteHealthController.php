@@ -14,11 +14,7 @@ use WP_Error;
 use WP_REST_Request;
 
 /**
- * Site Health controller
- *
- * @author  Remco Tolsma
- * @version 1.0.5
- * @since   1.0.5
+ * Site Health controller class
  */
 class SiteHealthController {
 	/**
@@ -41,14 +37,14 @@ class SiteHealthController {
 	 * @return void
 	 */
 	public function setup() {
-		add_filter( 'site_status_tests', array( $this, 'site_status_tests' ) );
+		add_filter( 'site_status_tests', [ $this, 'site_status_tests' ] );
 
 		$prefix = 'health-check-';
 		$action = 'pronamic-pay-adyen-http-authorization-test';
 
-		add_action( 'wp_ajax_' . $prefix . $action, array( $this, 'wp_ajax_health_check_http_authorization_test' ) );
+		add_action( 'wp_ajax_' . $prefix . $action, [ $this, 'wp_ajax_health_check_http_authorization_test' ] );
 
-		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
+		add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
 	}
 
 	/**
@@ -59,10 +55,10 @@ class SiteHealthController {
 	 * @return array<string, array<string, array<string, string>>>
 	 */
 	public function site_status_tests( $tests ) {
-		$tests['async']['pronamic_pay_adyen_http_authorization_test'] = array(
+		$tests['async']['pronamic_pay_adyen_http_authorization_test'] = [
 			'label' => __( 'HTTP Authorization header test', 'pronamic_ideal' ),
 			'test'  => 'pronamic-pay-adyen-http-authorization-test',
-		);
+		];
 
 		return $tests;
 	}
@@ -83,20 +79,20 @@ class SiteHealthController {
 	 * @return array<string, string|array<string, string>>
 	 */
 	private function get_http_authorization_test() {
-		$result = array(
+		$result = [
 			'label'       => __( 'HTTP Basic authentication is working', 'pronamic_ideal' ),
 			'status'      => 'good',
-			'badge'       => array(
+			'badge'       => [
 				'label' => __( 'Payments', 'pronamic_ideal' ),
 				'color' => 'blue',
-			),
+			],
 			'description' => sprintf(
 				'<p>%s</p>',
 				__( 'HTTP Basic authentication is required to securely receive Adyen notifications.', 'pronamic_ideal' )
 			),
 			'actions'     => '',
 			'test'        => 'pronamic-pay-adyen-http-authorization-test',
-		);
+		];
 
 		$rest_url = \rest_url( Integration::REST_ROUTE_NAMESPACE . '/http-authorization-test' );
 
@@ -104,11 +100,11 @@ class SiteHealthController {
 
 		$response = wp_remote_get(
 			$rest_url,
-			array(
-				'headers' => array(
+			[
+				'headers' => [
 					'Authorization' => $request_authorization,
-				),
-			)
+				],
+			]
 		);
 
 		if ( $response instanceof \WP_Error ) {
@@ -220,11 +216,11 @@ class SiteHealthController {
 		register_rest_route(
 			Integration::REST_ROUTE_NAMESPACE,
 			'/http-authorization-test',
-			array(
+			[
 				'methods'             => 'GET',
-				'callback'            => array( $this, 'rest_api_http_authorization_test' ),
+				'callback'            => [ $this, 'rest_api_http_authorization_test' ],
 				'permission_callback' => '__return_true',
-			)
+			]
 		);
 	}
 
@@ -236,16 +232,16 @@ class SiteHealthController {
 	 * @return object
 	 */
 	public function rest_api_http_authorization_test( WP_REST_Request $request ) {
-		$data = array(
+		$data = [
 			'authorization' => $request->get_header( 'Authorization' ),
-		);
+		];
 
-		$server_keys = array(
+		$server_keys = [
 			'HTTP_AUTHORIZATION',
 			'PHP_AUTH_USER',
 			'PHP_AUTH_PW',
 			'AUTH_TYPE',
-		);
+		];
 
 		foreach ( $server_keys as $key ) {
 			if ( array_key_exists( $key, $_SERVER ) ) {

@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.0.0] - 2022-05-30
+### Removed
+- ⚠️ Removed the web SDK gateway, which functioned without origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!
+- ⚠️ Removed support for Adyen origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!
+- ⚠️ Removed support for your own Apple Pay certificate, because the [benefits of using Adyen's Apple Pay certificate](https://docs.adyen.com/payment-methods/apple-pay/web-drop-in):
+  - A faster way to add Apple Pay to your integration.
+  - There is less configuration required.
+  - You get access to new features.
+  - Apple Pay enabled by default for your Pay by Link integration, if you have one.
+
+### Changed
+- Switched to [Adyen web drop-in version `v5.14.0`](https://github.com/Adyen/adyen-web/releases/tag/v5.14.0).
+- Switched to [Adyen Checkout API version `v68`](https://docs.adyen.com/api-explorer/#/CheckoutService/v68/overview).
+- The Pronamic Pay payment method is updated from the Adyen webhook notification item.
+
+### Added
+- Added REST API endpoint `pronamic-pay/adyen/v1/return/<payment_id>`, to handle customers who come back after payment.
+- Added REST API endpoint `pronamic-pay/adyen/v1/redirect/<payment_id>`, to redirect customers in the web drop-in.
+- Added REST API endpoint `pronamic-pay/adyen/v1/error/<payment_id>`, to redirect errors in the web drop-in.
+
 ## [3.1.1] - 2022-04-12
 - Updated version number in `readme.txt`.
 
@@ -126,7 +146,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.0.0-RC-1...HEAD
+[4.0.0-RC-1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.1...4.0.0-RC-1
 [3.1.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.0.0...3.0.1

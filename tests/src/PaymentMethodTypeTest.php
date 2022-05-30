@@ -53,19 +53,19 @@ class PaymentMethodTypeTest extends TestCase {
 	 * @return array
 	 */
 	public function transform_test_provider() {
-		return array(
-			array( PaymentMethodType::AFTERPAY, PaymentMethods::AFTERPAY_COM ),
-			array( PaymentMethodType::ALIPAY, PaymentMethods::ALIPAY ),
-			array( PaymentMethodType::BANCONTACT, PaymentMethods::BANCONTACT ),
-			array( PaymentMethodType::SCHEME, PaymentMethods::CREDIT_CARD ),
-			array( PaymentMethodType::SEPA_DIRECT_DEBIT, PaymentMethods::DIRECT_DEBIT ),
-			array( PaymentMethodType::GIROPAY, PaymentMethods::GIROPAY ),
-			array( PaymentMethodType::IDEAL, PaymentMethods::IDEAL ),
-			array( PaymentMethodType::KLARNA, PaymentMethods::KLARNA_PAY_LATER ),
-			array( PaymentMethodType::MAESTRO, PaymentMethods::MAESTRO ),
-			array( PaymentMethodType::PAYPAL, PaymentMethods::PAYPAL ),
-			array( PaymentMethodType::DIRECT_EBANKING, PaymentMethods::SOFORT ),
-			array( null, null ),
-		);
+		return [
+			[ PaymentMethodType::AFTERPAY, PaymentMethods::AFTERPAY_COM ],
+			[ PaymentMethodType::ALIPAY, PaymentMethods::ALIPAY ],
+			[ PaymentMethodType::BANCONTACT, PaymentMethods::BANCONTACT ],
+			[ PaymentMethodType::SCHEME, PaymentMethods::CREDIT_CARD ],
+			[ PaymentMethodType::SEPA_DIRECT_DEBIT, PaymentMethods::DIRECT_DEBIT ],
+			[ PaymentMethodType::GIROPAY, PaymentMethods::GIROPAY ],
+			[ PaymentMethodType::IDEAL, PaymentMethods::IDEAL ],
+			[ PaymentMethodType::KLARNA, PaymentMethods::KLARNA_PAY_LATER ],
+			[ PaymentMethodType::MAESTRO, PaymentMethods::MAESTRO ],
+			[ PaymentMethodType::PAYPAL, PaymentMethods::PAYPAL ],
+			[ PaymentMethodType::DIRECT_EBANKING, PaymentMethods::SOFORT ],
+			[ null, null ],
+		];
 	}
 }

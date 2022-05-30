@@ -52,14 +52,14 @@ class AddressTest extends TestCase {
 		$this->assertEquals( 'CA', $address->get_state_or_province() );
 
 		$this->assertEquals(
-			(object) array(
+			(object) [
 				'country'           => 'US',
 				'city'              => 'San Francisco',
 				'houseNumberOrName' => '343',
 				'postalCode'        => '94110',
 				'stateOrProvince'   => 'CA',
 				'street'            => '60 29th Street',
-			),
+			],
 			$address->get_json()
 		);
 	}

@@ -11,13 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Details information
+ * Details information class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
- *
- * @author  Reüel van der Steege
- * @version 1.1.0
- * @since   1.1.0
  */
 class DetailsInformation extends ResponseObject {
 	/**
@@ -84,9 +80,9 @@ class DetailsInformation extends ResponseObject {
 
 		$validator->validate(
 			$object,
-			(object) array(
+			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/details.json' ),
-			),
+			],
 			\JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
@@ -110,10 +106,10 @@ class DetailsInformation extends ResponseObject {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'key'  => $this->get_key(),
 				'type' => $this->get_type(),
-			)
+			]
 		);
 
 		$object = (object) $properties;

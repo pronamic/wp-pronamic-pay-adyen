@@ -11,13 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Payment details request
+ * Payment details request class
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments/details
- *
- * @author  Reüel van der Steege
- * @version 1.1.0
- * @since   1.1.0
  */
 class PaymentDetailsRequest extends Request {
 	/**
@@ -79,10 +75,10 @@ class PaymentDetailsRequest extends Request {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'details'     => $this->get_details(),
 				'paymentData' => $this->get_payment_data(),
-			)
+			]
 		);
 
 		$object = (object) $properties;

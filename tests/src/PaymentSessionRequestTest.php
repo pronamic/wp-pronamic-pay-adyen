@@ -48,10 +48,10 @@ class PaymentSessionRequestTest extends TestCase {
 		$payment_request->set_telephone_number( '085 40 11 580' );
 
 		$payment_request->set_allowed_payment_methods(
-			array(
+			[
 				PaymentMethodType::DIRECT_EBANKING,
 				PaymentMethodType::IDEAL,
-			)
+			]
 		);
 
 		$payment_request->set_origin( 'https://www.pronamic.eu/' );
@@ -63,10 +63,10 @@ class PaymentSessionRequestTest extends TestCase {
 		$this->assertEquals( 'https://your-company.com/...', $payment_request->get_return_url() );
 		$this->assertEquals( 'NL', $payment_request->get_country_code() );
 		$this->assertEquals(
-			array(
+			[
 				PaymentMethodType::DIRECT_EBANKING,
 				PaymentMethodType::IDEAL,
-			),
+			],
 			$payment_request->get_allowed_payment_methods()
 		);
 		$this->assertEquals( 'https://www.pronamic.eu/', $payment_request->get_origin() );
@@ -146,14 +146,14 @@ class PaymentSessionRequestTest extends TestCase {
 			'NL'
 		);
 
-		$payment_request->set_allowed_payment_methods( array( PaymentMethodType::ALIPAY ) );
+		$payment_request->set_allowed_payment_methods( [ PaymentMethodType::ALIPAY ] );
 		$payment_request->set_sdk_version( '1.9.4' );
 		$payment_request->set_origin( 'https://www.pronamic.eu/' );
 
 		$object = $payment_request->get_json();
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		$this->assertEquals( array( 'alipay' ), $object->allowedPaymentMethods );
+		$this->assertEquals( [ 'alipay' ], $object->allowedPaymentMethods );
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 		$this->assertEquals( '1.9.4', $object->sdkVersion );
 		$this->assertEquals( 'https://www.pronamic.eu/', $object->origin );

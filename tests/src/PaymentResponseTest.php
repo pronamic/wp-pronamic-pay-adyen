@@ -52,14 +52,14 @@ class PaymentResponseTest extends TestCase {
 	 * Test JSON optional.
 	 */
 	public function test_from_object_optional() {
-		$object = (object) array(
+		$object = (object) [
 			'resultCode'   => ResultCode::PENDING,
 			'pspReference' => '1234567890123456',
-			'redirect'     => (object) array(
+			'redirect'     => (object) [
 				'method' => 'GET',
 				'url'    => 'https://test.adyen.com/hpp/redirectIdeal.shtml',
-			),
-		);
+			],
+		];
 
 		$payment_response = PaymentResponse::from_object( $object );
 

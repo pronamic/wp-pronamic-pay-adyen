@@ -1,6 +1,6 @@
 <?php
 /**
- * Line item.
+ * Line item
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2022 Pronamic
@@ -11,11 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 /**
- * Line item.
- *
- * @author  Reüel van der Steege
- * @version 1.0.0
- * @since   1.0.0
+ * Line item class
  */
 class LineItem implements \JsonSerializable {
 	/**
@@ -249,7 +245,7 @@ class LineItem implements \JsonSerializable {
 	 */
 	public function get_json() {
 		$properties = Util::filter_null(
-			array(
+			[
 				'amountExcludingTax' => $this->amount_excluding_tax,
 				'amountIncludingTax' => $this->amount_including_tax,
 				'description'        => $this->description,
@@ -258,7 +254,7 @@ class LineItem implements \JsonSerializable {
 				'taxAmount'          => $this->tax_amount,
 				'taxCategory'        => $this->tax_category,
 				'taxPercentage'      => $this->tax_percentage,
-			)
+			]
 		);
 
 		$object = (object) $properties;

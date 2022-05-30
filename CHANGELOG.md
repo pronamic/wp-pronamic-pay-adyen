@@ -6,12 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
-## [4.0.0-RC-2] - 2022-05-25
-### Changed
-- Improved return controller for more payment methods.
-- Improved return controller security with hash.
-
-## [4.0.0-RC-1] - 2022-05-12
+## [4.0.0] - 2022-05-30
 ### Removed
 - ⚠️ Removed the web SDK gateway, which functioned without origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!
 - ⚠️ Removed support for Adyen origin key, manual [migration to client key](https://docs.adyen.com/development-resources/client-side-authentication/migrate-from-origin-key-to-client-key) is required!
@@ -28,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added REST API endpoint `pronamic-pay/adyen/v1/return/<payment_id>`, to handle customers who come back after payment.
+- Added REST API endpoint `pronamic-pay/adyen/v1/redirect/<payment_id>`, to redirect customers in the web drop-in.
+- Added REST API endpoint `pronamic-pay/adyen/v1/error/<payment_id>`, to redirect errors in the web drop-in.
 
 ## [3.1.1] - 2022-04-12
 - Updated version number in `readme.txt`.

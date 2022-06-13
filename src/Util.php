@@ -77,4 +77,50 @@ class Util {
 
 		return $country_code;
 	}
+
+	/**
+	 * Get reference for payment including network and blog IDs.
+	 *
+	 * @since 4.1.0
+	 * @param string|int $payment_id Payment ID.
+	 * @return string
+	 * @throws \InvalidArgumentException Throws error on empty payment ID.
+	 */
+	public static function get_payment_reference( $payment_id ) : string {
+		if ( empty( $payment_id ) ) {
+			throw new \InvalidArgumentException( 'Payment ID cannot be empty for a unique reference to the payment.' );
+		}
+
+		return \sprintf(
+			'%s-%s-%s',
+			\get_current_network_id(),
+			\get_current_blog_id(),
+			$payment_id
+		);
+	}
+
+	/**
+	 * Get payment ID from merchant reference.
+	 *
+	 * @param string $reference Merchant reference.
+	 * @return string|null
+	 */
+	public static function get_reference_payment_id( $reference ) : ?string {
+		// Reference notation without network and blog IDs for backward compatibility.
+		if ( ! \str_contains( $reference, '-' ) ) {
+			return $reference;
+		}
+
+		list( $scan_network_id, $scan_blog_id, $scan_payment_id ) = \sscanf( $reference, '%d-%d-%s' );
+
+		if ( \get_current_network_id() !== $scan_network_id ) {
+			return null;
+		}
+
+		if ( \get_current_blog_id() !== $scan_blog_id ) {
+			return null;
+		}
+
+		return $scan_payment_id;
+	}
 }

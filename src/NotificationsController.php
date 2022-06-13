@@ -150,7 +150,9 @@ class NotificationsController {
 		}
 
 		foreach ( $notification_request->get_items() as $item ) {
-			$payment = get_pronamic_payment( $item->get_merchant_reference() );
+			$payment_id = Util::get_reference_payment_id( $item->get_merchant_reference() );
+
+			$payment = get_pronamic_payment( $payment_id );
 
 			if ( null === $payment ) {
 				continue;

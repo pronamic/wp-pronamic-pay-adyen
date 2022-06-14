@@ -194,7 +194,7 @@ class Gateway extends Core_Gateway {
 		$payment_request = new PaymentRequest(
 			AmountTransformer::transform( $payment->get_total_amount() ),
 			$this->config->get_merchant_account(),
-			Util::get_payment_reference( $payment_id ),
+			\sprintf( '%s-%s-%s', \get_current_network_id(), \get_current_blog_id(), $payment_id ),
 			$this->get_payment_return_url( $payment_id ),
 			$payment_method_details
 		);
@@ -273,7 +273,7 @@ class Gateway extends Core_Gateway {
 		$request = new PaymentSessionRequest(
 			AmountTransformer::transform( $payment->get_total_amount() ),
 			$this->config->get_merchant_account(),
-			Util::get_payment_reference( $payment_id ),
+			\sprintf( '%s-%s-%s', \get_current_network_id(), \get_current_blog_id(), $payment_id ),
 			$this->get_payment_return_url( $payment_id )
 		);
 

@@ -150,7 +150,19 @@ class NotificationsController {
 		}
 
 		foreach ( $notification_request->get_items() as $item ) {
-			$payment = get_pronamic_payment( $item->get_merchant_reference() );
+			$payment_id = $item->get_merchant_reference();
+
+			if ( \str_contains( $payment_id, '-' ) ) {
+				list( $scan_network_id, $scan_blog_id, $scan_payment_id ) = \sscanf( $payment_id, '%d-%d-%s' );
+
+				$payment_id = null;
+
+				if ( \get_current_network_id() === $scan_network_id && \get_current_blog_id() === $scan_blog_id ) {
+					$payment_id = $scan_payment_id;
+				}
+			}
+
+			$payment = get_pronamic_payment( $payment_id );
 
 			if ( null === $payment ) {
 				continue;

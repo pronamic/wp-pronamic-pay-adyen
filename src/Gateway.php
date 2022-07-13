@@ -11,7 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
+use Pronamic\WordPress\Pay\Core\PaymentMethod;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\SelectField;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
@@ -60,36 +62,37 @@ class Gateway extends Core_Gateway {
 		];
 
 		$this->client = new Client( $config );
-	}
 
-	/**
-	 * Get supported payment methods
-	 *
-	 * @return array<string>
-	 * @see Core_Gateway::get_supported_payment_methods()
-	 */
-	public function get_supported_payment_methods() {
-		return [
-			PaymentMethods::AFTERPAY_COM,
-			PaymentMethods::ALIPAY,
-			PaymentMethods::APPLE_PAY,
-			PaymentMethods::BANCONTACT,
-			PaymentMethods::BLIK,
-			PaymentMethods::CREDIT_CARD,
-			PaymentMethods::DIRECT_DEBIT,
-			PaymentMethods::EPS,
-			PaymentMethods::GIROPAY,
-			PaymentMethods::GOOGLE_PAY,
-			PaymentMethods::IDEAL,
-			PaymentMethods::KLARNA_PAY_LATER,
-			PaymentMethods::KLARNA_PAY_NOW,
-			PaymentMethods::KLARNA_PAY_OVER_TIME,
-			PaymentMethods::MB_WAY,
-			PaymentMethods::SOFORT,
-			PaymentMethods::SWISH,
-			PaymentMethods::TWINT,
-			PaymentMethods::VIPPS,
-		];
+		// Methods.
+		$ideal_payment_method = new PaymentMethod( PaymentMethods::IDEAL );
+
+		$ideal_issuer_field = new SelectField( 'ideal-issuer' );
+		$ideal_issuer_field->set_required( true );
+		$ideal_issuer_field->set_options_callback( function() {
+			return $this->get_issuers();
+		} );
+
+		$ideal_payment_method->add_field( $ideal_issuer_field );
+
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::AFTERPAY_COM ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::ALIPAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::APPLE_PAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::BANCONTACT ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::BLIK ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::CREDIT_CARD ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::DIRECT_DEBIT ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::EPS ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::GIROPAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::GOOGLE_PAY ) );
+		$this->register_payment_method( $ideal_payment_method );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_LATER ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_NOW ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_OVER_TIME ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::MB_WAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::SOFORT ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::SWISH ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::TWINT ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::VIPPS ) );
 	}
 
 	/**
@@ -123,9 +126,8 @@ class Gateway extends Core_Gateway {
 	 * Get issuers.
 	 *
 	 * @return array<string, string>|array<int, array<string, array<string, string>>>
-	 * @see Core_Gateway::get_issuers()
 	 */
-	public function get_issuers() {
+	private function get_issuers() {
 		$issuers = [];
 
 		$payment_methods_request = new PaymentMethodsRequest( $this->config->get_merchant_account() );

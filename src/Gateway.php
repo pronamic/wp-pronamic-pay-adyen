@@ -11,9 +11,11 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
+use Pronamic\WordPress\Pay\Core\IDealIssuerSelectField;
 use Pronamic\WordPress\Pay\Core\PaymentMethod;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\SelectField;
+use Pronamic\WordPress\Pay\Core\SelectFieldOption;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
@@ -66,7 +68,7 @@ class Gateway extends Core_Gateway {
 		// Methods.
 		$ideal_payment_method = new PaymentMethod( PaymentMethods::IDEAL );
 
-		$ideal_issuer_field = new SelectField( 'ideal-issuer' );
+		$ideal_issuer_field = new IDealIssuerSelectField( 'ideal-issuer' );
 		$ideal_issuer_field->set_required( true );
 		$ideal_issuer_field->set_options_callback( function() {
 			return $this->get_ideal_issuers();
@@ -93,6 +95,7 @@ class Gateway extends Core_Gateway {
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::SWISH ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::TWINT ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::VIPPS ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::VOID ) );
 	}
 
 	/**
@@ -146,20 +149,12 @@ class Gateway extends Core_Gateway {
 					$id   = $payment_method_issuer->get_id();
 					$name = $payment_method_issuer->get_name();
 
-					$issuers[ $id ] = $name;
+					$issuers[] = new SelectFieldOption( $id, $name );
 				}
 			}
 		}
 
-		if ( empty( $issuers ) ) {
-			return $issuers;
-		}
-
-		return [
-			[
-				'options' => $issuers,
-			],
-		];
+		return $issuers;
 	}
 
 	/**

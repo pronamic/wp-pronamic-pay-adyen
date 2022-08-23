@@ -105,30 +105,44 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
-	 * Get available payment methods.
+	 * Get payment methods.
 	 *
-	 * @return array<int, string>
-	 * @see Core_Gateway::get_available_payment_methods()
+	 * @param array $args Query arguments.
+	 * @return PaymentMethod[]
 	 */
-	public function get_available_payment_methods() {
-		$core_payment_methods = [];
+	public function get_payment_methods( $args = [] ) {
+		$this->maybe_enrich_payment_methods();
 
-		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+		return parent::get_payment_methods( $args );
+	}
 
-		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
-			$type = $payment_method->get_type();
+	/**
+	 * Maybe enrich payment methods.
+	 *
+	 * @return void
+	 */
+	private function maybe_enrich_payment_methods() {
+		$cache_key = 'pronamic_pay_adyen_payment_methods_' . \md5( \wp_json_encode( $this->config ) );
 
-			if ( null === $type ) {
-				continue;
-			}
+		$adyen_payment_methods = \get_transient( $cache_key );
 
-			$core_payment_methods[] = PaymentMethodType::to_wp( $type );
+		if ( false === $adyen_payment_methods ) {
+			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+
+			$adyen_payment_methods = $payment_methods_response->get_payment_methods();
+
+			\set_transient( $cache_key, $adyen_payment_methods, \DAY_IN_SECONDS );
 		}
 
-		$core_payment_methods = array_filter( $core_payment_methods );
-		$core_payment_methods = array_unique( $core_payment_methods );
+		foreach ( $adyen_payment_methods as $adyen_payment_method ) {
+			$core_payment_method_id = PaymentMethodType::to_wp( $adyen_payment_method->get_type() );
 
-		return $core_payment_methods;
+			$core_payment_method = $this->get_payment_method( $core_payment_method_id );
+
+			if ( null !== $core_payment_method ) {
+				$core_payment_method->set_status( 'active' );
+			}
+		}
 	}
 
 	/**

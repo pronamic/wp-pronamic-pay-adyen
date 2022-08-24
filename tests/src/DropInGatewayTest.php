@@ -36,23 +36,8 @@ class DropInGatewayTest extends TestCase {
 
 		$gateway = new DropInGateway( $config );
 
-		$this->assertEquals(
-			[
-				PaymentMethods::ALIPAY,
-				PaymentMethods::APPLE_PAY,
-				PaymentMethods::BANCONTACT,
-				PaymentMethods::CREDIT_CARD,
-				PaymentMethods::DIRECT_DEBIT,
-				PaymentMethods::EPS,
-				PaymentMethods::GIROPAY,
-				PaymentMethods::GOOGLE_PAY,
-				PaymentMethods::IDEAL,
-				PaymentMethods::KLARNA_PAY_LATER,
-				PaymentMethods::SOFORT,
-				PaymentMethods::SWISH,
-				PaymentMethods::VIPPS,
-			],
-			$gateway->get_supported_payment_methods()
-		);
+		$payment_methods = $gateway->get_payment_methods();
+
+		$this->assertCount( 12, $payment_methods );
 	}
 }

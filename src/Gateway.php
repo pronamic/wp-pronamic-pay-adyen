@@ -117,7 +117,11 @@ class Gateway extends Core_Gateway {
 	 * @return PaymentMethod[]
 	 */
 	public function get_payment_methods( $args = [] ) {
-		$this->maybe_enrich_payment_methods();
+		try {
+			$this->maybe_enrich_payment_methods();
+		} catch ( \Exception $e ) {
+			// No problem.
+		}
 
 		return parent::get_payment_methods( $args );
 	}

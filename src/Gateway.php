@@ -13,6 +13,7 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethod;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\PaymentMethodsCollection;
 use Pronamic\WordPress\Pay\Fields\CachedCallbackOptions;
 use Pronamic\WordPress\Pay\Fields\IDealIssuerSelectField;
 use Pronamic\WordPress\Pay\Fields\SelectFieldOption;
@@ -114,9 +115,9 @@ class Gateway extends Core_Gateway {
 	 * Get payment methods.
 	 *
 	 * @param array $args Query arguments.
-	 * @return PaymentMethod[]
+	 * @return PaymentMethodsCollection
 	 */
-	public function get_payment_methods( $args = [] ) {
+	public function get_payment_methods( array $args = [] ) : PaymentMethodsCollection {
 		try {
 			$this->maybe_enrich_payment_methods();
 		} catch ( \Exception $e ) {

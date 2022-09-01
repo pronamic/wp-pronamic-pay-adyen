@@ -104,11 +104,6 @@ class Gateway extends Core_Gateway {
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::SWISH ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::TWINT ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::VIPPS ) );
-
-		$payment_method_void = new PaymentMethod( PaymentMethods::VOID );
-		$payment_method_void->set_status( 'active' );
-
-		$this->register_payment_method( $payment_method_void );
 	}
 
 	/**

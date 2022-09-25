@@ -11,8 +11,14 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
+use Pronamic\WordPress\Pay\Core\PaymentMethod;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\PaymentMethodsCollection;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
+use Pronamic\WordPress\Pay\Fields\CachedCallbackOptions;
+use Pronamic\WordPress\Pay\Fields\IDealIssuerSelectField;
+use Pronamic\WordPress\Pay\Fields\SelectFieldOption;
+use Pronamic\WordPress\Pay\Fields\SelectFieldOptionGroup;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
@@ -50,6 +56,8 @@ class Gateway extends Core_Gateway {
 	 * @param Config $config Config.
 	 */
 	public function __construct( Config $config ) {
+		parent::__construct();
+
 		$this->config = $config;
 
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
@@ -60,72 +68,103 @@ class Gateway extends Core_Gateway {
 		];
 
 		$this->client = new Client( $config );
+
+		// Methods.
+		$ideal_payment_method = new PaymentMethod( PaymentMethods::IDEAL );
+
+		$ideal_issuer_field = new IDealIssuerSelectField( 'ideal-issuer' );
+
+		$ideal_issuer_field->set_required( true );
+
+		$ideal_issuer_field->set_options(
+			new CachedCallbackOptions(
+				function() {
+					return $this->get_ideal_issuers();
+				},
+				'pronamic_pay_ideal_issuers_' . \md5( \wp_json_encode( $config ) )
+			)
+		);
+
+		$ideal_payment_method->add_field( $ideal_issuer_field );
+
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::AFTERPAY_COM ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::ALIPAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::APPLE_PAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::BANCONTACT ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::BLIK ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::CREDIT_CARD ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::DIRECT_DEBIT ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::EPS ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::GIROPAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::GOOGLE_PAY ) );
+		$this->register_payment_method( $ideal_payment_method );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_LATER ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_NOW ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_OVER_TIME ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::MB_WAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::SOFORT ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::SWISH ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::TWINT ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::VIPPS ) );
 	}
 
 	/**
-	 * Get supported payment methods
+	 * Get payment methods.
 	 *
-	 * @return array<string>
-	 * @see Core_Gateway::get_supported_payment_methods()
+	 * @param array $args Query arguments.
+	 * @return PaymentMethodsCollection
 	 */
-	public function get_supported_payment_methods() {
-		return [
-			PaymentMethods::AFTERPAY_COM,
-			PaymentMethods::ALIPAY,
-			PaymentMethods::APPLE_PAY,
-			PaymentMethods::BANCONTACT,
-			PaymentMethods::BLIK,
-			PaymentMethods::CREDIT_CARD,
-			PaymentMethods::DIRECT_DEBIT,
-			PaymentMethods::EPS,
-			PaymentMethods::GIROPAY,
-			PaymentMethods::GOOGLE_PAY,
-			PaymentMethods::IDEAL,
-			PaymentMethods::KLARNA_PAY_LATER,
-			PaymentMethods::KLARNA_PAY_NOW,
-			PaymentMethods::KLARNA_PAY_OVER_TIME,
-			PaymentMethods::MB_WAY,
-			PaymentMethods::SOFORT,
-			PaymentMethods::SWISH,
-			PaymentMethods::TWINT,
-			PaymentMethods::VIPPS,
-		];
-	}
-
-	/**
-	 * Get available payment methods.
-	 *
-	 * @return array<int, string>
-	 * @see Core_Gateway::get_available_payment_methods()
-	 */
-	public function get_available_payment_methods() {
-		$core_payment_methods = [];
-
-		$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
-
-		foreach ( $payment_methods_response->get_payment_methods() as $payment_method ) {
-			$type = $payment_method->get_type();
-
-			if ( null === $type ) {
-				continue;
-			}
-
-			$core_payment_methods[] = PaymentMethodType::to_wp( $type );
+	public function get_payment_methods( array $args = [] ) : PaymentMethodsCollection {
+		try {
+			$this->maybe_enrich_payment_methods();
+		} catch ( \Exception $e ) {
+			// No problem.
 		}
 
-		$core_payment_methods = array_filter( $core_payment_methods );
-		$core_payment_methods = array_unique( $core_payment_methods );
-
-		return $core_payment_methods;
+		return parent::get_payment_methods( $args );
 	}
 
 	/**
-	 * Get issuers.
+	 * Maybe enrich payment methods.
 	 *
-	 * @return array<string, string>|array<int, array<string, array<string, string>>>
-	 * @see Core_Gateway::get_issuers()
+	 * @return void
 	 */
-	public function get_issuers() {
+	private function maybe_enrich_payment_methods() {
+		$cache_key = 'pronamic_pay_adyen_payment_methods_' . \md5( \wp_json_encode( $this->config ) );
+
+		$adyen_payment_methods = \get_transient( $cache_key );
+
+		if ( false === $adyen_payment_methods ) {
+			$payment_methods_response = $this->client->get_payment_methods( new PaymentMethodsRequest( $this->config->get_merchant_account() ) );
+
+			$adyen_payment_methods = $payment_methods_response->get_payment_methods();
+
+			\set_transient( $cache_key, $adyen_payment_methods, \DAY_IN_SECONDS );
+		}
+
+		foreach ( $adyen_payment_methods as $adyen_payment_method ) {
+			$core_payment_method_id = PaymentMethodType::to_wp( $adyen_payment_method->get_type() );
+
+			$core_payment_method = $this->get_payment_method( $core_payment_method_id );
+
+			if ( null !== $core_payment_method ) {
+				$core_payment_method->set_status( 'active' );
+			}
+		}
+
+		foreach ( $this->payment_methods as $payment_method ) {
+			if ( '' === $payment_method->get_status() ) {
+				$payment_method->set_status( 'inactive' );
+			}
+		}
+	}
+
+	/**
+	 * Get iDEAL issuers.
+	 *
+	 * @return iterable<SelectFieldOption|SelectFieldOptionGroup>
+	 */
+	private function get_ideal_issuers() {
 		$issuers = [];
 
 		$payment_methods_request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
@@ -144,20 +183,12 @@ class Gateway extends Core_Gateway {
 					$id   = $payment_method_issuer->get_id();
 					$name = $payment_method_issuer->get_name();
 
-					$issuers[ $id ] = $name;
+					$issuers[] = new SelectFieldOption( $id, $name );
 				}
 			}
 		}
 
-		if ( empty( $issuers ) ) {
-			return $issuers;
-		}
-
-		return [
-			[
-				'options' => $issuers,
-			],
-		];
+		return $issuers;
 	}
 
 	/**

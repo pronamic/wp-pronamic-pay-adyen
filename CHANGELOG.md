@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.2.0] - 2022-09-25
+- Updated payment methods registration.
+
 ## [4.1.0] - 2022-07-01
 ### Changed
 - Added WordPress network ID and blog ID to merchant reference ([#1](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/1)).
@@ -150,8 +153,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.1.0...HEAD
-[4.0.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.0.0...4.1.0
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.0...HEAD
+[4.2.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.1.0...4.2.0
+[4.1.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.1...4.0.0
 [3.1.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/3.0.1...3.1.0

@@ -10,13 +10,13 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
+use JsonSerializable;
 use Pronamic\WordPress\Pay\Core\GatewayConfig;
 
 /**
  * Config class
  */
-class Config extends GatewayConfig {
+class Config extends GatewayConfig implements JsonSerializable {
 	/**
 	 * Environment.
 	 * 
@@ -84,5 +84,21 @@ class Config extends GatewayConfig {
 	 */
 	public function get_merchant_order_reference() {
 		return (string) $this->merchant_order_reference;
+	}
+
+	/**
+	 * Serialize to JSON.
+	 *
+	 * @link https://www.w3.org/TR/json-ld11/#specifying-the-type
+	 * @return mixed|void
+	 */
+	public function jsonSerialize() {
+		return [
+			'@type'            => __CLASS__,
+			'environment'      => $this->environment,
+			'merchant_account' => (string) $this->merchant_account,
+			'api_key'          => (string) $this->api_key,
+			'client_key'       => (string) $this->client_key,
+		];
 	}
 }

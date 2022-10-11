@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.2.3] - 2022-10-11
+- Updated Adyen Drop-in to version `5.27.0` (pronamic/wp-pronamic-pay-adyen#14).
+- Fixes error triggered by Adyen drop-in with Swish payment method on mobile.
+
 ## [4.2.2] - 2022-09-27
 - Updated version number in `readme.txt`.
 
@@ -159,7 +163,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.2...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.3...HEAD
+[4.2.3]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.2...4.2.3
 [4.2.2]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.0...4.2.1
 [4.2.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.1.0...4.2.0

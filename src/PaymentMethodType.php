@@ -166,6 +166,13 @@ class PaymentMethodType {
 	const MB_WAY = 'mbway';
 
 	/**
+	 * Constant for the 'mobilepay' payment method type.
+	 *
+	 * @var string
+	 */
+	const MOBILEPAY = 'mobilepay';
+
+	/**
 	 * Constant for the 'Multibanco' payment method type.
 	 *
 	 * @var string
@@ -236,6 +243,7 @@ class PaymentMethodType {
 		PaymentMethods::KLARNA_PAY_OVER_TIME => self::KLARNA_ACCOUNT,
 		PaymentMethods::MAESTRO              => self::MAESTRO,
 		PaymentMethods::MB_WAY               => self::MB_WAY,
+		PaymentMethods::MOBILEPAY            => self::MOBILEPAY,
 		PaymentMethods::PAYPAL               => self::PAYPAL,
 		PaymentMethods::SOFORT               => self::DIRECT_EBANKING,
 		PaymentMethods::SWISH                => self::SWISH,

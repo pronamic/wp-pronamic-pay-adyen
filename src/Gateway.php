@@ -102,6 +102,7 @@ class Gateway extends Core_Gateway {
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_NOW ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_OVER_TIME ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::MB_WAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::MOBILEPAY ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::SOFORT ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::SWISH ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::TWINT ) );
@@ -496,6 +497,7 @@ class Gateway extends Core_Gateway {
 		return \in_array(
 			$payment_method_type,
 			[
+				PaymentMethodType::MOBILEPAY,
 				PaymentMethodType::SWISH,
 				PaymentMethodType::UNIONPAY,
 			],

@@ -4,7 +4,7 @@
  * Plugin URI: https://www.pronamic.eu/plugins/pronamic-pay-adyen/
  * Description: Extend the Pronamic Pay plugin with the Adyen gateway to receive payments with Adyen through a variety of WordPress plugins.
  *
- * Version: 4.2.3
+ * Version: 4.3.0
  * Requires at least: 5.9
  *
  * Author: Pronamic

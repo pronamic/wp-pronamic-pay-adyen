@@ -43,7 +43,7 @@
 		"justinrainbow/json-schema": "^5.2",
 		"pronamic/wp-http": "^1.0",
 		"pronamic/wp-money": "^2.0",
-		"wp-pay/core": "^4.4"
+		"wp-pay/core": "^4.5"
 	},
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "^1.4",

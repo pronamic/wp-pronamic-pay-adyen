@@ -297,6 +297,19 @@ class Gateway extends Core_Gateway {
 			exit;
 		}
 
+		// Redirect API-only payment methods to payment action URL.
+		$payment_method_type = PaymentMethodType::transform( $payment->get_payment_method() );
+
+		if ( $this->can_api_only( $payment_method_type ) ) {
+			$action_url = $payment->get_action_url();
+
+			if ( null !== $action_url ) {
+				\wp_redirect( $action_url );
+
+				exit;
+			}
+		}
+
 		/**
 		 * Step 1: Create a payment session
 		 * 

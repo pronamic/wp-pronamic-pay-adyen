@@ -67,7 +67,15 @@ class ReturnController {
 					'redirectResult' => [
 						'description' => __( 'Details you need to submit to handle the redirect.', 'pronamic_ideal' ),
 						'type'        => 'string',
-						'required'    => true,
+						/**
+						 * The return URL should have the `redirectResult` parameter appended to it, which is required
+						 * to retrieve the payment status. However, this parameter is sometimes omitted (e.g. for Swish
+						 * payment method), therefore we don't set the parameter as required.
+						 *
+						 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/19
+						 * @link https://docs.adyen.com/online-payments/web-drop-in#handle-redirect-result
+						 */
+						'required'    => false,
 					],
 				],
 			]
@@ -212,24 +220,25 @@ class ReturnController {
 		// Redirect result.
 		$redirect_result = $request->get_param( 'redirectResult' );
 
-		// OK.
-		$payment_details_request = new PaymentDetailsRequest();
+		if ( null !== $redirect_result ) {
+			$payment_details_request = new PaymentDetailsRequest();
 
-		$payment_details_request->set_details(
-			(object) [
-				'redirectResult' => $redirect_result,
-			] 
-		);
-
-		try {
-			$payment_details_response = $gateway->client->request_payment_details( $payment_details_request );
-
-			PaymentResponseHelper::update_payment( $payment, $payment_details_response );
-		} catch ( \Exception $e ) {
-			return new WP_Error(
-				'pronamic-pay-adyen-payment-details-exception',
-				$e->getMessage()
+			$payment_details_request->set_details(
+				(object) [
+					'redirectResult' => $redirect_result,
+				]
 			);
+
+			try {
+				$payment_details_response = $gateway->client->request_payment_details( $payment_details_request );
+
+				PaymentResponseHelper::update_payment( $payment, $payment_details_response );
+			} catch ( \Exception $e ) {
+				return new WP_Error(
+					'pronamic-pay-adyen-payment-details-exception',
+					$e->getMessage()
+				);
+			}
 		}
 
 		/**

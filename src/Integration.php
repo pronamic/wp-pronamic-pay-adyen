@@ -47,7 +47,7 @@ class Integration extends AbstractGatewayIntegration {
 				'url'           => \__( 'https://www.adyen.com/', 'pronamic_ideal' ),
 				'product_url'   => \__( 'https://www.adyen.com/pricing', 'pronamic_ideal' ),
 				'dashboard_url' => 'https://ca-live.adyen.com/ca/ca/login.shtml',
-				'manual_url'    => \__( 'https://www.pronamic.eu/manuals/using-adyen-pronamic-pay/', 'pronamic_ideal' ),
+				'manual_url'    => \__( 'https://www.pronamicpay.com/en/manuals/how-to-connect-adyen-to-wordpress-with-pronamic-pay/', 'pronamic_ideal' ),
 				'supports'      => [
 					'webhook',
 					'webhook_log',

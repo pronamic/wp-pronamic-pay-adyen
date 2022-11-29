@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.3.1] - 2022-11-29
+- Redirect API-only payment methods to payment action URL. [#18](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/18)
+- Make `redirectResult` no longer required in return endpoint. [#19](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/19)
+
 ## [4.3.0] - 2022-11-07
 - Added MobilePay payment method. [#16](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/16)
 
@@ -166,7 +170,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.3.0...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.3.1...HEAD
+[4.3.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.3.0...4.3.1
 [4.3.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.3...4.3.0
 [4.2.3]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.2...4.2.3
 [4.2.2]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.1...4.2.2

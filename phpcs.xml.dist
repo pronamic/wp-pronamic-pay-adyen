@@ -8,6 +8,10 @@
 
 	<rule ref="VariableAnalysis"/>
 
+	<rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedCatch">
+		<exclude-pattern>src/Gateway.php</exclude-pattern>
+	</rule>
+
 	<rule ref="PronamicWP">
 		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_key"/>
 		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_query"/>

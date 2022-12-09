@@ -101,7 +101,7 @@ class Endpoint {
 
 	/**
 	 * Get front-end URL.
-	 * 
+	 *
 	 * @link https://docs.adyen.com/online-payments/web-drop-in?tab=embed_script_and_stylesheet_2
 	 * @link https://docs.adyen.com/development-resources/live-endpoints#checkout-js-endpoints
 	 * @param string $version Version.

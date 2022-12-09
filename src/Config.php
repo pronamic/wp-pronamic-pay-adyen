@@ -19,7 +19,7 @@ use Pronamic\WordPress\Pay\Core\GatewayConfig;
 class Config extends GatewayConfig implements JsonSerializable {
 	/**
 	 * Environment.
-	 * 
+	 *
 	 * @var string
 	 */
 	public $environment;

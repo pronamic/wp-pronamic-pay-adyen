@@ -171,7 +171,7 @@ class Gateway extends Core_Gateway {
 		$payment_methods_request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
 
 		$payment_methods_request->set_allowed_payment_methods( [ PaymentMethodType::IDEAL ] );
-		
+
 		$payment_methods_response = $this->client->get_payment_methods( $payment_methods_request );
 
 		$payment_methods = $payment_methods_response->get_payment_methods();
@@ -312,7 +312,7 @@ class Gateway extends Core_Gateway {
 
 		/**
 		 * Step 1: Create a payment session
-		 * 
+		 *
 		 * @link https://docs.adyen.com/online-payments/web-drop-in#create-payment-session
 		 */
 		$request = new PaymentSessionRequest(

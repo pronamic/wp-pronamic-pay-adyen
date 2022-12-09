@@ -41,7 +41,7 @@ class ReturnController {
 	public function rest_api_init() {
 		/**
 		 * Adyen return route.
-		 * 
+		 *
 		 * @link https://docs.adyen.com/online-payments/web-drop-in#handle-redirect-result
 		 */
 		\register_rest_route(
@@ -83,7 +83,7 @@ class ReturnController {
 
 		/**
 		 * Adyen redirect route.
-		 * 
+		 *
 		 * @link https://docs.adyen.com/online-payments/web-drop-in#handle-redirect-result
 		 */
 		\register_rest_route(
@@ -304,7 +304,7 @@ class ReturnController {
 
 		/**
 		 * Result code.
-		 * 
+		 *
 		 * @link https://docs.adyen.com/online-payments/payment-result-codes
 		 */
 		$result_code = $request->get_param( 'resultCode' );

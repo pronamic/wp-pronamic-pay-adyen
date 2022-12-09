@@ -230,7 +230,6 @@ class Integration extends AbstractGatewayIntegration {
 		// Merchant Account.
 		$fields[] = [
 			'section'  => 'general',
-			'filter'   => FILTER_SANITIZE_STRING,
 			'meta_key' => '_pronamic_gateway_adyen_merchant_account',
 			'title'    => _x( 'Merchant Account', 'adyen', 'pronamic_ideal' ),
 			'type'     => 'text',
@@ -242,6 +241,11 @@ class Integration extends AbstractGatewayIntegration {
 		// API Key.
 		$fields[] = [
 			'section'     => 'general',
+			/**
+			 * Filter Adyen API key unsafe raw to allow <> chars.
+			 *
+			 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/7
+			 */
 			'filter'      => \FILTER_UNSAFE_RAW,
 			'meta_key'    => '_pronamic_gateway_adyen_api_key',
 			'title'       => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
@@ -260,7 +264,6 @@ class Integration extends AbstractGatewayIntegration {
 			// Environment.
 			$fields[] = [
 				'section'  => 'general',
-				'filter'   => \FILTER_SANITIZE_STRING,
 				'meta_key' => '_pronamic_gateway_adyen_environment',
 				'title'    => \_x( 'Environment', 'adyen', 'pronamic_ideal' ),
 				'type'     => 'select',
@@ -280,7 +283,6 @@ class Integration extends AbstractGatewayIntegration {
 			// Live API URL prefix.
 			$fields[] = [
 				'section'     => 'general',
-				'filter'      => FILTER_SANITIZE_STRING,
 				'meta_key'    => '_pronamic_gateway_adyen_api_live_url_prefix',
 				'title'       => _x( 'API Live URL Prefix', 'adyen', 'pronamic_ideal' ),
 				'type'        => 'text',
@@ -298,7 +300,6 @@ class Integration extends AbstractGatewayIntegration {
 		// Client Key.
 		$fields[] = [
 			'section'     => 'general',
-			'filter'      => FILTER_SANITIZE_STRING,
 			'meta_key'    => '_pronamic_gateway_adyen_client_key',
 			'title'       => _x( 'Client Key', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'text',
@@ -318,10 +319,10 @@ class Integration extends AbstractGatewayIntegration {
 		// Merchant Order Reference.
 		$fields[] = [
 			'section'     => 'advanced',
-			'filter'      => [
-				'filter' => \FILTER_SANITIZE_STRING,
-				'flags'  => \FILTER_FLAG_NO_ENCODE_QUOTES,
-			],
+			/**
+			 * Filter Adyen merchant order reference unsafe raw to allow double quotes.
+			 */
+			'filter'      => \FILTER_UNSAFE_RAW,
 			'meta_key'    => '_pronamic_gateway_adyen_merchant_order_reference',
 			'title'       => __( 'Merchant Order Reference', 'pronamic_ideal' ),
 			'type'        => 'text',

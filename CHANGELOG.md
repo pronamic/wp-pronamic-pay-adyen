@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.0] - 2022-12-20
+- Increased minimum PHP version to version `8` or higher.
+- Improved support for PHP `8.1` and `8.2`.
+- Removed usage of deprecated constant `FILTER_SANITIZE_STRING`.
+- Added support for https://github.com/WordPress/wp-plugin-dependencies. ([b8b2fd0](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/b8b2fd05efca0f1685fca3e1b7e89bd0b8cab71a))
+- Updated manual URL to pronamicpay.com (pronamic/pronamic-pay#15). ([43f1d7d](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/43f1d7d8b6e51ae8470f10b3bc1a2e3cd06d0ec8))
+
+Full set of changes: [`4.3.1...4.4.0`][4.4.0]
+
+[4.4.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.3.1...v4.4.0
+
 ## [4.3.1] - 2022-11-29
 - Redirect API-only payment methods to payment action URL. [#18](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/18)
 - Make `redirectResult` no longer required in return endpoint. [#19](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/19)

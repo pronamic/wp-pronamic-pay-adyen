@@ -38,7 +38,7 @@
 		}
 	},
 	"require": {
-		"php": ">=8.0",
+		"php": ">=7.4",
 		"ext-intl": "*",
 		"justinrainbow/json-schema": "^5.2",
 		"pronamic/wp-http": "^1.2",

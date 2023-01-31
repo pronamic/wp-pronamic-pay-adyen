@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.1] - 2023-01-31
+### Composer
+
+- Changed `php` from `>=8.0` to `>=7.4`.
+Full set of changes: [`4.4.0...4.4.1`][4.4.1]
+
+[4.4.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.0...v4.4.1
+
 ## [4.4.0] - 2022-12-20
 - Increased minimum PHP version to version `8` or higher.
 - Improved support for PHP `8.1` and `8.2`.

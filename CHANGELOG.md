@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.2] - 2023-02-03
+
+### Commits
+
+- Updated "Requires PHP: 7.4" plugin header. ([acbe9c5](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/acbe9c5e4bd4a342c08e054f71147d6d6cdbe15d))
+
+Full set of changes: [`4.4.1...4.4.2`][4.4.2]
+
+[4.4.2]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.1...v4.4.2
+
 ## [4.4.1] - 2023-01-31
 ### Composer
 

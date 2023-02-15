@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.3] - 2023-02-15
+
+### Commits
+
+- Added support for PayPal payment method. ([27e7508](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/27e75089763f71508f461195978cc580015e0ba8))
+
+Full set of changes: [`4.4.2...4.4.3`][4.4.3]
+
+[4.4.3]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.2...v4.4.3
+
 ## [4.4.2] - 2023-02-03
 
 ### Commits

@@ -1,4 +1,5 @@
 *.http text eol=crlf
+
 /js/src            export-ignore
 /tests             export-ignore
 /vendor-bin        export-ignore
@@ -6,6 +7,7 @@
 /.eslintignore     export-ignore
 /.eslintrc         export-ignore
 /.gitattributes    export-ignore
+/.github/          export-ignore
 /.gitignore        export-ignore
 /.phplint.yml      export-ignore
 /.scrutinizer.yml  export-ignore

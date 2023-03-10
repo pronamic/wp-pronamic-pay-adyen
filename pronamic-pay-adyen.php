@@ -27,6 +27,14 @@
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
 
+/**
+ * Autoload.
+ */
+require_once __DIR__ . '/vendor/autoload_packages.php';
+
+/**
+ * Gateway.
+ */
 add_filter(
 	'pronamic_pay_gateways',
 	function( $gateways ) {

@@ -34,16 +34,18 @@
 			"composer/installers": true,
 			"dealerdirect/phpcodesniffer-composer-installer": true,
 			"roots/wordpress-core-installer": true,
-			"bamarni/composer-bin-plugin": true
+			"bamarni/composer-bin-plugin": true,
+			"automattic/jetpack-autoloader": true
 		}
 	},
 	"require": {
 		"php": ">=7.4",
 		"ext-intl": "*",
+		"automattic/jetpack-autoloader": "^2.11",
 		"justinrainbow/json-schema": "^5.2",
 		"pronamic/wp-http": "^1.2",
 		"pronamic/wp-money": "^2.2",
-		"wp-pay/core": "^4.6"
+		"wp-pay/core": "dev-develop as 4.6"
 	},
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "^1.4",

@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.4] - 2023-03-27
+
+### Commits
+
+- Set Composer to `wordpress-plugin`. ([8b0f073](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/8b0f07320bb070c6c366925ee19245615229fd9a))
+- Added Jetpack autoloader to fix #21. ([53c3e9b](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/53c3e9b32399b5dd050a994e07b78a589e73cbe1))
+- Updated .gitattributes ([f78ee40](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/f78ee40a54d685ed7eb6e8fd3ae5a6562a52f6df))
+
+### Composer
+
+- Added `automattic/jetpack-autoloader` `^2.11`.
+- Changed `wp-pay/core` from `^4.6` to `v4.8.0`.
+	Release notes: https://github.com/pronamic/wp-pay-core/releases/tag/v4.8.0
+Full set of changes: [`4.4.3...4.4.4`][4.4.4]
+
+[4.4.4]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.3...v4.4.4
+
 ## [4.4.3] - 2023-02-15
 
 ### Commits

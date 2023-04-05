@@ -119,7 +119,7 @@ class SiteHealthController {
 					__( 'Error', 'pronamic_ideal' ),
 					sprintf(
 						/* translators: %s: The error returned by the lookup. */
-						__( 'Your site is unable to test the HTTP Authorization header, and returned the error: %s' ),
+						__( 'Your site is unable to test the HTTP Authorization header, and returned the error: %s', 'pronamic_ideal' ),
 						$response->get_error_message()
 					)
 				)

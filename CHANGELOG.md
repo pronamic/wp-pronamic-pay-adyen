@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.5] - 2023-06-01
+
+### Commits
+
+- Switch from `pronamic/wp-deployer` to `pronamic/pronamic-cli`. ([13471a1](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/13471a195870e8a70e6fc5bd1686539f79772bb0))
+- Added missing text domain. ([8facc90](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/8facc904a4117c6e55773be1615d7c4e32634bdc))
+- Updated .gitattributes ([b62c276](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/b62c276841c12227469de41aa985eb751c4a3faf))
+- Removed trailing slash from `.github` directory. ([0f09f3e](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/0f09f3edcc5ce88cb909e40e27ace9cbc5b261bc))
+
+Full set of changes: [`4.4.4...4.4.5`][4.4.5]
+
+[4.4.5]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.4...v4.4.5
+
 ## [4.4.4] - 2023-03-27
 
 ### Commits

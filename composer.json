@@ -37,7 +37,8 @@
 			"roots/wordpress-core-installer": true,
 			"bamarni/composer-bin-plugin": true,
 			"automattic/jetpack-autoloader": true
-		}
+		},
+		"wp-slug": "pronamic-pay-adyen"
 	},
 	"require": {
 		"php": ">=7.4",

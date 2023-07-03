@@ -33,7 +33,13 @@ class PaymentRequestHelper {
 		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/payments__reqParam_merchantOrderReference
 		 * @link https://docs.adyen.com/api-explorer/#/CheckoutService/v68/post/sessions__reqParam_merchantOrderReference
 		 */
-		$request->set_merchant_order_reference( $payment->format_string( $config->get_merchant_order_reference() ) );
+		$merchant_order_reference = $payment->format_string( $config->get_merchant_order_reference() );
+
+		if ( '' === $merchant_order_reference ) {
+			$merchant_order_reference = $payment->get_id();
+		}
+
+		$request->set_merchant_order_reference( $merchant_order_reference );
 
 		/**
 		 * Country code.

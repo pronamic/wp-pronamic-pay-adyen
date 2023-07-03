@@ -35,6 +35,10 @@ class PaymentRequestHelper {
 		 */
 		$merchant_order_reference = $payment->format_string( $config->get_merchant_order_reference() );
 
+    if ( '' === $merchant_order_reference ) {
+			$merchant_order_reference = $payment->get_id();
+		}
+
 		/**
 		 * Filters the Adyen merchant order reference.
 		 *

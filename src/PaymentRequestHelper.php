@@ -39,6 +39,22 @@ class PaymentRequestHelper {
 			$merchant_order_reference = $payment->get_id();
 		}
 
+		/**
+		 * Filters the Adyen merchant order reference.
+		 *
+		 * This reference allows linking multiple transactions to each other
+		 * for reporting purposes (i.e. order auth-rate). The reference should
+		 * be unique per billing cycle. The same merchant order reference
+		 * should never be reused after the first authorised attempt. If used,
+		 * this field should be supplied for all incoming authorisations.
+		 *
+		 * @param string  $merchant_order_reference Merchant order reference.
+		 * @param Payment $payment                  Payment.
+		 * @link https://docs.adyen.com/api-explorer/Checkout/68/post/payments#request-merchantOrderReference
+		 * @since 4.5.0 Added.
+		 */
+		$merchant_order_reference = apply_filters( 'pronamic_pay_adyen_merchant_order_reference', $merchant_order_reference, $payment );
+
 		$request->set_merchant_order_reference( $merchant_order_reference );
 
 		/**

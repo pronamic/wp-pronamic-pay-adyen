@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.6] - 2023-07-12
+
+### Commits
+
+- Updated for removed payment ID fallback in formatted payment string (pronamic/wp-pronamic-pay-adyen#23). ([f4ea7b2](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/f4ea7b2534f8c693ef0db62b54e6fd51e2686f6a))
+- Added filter for merchant order reference. ([783900b](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/783900b51c6a969fcb004bb0870d58492af8c23f))
+
+Full set of changes: [`4.4.5...4.4.6`][4.4.6]
+
+[4.4.6]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.5...v4.4.6
+
 ## [4.4.5] - 2023-06-01
 
 ### Commits

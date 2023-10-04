@@ -370,10 +370,12 @@ class Integration extends AbstractGatewayIntegration {
 		 * @link https://www.howsmyssl.com/a/check
 		 */
 		$fields[] = [
-			'section' => 'feedback',
-			'title'   => __( 'SSL Version', 'pronamic_ideal' ),
-			'type'    => 'description',
-			'html'    => __( 'Choose the SSL Version of your server on the Adyen Customer Area.', 'pronamic_ideal' ),
+			'section'  => 'feedback',
+			'title'    => \__( 'SSL Version', 'pronamic_ideal' ),
+			'type'     => 'custom',
+			'callback' => function () {
+				\esc_html_e( 'Choose the SSL Version of your server on the Adyen Customer Area.', 'pronamic_ideal' );
+			},
 		];
 
 		/**
@@ -383,29 +385,33 @@ class Integration extends AbstractGatewayIntegration {
 		 * @link https://www.howsmyssl.com/a/check
 		 */
 		$fields[] = [
-			'section' => 'feedback',
-			'title'   => _x( 'Method', 'adyen notification', 'pronamic_ideal' ),
-			'type'    => 'description',
-			'html'    => __( 'JSON', 'pronamic_ideal' ),
+			'section'  => 'feedback',
+			'title'    => \_x( 'Method', 'adyen notification', 'pronamic_ideal' ),
+			'type'     => 'custom',
+			'callback' => function () {
+				\esc_html_e( 'JSON', 'pronamic_ideal' );
+			},
 		];
 
 		// Webhook authentication settings.
 		$fields[] = [
-			'section' => 'feedback',
-			'title'   => __( 'Authentication', 'pronamic_ideal' ),
-			'type'    => 'description',
-			'html'    => \sprintf(
-				/* translators: %s: Pronamic Pay settings page URL. */
-				__( 'Go to the <a href="%s">Pronamic Pay settings page</a> for webhook authentication settings.', 'pronamic_ideal' ),
-				\esc_url(
-					\add_query_arg(
-						[
-							'page' => 'pronamic_pay_settings',
-						],
-						\admin_url( 'admin.php' )
+			'section'  => 'feedback',
+			'title'    => \__( 'Authentication', 'pronamic_ideal' ),
+			'type'     => 'custom',
+			'callback' => function () {
+				\printf(
+					/* translators: %s: Pronamic Pay settings page URL. */
+					__( 'Go to the <a href="%s">Pronamic Pay settings page</a> for webhook authentication settings.', 'pronamic_ideal' ),
+					\esc_url(
+						\add_query_arg(
+							[
+								'page' => 'pronamic_pay_settings',
+							],
+							\admin_url( 'admin.php' )
+						)
 					)
-				)
-			),
+				);
+			},
 		];
 
 		// Return fields.

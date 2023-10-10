@@ -69,7 +69,7 @@ class NotificationsController {
 		 * Check if request URI contains the integration REST route namespace,
 		 * parsed REST request is not yet available at this point during WordPress bootstrap.
 		*/
-		if ( false === \stripos( Server::get( 'REQUEST_URI' ), Integration::REST_ROUTE_NAMESPACE ) ) {
+		if ( false === \stripos( \get_self_link(), Integration::REST_ROUTE_NAMESPACE ) ) {
 			return $is_api_request;
 		}
 

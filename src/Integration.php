@@ -241,12 +241,6 @@ class Integration extends AbstractGatewayIntegration {
 		// API Key.
 		$fields[] = [
 			'section'     => 'general',
-			/**
-			 * Filter Adyen API key unsafe raw to allow <> chars.
-			 *
-			 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/7
-			 */
-			'filter'      => \FILTER_UNSAFE_RAW,
 			'meta_key'    => '_pronamic_gateway_adyen_api_key',
 			'title'       => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'textarea',
@@ -258,6 +252,23 @@ class Integration extends AbstractGatewayIntegration {
 				esc_html__( 'Adyen documentation: "API credentials".', 'pronamic_ideal' )
 			),
 			'required'    => true,
+			/**
+			 * Filter Adyen API key unsafe raw to allow <> chars.
+			 *
+			 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/7
+			 */
+			'input'       => function ( $name ) {
+				// phpcs:disable WordPress.Security.NonceVerification.Missing
+
+				if ( ! \array_key_exists( $name, $_POST ) ) {
+					return '';
+				}
+
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- API Key can contain whitespace, HTML tags and percent-encoded characters.
+				return $_POST[ $name ];
+
+				// phpcs:enable WordPress.Security.NonceVerification.Missing
+			},
 		];
 
 		if ( 'live' === $this->get_mode() ) {

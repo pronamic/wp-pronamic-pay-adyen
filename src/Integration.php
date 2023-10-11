@@ -319,10 +319,6 @@ class Integration extends AbstractGatewayIntegration {
 		// Merchant Order Reference.
 		$fields[] = [
 			'section'     => 'advanced',
-			/**
-			 * Filter Adyen merchant order reference unsafe raw to allow double quotes.
-			 */
-			'filter'      => \FILTER_UNSAFE_RAW,
 			'meta_key'    => '_pronamic_gateway_adyen_merchant_order_reference',
 			'title'       => __( 'Merchant Order Reference', 'pronamic_ideal' ),
 			'type'        => 'text',

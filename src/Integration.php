@@ -406,17 +406,24 @@ class Integration extends AbstractGatewayIntegration {
 			'title'    => \__( 'Authentication', 'pronamic_ideal' ),
 			'type'     => 'custom',
 			'callback' => function () {
-				\printf(
-					/* translators: %s: Pronamic Pay settings page URL. */
-					__( 'Go to the <a href="%s">Pronamic Pay settings page</a> for webhook authentication settings.', 'pronamic_ideal' ),
-					\esc_url(
-						\add_query_arg(
-							[
-								'page' => 'pronamic_pay_settings',
-							],
-							\admin_url( 'admin.php' )
+				echo \wp_kses(
+					\sprintf(
+						/* translators: %s: Pronamic Pay settings page URL. */
+						__( 'Go to the <a href="%s">Pronamic Pay settings page</a> for webhook authentication settings.', 'pronamic_ideal' ),
+						\esc_url(
+							\add_query_arg(
+								[
+									'page' => 'pronamic_pay_settings',
+								],
+								\admin_url( 'admin.php' )
+							)
 						)
-					)
+					),
+					[
+						'a' => [
+							'href' => true,
+						],
+					]
 				);
 			},
 		];

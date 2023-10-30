@@ -268,14 +268,10 @@ class Integration extends AbstractGatewayIntegration {
 				'title'    => \_x( 'Environment', 'adyen', 'pronamic_ideal' ),
 				'type'     => 'select',
 				'options'  => [
-					[
-						'options' => [
-							'live'      => \__( 'Live - Europe', 'pronamic_ideal' ),
-							'live-apse' => \__( 'Live - Asia Pacific South East', 'pronamic_ideal' ),
-							'live-au'   => \__( 'Live - Australia', 'pronamic_ideal' ),
-							'live-us'   => \__( 'Live - United States', 'pronamic_ideal' ),
-						],
-					],
+					'live'      => \__( 'Live - Europe', 'pronamic_ideal' ),
+					'live-apse' => \__( 'Live - Asia Pacific South East', 'pronamic_ideal' ),
+					'live-au'   => \__( 'Live - Australia', 'pronamic_ideal' ),
+					'live-us'   => \__( 'Live - United States', 'pronamic_ideal' ),
 				],
 				'required' => true,
 			];

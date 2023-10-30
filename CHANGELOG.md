@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.7] - 2023-10-13
+
+### Commits
+
+- Use `wp_kses` to allow only <a href=""> element. ([171d841](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/171d84103b4b719c95b734619c7351cf05b756a9))
+- No longer use `FILTER_UNSAFE_RAW`, instead use a custom input callback. ([d70823b](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/d70823b38c2f70dc6e65393d7aba56257f8fcdfb))
+- The default sanitize function allows dobule quotes. ([ac99766](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/ac99766b9e1505df22aae32ebe247801bec3fdf0))
+- No longer use `Server::get()` function, will be removed. ([6f7dda2](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/6f7dda274dff811961aa9e487dd53568082f198d))
+- Use callback, since 'description' field type support was removed. ([451bb33](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/451bb33187e372a62462d5d148e8b94349e75e60))
+
+Full set of changes: [`4.4.6...4.4.7`][4.4.7]
+
+[4.4.7]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.6...v4.4.7
+
 ## [4.4.6] - 2023-07-12
 
 ### Commits

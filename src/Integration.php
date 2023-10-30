@@ -241,12 +241,6 @@ class Integration extends AbstractGatewayIntegration {
 		// API Key.
 		$fields[] = [
 			'section'     => 'general',
-			/**
-			 * Filter Adyen API key unsafe raw to allow <> chars.
-			 *
-			 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/7
-			 */
-			'filter'      => \FILTER_UNSAFE_RAW,
 			'meta_key'    => '_pronamic_gateway_adyen_api_key',
 			'title'       => _x( 'API Key', 'adyen', 'pronamic_ideal' ),
 			'type'        => 'textarea',
@@ -258,6 +252,23 @@ class Integration extends AbstractGatewayIntegration {
 				esc_html__( 'Adyen documentation: "API credentials".', 'pronamic_ideal' )
 			),
 			'required'    => true,
+			/**
+			 * Filter Adyen API key unsafe raw to allow <> chars.
+			 *
+			 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/7
+			 */
+			'input'       => function ( $name ) {
+				// phpcs:disable WordPress.Security.NonceVerification.Missing
+
+				if ( ! \array_key_exists( $name, $_POST ) ) {
+					return '';
+				}
+
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- API Key can contain whitespace, HTML tags and percent-encoded characters.
+				return $_POST[ $name ];
+
+				// phpcs:enable WordPress.Security.NonceVerification.Missing
+			},
 		];
 
 		if ( 'live' === $this->get_mode() ) {
@@ -315,10 +326,6 @@ class Integration extends AbstractGatewayIntegration {
 		// Merchant Order Reference.
 		$fields[] = [
 			'section'     => 'advanced',
-			/**
-			 * Filter Adyen merchant order reference unsafe raw to allow double quotes.
-			 */
-			'filter'      => \FILTER_UNSAFE_RAW,
 			'meta_key'    => '_pronamic_gateway_adyen_merchant_order_reference',
 			'title'       => __( 'Merchant Order Reference', 'pronamic_ideal' ),
 			'type'        => 'text',
@@ -366,10 +373,12 @@ class Integration extends AbstractGatewayIntegration {
 		 * @link https://www.howsmyssl.com/a/check
 		 */
 		$fields[] = [
-			'section' => 'feedback',
-			'title'   => __( 'SSL Version', 'pronamic_ideal' ),
-			'type'    => 'description',
-			'html'    => __( 'Choose the SSL Version of your server on the Adyen Customer Area.', 'pronamic_ideal' ),
+			'section'  => 'feedback',
+			'title'    => \__( 'SSL Version', 'pronamic_ideal' ),
+			'type'     => 'custom',
+			'callback' => function () {
+				\esc_html_e( 'Choose the SSL Version of your server on the Adyen Customer Area.', 'pronamic_ideal' );
+			},
 		];
 
 		/**
@@ -379,29 +388,40 @@ class Integration extends AbstractGatewayIntegration {
 		 * @link https://www.howsmyssl.com/a/check
 		 */
 		$fields[] = [
-			'section' => 'feedback',
-			'title'   => _x( 'Method', 'adyen notification', 'pronamic_ideal' ),
-			'type'    => 'description',
-			'html'    => __( 'JSON', 'pronamic_ideal' ),
+			'section'  => 'feedback',
+			'title'    => \_x( 'Method', 'adyen notification', 'pronamic_ideal' ),
+			'type'     => 'custom',
+			'callback' => function () {
+				\esc_html_e( 'JSON', 'pronamic_ideal' );
+			},
 		];
 
 		// Webhook authentication settings.
 		$fields[] = [
-			'section' => 'feedback',
-			'title'   => __( 'Authentication', 'pronamic_ideal' ),
-			'type'    => 'description',
-			'html'    => \sprintf(
-				/* translators: %s: Pronamic Pay settings page URL. */
-				__( 'Go to the <a href="%s">Pronamic Pay settings page</a> for webhook authentication settings.', 'pronamic_ideal' ),
-				\esc_url(
-					\add_query_arg(
-						[
-							'page' => 'pronamic_pay_settings',
+			'section'  => 'feedback',
+			'title'    => \__( 'Authentication', 'pronamic_ideal' ),
+			'type'     => 'custom',
+			'callback' => function () {
+				echo \wp_kses(
+					\sprintf(
+						/* translators: %s: Pronamic Pay settings page URL. */
+						__( 'Go to the <a href="%s">Pronamic Pay settings page</a> for webhook authentication settings.', 'pronamic_ideal' ),
+						\esc_url(
+							\add_query_arg(
+								[
+									'page' => 'pronamic_pay_settings',
+								],
+								\admin_url( 'admin.php' )
+							)
+						)
+					),
+					[
+						'a' => [
+							'href' => true,
 						],
-						\admin_url( 'admin.php' )
-					)
-				)
-			),
+					]
+				);
+			},
 		];
 
 		// Return fields.

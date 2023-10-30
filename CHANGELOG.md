@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.4.8] - 2023-10-30
+
+### Commits
+
+- Simplified options for select. ([08294f1](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/08294f16a1dfaf30894019c5da1dcdc2d65b26aa))
+
+Full set of changes: [`4.4.7...4.4.8`][4.4.8]
+
+[4.4.8]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.7...v4.4.8
+
 ## [4.4.7] - 2023-10-13
 
 ### Commits

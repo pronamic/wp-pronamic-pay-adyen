@@ -102,6 +102,7 @@ class LineItems implements \JsonSerializable {
 	 * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
 	 * @return array<object>
 	 */
+	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
 		return $this->get_json();
 	}

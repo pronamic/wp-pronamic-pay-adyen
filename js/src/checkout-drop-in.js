@@ -1,5 +1,15 @@
 /* global AdyenCheckout, pronamicPayAdyenCheckout */
 
+/**
+ * Adyen checkout error definition.
+ *
+ * @see https://github.com/Adyen/adyen-web/blob/v5.57.0/packages/lib/src/core/Errors/AdyenCheckoutError.ts
+ * @typedef AdyenCheckoutError
+ * @type {Object}
+ * @property {string} name    - Adyen error name.
+ * @property {string} message - Adyen error message.
+ */
+
 'use strict';
 
 ( async function () {
@@ -23,7 +33,7 @@
 		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 		 * @see https://github.com/Adyen/adyen-web/blob/v5.15.0/packages/lib/src/core/Errors/AdyenCheckoutError.ts
 		 * @see https://github.com/Adyen/adyen-web/blob/v5.15.0/packages/lib/src/components/UIElement.tsx#L115-L126
-		 * @param AdyenCheckoutError error Adyen checkout error.
+		 * @param {AdyenCheckoutError} error Adyen checkout error.
 		 */
 		onError: ( error ) => {
 			if ( 'CANCEL' === error.name ) {

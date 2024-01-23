@@ -52,7 +52,7 @@ class Client {
 	 */
 	private function send_request( $method, $request ) {
 		// Request.
-		$url = $this->endpoint->get_api_url( 'v68', $method );
+		$url = $this->endpoint->get_api_url( 'v71', $method );
 
 		$response = Http::request(
 			$url,

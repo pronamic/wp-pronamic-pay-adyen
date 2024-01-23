@@ -51,6 +51,7 @@
 			 *
 			 * @see https://github.com/Adyen/adyen-web/issues/973#issuecomment-821148830
 			 * @see https://docs.adyen.com/online-payments/migrate-to-web-4-0-0#dropin-configuration
+			 * @param {Object} dropin Adyen dropin component.
 			 */
 			onSelect: ( dropin ) => {
 				if ( pronamicPayAdyenCheckout.autoSubmit ) {

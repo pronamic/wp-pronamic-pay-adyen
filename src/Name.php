@@ -98,7 +98,7 @@ class Name {
 			throw new InvalidArgumentException(
 				sprintf(
 					'Given infix `%s` is longer then 20 characters.',
-					$infix
+					\esc_html( $infix )
 				)
 			);
 		}

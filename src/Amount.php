@@ -43,7 +43,7 @@ class Amount implements \JsonSerializable {
 			throw new \InvalidArgumentException(
 				sprintf(
 					'Given currency `%s` not a three-character ISO currency code.',
-					$currency
+					\esc_html( $currency )
 				)
 			);
 		}

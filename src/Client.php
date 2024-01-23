@@ -73,8 +73,8 @@ class Client {
 			throw new \Exception(
 				\sprintf(
 					'Could not JSON decode Adyen response to an object, HTTP response: "%s", HTTP body: "%s".',
-					$response->status(),
-					$response->body()
+					\esc_html( $response->status() ),
+					\esc_html( $response->body() )
 				),
 				\intval( $response->status() )
 			);

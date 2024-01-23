@@ -306,7 +306,7 @@ abstract class AbstractPaymentRequest extends Request {
 			throw new InvalidArgumentException(
 				sprintf(
 					'Given country code `%s` not ISO 3166-1 alpha-2 value.',
-					$country_code
+					\esc_html( $country_code )
 				)
 			);
 		}

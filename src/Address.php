@@ -82,7 +82,7 @@ class Address {
 			throw new InvalidArgumentException(
 				sprintf(
 					'Given country `%s` not ISO 3166-1 alpha-2 value.',
-					$country
+					\esc_html( $country )
 				)
 			);
 		}
@@ -124,8 +124,8 @@ class Address {
 				throw new InvalidArgumentException(
 					sprintf(
 						'Given postal code `%s` is longer then `%d` digits.',
-						$postal_code,
-						$max
+						\esc_html( $postal_code ),
+						\esc_html( $max )
 					)
 				);
 			}
@@ -164,8 +164,8 @@ class Address {
 				throw new InvalidArgumentException(
 					sprintf(
 						'Given state or province `%s` is longer then `%d` digits.',
-						$state_or_province,
-						$max
+						\esc_html( $state_or_province ),
+						\esc_html( $max )
 					)
 				);
 			}

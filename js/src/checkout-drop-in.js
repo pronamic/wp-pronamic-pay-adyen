@@ -30,7 +30,7 @@
 				return;
 			}
 
-			let redirectUrl = new URL(
+			const redirectUrl = new URL(
 				pronamicPayAdyenCheckout.paymentErrorUrl
 			);
 

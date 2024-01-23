@@ -244,7 +244,7 @@ class Gateway extends Core_Gateway {
 			throw new \Exception(
 				\sprintf(
 					'The handling of the `%s` result code is not implemented.',
-					\esc_html( $result_code )
+					\esc_html( (string) $result_code )
 				)
 			);
 		}

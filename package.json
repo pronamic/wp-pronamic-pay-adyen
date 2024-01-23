@@ -2,18 +2,6 @@
 	"name": "adyen",
 	"version": "4.4.8",
 	"description": "Adyen driver for the WordPress payment processing library.",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/wp-pay-gateways/adyen"
-	},
-	"keywords": [
-		"wordpress",
-		"wp",
-		"pay",
-		"adyen",
-		"gateway",
-		"pronamic"
-	],
 	"author": {
 		"name": "Pronamic",
 		"email": "info@pronamic.nl",
@@ -26,14 +14,22 @@
 			"url": "https://www.remcotolsma.nl/"
 		}
 	],
-	"license": "GPL-3.0",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"wp",
+		"pay",
+		"adyen",
+		"gateway",
+		"pronamic"
+	],
+	"homepage": "https://www.wp-pay.org/gateways/adyen/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wp-pay-gateways/adyen"
+	},
 	"bugs": {
 		"url": "https://github.com/wp-pay-gateways/adyen/issues"
-	},
-	"homepage": "https://www.wp-pay.org/gateways/adyen/",
-	"scripts": {
-		"babel": "babel ./js/src -d ./js/dist --source-maps",
-		"eslint": "eslint . --ext .json --ext .js"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.23.4",
@@ -43,5 +39,10 @@
 		"@wordpress/scripts": "^27.0.0",
 		"eslint": "^8.56.0",
 		"eslint-plugin-json": "^3.1.0"
+	},
+	"scripts": {
+		"babel": "babel ./js/src -d ./js/dist --source-maps",
+		"eslint": "eslint . --ext .json --ext .js",
+		"lint-pkg-json": "wp-scripts lint-pkg-json"
 	}
 }

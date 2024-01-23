@@ -125,7 +125,7 @@ class Address {
 					sprintf(
 						'Given postal code `%s` is longer then `%d` digits.',
 						\esc_html( $postal_code ),
-						\esc_html( $max )
+						\esc_html( (string) $max )
 					)
 				);
 			}
@@ -165,7 +165,7 @@ class Address {
 					sprintf(
 						'Given state or province `%s` is longer then `%d` digits.',
 						\esc_html( $state_or_province ),
-						\esc_html( $max )
+						\esc_html( (string) $max )
 					)
 				);
 			}

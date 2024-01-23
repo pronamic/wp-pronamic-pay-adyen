@@ -43,7 +43,7 @@
 
 	const checkout = await AdyenCheckout( configuration );
 
-	const dropinComponent = checkout
+	checkout
 		.create( 'dropin', {
 			/**
 			 * The `onSelect` and `onReady` events, since they're not generic events,

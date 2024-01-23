@@ -1,45 +1,45 @@
 {
-  "name": "adyen",
-  "version": "4.4.8",
-  "description": "Adyen driver for the WordPress payment processing library.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wp-pay-gateways/adyen"
-  },
-  "keywords": [
-    "wordpress",
-    "wp",
-    "pay",
-    "adyen",
-    "gateway",
-    "pronamic"
-  ],
-  "author": {
-    "name": "Pronamic",
-    "email": "info@pronamic.nl",
-    "url": "https://www.pronamic.nl/"
-  },
-  "contributors": [
-    {
-      "name": "Remco Tolsma",
-      "email": "info@remcotolsma.nl",
-      "url": "https://www.remcotolsma.nl/"
-    }
-  ],
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/wp-pay-gateways/adyen/issues"
-  },
-  "homepage": "https://www.wp-pay.org/gateways/adyen/",
-  "scripts": {
-    "babel": "babel ./js/src -d ./js/dist --source-maps",
-    "eslint": "eslint . --ext .json --ext .js"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.15.4",
-    "@babel/core": "^7.15.5",
-    "@babel/preset-env": "^7.15.6",
-    "eslint": "^7.32.0",
-    "eslint-plugin-json": "^3.1.0"
-  }
+	"name": "adyen",
+	"version": "4.4.8",
+	"description": "Adyen driver for the WordPress payment processing library.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wp-pay-gateways/adyen"
+	},
+	"keywords": [
+		"wordpress",
+		"wp",
+		"pay",
+		"adyen",
+		"gateway",
+		"pronamic"
+	],
+	"author": {
+		"name": "Pronamic",
+		"email": "info@pronamic.nl",
+		"url": "https://www.pronamic.nl/"
+	},
+	"contributors": [
+		{
+			"name": "Remco Tolsma",
+			"email": "info@remcotolsma.nl",
+			"url": "https://www.remcotolsma.nl/"
+		}
+	],
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/wp-pay-gateways/adyen/issues"
+	},
+	"homepage": "https://www.wp-pay.org/gateways/adyen/",
+	"scripts": {
+		"babel": "babel ./js/src -d ./js/dist --source-maps",
+		"eslint": "eslint . --ext .json --ext .js"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.15.4",
+		"@babel/core": "^7.15.5",
+		"@babel/preset-env": "^7.15.6",
+		"eslint": "^7.32.0",
+		"eslint-plugin-json": "^3.1.0"
+	}
 }

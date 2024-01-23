@@ -268,7 +268,9 @@ class ReturnController {
 			return false;
 		}
 
-		return \wp_verify_nonce( $nonce, 'pronamic-pay-adyen-payment-redirect-' . $payment_id );
+		$result = \wp_verify_nonce( $nonce, 'pronamic-pay-adyen-payment-redirect-' . $payment_id );
+
+		return ( false !== $result );
 	}
 
 	/**
@@ -350,7 +352,9 @@ class ReturnController {
 			return false;
 		}
 
-		return \wp_verify_nonce( $nonce, 'pronamic-pay-adyen-payment-error-' . $payment_id );
+		$result = \wp_verify_nonce( $nonce, 'pronamic-pay-adyen-payment-error-' . $payment_id );
+
+		return ( false !== $result );
 	}
 
 	/**

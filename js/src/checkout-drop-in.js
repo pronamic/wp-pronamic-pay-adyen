@@ -9,7 +9,7 @@
 	const configuration = {
 		...pronamicPayAdyenCheckout.configuration,
 		onPaymentCompleted: ( result, component ) => {
-			let redirectUrl = new URL(
+			const redirectUrl = new URL(
 				pronamicPayAdyenCheckout.paymentRedirectUrl
 			);
 

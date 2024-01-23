@@ -67,32 +67,32 @@ class PaymentMethod extends ResponseObject {
 	/**
 	 * Create payment method from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return PaymentMethod
 	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-method.json' ),
 			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$payment_method = new self( $object );
+		$payment_method = new self( $value );
 
-		if ( \property_exists( $object, 'issuers' ) ) {
+		if ( \property_exists( $value, 'issuers' ) ) {
 			$payment_method->issuers = [];
 
-			foreach ( $object->issuers as $issuer_object ) {
+			foreach ( $value->issuers as $issuer_object ) {
 				$payment_method->issuers[] = PaymentMethodIssuer::from_object( $issuer_object );
 			}
 		}
 
-		$payment_method->set_original_object( $object );
+		$payment_method->set_original_object( $value );
 
 		return $payment_method;
 	}

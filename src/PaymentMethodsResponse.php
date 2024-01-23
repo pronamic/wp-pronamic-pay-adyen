@@ -48,15 +48,15 @@ class PaymentMethodsResponse extends ResponseObject {
 	/**
 	 * Create payment methods response from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return PaymentMethodsResponse
 	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-methods-response.json' ),
 			],
@@ -66,13 +66,13 @@ class PaymentMethodsResponse extends ResponseObject {
 		$payment_methods = [];
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
-		foreach ( $object->paymentMethods as $payment_method_object ) {
+		foreach ( $value->paymentMethods as $payment_method_object ) {
 			$payment_methods[] = PaymentMethod::from_object( $payment_method_object );
 		}
 
 		$response = new self( $payment_methods );
 
-		$response->set_original_object( $object );
+		$response->set_original_object( $value );
 
 		return $response;
 	}

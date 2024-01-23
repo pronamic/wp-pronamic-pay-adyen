@@ -33,11 +33,11 @@ abstract class ResponseObject {
 	/**
 	 * Set original object.
 	 *
-	 * @param object|null $object Object.
+	 * @param object|null $value Object.
 	 * @return void
 	 */
-	public function set_original_object( $object ) {
-		$this->original_object = $object;
+	public function set_original_object( $value ) {
+		$this->original_object = $value;
 	}
 
 	/**

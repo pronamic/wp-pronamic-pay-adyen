@@ -97,22 +97,22 @@ class ServiceException extends Exception {
 	/**
 	 * Create service exception from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return ServiceException
 	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/service-exception.json' ),
 			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$data = new ObjectAccess( $object );
+		$data = new ObjectAccess( $value );
 
 		return new self(
 			$data->get_property( 'status' ),

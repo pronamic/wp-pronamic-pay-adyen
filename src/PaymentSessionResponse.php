@@ -66,22 +66,22 @@ class PaymentSessionResponse extends ResponseObject {
 	/**
 	 * Create payment session response from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return PaymentSessionResponse
 	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-session-response.json' ),
 			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$data = new ObjectAccess( $object );
+		$data = new ObjectAccess( $value );
 
 		return new self(
 			$data->get_property( 'id' ),

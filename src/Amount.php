@@ -96,15 +96,15 @@ class Amount implements \JsonSerializable {
 	/**
 	 * Create amount from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return Amount
 	 * @throws \JsonSchema\Exception\ValidationException Throws validation exception when object does not contains the required properties.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/amount.json' ),
 			],
@@ -112,8 +112,8 @@ class Amount implements \JsonSerializable {
 		);
 
 		return new self(
-			$object->currency,
-			$object->value
+			$value->currency,
+			$value->value
 		);
 	}
 }

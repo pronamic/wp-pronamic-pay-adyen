@@ -39,22 +39,22 @@ class PaymentResponse extends AbstractPaymentResponse {
 	/**
 	 * Create payment response from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return self
 	 * @throws ValidationException Throws validation exception when object does not contains the required properties.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-response.json' ),
 			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$data = new ObjectAccess( $object );
+		$data = new ObjectAccess( $value );
 
 		$payment_response = new self();
 
@@ -66,7 +66,7 @@ class PaymentResponse extends AbstractPaymentResponse {
 			$payment_response->action = PaymentResponseAction::from_object( $data->get_property( 'action' ) );
 		}
 
-		$payment_response->set_original_object( $object );
+		$payment_response->set_original_object( $value );
 
 		return $payment_response;
 	}

@@ -47,14 +47,14 @@ class AmountTest extends TestCase {
 	 *
 	 * @dataProvider provider_from_object
 	 *
-	 * @param object $object Object to create Amount from.
+	 * @param object $value Object to create Amount from.
 	 */
-	public function test_from_object( $object ) {
-		if ( ! isset( $object->currency, $object->value ) ) {
+	public function test_from_object( $value ) {
+		if ( ! isset( $value->currency, $value->value ) ) {
 			$this->expectException( 'JsonSchema\Exception\ValidationException' );
 		}
 
-		$amount = Amount::from_object( $object );
+		$amount = Amount::from_object( $value );
 
 		self::assertEquals( 'EUR', $amount->get_currency() );
 		self::assertEquals( 12375, $amount->get_value() );

@@ -81,25 +81,25 @@ class PaymentMethodIssuer {
 	/**
 	 * Create payment method from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return self
 	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-method-issuer.json' ),
 			],
 			Constraint::CHECK_MODE_EXCEPTIONS
 		);
 
-		$payment_method_issuer = new self( $object->id, $object->name );
+		$payment_method_issuer = new self( $value->id, $value->name );
 
-		if ( isset( $object->disabled ) ) {
-			$payment_method_issuer->disabled = $object->disabled;
+		if ( isset( $value->disabled ) ) {
+			$payment_method_issuer->disabled = $value->disabled;
 		}
 
 		return $payment_method_issuer;

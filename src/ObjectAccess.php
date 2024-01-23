@@ -19,15 +19,15 @@ class ObjectAccess {
 	 *
 	 * @var object
 	 */
-	private $object;
+	private $value;
 
 	/**
 	 * Construct object access.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 */
-	public function __construct( $object ) {
-		$this->object = $object;
+	public function __construct( $value ) {
+		$this->value = $value;
 	}
 
 	/**
@@ -37,7 +37,7 @@ class ObjectAccess {
 	 * @return bool
 	 */
 	public function has_property( $property ) {
-		return \property_exists( $this->object, $property );
+		return \property_exists( $this->value, $property );
 	}
 
 	/**
@@ -47,10 +47,10 @@ class ObjectAccess {
 	 * @return mixed
 	 */
 	public function get_property( $property ) {
-		if ( ! \property_exists( $this->object, $property ) ) {
+		if ( ! \property_exists( $this->value, $property ) ) {
 			return null;
 		}
 
-		return $this->object->{$property};
+		return $this->value->{$property};
 	}
 }

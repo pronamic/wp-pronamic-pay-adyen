@@ -69,15 +69,15 @@ class Error extends Exception {
 	/**
 	 * Create error from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return Error
 	 * @throws ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/error.json' ),
 			],
@@ -85,9 +85,9 @@ class Error extends Exception {
 		);
 
 		return new self(
-			$object->code,
-			$object->message,
-			$object->{'requested URI'}
+			$value->code,
+			$value->message,
+			$value->{'requested URI'}
 		);
 	}
 }

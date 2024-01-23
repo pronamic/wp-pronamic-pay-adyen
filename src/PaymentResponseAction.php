@@ -49,15 +49,15 @@ class PaymentResponseAction extends ResponseObject {
 	/**
 	 * Create action information from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return PaymentResponseAction
 	 * @throws \JsonSchema\Exception\ValidationException Throws validation exception when object does not contains the required properties.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/payment-response-action.json' ),
 			],
@@ -66,15 +66,15 @@ class PaymentResponseAction extends ResponseObject {
 
 		$action = new self();
 
-		if ( isset( $object->type ) ) {
-			$action->type = $object->type;
+		if ( isset( $value->type ) ) {
+			$action->type = $value->type;
 		}
 
-		if ( isset( $object->url ) ) {
-			$action->url = $object->url;
+		if ( isset( $value->url ) ) {
+			$action->url = $value->url;
 		}
 
-		$action->set_original_object( $object );
+		$action->set_original_object( $value );
 
 		return $action;
 	}

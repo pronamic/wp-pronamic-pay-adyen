@@ -225,15 +225,15 @@ class NotificationRequestItem extends ResponseObject {
 	/**
 	 * Create notification request item from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return NotificationRequestItem
 	 * @throws \JsonSchema\Exception\ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/notification-request-item.json' ),
 			],
@@ -243,26 +243,26 @@ class NotificationRequestItem extends ResponseObject {
 		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		$item = new self(
-			Amount::from_object( $object->amount ),
-			$object->pspReference,
-			$object->eventCode,
-			new DateTime( $object->eventDate ),
-			$object->merchantAccountCode,
-			$object->merchantReference,
-			filter_var( $object->success, FILTER_VALIDATE_BOOLEAN )
+			Amount::from_object( $value->amount ),
+			$value->pspReference,
+			$value->eventCode,
+			new DateTime( $value->eventDate ),
+			$value->merchantAccountCode,
+			$value->merchantReference,
+			filter_var( $value->success, FILTER_VALIDATE_BOOLEAN )
 		);
 
-		if ( property_exists( $object, 'operations' ) ) {
-			$item->set_operations( $object->operations );
+		if ( property_exists( $value, 'operations' ) ) {
+			$item->set_operations( $value->operations );
 		}
 
-		if ( property_exists( $object, 'paymentMethod' ) ) {
-			$item->set_payment_method( $object->paymentMethod );
+		if ( property_exists( $value, 'paymentMethod' ) ) {
+			$item->set_payment_method( $value->paymentMethod );
 		}
 
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
-		$item->set_original_object( $object );
+		$item->set_original_object( $value );
 
 		return $item;
 	}

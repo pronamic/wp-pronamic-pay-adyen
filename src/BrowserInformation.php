@@ -265,48 +265,48 @@ class BrowserInformation implements \JsonSerializable {
 	/**
 	 * Create browser information from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return BrowserInformation
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$browser_information = new self();
 
 		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
-		if ( isset( $object->acceptHeader ) ) {
-			$browser_information->set_accept_header( $object->acceptHeader );
+		if ( isset( $value->acceptHeader ) ) {
+			$browser_information->set_accept_header( $value->acceptHeader );
 		}
 
-		if ( isset( $object->colorDepth ) ) {
-			$browser_information->set_color_depth( $object->colorDepth );
+		if ( isset( $value->colorDepth ) ) {
+			$browser_information->set_color_depth( $value->colorDepth );
 		}
 
-		if ( isset( $object->javaEnabled ) ) {
-			$browser_information->set_java_enabled( $object->javaEnabled );
+		if ( isset( $value->javaEnabled ) ) {
+			$browser_information->set_java_enabled( $value->javaEnabled );
 		}
 
-		if ( isset( $object->javaScriptEnabled ) ) {
-			$browser_information->set_javascript_enabled( $object->javaScriptEnabled );
+		if ( isset( $value->javaScriptEnabled ) ) {
+			$browser_information->set_javascript_enabled( $value->javaScriptEnabled );
 		}
 
-		if ( isset( $object->language ) ) {
-			$browser_information->set_language( $object->language );
+		if ( isset( $value->language ) ) {
+			$browser_information->set_language( $value->language );
 		}
 
-		if ( isset( $object->screenHeight ) ) {
-			$browser_information->set_screen_height( $object->screenHeight );
+		if ( isset( $value->screenHeight ) ) {
+			$browser_information->set_screen_height( $value->screenHeight );
 		}
 
-		if ( isset( $object->screenWidth ) ) {
-			$browser_information->set_screen_width( $object->screenWidth );
+		if ( isset( $value->screenWidth ) ) {
+			$browser_information->set_screen_width( $value->screenWidth );
 		}
 
-		if ( isset( $object->timeZoneOffset ) ) {
-			$browser_information->set_timezone_offset( $object->timeZoneOffset );
+		if ( isset( $value->timeZoneOffset ) ) {
+			$browser_information->set_timezone_offset( $value->timeZoneOffset );
 		}
 
-		if ( isset( $object->userAgent ) ) {
-			$browser_information->set_user_agent( $object->userAgent );
+		if ( isset( $value->userAgent ) ) {
+			$browser_information->set_user_agent( $value->userAgent );
 		}
 
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
@@ -334,9 +334,9 @@ class BrowserInformation implements \JsonSerializable {
 			]
 		);
 
-		$object = (object) $properties;
+		$value = (object) $properties;
 
-		return $object;
+		return $value;
 	}
 
 	/**

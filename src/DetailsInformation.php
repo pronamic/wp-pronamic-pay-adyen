@@ -71,15 +71,15 @@ class DetailsInformation extends ResponseObject {
 	/**
 	 * Create details information from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return DetailsInformation
 	 * @throws \JsonSchema\Exception\ValidationException Throws validation exception when object does not contains the required properties.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/details.json' ),
 			],
@@ -88,12 +88,12 @@ class DetailsInformation extends ResponseObject {
 
 		$details = new self();
 
-		if ( isset( $object->key ) ) {
-			$details->set_key( $object->key );
+		if ( isset( $value->key ) ) {
+			$details->set_key( $value->key );
 		}
 
-		if ( isset( $object->type ) ) {
-			$details->set_type( $object->type );
+		if ( isset( $value->type ) ) {
+			$details->set_type( $value->type );
 		}
 
 		return $details;
@@ -112,8 +112,8 @@ class DetailsInformation extends ResponseObject {
 			]
 		);
 
-		$object = (object) $properties;
+		$value = (object) $properties;
 
-		return $object;
+		return $value;
 	}
 }

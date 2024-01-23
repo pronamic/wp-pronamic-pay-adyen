@@ -65,15 +65,15 @@ class NotificationRequest extends ResponseObject {
 	/**
 	 * Create notification request from object.
 	 *
-	 * @param object $object Object.
+	 * @param object $value Object.
 	 * @return NotificationRequest
 	 * @throws \InvalidArgumentException Throws JSON schema validation exception when JSON is invalid.
 	 */
-	public static function from_object( $object ) {
+	public static function from_object( $value ) {
 		$validator = new \JsonSchema\Validator();
 
 		$validator->validate(
-			$object,
+			$value,
 			(object) [
 				'$ref' => 'file://' . realpath( __DIR__ . '/../json-schemas/notification-request.json' ),
 			],
@@ -84,14 +84,14 @@ class NotificationRequest extends ResponseObject {
 
 		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
-		foreach ( $object->notificationItems as $o ) {
+		foreach ( $value->notificationItems as $o ) {
 			$items[] = NotificationRequestItem::from_object( $o->NotificationRequestItem );
 		}
 
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.
 
 		return new self(
-			filter_var( $object->live, FILTER_VALIDATE_BOOLEAN ),
+			filter_var( $value->live, FILTER_VALIDATE_BOOLEAN ),
 			$items
 		);
 	}

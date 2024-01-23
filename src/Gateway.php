@@ -373,13 +373,13 @@ class Gateway extends Core_Gateway {
 			false
 		);
 
-		$file = '../js/dist/checkout-drop-in.js';
+		$asset = include __DIR__ . '/../js/dist/checkout-drop-in.asset.php';
 
 		\wp_register_script(
 			'pronamic-pay-adyen-checkout-drop-in',
-			\plugins_url( $file, __FILE__ ),
+			\plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
 			[ 'pronamic-pay-adyen-checkout' ],
-			\hash_file( 'crc32b', __DIR__ . '/' . $file ),
+			$asset['version'],
 			true
 		);
 

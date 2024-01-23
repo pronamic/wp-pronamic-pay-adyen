@@ -50,7 +50,7 @@ class ReturnController {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'rest_api_adyen_return' ],
-				'permission_callback' => function() {
+				'permission_callback' => function () {
 					return true;
 				},
 				'args'                => [

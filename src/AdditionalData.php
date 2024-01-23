@@ -183,7 +183,7 @@ class AdditionalData implements \JsonSerializable {
 
 				$properties = array_merge( $properties, $item_properties );
 
-				$index++;
+				++$index;
 			}
 		}
 

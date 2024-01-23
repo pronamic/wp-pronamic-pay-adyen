@@ -37,7 +37,7 @@ require_once __DIR__ . '/vendor/autoload_packages.php';
  */
 add_filter(
 	'pronamic_pay_gateways',
-	function( $gateways ) {
+	function ( $gateways ) {
 		$gateways[] = new \Pronamic\WordPress\Pay\Gateways\Adyen\Integration(
 			[
 				'id'            => 'adyen',

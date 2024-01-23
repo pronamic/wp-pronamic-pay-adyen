@@ -364,11 +364,11 @@ class Gateway extends Core_Gateway {
 		// Register scripts.
 		$url_script = $endpoint->get_web_url( self::SDK_VERSION, 'adyen.js' );
 
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
 		\wp_register_script(
 			'pronamic-pay-adyen-checkout',
 			$url_script,
 			[],
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
 			null,
 			false
 		);
@@ -386,11 +386,11 @@ class Gateway extends Core_Gateway {
 		// Register styles.
 		$url_stylesheet = $endpoint->get_web_url( self::SDK_VERSION, 'adyen.css' );
 
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
 		\wp_register_style(
 			'pronamic-pay-adyen-checkout',
 			$url_stylesheet,
 			[],
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
 			null
 		);
 

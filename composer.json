@@ -70,6 +70,8 @@
 		"yoast/phpunit-polyfills": "^1.0"
 	},
 	"scripts": {
+		"build": "vendor/bin/pronamic wp-build",
+		"build-docs": "vendor/bin/wp-documentor parse . --exclude=build --exclude=tests --exclude=vendor --exclude=wordpress --exclude=wp-content --format=markdown --relative=docs > docs/hooks.md",
 		"ci": [
 			"@phplint",
 			"@phpcs",
@@ -91,8 +93,15 @@
 		"xmllint": [
 			"@xmllint-phpcs"
 		],
-		"build-docs": [
-			"vendor/bin/wp-documentor parse . --exclude=tests --exclude=vendor --exclude=wordpress --exclude=wp-content --format=markdown --relative=docs > docs/hooks.md"
+		"translate": [
+			"@build",
+			"rsync --recursive --delete --verbose ./build/project/languages/ ./languages/"
+		],
+		"version": "@build",
+		"release": [
+			"@build",
+			"vendor/bin/pronamic release-to-github",
+			"vendor/bin/pronamic release-to-pronamic"
 		]
 	}
 }

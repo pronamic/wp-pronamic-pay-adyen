@@ -50,7 +50,7 @@
 	"require": {
 		"php": ">=7.4",
 		"ext-intl": "*",
-		"automattic/jetpack-autoloader": "^2.11",
+		"automattic/jetpack-autoloader": "^3.0",
 		"justinrainbow/json-schema": "^5.2",
 		"pronamic/wp-http": "^1.2",
 		"pronamic/wp-money": "^2.2",

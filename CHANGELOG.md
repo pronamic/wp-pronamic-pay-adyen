@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.5.0] - 2024-02-07
+
+### Changed
+
+- The code further complies with (WordPress) coding standards.
+- Improved support for PHP 8 and higher.
+- Use `wp-scripts` to build JS. [38e2088](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/38e20883505c323bae2647ca2e4c0b385b97e96f) [4398600](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/439860048f90faf72a0fdf9f848d88ff656c9620)
+- Updated to Adyen API `v71`. [21da986](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/21da986f66472e006f1b04a9d3b79870ce6f2227)
+
+### Composer
+
+- Changed `automattic/jetpack-autoloader` from `^2.11` to `v3.0.2`.
+	Release notes: https://github.com/Automattic/jetpack-autoloader/releases/tag/v3.0.2
+
+Full set of changes: [`4.4.8...4.5.0`][4.5.0]
+
+[4.5.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.4.8...v4.5.0
+
 ## [4.4.8] - 2023-10-30
 
 ### Commits

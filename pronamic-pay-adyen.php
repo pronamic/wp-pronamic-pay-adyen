@@ -27,6 +27,10 @@
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Autoload.
  */

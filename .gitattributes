@@ -1,6 +1,7 @@
 *.http text eol=crlf
 
 /.babelrc               export-ignore
+/.editorconfig          export-ignore
 /.eslintignore          export-ignore
 /.eslintrc              export-ignore
 /.gitattributes         export-ignore
@@ -10,6 +11,7 @@
 /.pronamic-build-ignore export-ignore
 /.scrutinizer.yml       export-ignore
 /.travis.yml            export-ignore
+/.wp-env.json           export-ignore
 /js/src                 export-ignore
 /phpcs.xml.dist         export-ignore
 /phpmd.ruleset.xml      export-ignore

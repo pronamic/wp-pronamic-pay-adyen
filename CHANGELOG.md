@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.5.1] - 2024-03-26
+
+### Commits
+
+- Updated .gitattributes ([28e541d](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/28e541d95d06be05a93af272dfa6d48ffae9c09e))
+- Added `if ( ! defined( 'ABSPATH' ) )`. ([21059f5](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/21059f5cbb67114c5f4fc7f99f8abcfeec758a71))
+- Added `if ( ! defined( 'ABSPATH' ) )`. ([d5d9811](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/d5d9811082d39a759ed544a0558ec91c71243f79))
+- Updated .gitattributes ([5f03af2](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/5f03af26b04742a92d431fee9c2fa0fe98ab6c91))
+- Translate. ([b5e0796](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/b5e079659bf9c22633b81b1b7b04b8a01a0e7621))
+
+Full set of changes: [`4.5.0...4.5.1`][4.5.1]
+
+[4.5.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.5.0...v4.5.1
+
 ## [4.5.0] - 2024-02-07
 
 ### Changed

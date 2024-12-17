@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.5.2] - 2024-12-17
+
+### Commits
+
+- Happy 2024. ([4d967be](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/4d967be1c9e2e2834226ddaf1ea09868614b3a04))
+
+Full set of changes: [`4.5.1...4.5.2`][4.5.2]
+
+[4.5.2]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.5.1...v4.5.2
+
 ## [4.5.1] - 2024-03-26
 
 ### Commits

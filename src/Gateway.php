@@ -15,10 +15,6 @@ use Pronamic\WordPress\Pay\Core\PaymentMethod;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\PaymentMethodsCollection;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
-use Pronamic\WordPress\Pay\Fields\CachedCallbackOptions;
-use Pronamic\WordPress\Pay\Fields\IDealIssuerSelectField;
-use Pronamic\WordPress\Pay\Fields\SelectFieldOption;
-use Pronamic\WordPress\Pay\Fields\SelectFieldOptionGroup;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
@@ -70,23 +66,6 @@ class Gateway extends Core_Gateway {
 		$this->client = new Client( $config );
 
 		// Methods.
-		$ideal_payment_method = new PaymentMethod( PaymentMethods::IDEAL );
-
-		$ideal_issuer_field = new IDealIssuerSelectField( 'ideal-issuer' );
-
-		$ideal_issuer_field->set_required( true );
-
-		$ideal_issuer_field->set_options(
-			new CachedCallbackOptions(
-				function () {
-					return $this->get_ideal_issuers();
-				},
-				'pronamic_pay_ideal_issuers_' . \md5( \wp_json_encode( $config ) )
-			)
-		);
-
-		$ideal_payment_method->add_field( $ideal_issuer_field );
-
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::AFTERPAY_COM ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::ALIPAY ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::APPLE_PAY ) );
@@ -97,7 +76,7 @@ class Gateway extends Core_Gateway {
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::EPS ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::GIROPAY ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::GOOGLE_PAY ) );
-		$this->register_payment_method( $ideal_payment_method );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::IDEAL ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_LATER ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_NOW ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_OVER_TIME ) );
@@ -162,38 +141,6 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
-	 * Get iDEAL issuers.
-	 *
-	 * @return iterable<SelectFieldOption|SelectFieldOptionGroup>
-	 */
-	private function get_ideal_issuers() {
-		$issuers = [];
-
-		$payment_methods_request = new PaymentMethodsRequest( $this->config->get_merchant_account() );
-
-		$payment_methods_request->set_allowed_payment_methods( [ PaymentMethodType::IDEAL ] );
-
-		$payment_methods_response = $this->client->get_payment_methods( $payment_methods_request );
-
-		$payment_methods = $payment_methods_response->get_payment_methods();
-
-		foreach ( $payment_methods as $payment_method ) {
-			$payment_method_issuers = $payment_method->get_issuers();
-
-			if ( is_array( $payment_method_issuers ) ) {
-				foreach ( $payment_method_issuers as $payment_method_issuer ) {
-					$id   = $payment_method_issuer->get_id();
-					$name = $payment_method_issuer->get_name();
-
-					$issuers[] = new SelectFieldOption( $id, $name );
-				}
-			}
-		}
-
-		return $issuers;
-	}
-
-	/**
 	 * Start.
 	 *
 	 * @param Payment $payment Payment.
@@ -211,16 +158,6 @@ class Gateway extends Core_Gateway {
 			return;
 		}
 
-		// Payment method.
-		switch ( $payment_method_type ) {
-			case PaymentMethodType::IDEAL:
-				$payment_method_details = new PaymentMethodIDealDetails( (string) $payment->get_meta( 'issuer' ) );
-
-				break;
-			default:
-				$payment_method_details = new PaymentMethodDetails( $payment_method_type );
-		}
-
 		// Create payment.
 		$payment_id = (string) $payment->get_id();
 
@@ -229,7 +166,7 @@ class Gateway extends Core_Gateway {
 			$this->config->get_merchant_account(),
 			\sprintf( '%s-%s-%s', \get_current_network_id(), \get_current_blog_id(), $payment_id ),
 			$this->get_payment_return_url( $payment_id ),
-			$payment_method_details
+			new PaymentMethodDetails( $payment_method_type )
 		);
 
 		PaymentRequestHelper::complement( $payment, $payment_request, $this->config );

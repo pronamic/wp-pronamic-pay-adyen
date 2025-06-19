@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.6.1] - 2025-06-19
+
+### Commits
+
+- Allow Jetpack autoloader 3, 4 and 5. ([0145d7a](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/0145d7ac2f8f2bd1d4bb9ad18b6ae8dc4c95fa03))
+
+### Composer
+
+- Changed `automattic/jetpack-autoloader` from `^3.0` to `v5.0.7`.
+	Release notes: https://github.com/Automattic/jetpack-autoloader/releases/tag/v5.0.7
+
+Full set of changes: [`4.6.0...4.6.1`][4.6.1]
+
+[4.6.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.6.0...v4.6.1
+
 ## [4.6.0] - 2025-06-19
 
 ### Removed

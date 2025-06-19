@@ -72,6 +72,8 @@
 		"sirbrillig/phpcs-variable-analysis": "^2.8",
 		"szepeviktor/phpstan-wordpress": "^1.3",
 		"vimeo/psalm": "^5.25",
+		"wp-cli/dist-archive-command": "*",
+		"wp-cli/wp-cli-bundle": "*",
 		"wp-phpunit/wp-phpunit": "^6.1",
 		"yoast/phpunit-polyfills": "^1.0"
 	},

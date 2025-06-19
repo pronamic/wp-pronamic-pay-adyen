@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.6.0] - 2025-06-19
+
+### Removed
+
+- Removed iDEAL issuers field. ([7f04dd0](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/7f04dd040bb26a95e10706850d0d89b81cead74d))
+
+Full set of changes: [`4.5.2...4.6.0`][4.6.0]
+
+[4.6.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.5.2...v4.6.0
+
 ## [4.5.2] - 2024-12-17
 
 ### Commits

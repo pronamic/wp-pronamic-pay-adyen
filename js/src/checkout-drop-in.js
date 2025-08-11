@@ -51,10 +51,13 @@
 		},
 	};
 
+	const { AdyenCheckout, Dropin } = window.AdyenWeb;
+
 	const checkout = await AdyenCheckout( configuration );
 
-	checkout
-		.create( 'dropin', {
+	const dropin = new Dropin(
+		checkout,
+		{
 			/**
 			 * The `onSelect` and `onReady` events, since they're not generic events,
 			 * should be defined when creating the Drop-in component.
@@ -68,6 +71,8 @@
 					dropin.submit();
 				}
 			},
-		} )
-		.mount( '#pronamic-pay-checkout' );
+		}
+	);
+
+	dropin.mount( '#pronamic-pay-checkout' );
 } )();

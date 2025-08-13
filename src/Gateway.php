@@ -30,7 +30,7 @@ class Gateway extends Core_Gateway {
 	 * @link https://www.npmjs.com/package/@adyen/adyen-web
 	 * @var string
 	 */
-	const SDK_VERSION = '5.27.0';
+	const SDK_VERSION = '6.16.0';
 
 	/**
 	 * Config.

@@ -51,23 +51,28 @@
 		},
 	};
 
+	const { AdyenCheckout, Dropin } = window.AdyenWeb;
+
 	const checkout = await AdyenCheckout( configuration );
 
-	checkout
-		.create( 'dropin', {
+	const dropin = new Dropin(
+		checkout,
+		{
 			/**
 			 * The `onSelect` and `onReady` events, since they're not generic events,
 			 * should be defined when creating the Drop-in component.
 			 *
 			 * @see https://github.com/Adyen/adyen-web/issues/973#issuecomment-821148830
 			 * @see https://docs.adyen.com/online-payments/migrate-to-web-4-0-0#dropin-configuration
-			 * @param {Object} dropin Adyen dropin component.
+			 * @param {Object} component Adyen payment method component.
 			 */
-			onSelect: ( dropin ) => {
+			onSelect: ( paymentMethod ) => {
 				if ( pronamicPayAdyenCheckout.autoSubmit ) {
-					dropin.submit();
+					paymentMethod.submit();
 				}
 			},
-		} )
-		.mount( '#pronamic-pay-checkout' );
+		}
+	);
+
+	dropin.mount( '#pronamic-pay-checkout' );
 } )();

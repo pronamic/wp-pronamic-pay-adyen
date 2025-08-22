@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.7.0] - 2025-08-22
+
+### Changed
+
+- Migrate to Adyen Web v6 ([7d619ab](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/7d619ab1a79ee7f319681b6657b5957fa0dd2dda))
+- Copyright 2025 ([dc483ea](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/dc483ea8ebeefb5ad3a53de12a05d313b64cfcad))
+
+### Composer
+
+- Changed `php` from `>=7.4` to `>=8.2`.
+
+Full set of changes: [`4.6.1...4.7.0`][4.7.0]
+
+[4.7.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.6.1...v4.7.0
+
 ## [4.6.1] - 2025-06-19
 
 ### Commits

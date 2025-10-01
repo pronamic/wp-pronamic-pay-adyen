@@ -44,10 +44,10 @@ class Integration extends AbstractGatewayIntegration {
 				'name'          => 'Adyen',
 				'mode'          => 'live',
 				'provider'      => 'adyen',
-				'url'           => \__( 'https://www.adyen.com/', 'pronamic_ideal' ),
-				'product_url'   => \__( 'https://www.adyen.com/pricing', 'pronamic_ideal' ),
+				'url'           => 'https://www.adyen.com/',
+				'product_url'   => 'https://www.adyen.com/',
 				'dashboard_url' => 'https://ca-live.adyen.com/ca/ca/login.shtml',
-				'manual_url'    => \__( 'https://www.pronamicpay.com/en/manuals/how-to-connect-adyen-to-wordpress-with-pronamic-pay/', 'pronamic_ideal' ),
+				'manual_url'    => 'https://www.pronamicpay.com/en/manuals/how-to-connect-adyen-to-wordpress-with-pronamic-pay/',
 				'supports'      => [
 					'webhook',
 					'webhook_log',

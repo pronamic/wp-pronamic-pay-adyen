@@ -1,4 +1,4 @@
-/* global pronamicPayAdyenCheckout */
+/* global pronamicPayAdyen */
 
 import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 
@@ -16,10 +16,10 @@ import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 
 ( async function () {
 	/**
-	 * Adyen Checkout.
+	 * Adyen Checkout configuration.
 	 */
-	const configuration = {
-		...pronamicPayAdyenCheckout.configuration,
+	const checkoutConfiguration = {
+		...pronamicPayAdyen.checkoutConfiguration,
 		onPaymentCompleted: ( result ) => {
 			const redirectUrl = new URL(
 				pronamicPayAdyenCheckout.paymentRedirectUrl
@@ -53,26 +53,29 @@ import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 		},
 	};
 
-	const checkout = await AdyenCheckout( configuration );
+	const checkout = await AdyenCheckout( checkoutConfiguration );
 
-	const dropin = new Dropin(
-		checkout,
-		{
-			/**
-			 * The `onSelect` and `onReady` events, since they're not generic events,
-			 * should be defined when creating the Drop-in component.
-			 *
-			 * @see https://github.com/Adyen/adyen-web/issues/973#issuecomment-821148830
-			 * @see https://docs.adyen.com/online-payments/migrate-to-web-4-0-0#dropin-configuration
-			 * @param {Object} component Adyen payment method component.
-			 */
-			onSelect: ( paymentMethod ) => {
-				if ( pronamicPayAdyenCheckout.autoSubmit ) {
-					paymentMethod.submit();
-				}
-			},
-		}
-	);
+	/**
+	 * Adyen Dropin configuration.
+	 */
+	const dropinConfiguration = {
+		...pronamicPayAdyen.dropinConfiguration,
+		/**
+		 * The `onSelect` and `onReady` events, since they're not generic events,
+		 * should be defined when creating the Drop-in component.
+		 *
+		 * @see https://github.com/Adyen/adyen-web/issues/973#issuecomment-821148830
+		 * @see https://docs.adyen.com/online-payments/migrate-to-web-4-0-0#dropin-configuration
+		 * @param {Object} component Adyen payment method component.
+		 */
+		onSelect: ( paymentMethod ) => {
+			if ( pronamicPayAdyen.autoSubmit ) {
+				paymentMethod.submit();
+			}
+		},
+	};
+
+	const dropin = new Dropin( checkout, dropinConfiguration );
 
 	dropin.mount( '#pronamic-pay-checkout' );
 } )();

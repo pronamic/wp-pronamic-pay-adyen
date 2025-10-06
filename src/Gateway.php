@@ -325,19 +325,18 @@ class Gateway extends Core_Gateway {
 		 * @link https://docs.adyen.com/checkout/drop-in-web
 		 * @link https://docs.adyen.com/checkout/components-web
 		 */
-		$configuration = [
-			'locale'                      => Util::get_payment_locale( $payment ),
-			'environment'                 => $this->config->environment,
-			'session'                     => (object) [
+		$checkout_configuration = [
+			'locale'      => Util::get_payment_locale( $payment ),
+			'environment' => $this->config->environment,
+			'session'     => (object) [
 				'id'          => $payment_session->get_id(),
 				'sessionData' => $payment_session->get_data(),
 			],
-			'clientKey'                   => $this->config->client_key,
-			'amount'                      => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
-			'paymentMethodsConfiguration' => $this->get_payment_methods_configuration( $payment ),
+			'clientKey'   => $this->config->client_key,
+			'amount'      => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
 		];
 
-		$configuration = (object) $configuration;
+		$checkout_configuration = (object) $checkout_configuration;
 
 		/**
 		 * Filters the Adyen checkout configuration.
@@ -346,28 +345,41 @@ class Gateway extends Core_Gateway {
 		 * @link https://docs.adyen.com/online-payments/drop-in-web#step-2-add-drop-in
 		 * @since 1.2.0 Added.
 		 */
-		$configuration = \apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
+		$checkout_configuration = \apply_filters( 'pronamic_pay_adyen_checkout_configuration', $checkout_configuration );
+
+		/**
+		 * Adyen dropin configuration.
+		 *
+		 * @link https://docs.adyen.com/checkout/drop-in-web
+		 * @link https://docs.adyen.com/checkout/components-web
+		 */
+		$dropin_configuration = [
+			'paymentMethodsConfiguration' => $this->get_payment_methods_configuration( $payment ),
+		];
+
+		$dropin_configuration = (object) $dropin_configuration;
 
 		\wp_localize_script(
 			'pronamic-pay-adyen-checkout-drop-in',
-			'pronamicPayAdyenCheckout',
+			'pronamicPayAdyen',
 			[
-				'configuration'      => $configuration,
-				'paymentRedirectUrl' => \add_query_arg(
+				'checkoutConfiguration' => $checkout_configuration,
+				'dropinConfiguration'   => $dropin_configuration,
+				'paymentRedirectUrl'    => \add_query_arg(
 					[
 						'_wpnonce' => \wp_create_nonce( 'wp_rest' ),
 						'nonce'    => \wp_create_nonce( 'pronamic-pay-adyen-payment-redirect-' . $payment->get_id() ),
 					],
 					\rest_url( Integration::REST_ROUTE_NAMESPACE . '/redirect/' . $payment_id )
 				),
-				'paymentErrorUrl'    => \add_query_arg(
+				'paymentErrorUrl'       => \add_query_arg(
 					[
 						'_wpnonce' => \wp_create_nonce( 'wp_rest' ),
 						'nonce'    => \wp_create_nonce( 'pronamic-pay-adyen-payment-error-' . $payment->get_id() ),
 					],
 					\rest_url( Integration::REST_ROUTE_NAMESPACE . '/error/' . $payment_id )
 				),
-				'autoSubmit'         => $this->can_auto_submit( $payment_method_type ),
+				'autoSubmit'            => $this->can_auto_submit( $payment_method_type ),
 			]
 		);
 

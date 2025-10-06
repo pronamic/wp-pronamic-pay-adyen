@@ -431,9 +431,8 @@ class Integration extends AbstractGatewayIntegration {
 			'title'    => \__( 'Country code', 'pronamic_ideal' ),
 			'type'     => 'text',
 			'classes'  => [ 'regular-text', 'code' ],
-			'tooltip'  => __( 'Country code used when it cannot be derived from the customer details.', 'pronamic_ideal' ),
+			'tooltip'  => \__( 'Country code used when it cannot be derived from the customer details.', 'pronamic_ideal' ),
 			'required' => true,
-			'default'  => 'NL',
 		];
 
 		// Return fields.

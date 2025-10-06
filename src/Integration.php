@@ -424,6 +424,18 @@ class Integration extends AbstractGatewayIntegration {
 			},
 		];
 
+		// Country code.
+		$fields[] = [
+			'section'  => 'general',
+			'meta_key' => '_pronamic_gateway_adyen_country_code',
+			'title'    => \__( 'Country code', 'pronamic_ideal' ),
+			'type'     => 'text',
+			'classes'  => [ 'regular-text', 'code' ],
+			'tooltip'  => __( 'Country code used when it cannot be derived from the customer details.', 'pronamic_ideal' ),
+			'required' => true,
+			'default'  => 'NL',
+		];
+
 		// Return fields.
 		return $fields;
 	}
@@ -457,6 +469,7 @@ class Integration extends AbstractGatewayIntegration {
 		$config->merchant_account         = $this->get_meta( $post_id, 'adyen_merchant_account' );
 		$config->client_key               = $this->get_meta( $post_id, 'adyen_client_key' );
 		$config->merchant_order_reference = $this->get_meta( $post_id, 'adyen_merchant_order_reference' );
+		$config->country_code             = $this->get_meta( $post_id, 'adyen_country_code' );
 
 		return $config;
 	}

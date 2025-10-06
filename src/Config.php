@@ -60,6 +60,13 @@ class Config extends GatewayConfig implements JsonSerializable {
 	public $client_key;
 
 	/**
+	 * Country code.
+	 *
+	 * @var string
+	 */
+	public $country_code;
+
+	/**
 	 * Get API key.
 	 *
 	 * @return string|null
@@ -99,6 +106,7 @@ class Config extends GatewayConfig implements JsonSerializable {
 			'merchant_account' => (string) $this->merchant_account,
 			'api_key'          => (string) $this->api_key,
 			'client_key'       => (string) $this->client_key,
+			'country_code'     => (string) $this->country_code,
 		];
 	}
 }

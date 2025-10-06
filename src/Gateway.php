@@ -341,7 +341,7 @@ class Gateway extends Core_Gateway {
 			 *
 			 * @link https://docs.adyen.com/online-payments/upgrade-your-integration/migrate-to-web-v6
 			 */
-			'countryCode' => Util::get_country_code( $payment ),
+			'countryCode' => Util::get_country_code( $payment ) ?? $this->config->country_code,
 		];
 
 		$checkout_configuration = (object) $checkout_configuration;

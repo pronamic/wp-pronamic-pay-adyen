@@ -64,7 +64,7 @@ class Config extends GatewayConfig implements JsonSerializable {
 	 *
 	 * @var string
 	 */
-	public $country_code;
+	public $country_code = '';
 
 	/**
 	 * Get API key.

@@ -22,7 +22,7 @@ import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 		...pronamicPayAdyen.checkoutConfiguration,
 		onPaymentCompleted: ( result ) => {
 			const redirectUrl = new URL(
-				pronamicPayAdyenCheckout.paymentRedirectUrl
+				pronamicPayAdyen.paymentRedirectUrl
 			);
 
 			redirectUrl.searchParams.set( 'resultCode', result.resultCode );
@@ -43,7 +43,7 @@ import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 			}
 
 			const redirectUrl = new URL(
-				pronamicPayAdyenCheckout.paymentErrorUrl
+				pronamicPayAdyen.paymentErrorUrl
 			);
 
 			redirectUrl.searchParams.set( 'name', error.name );

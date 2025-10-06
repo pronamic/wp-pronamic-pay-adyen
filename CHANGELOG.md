@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.8.0-rc.1] - 2025-10-06
+
+### Added
+
+- Addded mandatory configuration property `countryCode`.
+- Added country code configuration option.
+
+### Changed
+
+- Use Adyen Web via `npm`.
+
+### Fixed
+
+- Configuration property "paymentMethodsConfiguration" is not a valid AdyenCheckout property.
+
 ## [4.7.0] - 2025-08-22
 
 ### Changed

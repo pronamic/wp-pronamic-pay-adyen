@@ -303,7 +303,7 @@ class Gateway extends Core_Gateway {
 		\wp_register_script(
 			'pronamic-pay-adyen-checkout-drop-in',
 			\plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
-			[],
+			$asset['dependencies'],
 			$asset['version'],
 			true
 		);

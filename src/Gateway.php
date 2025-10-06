@@ -30,7 +30,7 @@ class Gateway extends Core_Gateway {
 	 * @link https://www.npmjs.com/package/@adyen/adyen-web
 	 * @var string
 	 */
-	const SDK_VERSION = '6.16.0';
+	const SDK_VERSION = '6.22.0';
 
 	/**
 	 * Config.
@@ -298,24 +298,12 @@ class Gateway extends Core_Gateway {
 		// Endpoint.
 		$endpoint = new Endpoint( $this->config->environment, $this->config->api_live_url_prefix );
 
-		// Register scripts.
-		$url_script = $endpoint->get_web_url( self::SDK_VERSION, 'adyen.js' );
-
-		\wp_register_script(
-			'pronamic-pay-adyen-checkout',
-			$url_script,
-			[],
-			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
-			null,
-			false
-		);
-
 		$asset = include __DIR__ . '/../js/dist/checkout-drop-in.asset.php';
 
 		\wp_register_script(
 			'pronamic-pay-adyen-checkout-drop-in',
 			\plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
-			[ 'pronamic-pay-adyen-checkout' ],
+			$asset['dependencies'],
 			$asset['version'],
 			true
 		);
@@ -361,7 +349,7 @@ class Gateway extends Core_Gateway {
 		$configuration = \apply_filters( 'pronamic_pay_adyen_checkout_configuration', $configuration );
 
 		\wp_localize_script(
-			'pronamic-pay-adyen-checkout',
+			'pronamic-pay-adyen-checkout-drop-in',
 			'pronamicPayAdyenCheckout',
 			[
 				'configuration'      => $configuration,

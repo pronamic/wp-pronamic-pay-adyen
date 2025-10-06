@@ -1,4 +1,6 @@
-/* global AdyenCheckout, pronamicPayAdyenCheckout */
+/* global pronamicPayAdyenCheckout */
+
+import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 
 /**
  * Adyen checkout error definition.
@@ -50,8 +52,6 @@
 			window.location.href = redirectUrl;
 		},
 	};
-
-	const { AdyenCheckout, Dropin } = window.AdyenWeb;
 
 	const checkout = await AdyenCheckout( configuration );
 

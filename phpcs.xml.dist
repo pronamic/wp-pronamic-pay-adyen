@@ -3,6 +3,7 @@
 <ruleset name="WordPress Pay Gateway: Adyen rules">
 	<file>.</file>
 
+	<exclude-pattern type="relative">^build/*</exclude-pattern>
 	<exclude-pattern>js/dist/*.asset.php</exclude-pattern>
 	<exclude-pattern>tests/bootstrap.php</exclude-pattern>
 	<exclude-pattern>tests/wp-config.php</exclude-pattern>

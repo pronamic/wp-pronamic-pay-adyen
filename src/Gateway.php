@@ -334,6 +334,14 @@ class Gateway extends Core_Gateway {
 			],
 			'clientKey'   => $this->config->client_key,
 			'amount'      => AmountTransformer::transform( $payment->get_total_amount() )->get_json(),
+			/**
+			 * Country code.
+			 *
+			 * Since Adyen Web v6 the `countryCode` is a mandatory configuration property.
+			 *
+			 * @link https://docs.adyen.com/online-payments/upgrade-your-integration/migrate-to-web-v6
+			 */
+			'countryCode' => Util::get_country_code( $payment ),
 		];
 
 		$checkout_configuration = (object) $checkout_configuration;

@@ -19,6 +19,9 @@
 # PHPLint
 /.phplint-cache
 
+# wp-env
+/.wp-env.override.json
+
 # WordPress
 /wordpress/
 /wp-content/

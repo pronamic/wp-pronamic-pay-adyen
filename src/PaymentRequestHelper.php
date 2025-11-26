@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Money\TaxedMoney;
+use Pronamic\WordPress\Number\Number;
 use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
@@ -168,9 +169,26 @@ class PaymentRequestHelper {
 
 				$total_amount = $line->get_total_amount();
 
+				$quantity = $line->get_quantity();
+
+				if ( null === $quantity ) {
+					$quantity = new Number( 0 );
+				}
+
+				// Handle decimal quantities.
+				if ( ! $quantity->is_whole_number() ) {
+					$description = \sprintf(
+						'%s × %s',
+						$quantity->format_i18n_non_trailing_zeros(),
+						(string) $description
+					);
+
+					$quantity = new Number( 1 );
+				}
+
 				$item = $line_items->new_item(
 					(string) $description,
-					(int) $line->get_quantity(),
+					$quantity->to_int(),
 					$total_amount->get_minor_units()->to_int()
 				);
 

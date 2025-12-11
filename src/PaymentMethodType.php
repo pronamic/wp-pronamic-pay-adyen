@@ -180,6 +180,14 @@ class PaymentMethodType {
 	const MULTIBANCO = 'multibanco';
 
 	/**
+	 * Constant for the 'PaybyBank' payment method type.
+	 *
+	 * @link https://www.adyen.com/nl_NL/betaalmethoden/open-banking
+	 * @var string
+	 */
+	const PAYBYBANK = 'paybybank';
+
+	/**
 	 * Constant for the 'PayPal' payment method type.
 	 *
 	 * @var string
@@ -244,6 +252,7 @@ class PaymentMethodType {
 		PaymentMethods::MAESTRO              => self::MAESTRO,
 		PaymentMethods::MB_WAY               => self::MB_WAY,
 		PaymentMethods::MOBILEPAY            => self::MOBILEPAY,
+		PaymentMethods::PAY_BY_BANK          => self::PAYBYBANK,
 		PaymentMethods::PAYPAL               => self::PAYPAL,
 		PaymentMethods::SOFORT               => self::DIRECT_EBANKING,
 		PaymentMethods::SWISH                => self::SWISH,

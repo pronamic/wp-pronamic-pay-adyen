@@ -32,8 +32,8 @@
 		"url": "https://github.com/wp-pay-gateways/adyen/issues"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^9.1.0",
-		"@wordpress/scripts": "^27.0.0",
+		"@wordpress/env": "^10.37.0",
+		"@wordpress/scripts": "^31.2.0",
 		"prettier": "npm:wp-prettier@^3.0.3"
 	},
 	"prettier": "@wordpress/prettier-config",
@@ -44,6 +44,6 @@
 		"lint-pkg-json": "wp-scripts lint-pkg-json"
 	},
 	"dependencies": {
-		"@adyen/adyen-web": "^6.22.0"
+		"@adyen/adyen-web": "^6.27.1"
 	}
 }

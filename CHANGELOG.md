@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.9.0] - 2026-01-05
+
+### Commits
+
+- Added support for Adyen payment method Open banking / PaybyBank ([7aac0fb](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/7aac0fb040f48ef0558e76d218898a8fe186e712))
+- Merge pull request #40 from pronamic/core-230-payment-line-quantity-type ([78e8356](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/78e83560f2b4074556c4b23e8224818b05a6b5fe))
+- Use `Number::is_whole_number()` helper. ([a5663bb](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/a5663bb9dfe0da1106fa57a5a42b3d930c36345d))
+- Updated for quantity `Number` (https://github.com/pronamic/wp-pay-core/issues/230). ([a10236e](https://github.com/pronamic/wp-pronamic-pay-adyen/commit/a10236ec1e959aa717962a5c842ab2876ee96471))
+
+### Composer
+
+- Added `pronamic/wp-number` `^1.4`.
+
+Full set of changes: [`4.8.0...4.9.0`][4.9.0]
+
+[4.9.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.8.0...v4.9.0
+
 ## [4.8.0] - 2025-11-11
 
 ### Commits

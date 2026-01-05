@@ -19,9 +19,7 @@ use Pronamic\WordPress\Pay\Region;
 /**
  * Address transformer test
  *
- * @link https://docs.adyen.com/developers/api-reference/common-api/address
- *
- * @author  Remco Tolsma
+ * @link    https://docs.adyen.com/developers/api-reference/common-api/address
  * @version 1.0.0
  * @since   1.0.0
  */

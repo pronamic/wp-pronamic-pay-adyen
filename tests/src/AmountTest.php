@@ -15,9 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Amount test
  *
- * @link https://docs.adyen.com/developers/api-reference/common-api/amount
- *
- * @author  Remco Tolsma
+ * @link    https://docs.adyen.com/developers/api-reference/common-api/amount
  * @version 1.0.0
  * @since   1.0.0
  */

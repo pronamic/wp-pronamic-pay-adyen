@@ -13,7 +13,6 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 /**
  * Application info test
  *
- * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
  */

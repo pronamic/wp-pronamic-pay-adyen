@@ -18,7 +18,6 @@ use WP_UnitTestCase;
 /**
  * Notifications controller test
  *
- * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
  */

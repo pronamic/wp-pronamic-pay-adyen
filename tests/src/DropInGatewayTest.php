@@ -12,12 +12,10 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use PHPUnit\Framework\TestCase;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
-use Pronamic\WordPress\Pay\Core\PaymentMethods;
 
 /**
  * Drop-in gateway test
  *
- * @author  Remco Tolsma
  * @version 1.1.0
  * @since   1.1.0
  */

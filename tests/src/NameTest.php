@@ -16,9 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Name test
  *
- * @link https://docs.adyen.com/developers/api-reference/common-api/name
- *
- * @author  Remco Tolsma
+ * @link    https://docs.adyen.com/developers/api-reference/common-api/name
  * @version 1.0.0
  * @since   1.0.0
  */

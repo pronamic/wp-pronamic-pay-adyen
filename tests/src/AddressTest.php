@@ -15,8 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Address test
  *
- * @link https://docs.adyen.com/developers/api-reference/common-api/address
- *
+ * @link    https://docs.adyen.com/developers/api-reference/common-api/address
  * @version 1.0.0
  * @since   1.0.0
  */

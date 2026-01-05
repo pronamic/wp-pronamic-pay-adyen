@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Service exception test
  *
- * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
  */

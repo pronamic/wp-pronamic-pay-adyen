@@ -10,19 +10,14 @@
 
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
-use Pronamic\WordPress\Http\Facades\Http;
 use Pronamic\WordPress\Http\Factory;
 use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
-use WP_Error;
-use WP_Http;
 use WP_UnitTestCase;
 
 /**
  * Client test
  *
- * @link https://docs.adyen.com/developers/development-resources/live-endpoints
- *
- * @author  Remco Tolsma
+ * @link    https://docs.adyen.com/developers/development-resources/live-endpoints
  * @version 1.0.5
  * @since   1.0.0
  */

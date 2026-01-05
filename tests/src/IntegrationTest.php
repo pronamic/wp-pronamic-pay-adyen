@@ -15,7 +15,6 @@ use WP_UnitTestCase;
 /**
  * Integration test
  *
- * @author  Remco Tolsma
  * @version 1.1.2
  * @since   1.0.0
  */

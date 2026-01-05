@@ -11,15 +11,12 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use PHPUnit\Framework\TestCase;
-use Pronamic\WordPress\Money\Currency;
 use Pronamic\WordPress\Money\Money;
 
 /**
  * Amount transformer test
  *
- * @link https://docs.adyen.com/developers/api-reference/common-api/amount
- *
- * @author  Remco Tolsma
+ * @link    https://docs.adyen.com/developers/api-reference/common-api/amount
  * @version 1.0.0
  * @since   1.0.0
  */

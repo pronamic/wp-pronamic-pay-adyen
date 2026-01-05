@@ -16,7 +16,6 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 /**
  * Payment method type test.
  *
- * @author  Remco Tolsma
  * @version 1.0.0
  * @since   1.0.0
  */

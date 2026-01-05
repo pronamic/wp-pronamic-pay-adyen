@@ -3,7 +3,7 @@
  * Line items test
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2025 Pronamic
+ * @copyright 2005-2026 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Gateways\Adyen
  */
@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
  *
  * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/payments
  *
- * @author  Reüel van der Steege
  * @version 1.0.0
  * @since   1.0.0
  */

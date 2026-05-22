@@ -32,7 +32,7 @@
 		"url": "https://github.com/wp-pay-gateways/adyen/issues"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^10.37.0",
+		"@wordpress/env": "^11.4.0",
 		"@wordpress/scripts": "^31.2.0",
 		"prettier": "npm:wp-prettier@^3.0.3"
 	},

@@ -5,9 +5,8 @@
 		"pronamic/wp-pronamic-pay-test-helper",
 		"https://downloads.wordpress.org/plugin/code-profiler.zip",
 		"https://downloads.wordpress.org/plugin/log-http-requests.zip",
-		"https://downloads.wordpress.org/plugin/ninja-forms.zip",
 		"https://downloads.wordpress.org/plugin/one-time-login.zip",
-		"https://downloads.wordpress.org/plugin/plugin-check.0.2.3.zip",
+		"https://downloads.wordpress.org/plugin/plugin-check.zip",
 		"https://downloads.wordpress.org/plugin/pronamic-client.zip",
 		"https://downloads.wordpress.org/plugin/pronamic-ideal.zip",
 		"https://downloads.wordpress.org/plugin/query-monitor.zip",
@@ -20,5 +19,6 @@
 	},
 	"config": {
 		"PRONAMIC_PAY_DEBUG": true
-	}
+	},
+	"testsEnvironment": false
 }

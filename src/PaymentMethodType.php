@@ -180,6 +180,20 @@ class PaymentMethodType {
 	const MULTIBANCO = 'multibanco';
 
 	/**
+	 * Constant for the 'onlineBanking_CZ' payment method type.
+	 *
+	 * @var string
+	 */
+	const ONLINE_BANKING_CZ = 'onlineBanking_CZ';
+
+	/**
+	 * Constant for the 'onlineBanking_SK' payment method type.
+	 *
+	 * @var string
+	 */
+	const ONLINE_BANKING_SK = 'onlineBanking_SK';
+
+	/**
 	 * Constant for the 'PaybyBank' payment method type.
 	 *
 	 * @link https://www.adyen.com/nl_NL/betaalmethoden/open-banking
@@ -252,6 +266,8 @@ class PaymentMethodType {
 		PaymentMethods::MAESTRO              => self::MAESTRO,
 		PaymentMethods::MB_WAY               => self::MB_WAY,
 		PaymentMethods::MOBILEPAY            => self::MOBILEPAY,
+		PaymentMethods::ONLINE_BANKING_CZ    => self::ONLINE_BANKING_CZ,
+		PaymentMethods::ONLINE_BANKING_SK    => self::ONLINE_BANKING_SK,
 		PaymentMethods::PAY_BY_BANK          => self::PAYBYBANK,
 		PaymentMethods::PAYPAL               => self::PAYPAL,
 		PaymentMethods::SOFORT               => self::DIRECT_EBANKING,

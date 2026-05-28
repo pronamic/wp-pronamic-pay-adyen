@@ -82,6 +82,8 @@ class Gateway extends Core_Gateway {
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::KLARNA_PAY_OVER_TIME ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::MB_WAY ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::MOBILEPAY ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::ONLINE_BANKING_CZ ) );
+		$this->register_payment_method( new PaymentMethod( PaymentMethods::ONLINE_BANKING_SK ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::PAY_BY_BANK ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::PAYPAL ) );
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::SOFORT ) );

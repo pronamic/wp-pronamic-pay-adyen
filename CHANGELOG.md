@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.10.0] - 2026-07-31
+
+### Added
+
+- Added support for the Online Banking Czech Republic (`onlineBanking_CZ`) payment method.
+- Added support for the Online Banking Slovakia (`onlineBanking_SK`) payment method.
+
+### Changed
+
+- Updated `@wordpress/env` development dependency to `^11.4.0`.
+
+Full set of changes: [`4.9.0...4.10.0`][4.10.0]
+
+[4.10.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.9.0...v4.10.0
+
 ## [4.9.0] - 2026-01-05
 
 ### Commits

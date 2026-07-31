@@ -88,8 +88,8 @@
 			"rsync --recursive --verbose --exclude-from=.distignore --exclude=/vendor/ ./ ./build/stage-1/",
 			"composer install --no-dev --prefer-dist --optimize-autoloader --working-dir=./build/stage-1/",
 			"rsync --recursive --verbose --exclude-from=.distignore ./build/stage-1/ ./build/stage-2/",
-			"vendor/bin/wp i18n make-pot ./build/stage-2/ --slug=pronamic-pay-adyen",
-			"vendor/bin/wp i18n make-json ./build/stage-2/languages/*.po --no-purge",
+			"vendor/bin/wp i18n make-pot ./build/stage-2/ --slug=pronamic-pay-adyen --exclude=js/dist/*.js",
+			"vendor/bin/wp i18n make-json ./build/stage-2/languages/*.po",
 			"vendor/bin/wp i18n make-mo ./build/stage-2/languages/",
 			"vendor/bin/wp dist-archive ./build/stage-2/ --plugin-dirname=pronamic-pay-adyen"
 		],

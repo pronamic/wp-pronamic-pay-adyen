@@ -203,18 +203,6 @@ class ReturnController {
 			);
 		}
 
-		if ( ! isset( $gateway->client ) ) {
-			return new WP_Error(
-				'pronamic-pay-adyen-client-not-found',
-				sprintf(
-					/* translators: %s: Gateway configuration ID */
-					__( 'Could not find client in gateway with ID `%s`.', 'pronamic_ideal' ),
-					$config_id
-				),
-				$config_id
-			);
-		}
-
 		// Redirect result.
 		$redirect_result = $request->get_param( 'redirectResult' );
 

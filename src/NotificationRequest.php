@@ -60,7 +60,7 @@ class NotificationRequest extends ResponseObject {
 	 *
 	 * @param object $value Object.
 	 * @return NotificationRequest
-	 * @throws \InvalidArgumentException Throws JSON schema validation exception when JSON is invalid.
+	 * @throws \JsonSchema\Exception\ValidationException Throws JSON schema validation exception when JSON is invalid.
 	 */
 	public static function from_object( $value ) {
 		$validator = new \JsonSchema\Validator();

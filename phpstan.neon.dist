@@ -2,6 +2,6 @@ includes:
 	- vendor/szepeviktor/phpstan-wordpress/extension.neon
 parameters:
 	customRulesetUsed: false
-	level: 3
+	level: 4
 	paths:
 		- src/

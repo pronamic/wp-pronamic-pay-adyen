@@ -284,6 +284,7 @@ class PaymentRequestHelper {
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_metadata
 		 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v41/paymentSession__reqParam_metadata
 		 */
+		// @phpstan-ignore function.alreadyNarrowedType (Third-party filter callbacks may return a non-array.)
 		if ( ! \is_array( $metadata ) ) {
 			throw new \Exception( 'Adyen metadata must be an array.' );
 		}

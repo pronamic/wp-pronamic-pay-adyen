@@ -25,8 +25,8 @@ class ClientTest extends WP_UnitTestCase {
 	/**
 	 * Setup.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up(): void {
+		parent::set_up();
 
 		$this->factory = new Factory();
 	}

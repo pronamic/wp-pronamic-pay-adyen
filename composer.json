@@ -77,6 +77,7 @@
 		"wp-cli/dist-archive-command": "*",
 		"wp-cli/wp-cli-bundle": "*",
 		"wp-phpunit/wp-phpunit": "^6.1",
+		"wp-plugin/sqlite-database-integration": "^3.1",
 		"yoast/phpunit-polyfills": "^4.0"
 	},
 	"scripts": {
@@ -120,5 +121,23 @@
 			"rsync --recursive --delete --verbose ./build/pronamic-pay-adyen/languages/ ./languages/",
 			"vendor/bin/wp i18n update-po ./languages/pronamic-pay-adyen.pot"
 		]
-	}
+	},
+	"extra": {
+		"installer-paths": {
+			"vendor/{$vendor}/{$name}/": [
+				"type:wordpress-plugin"
+			]
+		}
+	},
+	"repositories": [
+		{
+			"name": "wp-packages",
+			"type": "composer",
+			"url": "https://repo.wp-packages.org",
+			"only": [
+				"wp-plugin/*",
+				"wp-theme/*"
+			]
+		}
+	]
 }

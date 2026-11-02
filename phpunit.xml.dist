@@ -14,11 +14,11 @@
 		</testsuite>
 	</testsuites>
 
-	<filter>
-		<whitelist>
+	<coverage>
+		<include>
 			<directory suffix=".php">src</directory>
-		</whitelist>
-	</filter>
+		</include>
+	</coverage>
 
 	<php>
 		<env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-config.php"/>

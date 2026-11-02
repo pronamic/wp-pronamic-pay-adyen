@@ -28,3 +28,6 @@
 
 # macOS
 .DS_Store
+
+# PHPUnit
+/.phpunit.result.cache

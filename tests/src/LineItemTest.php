@@ -30,7 +30,7 @@ class LineItemTest extends TestCase {
 	/**
 	 * Setup.
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		$this->line_item = new LineItem( 'Test', 1, 12399 );
 
 		$this->line_item->set_id( 'TEST' );

@@ -27,8 +27,8 @@ class NotificationsControllerTest extends WP_UnitTestCase {
 	 *
 	 * @link https://github.com/WordPress/phpunit-test-reporter/blob/master/tests/test-restapi.php
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up(): void {
+		parent::set_up();
 
 		$this->rest_server = \rest_get_server();
 

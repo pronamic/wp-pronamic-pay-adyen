@@ -73,7 +73,6 @@
 		"sirbrillig/phpcs-import-detection": "^1.2",
 		"sirbrillig/phpcs-variable-analysis": "^2.8",
 		"szepeviktor/phpstan-wordpress": "^2.0",
-		"vimeo/psalm": "^5.25",
 		"wp-cli/dist-archive-command": "*",
 		"wp-cli/wp-cli-bundle": "*",
 		"wp-phpunit/wp-phpunit": "^6.1",
@@ -110,7 +109,10 @@
 		"phpunit": "vendor/bin/phpunit",
 		"post-install-cmd": "echo 'Optionally run: composer bin all install'",
 		"post-update-cmd": "echo 'Optionally run: composer bin all update'",
-		"psalm": "vendor/bin/psalm",
+		"psalm": [
+			"@composer bin psalm install --no-interaction --no-progress",
+			"vendor/bin/psalm"
+		],
 		"rector": "vendor/bin/rector",
 		"xmllint-phpcs": "xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd phpcs.xml.dist",
 		"xmllint": [

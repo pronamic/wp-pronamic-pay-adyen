@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <psalm
-    totallyTyped="false"
+    errorLevel="3"
+    findUnusedCode="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    autoloader="tests/bootstrap.php"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/psalm/vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
         <directory name="src" />
@@ -13,8 +13,16 @@
         </ignoreFiles>
     </projectFiles>
 
+    <stubs>
+        <file name="vendor/php-stubs/wordpress-stubs/wordpress-stubs.php" />
+        <file name="vendor/szepeviktor/phpstan-wordpress/bootstrap.php" />
+    </stubs>
+
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info" />
+
+        <!-- The `#[\Override]` attribute requires PHP 8.3, this plugin supports PHP 8.2. -->
+        <MissingOverrideAttribute errorLevel="suppress" />
 
         <!-- level 3 issues - slightly lazy code writing, but provably low false-negatives -->
 

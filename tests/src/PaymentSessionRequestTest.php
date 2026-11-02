@@ -30,9 +30,10 @@ class PaymentSessionRequestTest extends TestCase {
 			$amount,
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
-			'https://your-company.com/...',
-			'NL'
+			'https://your-company.com/...'
 		);
+
+		$payment_request->set_country_code( 'NL' );
 
 		$payment_request->set_billing_address( new Address( 'NL' ) );
 		$payment_request->set_channel( Channel::WEB );
@@ -93,15 +94,16 @@ class PaymentSessionRequestTest extends TestCase {
 	public function test_invalid_country() {
 		$amount = new Amount( 'EUR', 1000 );
 
-		$this->expectException( 'InvalidArgumentException' );
-
-		new PaymentSessionRequest(
+		$payment_request = new PaymentSessionRequest(
 			$amount,
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
-			'https://your-company.com/...',
-			'NL invalid'
+			'https://your-company.com/...'
 		);
+
+		$this->expectException( \InvalidArgumentException::class );
+
+		$payment_request->set_country_code( 'NL invalid' );
 	}
 
 	/**
@@ -116,9 +118,10 @@ class PaymentSessionRequestTest extends TestCase {
 			$amount,
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
-			'https://your-company.com/...',
-			'NL'
+			'https://your-company.com/...'
 		);
+
+		$payment_request->set_country_code( 'NL' );
 
 		$this->assertEquals( $amount, $payment_request->get_amount() );
 		$this->assertEquals( 'YOUR_MERCHANT_ACCOUNT', $payment_request->get_merchant_account() );
@@ -141,9 +144,10 @@ class PaymentSessionRequestTest extends TestCase {
 			$amount,
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
-			'https://your-company.com/...',
-			'NL'
+			'https://your-company.com/...'
 		);
+
+		$payment_request->set_country_code( 'NL' );
 
 		$payment_request->set_allowed_payment_methods( [ PaymentMethodType::ALIPAY ] );
 		$payment_request->set_sdk_version( '1.9.4' );

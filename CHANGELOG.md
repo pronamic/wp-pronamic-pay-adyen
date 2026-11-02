@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [5.0.1] - 2026-11-02
+
+### Changed
+
+- Updated the plugin header and readme to `Requires PHP: 8.2` and `Tested up to: 7.1`.
+
+### Composer
+
+- Changed `justinrainbow/json-schema` from `^5.2` to `^5.2 || ^6.8`, so this gateway can be installed together with the Mollie, PayPal and Rabo Smart Pay gateways, which now require `^6.8`. Version 6 is a new major release of the JSON Schema validator with improved type coercion, `const` support and centralized error handling; an unresolvable `$ref` now throws instead of passing silently. Tested with `6.14.0`. Release notes: https://github.com/jsonrainbow/json-schema/releases/tag/6.0.0 and https://github.com/jsonrainbow/json-schema/releases/tag/6.14.0
+
+Full set of changes: [`5.0.0...5.0.1`][5.0.1]
+
 ## [5.0.0] - 2026-11-02
 
 > [!IMPORTANT]
@@ -446,7 +458,8 @@ Full set of changes: [`4.3.1...4.4.0`][4.4.0]
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v5.0.0...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v5.0.1...HEAD
+[5.0.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v5.0.0...v5.0.1
 [4.3.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.3.0...4.3.1
 [4.3.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.3...4.3.0
 [4.2.3]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.2...4.2.3

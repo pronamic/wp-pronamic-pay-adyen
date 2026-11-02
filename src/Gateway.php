@@ -110,9 +110,16 @@ class Gateway extends Core_Gateway {
 	 * Maybe enrich payment methods.
 	 *
 	 * @return void
+	 * @throws \Exception Throws exception when the config cannot be JSON encoded.
 	 */
 	private function maybe_enrich_payment_methods() {
-		$cache_key = 'pronamic_pay_adyen_payment_methods_' . \md5( \wp_json_encode( $this->config ) );
+		$config_json = \wp_json_encode( $this->config );
+
+		if ( false === $config_json ) {
+			throw new \Exception( 'Unable to JSON encode Adyen config.' );
+		}
+
+		$cache_key = 'pronamic_pay_adyen_payment_methods_' . \md5( $config_json );
 
 		$adyen_payment_methods = \get_transient( $cache_key );
 
@@ -300,6 +307,7 @@ class Gateway extends Core_Gateway {
 
 		\wp_register_script(
 			'pronamic-pay-adyen-checkout-drop-in',
+			// @phpstan-ignore argument.type (The plugins_url() function never returns an empty string.)
 			\plugins_url( '../js/dist/checkout-drop-in.js', __FILE__ ),
 			$asset['dependencies'],
 			$asset['version'],

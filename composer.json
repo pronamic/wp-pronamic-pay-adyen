@@ -80,18 +80,15 @@
 	},
 	"scripts": {
 		"build": [
-			"rm -rf ./build",
-			"mkdir ./build",
-			"mkdir ./build/stage-1",
-			"mkdir ./build/stage-2",
 			"npm run build",
+			"rm -rf ./build/stage-1",
 			"rsync --recursive --verbose --exclude-from=.distignore --exclude=/vendor/ ./ ./build/stage-1/",
 			"composer install --no-dev --prefer-dist --optimize-autoloader --working-dir=./build/stage-1/",
-			"rsync --recursive --verbose --exclude-from=.distignore ./build/stage-1/ ./build/stage-2/",
-			"vendor/bin/wp i18n make-pot ./build/stage-2/ --slug=pronamic-pay-adyen --exclude=js/dist/*.js",
-			"vendor/bin/wp i18n make-json ./build/stage-2/languages/*.po",
-			"vendor/bin/wp i18n make-mo ./build/stage-2/languages/",
-			"vendor/bin/wp dist-archive ./build/stage-2/ --plugin-dirname=pronamic-pay-adyen"
+			"rsync --recursive --delete --delete-excluded --verbose --exclude-from=.distignore ./build/stage-1/ ./build/pronamic-pay-adyen/",
+			"vendor/bin/wp i18n make-pot ./build/pronamic-pay-adyen/ --slug=pronamic-pay-adyen --exclude=js/dist/*.js",
+			"vendor/bin/wp i18n make-json ./build/pronamic-pay-adyen/languages/*.po",
+			"vendor/bin/wp i18n make-mo ./build/pronamic-pay-adyen/languages/",
+			"vendor/bin/wp dist-archive ./build/pronamic-pay-adyen/ --plugin-dirname=pronamic-pay-adyen --force"
 		],
 		"build-docs": "vendor/bin/wp-documentor parse . --exclude=build --exclude=tests --exclude=vendor --exclude=wordpress --exclude=wp-content --format=markdown --relative=docs > docs/hooks.md",
 		"ci": [
@@ -115,9 +112,9 @@
 		"xmllint": [
 			"@xmllint-phpcs"
 		],
-		"translate": [
+		"make-pot": [
 			"@build",
-			"rsync --recursive --delete --verbose ./build/stage-2/languages/ ./languages/",
+			"rsync --recursive --delete --verbose ./build/pronamic-pay-adyen/languages/ ./languages/",
 			"vendor/bin/wp i18n update-po ./languages/pronamic-pay-adyen.pot"
 		]
 	}

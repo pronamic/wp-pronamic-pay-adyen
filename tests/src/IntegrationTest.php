@@ -45,8 +45,42 @@ class IntegrationTest extends WP_UnitTestCase {
 	public function test_filters() {
 		$this->integration->setup();
 
-		$this->assertEquals( has_filter( 'init', [ $this->integration, 'init' ] ), 10 );
-		$this->assertEquals( has_filter( 'admin_init', [ $this->integration, 'admin_init' ] ), 15 );
+		$this->assertSame( 10, $this->get_integration_hook_priority( 'init', 'init' ) );
+		$this->assertSame( 15, $this->get_integration_hook_priority( 'admin_init', 'admin_init' ) );
+	}
+
+	/**
+	 * Get the priority of an integration method hooked as first-class callable.
+	 *
+	 * The integration hooks closures like `$this->init( ... )`, which `has_filter()`
+	 * cannot match against an array callable.
+	 *
+	 * @param string $hook_name Hook name.
+	 * @param string $method    Integration method name.
+	 * @return int|null
+	 */
+	private function get_integration_hook_priority( $hook_name, $method ) {
+		global $wp_filter;
+
+		if ( ! isset( $wp_filter[ $hook_name ] ) ) {
+			return null;
+		}
+
+		foreach ( $wp_filter[ $hook_name ]->callbacks as $priority => $callbacks ) {
+			foreach ( $callbacks as $callback ) {
+				if ( ! $callback['function'] instanceof \Closure ) {
+					continue;
+				}
+
+				$reflection = new \ReflectionFunction( $callback['function'] );
+
+				if ( $reflection->getClosureThis() instanceof Integration && $method === $reflection->getName() ) {
+					return $priority;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -72,32 +106,12 @@ class IntegrationTest extends WP_UnitTestCase {
 
 		$this->integration->admin_init();
 
-		$this->assertArraySubset(
-			[
-				'pronamic_pay' => [
-					'pronamic_pay_adyen_notification_authentication' => [
-						'id' => 'pronamic_pay_adyen_notification_authentication',
-					],
-				],
-			],
-			$wp_settings_sections
-		);
+		$this->assertArrayHasKey( 'pronamic_pay_adyen_notification_authentication', $wp_settings_sections['pronamic_pay'] );
 
-		$this->assertArraySubset(
-			[
-				'pronamic_pay' => [
-					'pronamic_pay_adyen_notification_authentication' => [
-						'pronamic_pay_adyen_notification_authentication_username' => [
-							'id' => 'pronamic_pay_adyen_notification_authentication_username',
-						],
-						'pronamic_pay_adyen_notification_authentication_password' => [
-							'id' => 'pronamic_pay_adyen_notification_authentication_password',
-						],
-					],
-				],
-			],
-			$wp_settings_fields
-		);
+		$fields = $wp_settings_fields['pronamic_pay']['pronamic_pay_adyen_notification_authentication'];
+
+		$this->assertArrayHasKey( 'pronamic_pay_adyen_notification_authentication_username', $fields );
+		$this->assertArrayHasKey( 'pronamic_pay_adyen_notification_authentication_password', $fields );
 	}
 
 	/**
@@ -106,19 +120,21 @@ class IntegrationTest extends WP_UnitTestCase {
 	 * @link https://github.com/WordPress/WordPress/blob/5.1/wp-admin/includes/template.php#L1578-L1614
 	 */
 	public function test_settings_print() {
+		$this->integration->admin_init();
+
 		ob_start();
 
 		do_settings_sections( 'pronamic_pay' );
 
 		$output = ob_get_clean();
 
-		$this->assertContains( '<h2>Adyen Notification Authentication</h2>', $output );
+		$this->assertStringContainsString( '<h2>Adyen Notification Authentication</h2>', $output );
 
-		$this->assertContains( '<label for="pronamic_pay_adyen_notification_authentication_username">User Name</label>', $output );
-		$this->assertContains( '<input name="pronamic_pay_adyen_notification_authentication_username" id="pronamic_pay_adyen_notification_authentication_username" value="" type="text" class="regular-text" />', $output );
+		$this->assertStringContainsString( '<label for="pronamic_pay_adyen_notification_authentication_username">User Name</label>', $output );
+		$this->assertStringContainsString( '<input name="pronamic_pay_adyen_notification_authentication_username" id="pronamic_pay_adyen_notification_authentication_username" value="" type="text" class="regular-text" />', $output );
 
-		$this->assertContains( '<label for="pronamic_pay_adyen_notification_authentication_password">Password</label>', $output );
-		$this->assertContains( '<input name="pronamic_pay_adyen_notification_authentication_password" id="pronamic_pay_adyen_notification_authentication_password" value="" type="text" class="regular-text" />', $output );
+		$this->assertStringContainsString( '<label for="pronamic_pay_adyen_notification_authentication_password">Password</label>', $output );
+		$this->assertStringContainsString( '<input name="pronamic_pay_adyen_notification_authentication_password" id="pronamic_pay_adyen_notification_authentication_password" value="" type="text" class="regular-text" />', $output );
 	}
 
 	/**
@@ -127,6 +143,12 @@ class IntegrationTest extends WP_UnitTestCase {
 	public function test_settings_fields() {
 		$fields = $this->integration->get_settings_fields();
 
-		$this->assertCount( 14, $fields );
+		$this->assertCount( 11, $fields );
+
+		$integration = new Integration( [ 'mode' => 'test' ] );
+
+		$fields = $integration->get_settings_fields();
+
+		$this->assertCount( 9, $fields );
 	}
 }

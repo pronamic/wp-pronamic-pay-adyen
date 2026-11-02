@@ -26,11 +26,13 @@ class Gateway extends Core_Gateway {
 	/**
 	 * Web SDK version.
 	 *
+	 * Should match the `@adyen/adyen-web` version in `package-lock.json`.
+	 *
 	 * @link https://docs.adyen.com/developers/checkout/web-sdk/release-notes-web-sdk
 	 * @link https://www.npmjs.com/package/@adyen/adyen-web
 	 * @var string
 	 */
-	const SDK_VERSION = '6.22.0';
+	const SDK_VERSION = '6.48.0';
 
 	/**
 	 * Client.
@@ -294,9 +296,6 @@ class Gateway extends Core_Gateway {
 			exit;
 		}
 
-		// Endpoint.
-		$endpoint = new Endpoint( $this->config->environment, $this->config->api_live_url_prefix );
-
 		$asset = include __DIR__ . '/../js/dist/checkout-drop-in.asset.php';
 
 		\wp_register_script(
@@ -307,16 +306,22 @@ class Gateway extends Core_Gateway {
 			true
 		);
 
-		// Register styles.
-		$url_stylesheet = $endpoint->get_web_url( self::SDK_VERSION, 'adyen.css' );
-
+		/**
+		 * Adyen Web stylesheet.
+		 *
+		 * The stylesheet is bundled from the `@adyen/adyen-web` npm package,
+		 * so it always matches the bundled Adyen Web JavaScript.
+		 *
+		 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/45
+		 */
 		\wp_register_style(
 			'pronamic-pay-adyen-checkout',
-			$url_stylesheet,
+			\plugins_url( '../js/dist/checkout-drop-in.css', __FILE__ ),
 			[],
-			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version is part of URL.
-			null
+			$asset['version']
 		);
+
+		\wp_style_add_data( 'pronamic-pay-adyen-checkout', 'rtl', 'replace' );
 
 		/**
 		 * Adyen checkout configuration.

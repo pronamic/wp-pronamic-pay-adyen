@@ -114,6 +114,12 @@ class Integration extends AbstractGatewayIntegration {
 		 */
 		\add_action( 'admin_notices', $this->maybe_display_migrate_client_key_admin_notice( ... ) );
 		\add_action( 'save_post_pronamic_gateway', $this->delete_migrate_client_key_query_transient( ... ) );
+
+		// Webhook authentication.
+		\add_action( 'admin_notices', $this->maybe_display_webhook_authentication_admin_notice( ... ) );
+		\add_action( 'save_post_pronamic_gateway', $this->delete_webhook_authentication_query_transient( ... ) );
+		\add_action( 'update_option_pronamic_pay_adyen_notification_authentication_username', $this->delete_webhook_authentication_query_transient( ... ) );
+		\add_action( 'update_option_pronamic_pay_adyen_notification_authentication_password', $this->delete_webhook_authentication_query_transient( ... ) );
 	}
 
 	/**
@@ -193,7 +199,7 @@ class Integration extends AbstractGatewayIntegration {
 		printf(
 			'<p>%s</p>',
 			esc_html__(
-				'Set the user name and password below and in the webhook authentication settings in the Adyen dashboard for increased security (recommended).',
+				'Adyen notifications are only processed when they are authenticated. Set the user name and password below and in the webhook authentication settings in the Adyen dashboard, or set an HMAC key in each Adyen configuration (recommended).',
 				'pronamic_ideal'
 			)
 		);
@@ -424,6 +430,21 @@ class Integration extends AbstractGatewayIntegration {
 			},
 		];
 
+		// HMAC key.
+		$fields[] = [
+			'section'     => 'feedback',
+			'meta_key'    => '_pronamic_gateway_adyen_hmac_key',
+			'title'       => \__( 'HMAC Key', 'pronamic_ideal' ),
+			'type'        => 'text',
+			'classes'     => [ 'regular-text', 'code' ],
+			'tooltip'     => \__( 'The HMAC key of the webhook in the Adyen Customer Area, used to verify the signature of notifications.', 'pronamic_ideal' ),
+			'description' => \sprintf(
+				'<a href="%s" target="_blank">%s</a>',
+				\esc_url( 'https://docs.adyen.com/development-resources/webhooks/verify-hmac-signatures' ),
+				\esc_html__( 'Adyen documentation: "Verify HMAC signatures".', 'pronamic_ideal' )
+			),
+		];
+
 		// Country code.
 		$fields[] = [
 			'section'  => 'general',
@@ -469,6 +490,7 @@ class Integration extends AbstractGatewayIntegration {
 		$config->client_key               = $this->get_meta( $post_id, 'adyen_client_key' );
 		$config->merchant_order_reference = $this->get_meta( $post_id, 'adyen_merchant_order_reference' );
 		$config->country_code             = $this->get_meta( $post_id, 'adyen_country_code' );
+		$config->hmac_key                 = $this->get_meta( $post_id, 'adyen_hmac_key' );
 
 		return $config;
 	}
@@ -579,5 +601,140 @@ class Integration extends AbstractGatewayIntegration {
 	 */
 	public function delete_migrate_client_key_query_transient() {
 		\delete_transient( 'pronamic_pay_adyen_migrate_client_key_query' );
+	}
+
+	/**
+	 * Get Adyen configurations without webhook authentication.
+	 *
+	 * Returns an empty array when HTTP Basic authentication is configured,
+	 * otherwise the Adyen configurations without an HMAC key.
+	 *
+	 * @return array<int, \WP_Post>
+	 */
+	public static function get_configurations_without_webhook_authentication() {
+		if ( NotificationsController::is_basic_authentication_configured() ) {
+			return [];
+		}
+
+		$posts = \get_transient( 'pronamic_pay_adyen_webhook_authentication_query' );
+
+		if ( \is_array( $posts ) ) {
+			return $posts;
+		}
+
+		$query = new WP_Query(
+			[
+				'post_type'      => 'pronamic_gateway',
+				'post_status'    => 'publish',
+				'posts_per_page' => 10,
+				'meta_query'     => [
+					'relation' => 'AND',
+					[
+						'key'     => '_pronamic_gateway_id',
+						'compare' => 'IN',
+						'value'   => [
+							'adyen',
+							'adyen-test',
+						],
+					],
+					[
+						'relation' => 'OR',
+						[
+							'key'     => '_pronamic_gateway_adyen_hmac_key',
+							'compare' => '=',
+							'value'   => '',
+						],
+						[
+							'key'     => '_pronamic_gateway_adyen_hmac_key',
+							'compare' => 'NOT EXISTS',
+						],
+					],
+				],
+				'no_found_rows'  => true,
+			]
+		);
+
+		$posts = \array_values( \array_filter( $query->posts, fn( $post ) => $post instanceof \WP_Post ) );
+
+		\set_transient( 'pronamic_pay_adyen_webhook_authentication_query', $posts, DAY_IN_SECONDS );
+
+		return $posts;
+	}
+
+	/**
+	 * Maybe display webhook authentication admin notice.
+	 *
+	 * @return void
+	 */
+	public function maybe_display_webhook_authentication_admin_notice() {
+		if ( ! \current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$posts = self::get_configurations_without_webhook_authentication();
+
+		if ( empty( $posts ) ) {
+			return;
+		}
+
+		?>
+		<div class="error notice">
+			<p>
+				<strong><?php \esc_html_e( 'Pronamic Pay', 'pronamic_ideal' ); ?></strong> —
+				<?php
+
+				echo \wp_kses(
+					\sprintf(
+						/* translators: %s: Pronamic Pay settings page URL. */
+						\__( 'Adyen notifications are rejected until webhook authentication is configured. Set an HMAC key in the following Adyen configurations, or configure HTTP Basic authentication on the <a href="%s">Pronamic Pay settings page</a>:', 'pronamic_ideal' ),
+						\esc_url(
+							\add_query_arg(
+								[
+									'page' => 'pronamic_pay_settings',
+								],
+								\admin_url( 'admin.php' )
+							)
+						)
+					),
+					[
+						'a' => [
+							'href' => true,
+						],
+					]
+				);
+
+				?>
+			</p>
+
+			<ul>
+
+				<?php foreach ( $posts as $adyen_config_post ) : ?>
+
+					<li>
+						<?php
+
+						\printf(
+							'<a href="%s">%s</a>',
+							\esc_url( (string) \get_edit_post_link( $adyen_config_post ) ),
+							\esc_html( \get_the_title( $adyen_config_post ) )
+						);
+
+						?>
+					</li>
+
+				<?php endforeach; ?>
+
+			</ul>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Delete the webhook authentication query transient.
+	 *
+	 * @return void
+	 */
+	public function delete_webhook_authentication_query_transient() {
+		\delete_transient( 'pronamic_pay_adyen_webhook_authentication_query' );
 	}
 }

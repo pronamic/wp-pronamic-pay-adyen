@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [5.1.0] - 2026-11-02
+
+### Composer
+
+- Changed `justinrainbow/json-schema` from `^5.2 || ^6.8` to `^6.8`, in line with the Mollie, PayPal and Rabo Smart Pay gateways. Tested with `6.14.0`. Release notes: https://github.com/jsonrainbow/json-schema/releases/tag/6.0.0 and https://github.com/jsonrainbow/json-schema/releases/tag/6.14.0
+
+Full set of changes: [`5.0.1...5.1.0`][5.1.0]
+
 ## [5.0.1] - 2026-11-02
 
 ### Changed
@@ -458,7 +466,8 @@ Full set of changes: [`4.3.1...4.4.0`][4.4.0]
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v5.0.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v5.0.1...v5.1.0
 [5.0.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v5.0.0...v5.0.1
 [4.3.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.3.0...4.3.1
 [4.3.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.3...4.3.0

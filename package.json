@@ -1,6 +1,6 @@
 {
 	"name": "adyen",
-	"version": "5.0.1",
+	"version": "5.1.0",
 	"description": "Adyen driver for the WordPress payment processing library.",
 	"author": {
 		"name": "Pronamic",

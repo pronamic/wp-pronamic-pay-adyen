@@ -293,9 +293,13 @@ class ReturnController {
 		/**
 		 * Result code.
 		 *
+		 * The result code is passed by the browser, the status is only used
+		 * to determine the return redirect URL and is not saved. The webhook
+		 * updates the payment status.
+		 *
 		 * @link https://docs.adyen.com/online-payments/payment-result-codes
 		 */
-		$result_code = $request->get_param( 'resultCode' );
+		$result_code = (string) $request->get_param( 'resultCode' );
 
 		$status = ResultCode::transform( $result_code );
 
@@ -307,7 +311,7 @@ class ReturnController {
 			\sprintf(
 				/* translators: %s: Adyen payment result code. */
 				\__( 'Result code `%s` was received via the Adyen web drop-in, awaiting the webhook to update payment status.', 'pronamic_ideal' ),
-				$result_code
+				\esc_html( $result_code )
 			)
 		);
 
@@ -395,13 +399,13 @@ class ReturnController {
 			\sprintf(
 				/* translators: %s: Adyen error name. */
 				\__( 'An `%s` error occurred while processing payment.', 'pronamic_ideal' ),
-				$error_name
+				\esc_html( (string) $error_name )
 			)
 		);
 
 		$note .= sprintf(
 			'<blockquote>%s</blockquote>',
-			$error_message
+			\esc_html( (string) $error_message )
 		);
 
 		$payment->add_note( $note );

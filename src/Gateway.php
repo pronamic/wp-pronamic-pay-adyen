@@ -91,6 +91,15 @@ class Gateway extends Core_Gateway {
 	}
 
 	/**
+	 * Get config.
+	 *
+	 * @return Config
+	 */
+	public function get_config() {
+		return $this->config;
+	}
+
+	/**
 	 * Get payment methods.
 	 *
 	 * @param array<string, mixed> $args Query arguments.

@@ -25,17 +25,12 @@ class PaymentRequestTest extends TestCase {
 	public function test_payment_request() {
 		$json_file = __DIR__ . '/../json/payment-request.json';
 
-		$payment_method = [
-			'type'   => PaymentMethodType::IDEAL,
-			'issuer' => '1121',
-		];
-
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
 			'https://your-company.com/...',
-			new PaymentMethod( (object) $payment_method )
+			new PaymentMethodDetails( PaymentMethodType::IDEAL )
 		);
 
 		/**

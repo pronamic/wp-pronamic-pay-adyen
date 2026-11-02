@@ -53,7 +53,7 @@
 	"require": {
 		"php": ">=8.2",
 		"ext-intl": "*",
-		"automattic/jetpack-autoloader": "^3.0 || ^4.0 || ^5.0",
+		"automattic/jetpack-autoloader": "^3.0 || ^4.0 || ^5.0 || ^6.0",
 		"justinrainbow/json-schema": "^5.2",
 		"pronamic/wp-http": "^1.2",
 		"pronamic/wp-money": "^2.2",
@@ -68,6 +68,7 @@
 		"phpstan/phpstan": "^2.1",
 		"pronamic/pronamic-cli": "^1.1",
 		"pronamic/wp-coding-standards": "^2.1",
+		"rector/rector": "^2.6",
 		"roots/wordpress": "^6.0",
 		"sirbrillig/phpcs-import-detection": "^1.2",
 		"sirbrillig/phpcs-variable-analysis": "^2.8",
@@ -108,6 +109,7 @@
 		"post-install-cmd": "echo 'Optionally run: composer bin all install'",
 		"post-update-cmd": "echo 'Optionally run: composer bin all update'",
 		"psalm": "vendor/bin/psalm",
+		"rector": "vendor/bin/rector",
 		"xmllint-phpcs": "xmllint --noout --schema vendor/squizlabs/php_codesniffer/phpcs.xsd phpcs.xml.dist",
 		"xmllint": [
 			"@xmllint-phpcs"

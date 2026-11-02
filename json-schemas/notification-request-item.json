@@ -4,6 +4,10 @@
 	"title": "Adyen notification request item.",
 	"type": "object",
 	"properties": {
+		"additionalData": {
+			"type": "object",
+			"description": "Additional data, contains for example the HMAC signature (`hmacSignature`)."
+		},
 		"amount": {
 			"$ref": "amount.json"
 		},
@@ -35,6 +39,10 @@
 		"merchantReference": {
 			"type": "string",
 			"description": "A reference to uniquely identify the payment."
+		},
+		"originalReference": {
+			"type": "string",
+			"description": "The original reference, populated for modification notifications."
 		},
 		"paymentMethod": {
 			"type": "string",

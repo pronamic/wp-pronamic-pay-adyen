@@ -39,6 +39,20 @@ class NotificationRequestItem extends ResponseObject {
 	private $payment_method;
 
 	/**
+	 * The original reference, populated for modification notifications (for example `REFUND`).
+	 *
+	 * @var string|null
+	 */
+	private $original_reference;
+
+	/**
+	 * Additional data.
+	 *
+	 * @var array<string, mixed>
+	 */
+	private $additional_data = [];
+
+	/**
 	 * Construct notification request item.
 	 *
 	 * @link https://stackoverflow.com/questions/34468660/how-to-use-builder-pattern-with-all-parameters-as-mandatory
@@ -179,6 +193,64 @@ class NotificationRequestItem extends ResponseObject {
 	}
 
 	/**
+	 * Get original reference.
+	 *
+	 * @return string|null
+	 */
+	public function get_original_reference() {
+		return $this->original_reference;
+	}
+
+	/**
+	 * Set original reference.
+	 *
+	 * @param string|null $original_reference Original reference.
+	 * @return void
+	 */
+	public function set_original_reference( $original_reference ) {
+		$this->original_reference = $original_reference;
+	}
+
+	/**
+	 * Get additional data.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function get_additional_data() {
+		return $this->additional_data;
+	}
+
+	/**
+	 * Set additional data.
+	 *
+	 * @param array<string, mixed> $additional_data Additional data.
+	 * @return void
+	 */
+	public function set_additional_data( array $additional_data ) {
+		$this->additional_data = $additional_data;
+	}
+
+	/**
+	 * Get HMAC signature.
+	 *
+	 * @link https://docs.adyen.com/development-resources/webhooks/verify-hmac-signatures
+	 * @return string|null
+	 */
+	public function get_hmac_signature() {
+		if ( ! \array_key_exists( 'hmacSignature', $this->additional_data ) ) {
+			return null;
+		}
+
+		$signature = $this->additional_data['hmacSignature'];
+
+		if ( ! \is_string( $signature ) ) {
+			return null;
+		}
+
+		return $signature;
+	}
+
+	/**
 	 * Is success.
 	 *
 	 * @return boolean
@@ -223,6 +295,14 @@ class NotificationRequestItem extends ResponseObject {
 
 		if ( property_exists( $value, 'paymentMethod' ) ) {
 			$item->set_payment_method( $value->paymentMethod );
+		}
+
+		if ( property_exists( $value, 'originalReference' ) ) {
+			$item->set_original_reference( $value->originalReference );
+		}
+
+		if ( property_exists( $value, 'additionalData' ) ) {
+			$item->set_additional_data( (array) $value->additionalData );
 		}
 
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Adyen JSON object.

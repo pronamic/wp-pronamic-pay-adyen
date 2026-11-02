@@ -1,0 +1,20 @@
+.pronamic-pay-adyen-error dd {
+	overflow-wrap: anywhere;
+}
+
+.pronamic-pay-adyen-error .pronamic-pay-btn {
+	background: #2271b1;
+	border-radius: 3px;
+	color: #fff;
+	display: inline-block;
+	font-size: 1.25em;
+	font-weight: 300;
+	letter-spacing: 0.05rem;
+	margin-top: 1em;
+	padding: 10px 20px;
+	text-decoration: none;
+}
+
+.pronamic-pay-adyen-error .pronamic-pay-btn:hover {
+	background-color: #135e96;
+}

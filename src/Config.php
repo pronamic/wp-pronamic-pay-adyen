@@ -67,6 +67,14 @@ class Config extends GatewayConfig implements JsonSerializable {
 	public $country_code = '';
 
 	/**
+	 * HMAC key.
+	 *
+	 * @link https://docs.adyen.com/development-resources/webhooks/verify-hmac-signatures
+	 * @var string|null
+	 */
+	public $hmac_key;
+
+	/**
 	 * Get API key.
 	 *
 	 * @return string|null
@@ -82,6 +90,15 @@ class Config extends GatewayConfig implements JsonSerializable {
 	 */
 	public function get_merchant_account() {
 		return (string) $this->merchant_account;
+	}
+
+	/**
+	 * Get HMAC key.
+	 *
+	 * @return string
+	 */
+	public function get_hmac_key() {
+		return (string) $this->hmac_key;
 	}
 
 	/**

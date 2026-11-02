@@ -6,10 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+### Added
+
+- Added an HMAC key setting to Adyen configurations, the HMAC signature of Adyen notifications is verified when set ([#47](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/47)).
+- Added an admin notice and Site Health test for Adyen configurations without webhook authentication ([#47](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/47)).
+
 ### Changed
+
+- Adyen notifications now require authentication: HTTP Basic authentication or an HMAC key must be configured, otherwise notifications are rejected ([#47](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/47)).
+- Adyen notifications are only processed for payments of an Adyen configuration and are validated against the merchant account, amount and PSP reference of the payment ([#47](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/47)).
 
 - Updated `@adyen/adyen-web` to `6.48.0` ([#45](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/45)).
 - The Adyen Web stylesheet is now bundled with the plugin instead of being loaded from the Adyen CDN, so it always matches the bundled Adyen Web JavaScript ([#45](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/45)).
+- Adyen Web errors are now shown on the checkout page, with a button to continue, instead of redirecting the customer without explanation.
 
 ## [4.10.0] - 2026-07-31
 

@@ -15,10 +15,11 @@
 	],
 	"mappings": {
 		"wp-content/plugins/pronamic-pay-adyen-dev": "./",
-		"wp-content/plugins/pronamic-pay-adyen": "./build/project/"
+		"wp-content/plugins/pronamic-pay-adyen": "./build/pronamic-pay-adyen/"
 	},
 	"config": {
-		"PRONAMIC_PAY_DEBUG": true
+		"PRONAMIC_PAY_DEBUG": true,
+		"JETPACK_AUTOLOAD_DEV": true
 	},
 	"testsEnvironment": false
 }

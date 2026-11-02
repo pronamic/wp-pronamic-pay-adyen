@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [5.0.0] - 2026-11-02
+
+> [!IMPORTANT]
+> Adyen notifications (webhooks) now require authentication. Configure HTTP Basic authentication or an HMAC key in your Adyen configuration (and in the Adyen Customer Area), otherwise notifications are rejected and payment statuses will no longer be updated automatically.
+
 ### Added
 
 - Added an HMAC key setting to Adyen configurations, the HMAC signature of Adyen notifications is verified when set ([#47](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/47)).
@@ -15,10 +20,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Adyen notifications now require authentication: HTTP Basic authentication or an HMAC key must be configured, otherwise notifications are rejected ([#47](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/47)).
 - Adyen notifications are only processed for payments of an Adyen configuration and are validated against the merchant account, amount and PSP reference of the payment ([#47](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/47)).
-
 - Updated `@adyen/adyen-web` to `6.48.0` ([#45](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/45)).
 - The Adyen Web stylesheet is now bundled with the plugin instead of being loaded from the Adyen CDN, so it always matches the bundled Adyen Web JavaScript ([#45](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/45)).
 - Adyen Web errors are now shown on the checkout page, with a button to continue, instead of redirecting the customer without explanation.
+
+### Composer
+
+- Added support for `automattic/jetpack-autoloader` `^6.0`.
+  Tested with `automattic/jetpack-autoloader` `v6.0.2`: minimum supported PHP version is now 7.4, current plugin manifests are read before cached ones so a retired plugin directory cannot win a version tie, and internal updates.
+  Changelog: https://github.com/Automattic/jetpack-autoloader/blob/v6.0.2/CHANGELOG.md
+
+Full set of changes: [`4.10.0...5.0.0`][5.0.0]
+
+[5.0.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v4.10.0...v5.0.0
 
 ## [4.10.0] - 2026-07-31
 
@@ -432,7 +446,7 @@ Full set of changes: [`4.3.1...4.4.0`][4.4.0]
 ## 1.0.0 - 2019-03-28
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.3.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/v5.0.0...HEAD
 [4.3.1]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.3.0...4.3.1
 [4.3.0]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.3...4.3.0
 [4.2.3]: https://github.com/pronamic/wp-pronamic-pay-adyen/compare/4.2.2...4.2.3

@@ -24,6 +24,8 @@ phpunit.xml
 phpunit.xml.dist
 psalm.xml.dist
 
+.phpunit.result.cache
+
 /rector.php
 
 /build/
@@ -38,3 +40,4 @@ psalm.xml.dist
 /vendor-bin/
 
 /wordpress/
+/wp-content/

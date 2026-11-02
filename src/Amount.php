@@ -24,13 +24,6 @@ class Amount implements \JsonSerializable {
 	private $currency;
 
 	/**
-	 * Value.
-	 *
-	 * @var int
-	 */
-	private $value;
-
-	/**
 	 * Construct amount.
 	 *
 	 * @param string $currency Currency.
@@ -38,7 +31,13 @@ class Amount implements \JsonSerializable {
 	 *
 	 * @throws \InvalidArgumentException Throws invalid argument exception when Adyen amount requirements are not met.
 	 */
-	public function __construct( $currency, $value ) {
+	public function __construct(
+		$currency,
+		/**
+		 * Value.
+		 */
+		private $value
+	) {
 		if ( 3 !== strlen( $currency ) ) {
 			throw new \InvalidArgumentException(
 				sprintf(
@@ -49,7 +48,6 @@ class Amount implements \JsonSerializable {
 		}
 
 		$this->currency = $currency;
-		$this->value    = $value;
 	}
 
 	/**

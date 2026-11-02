@@ -72,7 +72,7 @@ class Integration extends AbstractGatewayIntegration {
 		$id = $this->get_id();
 
 		if ( null !== $id ) {
-			\add_filter( 'pronamic_gateway_configuration_display_value_' . $id, [ $this, 'gateway_configuration_display_value' ], 10, 2 );
+			\add_filter( 'pronamic_gateway_configuration_display_value_' . $id, $this->gateway_configuration_display_value( ... ), 10, 2 );
 		}
 
 		if ( false === self::$singles ) {
@@ -104,16 +104,16 @@ class Integration extends AbstractGatewayIntegration {
 		$return_controller->setup();
 
 		// Settings.
-		add_action( 'init', [ $this, 'init' ] );
-		add_action( 'admin_init', [ $this, 'admin_init' ], 15 );
+		add_action( 'init', $this->init( ... ) );
+		add_action( 'admin_init', $this->admin_init( ... ), 15 );
 
 		/**
 		 * Backward compatibility.
 		 *
 		 * @link https://github.com/pronamic/wp-pronamic-pay-adyen/issues/10
 		 */
-		\add_action( 'admin_notices', [ $this, 'maybe_display_migrate_client_key_admin_notice' ] );
-		\add_action( 'save_post_pronamic_gateway', [ $this, 'delete_migrate_client_key_query_transient' ] );
+		\add_action( 'admin_notices', $this->maybe_display_migrate_client_key_admin_notice( ... ) );
+		\add_action( 'save_post_pronamic_gateway', $this->delete_migrate_client_key_query_transient( ... ) );
 	}
 
 	/**
@@ -157,14 +157,14 @@ class Integration extends AbstractGatewayIntegration {
 			'pronamic_pay_adyen_notification_authentication',
 			/* translators: Translate 'notification' the same as in the Adyen dashboard. */
 			_x( 'Adyen Notification Authentication', 'Adyen', 'pronamic_ideal' ),
-			[ $this, 'settings_section_notification_authentication' ],
+			$this->settings_section_notification_authentication( ... ),
 			'pronamic_pay'
 		);
 
 		add_settings_field(
 			'pronamic_pay_adyen_notification_authentication_username',
 			__( 'User Name', 'pronamic_ideal' ),
-			[ __CLASS__, 'input_element' ],
+			self::input_element( ... ),
 			'pronamic_pay',
 			'pronamic_pay_adyen_notification_authentication',
 			[
@@ -175,7 +175,7 @@ class Integration extends AbstractGatewayIntegration {
 		add_settings_field(
 			'pronamic_pay_adyen_notification_authentication_password',
 			__( 'Password', 'pronamic_ideal' ),
-			[ __CLASS__, 'input_element' ],
+			self::input_element( ... ),
 			'pronamic_pay',
 			'pronamic_pay_adyen_notification_authentication',
 			[
@@ -376,7 +376,7 @@ class Integration extends AbstractGatewayIntegration {
 			'section'  => 'feedback',
 			'title'    => \__( 'SSL Version', 'pronamic_ideal' ),
 			'type'     => 'custom',
-			'callback' => function () {
+			'callback' => function (): void {
 				\esc_html_e( 'Choose the SSL Version of your server on the Adyen Customer Area.', 'pronamic_ideal' );
 			},
 		];
@@ -391,7 +391,7 @@ class Integration extends AbstractGatewayIntegration {
 			'section'  => 'feedback',
 			'title'    => \_x( 'Method', 'adyen notification', 'pronamic_ideal' ),
 			'type'     => 'custom',
-			'callback' => function () {
+			'callback' => function (): void {
 				\esc_html_e( 'JSON', 'pronamic_ideal' );
 			},
 		];
@@ -401,7 +401,7 @@ class Integration extends AbstractGatewayIntegration {
 			'section'  => 'feedback',
 			'title'    => \__( 'Authentication', 'pronamic_ideal' ),
 			'type'     => 'custom',
-			'callback' => function () {
+			'callback' => function (): void {
 				echo \wp_kses(
 					\sprintf(
 						/* translators: %s: Pronamic Pay settings page URL. */

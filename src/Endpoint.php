@@ -38,32 +38,26 @@ class Endpoint {
 	const WEB_URL = 'https://checkoutshopper-[environment].adyen.com/checkoutshopper/sdk/[version]/[file]';
 
 	/**
-	 * Environment.
-	 *
-	 * @var string
-	 */
-	private $environment;
-
-	/**
-	 * Live URL prefix.
-	 *
-	 * This prefix is the combination of the [random] and [company name] from the live
-	 * endpoint.
-	 *
-	 * @link https://docs.adyen.com/development-resources/live-endpoints#live-url-prefix
-	 * @var string|null
-	 */
-	public $live_url_prefix;
-
-	/**
 	 * Construct endpoint.
 	 *
 	 * @param string      $environment     Environment.
 	 * @param string|null $live_url_prefix Live URL prefix.
 	 */
-	public function __construct( $environment, $live_url_prefix ) {
-		$this->environment     = $environment;
-		$this->live_url_prefix = $live_url_prefix;
+	public function __construct(
+		/**
+		 * Environment.
+		 */
+		private $environment,
+		/**
+		 * Live URL prefix.
+		 *
+		 * This prefix is the combination of the [random] and [company name] from the live
+		 * endpoint.
+		 *
+		 * @link https://docs.adyen.com/development-resources/live-endpoints#live-url-prefix
+		 */
+		public $live_url_prefix
+	) {
 	}
 
 	/**

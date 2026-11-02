@@ -21,19 +21,16 @@ use JsonSchema\Validator;
  */
 class PaymentMethodsResponse extends ResponseObject {
 	/**
-	 * Detailed list of payment methods required to generate payment forms.
-	 *
-	 * @var PaymentMethod[]
-	 */
-	private $payment_methods;
-
-	/**
 	 * Construct payment methods response object.
 	 *
 	 * @param PaymentMethod[] $payment_methods Payment methods.
 	 */
-	public function __construct( $payment_methods ) {
-		$this->payment_methods = $payment_methods;
+	public function __construct(
+		/**
+		 * Detailed list of payment methods required to generate payment forms.
+		 */
+		private $payment_methods
+	) {
 	}
 
 	/**

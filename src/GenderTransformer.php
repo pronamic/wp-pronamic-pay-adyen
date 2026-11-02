@@ -23,16 +23,10 @@ class GenderTransformer {
 	 * @return string
 	 */
 	public static function transform( $gender ) {
-		switch ( $gender ) {
-			case Pay_Gender::FEMALE:
-				return Gender::FEMALE;
-
-			case Pay_Gender::MALE:
-				return Gender::MALE;
-
-			case Pay_Gender::OTHER:
-			default:
-				return Gender::UNKNOWN;
-		}
+		return match ( $gender ) {
+			Pay_Gender::FEMALE => Gender::FEMALE,
+			Pay_Gender::MALE => Gender::MALE,
+			default => Gender::UNKNOWN,
+		};
 	}
 }

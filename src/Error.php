@@ -20,23 +20,21 @@ use JsonSchema\Validator;
  */
 class Error extends Exception {
 	/**
-	 * The requested URI.
-	 *
-	 * @var string
-	 */
-	private $requested_uri;
-
-	/**
 	 * Construct error.
 	 *
 	 * @param int    $code          Code.
 	 * @param string $message       Message.
 	 * @param string $requested_uri Requested URI.
 	 */
-	public function __construct( $code, $message, $requested_uri ) {
+	public function __construct(
+		$code,
+		$message,
+		/**
+		 * The requested URI.
+		 */
+		private $requested_uri
+	) {
 		parent::__construct( $message, $code );
-
-		$this->requested_uri = $requested_uri;
 	}
 
 	/**

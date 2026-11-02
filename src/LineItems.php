@@ -87,9 +87,7 @@ class LineItems implements \JsonSerializable {
 			 * @param LineItem $item Line item.
 			 * @return object
 			 */
-			function ( LineItem $item ) {
-				return $item->get_json();
-			},
+			fn( LineItem $item ) => $item->get_json(),
 			$this->get_line_items()
 		);
 

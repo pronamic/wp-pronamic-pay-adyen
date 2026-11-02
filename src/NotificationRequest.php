@@ -17,31 +17,24 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  */
 class NotificationRequest extends ResponseObject {
 	/**
-	 * Informs about the origin of the notification:
-	 *
-	 * - `true`: the notification originated from the live environment.
-	 * - `false`: the notification originated from the test environment.
-	 *
-	 * @var boolean
-	 */
-	private $live;
-
-	/**
-	 * A container object for the details included in the notification.
-	 *
-	 * @var array<int, NotificationRequestItem>
-	 */
-	private $items;
-
-	/**
 	 * Construct notification request.
 	 *
 	 * @param boolean                   $live  Informs about the origin of the notification.
 	 * @param NotificationRequestItem[] $items A container object for the details included in the notification.
 	 */
-	public function __construct( $live, $items ) {
-		$this->live  = $live;
-		$this->items = $items;
+	public function __construct(
+		/**
+		 * Informs about the origin of the notification:
+		 *
+		 * - `true`: the notification originated from the live environment.
+		 * - `false`: the notification originated from the test environment.
+		 */
+		private $live,
+		/**
+		 * A container object for the details included in the notification.
+		 */
+		private $items
+	) {
 	}
 
 	/**

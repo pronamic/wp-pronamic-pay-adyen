@@ -171,9 +171,7 @@ class PaymentRequestHelper {
 
 				$quantity = $line->get_quantity();
 
-				if ( null === $quantity ) {
-					$quantity = new Number( 0 );
-				}
+				$quantity ??= new Number( 0 );
 
 				// Handle decimal quantities.
 				if ( ! $quantity->is_whole_number() ) {

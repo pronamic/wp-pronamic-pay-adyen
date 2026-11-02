@@ -19,32 +19,11 @@ use InvalidArgumentException;
  */
 class Name {
 	/**
-	 * First name.
-	 *
-	 * @var string
-	 */
-	private $first_name;
-
-	/**
-	 * Gender.
-	 *
-	 * @var string
-	 */
-	private $gender;
-
-	/**
 	 * The name's infix, if applicable.
 	 *
 	 * @var string|null
 	 */
 	private $infix;
-
-	/**
-	 * Last name.
-	 *
-	 * @var string
-	 */
-	private $last_name;
 
 	/**
 	 * Construct shopper name.
@@ -53,10 +32,20 @@ class Name {
 	 * @param string $last_name  Last name.
 	 * @param string $gender     Gender.
 	 */
-	public function __construct( $first_name, $last_name, $gender ) {
-		$this->first_name = $first_name;
-		$this->last_name  = $last_name;
-		$this->gender     = $gender;
+	public function __construct(
+		/**
+		 * First name.
+		 */
+		private $first_name,
+		/**
+		 * Last name.
+		 */
+		private $last_name,
+		/**
+		 * Gender.
+		 */
+		private $gender
+	) {
 	}
 
 	/**

@@ -27,7 +27,7 @@ class ReturnController {
 	 */
 	public function setup() {
 		// Actions.
-		\add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
+		\add_action( 'rest_api_init', $this->rest_api_init( ... ) );
 	}
 
 	/**
@@ -50,9 +50,7 @@ class ReturnController {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'rest_api_adyen_return' ],
-				'permission_callback' => function () {
-					return true;
-				},
+				'permission_callback' => fn() => true,
 				'args'                => [
 					'payment_id'     => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
@@ -92,7 +90,7 @@ class ReturnController {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'rest_api_adyen_redirect' ],
-				'permission_callback' => [ $this, 'rest_api_adyen_redirect_permission' ],
+				'permission_callback' => $this->rest_api_adyen_redirect_permission( ... ),
 				'args'                => [
 					'payment_id' => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),
@@ -123,7 +121,7 @@ class ReturnController {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'rest_api_adyen_error' ],
-				'permission_callback' => [ $this, 'rest_api_adyen_error_permission' ],
+				'permission_callback' => $this->rest_api_adyen_error_permission( ... ),
 				'args'                => [
 					'payment_id' => [
 						'description' => __( 'Payment ID.', 'pronamic_ideal' ),

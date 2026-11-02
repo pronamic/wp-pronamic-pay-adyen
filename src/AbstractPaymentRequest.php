@@ -28,13 +28,6 @@ abstract class AbstractPaymentRequest extends Request {
 	private $additional_data;
 
 	/**
-	 * Amount.
-	 *
-	 * @var Amount
-	 */
-	private $amount;
-
-	/**
 	 * Information about your application.
 	 *
 	 * @link https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v51/payments__reqParam_applicationInfo
@@ -93,13 +86,6 @@ abstract class AbstractPaymentRequest extends Request {
 	private $line_items;
 
 	/**
-	 * The merchant account identifier, with which you want to process the transaction.
-	 *
-	 * @var string
-	 */
-	private $merchant_account;
-
-	/**
 	 * This reference allows linking multiple transactions to each other for reporting
 	 * purposes (i.e. order auth-rate). The reference should be unique per billing cycle.
 	 * The same merchant order reference should never be reused after the first authorised
@@ -116,23 +102,6 @@ abstract class AbstractPaymentRequest extends Request {
 	 * @var array<string,int|string>|null
 	 */
 	private $metadata;
-
-	/**
-	 * The reference to uniquely identify a payment. This reference is used in all communication
-	 * with you about the payment status. We recommend using a unique value per payment;
-	 * however, it is not a requirement. If you need to provide multiple references for
-	 * a transaction, separate them with hyphens ("-"). Maximum length: 80 characters.
-	 *
-	 * @var string
-	 */
-	private $reference;
-
-	/**
-	 * The URL to return to.
-	 *
-	 * @var string
-	 */
-	private $return_url;
 
 	/**
 	 * The shopper's IP address.
@@ -193,11 +162,27 @@ abstract class AbstractPaymentRequest extends Request {
 	 * @param string $reference        The reference to uniquely identify a payment.
 	 * @param string $return_url       The URL to return to.
 	 */
-	public function __construct( Amount $amount, $merchant_account, $reference, $return_url ) {
-		$this->amount           = $amount;
-		$this->merchant_account = $merchant_account;
-		$this->reference        = $reference;
-		$this->return_url       = $return_url;
+	public function __construct(
+		/**
+		 * Amount.
+		 */
+		private readonly Amount $amount,
+		/**
+		 * The merchant account identifier, with which you want to process the transaction.
+		 */
+		private $merchant_account,
+		/**
+		 * The reference to uniquely identify a payment. This reference is used in all communication
+		 * with you about the payment status. We recommend using a unique value per payment;
+		 * however, it is not a requirement. If you need to provide multiple references for
+		 * a transaction, separate them with hyphens ("-"). Maximum length: 80 characters.
+		 */
+		private $reference,
+		/**
+		 * The URL to return to.
+		 */
+		private $return_url
+	) {
 	}
 
 	/**

@@ -22,25 +22,11 @@ use JsonSchema\Validator;
  */
 class ServiceException extends Exception {
 	/**
-	 * The HTTP response status code.
-	 *
-	 * @var string
-	 */
-	private $status;
-
-	/**
 	 * The Adyen code that is mapped to the error message.
 	 *
 	 * @var string
 	 */
 	private $error_code;
-
-	/**
-	 * The type of error that was encountered.
-	 *
-	 * @var string
-	 */
-	private $error_type;
 
 	/**
 	 * Construct service exception.
@@ -50,12 +36,21 @@ class ServiceException extends Exception {
 	 * @param string $message    Message.
 	 * @param string $error_type Error type.
 	 */
-	public function __construct( $status, $error_code, $message, $error_type ) {
+	public function __construct(
+		/**
+		 * The HTTP response status code.
+		 */
+		private $status,
+		$error_code,
+		$message,
+		/**
+		 * The type of error that was encountered.
+		 */
+		private $error_type
+	) {
 		parent::__construct( $message, intval( $error_code ) );
 
-		$this->status     = $status;
 		$this->error_code = $error_code;
-		$this->error_type = $error_type;
 	}
 
 	/**

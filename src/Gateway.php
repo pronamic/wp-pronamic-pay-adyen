@@ -33,13 +33,6 @@ class Gateway extends Core_Gateway {
 	const SDK_VERSION = '6.22.0';
 
 	/**
-	 * Config.
-	 *
-	 * @var Config
-	 */
-	private $config;
-
-	/**
 	 * Client.
 	 *
 	 * @var Client
@@ -51,10 +44,13 @@ class Gateway extends Core_Gateway {
 	 *
 	 * @param Config $config Config.
 	 */
-	public function __construct( Config $config ) {
+	public function __construct(
+		/**
+		 * Config.
+		 */
+		private readonly Config $config
+	) {
 		parent::__construct();
-
-		$this->config = $config;
 
 		$this->set_method( self::METHOD_HTTP_REDIRECT );
 
@@ -63,7 +59,7 @@ class Gateway extends Core_Gateway {
 			'webhook',
 		];
 
-		$this->client = new Client( $config );
+		$this->client = new Client( $this->config );
 
 		// Methods.
 		$this->register_payment_method( new PaymentMethod( PaymentMethods::AFTERPAY_COM ) );
@@ -101,7 +97,7 @@ class Gateway extends Core_Gateway {
 	public function get_payment_methods( array $args = [] ): PaymentMethodsCollection {
 		try {
 			$this->maybe_enrich_payment_methods();
-		} catch ( \Exception $e ) {
+		} catch ( \Exception ) {
 			// No problem.
 		}
 
@@ -394,7 +390,7 @@ class Gateway extends Core_Gateway {
 			]
 		);
 
-		\add_action( 'pronamic_pay_adyen_checkout_head', [ $this, 'checkout_head' ] );
+		\add_action( 'pronamic_pay_adyen_checkout_head', $this->checkout_head( ... ) );
 
 		Core_Util::no_cache();
 

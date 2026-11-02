@@ -31,13 +31,6 @@ class PaymentMethodsRequest extends Request {
 	private $blocked_payment_methods;
 
 	/**
-	 * The merchant account identifier, with which you want to process the transaction.
-	 *
-	 * @var string
-	 */
-	private $merchant_account;
-
-	/**
 	 * The shopper's country code.
 	 *
 	 * @var string|null
@@ -56,8 +49,12 @@ class PaymentMethodsRequest extends Request {
 	 *
 	 * @param string $merchant_account The merchant account identifier.
 	 */
-	public function __construct( $merchant_account ) {
-		$this->merchant_account = $merchant_account;
+	public function __construct(
+		/**
+		 * The merchant account identifier, with which you want to process the transaction.
+		 */
+		private $merchant_account
+	) {
 	}
 
 	/**

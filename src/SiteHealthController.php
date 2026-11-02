@@ -37,14 +37,14 @@ class SiteHealthController {
 	 * @return void
 	 */
 	public function setup() {
-		add_filter( 'site_status_tests', [ $this, 'site_status_tests' ] );
+		add_filter( 'site_status_tests', $this->site_status_tests( ... ) );
 
 		$prefix = 'health-check-';
 		$action = 'pronamic-pay-adyen-http-authorization-test';
 
-		add_action( 'wp_ajax_' . $prefix . $action, [ $this, 'wp_ajax_health_check_http_authorization_test' ] );
+		add_action( 'wp_ajax_' . $prefix . $action, $this->wp_ajax_health_check_http_authorization_test( ... ) );
 
-		add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
+		add_action( 'rest_api_init', $this->rest_api_init( ... ) );
 	}
 
 	/**

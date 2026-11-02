@@ -179,7 +179,7 @@ class AdditionalData implements \JsonSerializable {
 
 				$item_properties = Util::filter_null( $item_properties );
 
-				$item_properties = \array_map( '\strval', $item_properties );
+				$item_properties = \array_map( \strval( ... ), $item_properties );
 
 				$properties = array_merge( $properties, $item_properties );
 

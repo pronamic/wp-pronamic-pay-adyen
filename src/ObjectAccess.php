@@ -15,19 +15,16 @@ namespace Pronamic\WordPress\Pay\Gateways\Adyen;
  */
 class ObjectAccess {
 	/**
-	 * Object.
-	 *
-	 * @var object
-	 */
-	private $value;
-
-	/**
 	 * Construct object access.
 	 *
 	 * @param object $value Object.
 	 */
-	public function __construct( $value ) {
-		$this->value = $value;
+	public function __construct(
+		/**
+		 * Object.
+		 */
+		private $value
+	) {
 	}
 
 	/**

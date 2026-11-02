@@ -25,14 +25,6 @@ class PaymentRequest extends AbstractPaymentRequest {
 	private $browser_info;
 
 	/**
-	 * The collection that contains the type of the payment method and its
-	 * specific information (e.g. idealIssuer).
-	 *
-	 * @var PaymentMethodDetails
-	 */
-	private $payment_method;
-
-	/**
 	 * Construct a payment request object.
 	 *
 	 * @param Amount               $amount           The amount information for the transaction.
@@ -41,10 +33,18 @@ class PaymentRequest extends AbstractPaymentRequest {
 	 * @param string               $return_url       The URL to return to.
 	 * @param PaymentMethodDetails $payment_method   The collection that contains the type of the payment method and its specific information (e.g. idealIssuer).
 	 */
-	public function __construct( Amount $amount, $merchant_account, $reference, $return_url, PaymentMethodDetails $payment_method ) {
+	public function __construct(
+		Amount $amount,
+		$merchant_account,
+		$reference,
+		$return_url,
+		/**
+		 * The collection that contains the type of the payment method and its
+		 * specific information (e.g. idealIssuer).
+		 */
+		private readonly PaymentMethodDetails $payment_method
+	) {
 		parent::__construct( $amount, $merchant_account, $reference, $return_url );
-
-		$this->payment_method = $payment_method;
 	}
 
 	/**

@@ -53,7 +53,7 @@ class AddressTransformer {
 				$address->get_city(),
 				$state_or_province
 			);
-		} catch ( InvalidArgumentException $exception ) {
+		} catch ( InvalidArgumentException ) {
 			return null;
 		}
 

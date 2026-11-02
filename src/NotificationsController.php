@@ -30,10 +30,10 @@ class NotificationsController {
 	 */
 	public function setup() {
 		// Actions.
-		\add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
+		\add_action( 'rest_api_init', $this->rest_api_init( ... ) );
 
 		// Filters.
-		\add_filter( 'application_password_is_api_request', [ $this, 'maybe_disable_application_passwords_for_api_request' ], 10 );
+		\add_filter( 'application_password_is_api_request', $this->maybe_disable_application_passwords_for_api_request( ... ), 10 );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class NotificationsController {
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_api_adyen_notifications' ],
-				'permission_callback' => [ $this, 'rest_api_adyen_permissions_check' ],
+				'permission_callback' => $this->rest_api_adyen_permissions_check( ... ),
 			]
 		);
 	}
@@ -140,7 +140,7 @@ class NotificationsController {
 
 		try {
 			$notification_request = NotificationRequest::from_object( $data );
-		} catch ( ValidationException $e ) {
+		} catch ( ValidationException ) {
 			return new WP_Error(
 				'adyen_invalid_notification',
 				/* translators: Translate 'notification' the same as in the Adyen dashboard. */
@@ -153,7 +153,7 @@ class NotificationsController {
 			$payment_id = $item->get_merchant_reference();
 
 			if ( \str_contains( $payment_id, '-' ) ) {
-				list( $scan_network_id, $scan_blog_id, $scan_payment_id ) = \sscanf( $payment_id, '%d-%d-%s' );
+				[$scan_network_id, $scan_blog_id, $scan_payment_id] = \sscanf( $payment_id, '%d-%d-%s' );
 
 				$payment_id = null;
 

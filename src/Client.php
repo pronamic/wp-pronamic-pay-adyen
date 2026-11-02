@@ -19,13 +19,6 @@ use Pronamic\WordPress\Http\Facades\Http;
  */
 class Client {
 	/**
-	 * Config.
-	 *
-	 * @var Config
-	 */
-	private $config;
-
-	/**
 	 * Endpoint.
 	 *
 	 * @var Endpoint
@@ -37,9 +30,13 @@ class Client {
 	 *
 	 * @param Config $config Adyen config.
 	 */
-	public function __construct( Config $config ) {
-		$this->config   = $config;
-		$this->endpoint = new Endpoint( $config->environment, $config->api_live_url_prefix );
+	public function __construct(
+		/**
+		 * Config.
+		 */
+		private readonly Config $config
+	) {
+		$this->endpoint = new Endpoint( $this->config->environment, $this->config->api_live_url_prefix );
 	}
 
 	/**

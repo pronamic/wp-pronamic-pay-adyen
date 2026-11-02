@@ -19,41 +19,6 @@ use DateTime;
  */
 class NotificationRequestItem extends ResponseObject {
 	/**
-	 * Amount.
-	 *
-	 * @var Amount
-	 */
-	private $amount;
-
-	/**
-	 * Adyen's 16-character unique reference associated with the transaction/the request. This value is globally unique; quote it when communicating with us about this request.
-	 *
-	 * @var string
-	 */
-	private $psp_reference;
-
-	/**
-	 * The type of event the notification item refers to.
-	 *
-	 * @var string
-	 */
-	private $event_code;
-
-	/**
-	 * The time when the event was generated.
-	 *
-	 * @var DateTime
-	 */
-	private $event_date;
-
-	/**
-	 * The merchant account identifier used in the transaction the notification item refers to.
-	 *
-	 * @var string
-	 */
-	private $merchant_account_code;
-
-	/**
 	 * This field holds a list of the modification operations supported by the transaction the notification item refers to.
 	 *
 	 * This field is populated only in authorisation notifications.
@@ -65,13 +30,6 @@ class NotificationRequestItem extends ResponseObject {
 	private $operations;
 
 	/**
-	 * A reference to uniquely identify the payment.
-	 *
-	 * @var string
-	 */
-	private $merchant_reference;
-
-	/**
 	 * The payment method used in the transaction the notification item refers to.
 	 *
 	 * This field is populated only in authorisation notifications.
@@ -79,16 +37,6 @@ class NotificationRequestItem extends ResponseObject {
 	 * @var string|null
 	 */
 	private $payment_method;
-
-	/**
-	 * Informs about the outcome of the event (`eventCode`) the notification refers to:
-	 *
-	 * - `true`: the event (`eventCode`) the notification refers to was executed successfully.
-	 * - `false`: the event was not executed successfully.
-	 *
-	 * @var boolean
-	 */
-	private $success;
 
 	/**
 	 * Construct notification request item.
@@ -104,21 +52,38 @@ class NotificationRequestItem extends ResponseObject {
 	 * @param boolean  $success               Success.
 	 */
 	public function __construct(
-		Amount $amount,
-		$psp_reference,
-		$event_code,
-		DateTime $event_date,
-		$merchant_account_code,
-		$merchant_reference,
-		$success
+		/**
+		 * Amount.
+		 */
+		private readonly Amount $amount,
+		/**
+		 * Adyen's 16-character unique reference associated with the transaction/the request. This value is globally unique; quote it when communicating with us about this request.
+		 */
+		private $psp_reference,
+		/**
+		 * The type of event the notification item refers to.
+		 */
+		private $event_code,
+		/**
+		 * The time when the event was generated.
+		 */
+		private readonly DateTime $event_date,
+		/**
+		 * The merchant account identifier used in the transaction the notification item refers to.
+		 */
+		private $merchant_account_code,
+		/**
+		 * A reference to uniquely identify the payment.
+		 */
+		private $merchant_reference,
+		/**
+		 * Informs about the outcome of the event (`eventCode`) the notification refers to:
+		 *
+		 * - `true`: the event (`eventCode`) the notification refers to was executed successfully.
+		 * - `false`: the event was not executed successfully.
+		 */
+		private $success
 	) {
-		$this->amount                = $amount;
-		$this->psp_reference         = $psp_reference;
-		$this->event_code            = $event_code;
-		$this->event_date            = $event_date;
-		$this->merchant_account_code = $merchant_account_code;
-		$this->merchant_reference    = $merchant_reference;
-		$this->success               = $success;
 	}
 
 	/**

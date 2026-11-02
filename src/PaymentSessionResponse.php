@@ -21,28 +21,21 @@ use JsonSchema\Validator;
  */
 class PaymentSessionResponse extends ResponseObject {
 	/**
-	 * A unique identifier of the session.
-	 *
-	 * @var string
-	 */
-	private $id;
-
-	/**
-	 * The payment session data you need to pass to your front end.
-	 *
-	 * @var string|null
-	 */
-	private $data;
-
-	/**
 	 * Construct payment session response object.
 	 *
 	 * @param string $id   A unique identifier of the session.
 	 * @param string $data The payment session data you need to pass to your front end.
 	 */
-	public function __construct( $id, $data ) {
-		$this->id   = $id;
-		$this->data = $data;
+	public function __construct(
+		/**
+		 * A unique identifier of the session.
+		 */
+		private $id,
+		/**
+		 * The payment session data you need to pass to your front end.
+		 */
+		private $data
+	) {
 	}
 
 	/**

@@ -17,19 +17,16 @@ use JsonSerializable;
  */
 class PaymentMethodDetails implements JsonSerializable {
 	/**
-	 * Type.
-	 *
-	 * @var string
-	 */
-	private $type;
-
-	/**
 	 * Construct a payment method details object.
 	 *
 	 * @param string $type Type.
 	 */
-	public function __construct( $type ) {
-		$this->type = $type;
+	public function __construct(
+		/**
+		 * Type.
+		 */
+		private $type
+	) {
 	}
 
 	/**

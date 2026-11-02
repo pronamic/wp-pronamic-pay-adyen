@@ -19,20 +19,6 @@ use JsonSchema\Validator;
  */
 class PaymentMethodIssuer {
 	/**
-	 * The unique identifier of this issuer, to submit in requests to /payments.
-	 *
-	 * @var string
-	 */
-	private $id;
-
-	/**
-	 * A localized name of the issuer.
-	 *
-	 * @var string
-	 */
-	private $name;
-
-	/**
 	 * A boolean value indicating whether this issuer is unavailable.
 	 * Can be true whenever the issuer is offline.
 	 *
@@ -46,9 +32,16 @@ class PaymentMethodIssuer {
 	 * @param string $id   ID.
 	 * @param string $name Name.
 	 */
-	public function __construct( $id, $name ) {
-		$this->id   = $id;
-		$this->name = $name;
+	public function __construct(
+		/**
+		 * The unique identifier of this issuer, to submit in requests to /payments.
+		 */
+		private $id,
+		/**
+		 * A localized name of the issuer.
+		 */
+		private $name
+	) {
 	}
 
 	/**

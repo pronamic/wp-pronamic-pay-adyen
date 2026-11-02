@@ -11,6 +11,7 @@
  */
 
 import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto';
+import '@adyen/adyen-web/styles/adyen.css';
 
 ( async function () {
 	/**

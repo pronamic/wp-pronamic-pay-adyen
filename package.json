@@ -33,7 +33,7 @@
 	},
 	"prettier": "@wordpress/prettier-config",
 	"dependencies": {
-		"@adyen/adyen-web": "^6.27.1"
+		"@adyen/adyen-web": "^6.48.0"
 	},
 	"devDependencies": {
 		"@wordpress/env": "^12.0.0",

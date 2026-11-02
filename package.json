@@ -31,19 +31,19 @@
 	"bugs": {
 		"url": "https://github.com/wp-pay-gateways/adyen/issues"
 	},
+	"prettier": "@wordpress/prettier-config",
+	"dependencies": {
+		"@adyen/adyen-web": "^6.27.1"
+	},
 	"devDependencies": {
 		"@wordpress/env": "^12.0.0",
 		"@wordpress/scripts": "^37.0.0",
 		"prettier": "npm:wp-prettier@^3.9.6"
 	},
-	"prettier": "@wordpress/prettier-config",
 	"scripts": {
 		"build": "wp-scripts build js/src/checkout-drop-in.js --output-path=js/dist",
 		"start": "wp-scripts start js/src/checkout-drop-in.js --output-path=js/dist",
 		"lint-js": "wp-scripts lint-js js/src",
 		"lint-pkg-json": "wp-scripts lint-pkg-json"
-	},
-	"dependencies": {
-		"@adyen/adyen-web": "^6.27.1"
 	}
 }

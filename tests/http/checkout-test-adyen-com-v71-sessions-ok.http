@@ -1,0 +1,4 @@
+HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+
+{"amount":{"currency":"EUR","value":1000},"expiresAt":"2021-08-24T13:35:16+02:00","id":"CSD9CAC34EBAE225DD","merchantAccount":"YOUR_MERCHANT_ACCOUNT","reference":"YOUR_PAYMENT_REFERENCE","returnUrl":"https://your-company.com/checkout?shopperOrder=12xy","sessionData":"Ab02b4c0!BQABAgBfYI29..."}

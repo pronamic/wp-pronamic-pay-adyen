@@ -11,7 +11,6 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use Pronamic\WordPress\Http\Factory;
-use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 use WP_UnitTestCase;
 
 /**
@@ -37,6 +36,8 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_get_payment_methods_exception() {
 		$config = new Config();
 
+		$config->environment = 'live';
+
 		$client = new Client( $config );
 
 		$this->expectException( \Exception::class );
@@ -51,11 +52,11 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_get_payment_methods_unauthorized() {
 		$config = new Config();
 
-		$config->mode = Core_Gateway::MODE_TEST;
+		$config->environment = 'test';
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v71/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
 
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'HTTP Status Response - Unauthorized' );
@@ -69,13 +70,13 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_get_payment_methods_error() {
 		$config = new Config();
 
-		$config->mode             = Core_Gateway::MODE_TEST;
+		$config->environment      = 'test';
 		$config->api_key          = 'JPERWpuRAAvAj4mU';
 		$config->merchant_account = 'Test';
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v51/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v71/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v51-paymentMethods-unauthorized.http' );
 
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'HTTP Status Response - Unauthorized' );
@@ -89,11 +90,11 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_get_payment_methods_service_exception() {
 		$config = new Config();
 
-		$config->mode = Core_Gateway::MODE_TEST;
+		$config->environment = 'test';
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v64/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v64-paymentMethods-forbidden-901.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v71/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v64-paymentMethods-forbidden-901.http' );
 
 		$this->expectException( ServiceException::class );
 		$this->expectExceptionMessage( 'Invalid Merchant Account' );
@@ -107,11 +108,11 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_get_payment_methods() {
 		$config = new Config();
 
-		$config->mode = Core_Gateway::MODE_TEST;
+		$config->environment = 'test';
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v64/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v64-paymentMethods-ok.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v71/paymentMethods', __DIR__ . '/../http/checkout-test-adyen-com-v64-paymentMethods-ok.http' );
 
 		$payment_methods_response = $client->get_payment_methods( new PaymentMethodsRequest( 'YOUR_MERCHANT_ACCOUNT' ) );
 
@@ -124,30 +125,25 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_create_payment() {
 		$config = new Config();
 
-		$config->mode = Core_Gateway::MODE_TEST;
+		$config->environment = 'test';
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v64/payments', __DIR__ . '/../http/checkout-test-adyen-com-v64-payments-ok.http' );
-
-		$payment_method = [
-			'type'   => PaymentMethodType::IDEAL,
-			'issuer' => '1121',
-		];
+		$this->factory->fake( 'https://checkout-test.adyen.com/v71/payments', __DIR__ . '/../http/checkout-test-adyen-com-v64-payments-ok.http' );
 
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
 			'https://your-company.com/...',
-			new PaymentMethod( (object) $payment_method )
+			new PaymentMethodDetails( PaymentMethodType::IDEAL )
 		);
 
 		$payment_response = $client->create_payment( $payment_request );
 
 		$this->assertInstanceOf( PaymentResponse::class, $payment_response );
 		$this->assertEquals( ResultCode::REDIRECT_SHOPPER, $payment_response->get_result_code() );
-		$this->assertEquals( 'GET', $payment_response->get_redirect()->get_method() );
+		$this->assertEquals( 'redirect', $payment_response->get_action()->get_type() );
 	}
 
 	/**
@@ -156,11 +152,11 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_create_payment_session() {
 		$config = new Config();
 
-		$config->mode = Core_Gateway::MODE_TEST;
+		$config->environment = 'test';
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v41/paymentSession', __DIR__ . '/../http/checkout-test-adyen-com-v41-paymentSession-ok.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v71/sessions', __DIR__ . '/../http/checkout-test-adyen-com-v71-sessions-ok.http' );
 
 		$amount = new Amount( 'EUR', 1000 );
 
@@ -168,14 +164,16 @@ class ClientTest extends WP_UnitTestCase {
 			$amount,
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
-			'https://your-company.com/...',
-			'NL'
+			'https://your-company.com/...'
 		);
+
+		$payment_request->set_country_code( 'NL' );
 
 		$payment_response = $client->create_payment_session( $payment_request );
 
 		$this->assertInstanceOf( PaymentSessionResponse::class, $payment_response );
-		$this->assertStringStartsWith( 'eyJjaGVja291dHNob3BwZXJCYXNlVXJs', $payment_response->get_payment_session() );
+		$this->assertEquals( 'CSD9CAC34EBAE225DD', $payment_response->get_id() );
+		$this->assertEquals( 'Ab02b4c0!BQABAgBfYI29...', $payment_response->get_data() );
 	}
 
 	/**
@@ -184,11 +182,11 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_json_invalid() {
 		$config = new Config();
 
-		$config->mode = Core_Gateway::MODE_TEST;
+		$config->environment = 'test';
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-invalid.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v71/paymentMethods', __DIR__ . '/../http/json-invalid.http' );
 
 		$this->expectException( \Exception::class );
 
@@ -201,11 +199,11 @@ class ClientTest extends WP_UnitTestCase {
 	public function test_json_array() {
 		$config = new Config();
 
-		$config->mode = Core_Gateway::MODE_TEST;
+		$config->environment = 'test';
 
 		$client = new Client( $config );
 
-		$this->factory->fake( 'https://checkout-test.adyen.com/v41/paymentMethods', __DIR__ . '/../http/json-array.http' );
+		$this->factory->fake( 'https://checkout-test.adyen.com/v71/paymentMethods', __DIR__ . '/../http/json-array.http' );
 
 		$this->expectException( \Exception::class );
 

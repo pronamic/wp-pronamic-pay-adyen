@@ -11,14 +11,9 @@
 namespace Pronamic\WordPress\Pay\Gateways\Adyen;
 
 use PHPUnit\Framework\TestCase;
-use Pronamic\WordPress\Pay\Core\Gateway as Core_Gateway;
 
 /**
  * Config test
- *
- * @link    https://docs.adyen.com/developers/development-resources/live-endpoints
- * @version 1.0.0
- * @since   1.0.0
  */
 class ConfigTest extends TestCase {
 	/**
@@ -27,17 +22,27 @@ class ConfigTest extends TestCase {
 	public function test_config() {
 		$config = new Config();
 
-		$config->mode                = Core_Gateway::MODE_TEST;
-		$config->api_key             = 'JPERWpuRAAvAj4mU';
-		$config->merchant_account    = 'Test';
-		$config->api_live_url_prefix = '1797a841fbb37ca7-AdyenDemo';
+		$config->environment              = 'test';
+		$config->api_key                  = 'JPERWpuRAAvAj4mU';
+		$config->client_key               = 'test_ABC123';
+		$config->merchant_account         = 'Test';
+		$config->merchant_order_reference = 'Order {order_id}';
+		$config->country_code             = 'NL';
 
 		$this->assertEquals( 'JPERWpuRAAvAj4mU', $config->get_api_key() );
 		$this->assertEquals( 'Test', $config->get_merchant_account() );
-		$this->assertEquals( 'https://checkout-test.adyen.com/v41/paymentMethods', $config->get_api_url( 'v41/paymentMethods' ) );
+		$this->assertEquals( 'Order {order_id}', $config->get_merchant_order_reference() );
 
-		$config->mode = Core_Gateway::MODE_LIVE;
-
-		$this->assertEquals( 'https://1797a841fbb37ca7-AdyenDemo-checkout-live.adyenpayments.com/checkout/v41/paymentMethods', $config->get_api_url( 'v41/paymentMethods' ) );
+		$this->assertEquals(
+			(object) [
+				'@type'            => Config::class,
+				'environment'      => 'test',
+				'merchant_account' => 'Test',
+				'api_key'          => 'JPERWpuRAAvAj4mU',
+				'client_key'       => 'test_ABC123',
+				'country_code'     => 'NL',
+			],
+			$config->jsonSerialize()
+		);
 	}
 }

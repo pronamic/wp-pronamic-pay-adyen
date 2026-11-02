@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated `@adyen/adyen-web` to `6.48.0` ([#45](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/45)).
 - The Adyen Web stylesheet is now bundled with the plugin instead of being loaded from the Adyen CDN, so it always matches the bundled Adyen Web JavaScript ([#45](https://github.com/pronamic/wp-pronamic-pay-adyen/issues/45)).
+- Adyen Web errors are now shown on the checkout page, with a button to continue, instead of redirecting the customer without explanation.
 
 ## [4.10.0] - 2026-07-31
 

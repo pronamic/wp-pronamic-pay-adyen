@@ -119,7 +119,7 @@ class ReturnController {
 			Integration::REST_ROUTE_NAMESPACE,
 			'/error/(?P<payment_id>\d+)',
 			[
-				'methods'             => 'GET',
+				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_api_adyen_error' ],
 				'permission_callback' => $this->rest_api_adyen_error_permission( ... ),
 				'args'                => [
@@ -413,10 +413,13 @@ class ReturnController {
 		}
 
 		/**
-		 * 303 See Other.
-		 *
-		 * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+		 * The checkout page shows the error to the customer, so return the
+		 * return URL instead of redirecting.
 		 */
-		return new \WP_REST_Response( null, 303, [ 'Location' => $payment->get_return_redirect_url() ] );
+		return new \WP_REST_Response(
+			[
+				'return_url' => $payment->get_return_redirect_url(),
+			]
+		);
 	}
 }

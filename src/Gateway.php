@@ -400,6 +400,13 @@ class Gateway extends Core_Gateway {
 					\rest_url( Integration::REST_ROUTE_NAMESPACE . '/error/' . $payment_id )
 				),
 				'autoSubmit'            => $this->can_auto_submit( $payment_method_type ),
+				'i18n'                  => [
+					'errorTitle'   => \__( 'Payment error', 'pronamic_ideal' ),
+					'errorText'    => \__( 'Unfortunately, an error occurred while processing your payment.', 'pronamic_ideal' ),
+					'errorMessage' => \__( 'Message', 'pronamic_ideal' ),
+					'errorCode'    => \__( 'Code', 'pronamic_ideal' ),
+					'continue'     => \__( 'Continue', 'pronamic_ideal' ),
+				],
 			]
 		);
 

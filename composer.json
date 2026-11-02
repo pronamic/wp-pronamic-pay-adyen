@@ -66,6 +66,7 @@
 		"php-coveralls/php-coveralls": "^2.5",
 		"phpmd/phpmd": "^2.13",
 		"phpstan/phpstan": "^2.1",
+		"phpunit/phpunit": "^9.6",
 		"pronamic/pronamic-cli": "^1.1",
 		"pronamic/wp-coding-standards": "^2.1",
 		"rector/rector": "^2.6",

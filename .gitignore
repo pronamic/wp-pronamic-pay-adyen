@@ -18,6 +18,7 @@
 
 # PHPLint
 /.phplint-cache
+/.phplint.cache/
 
 # wp-env
 /.wp-env.override.json

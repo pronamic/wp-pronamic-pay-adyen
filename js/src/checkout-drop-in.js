@@ -1,7 +1,5 @@
 /* global pronamicPayAdyen */
 
-import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
-
 /**
  * Adyen checkout error definition.
  *
@@ -12,7 +10,7 @@ import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
  * @property {string} message - Adyen error message.
  */
 
-'use strict';
+import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto';
 
 ( async function () {
 	/**
@@ -21,9 +19,7 @@ import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 	const checkoutConfiguration = {
 		...pronamicPayAdyen.checkoutConfiguration,
 		onPaymentCompleted: ( result ) => {
-			const redirectUrl = new URL(
-				pronamicPayAdyen.paymentRedirectUrl
-			);
+			const redirectUrl = new URL( pronamicPayAdyen.paymentRedirectUrl );
 
 			redirectUrl.searchParams.set( 'resultCode', result.resultCode );
 
@@ -42,9 +38,7 @@ import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 				return;
 			}
 
-			const redirectUrl = new URL(
-				pronamicPayAdyen.paymentErrorUrl
-			);
+			const redirectUrl = new URL( pronamicPayAdyen.paymentErrorUrl );
 
 			redirectUrl.searchParams.set( 'name', error.name );
 			redirectUrl.searchParams.set( 'message', error.message );
@@ -66,7 +60,7 @@ import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
 		 *
 		 * @see https://github.com/Adyen/adyen-web/issues/973#issuecomment-821148830
 		 * @see https://docs.adyen.com/online-payments/migrate-to-web-4-0-0#dropin-configuration
-		 * @param {Object} component Adyen payment method component.
+		 * @param {Object} paymentMethod Adyen payment method component.
 		 */
 		onSelect: ( paymentMethod ) => {
 			if ( pronamicPayAdyen.autoSubmit ) {

@@ -42,27 +42,30 @@ class PaymentRequestHelperTest extends TestCase {
 		/**
 		 * Payment request.
 		 */
-		$payment_method = [
-			'type'   => PaymentMethodType::IDEAL,
-			'issuer' => '1121',
-		];
-
 		$payment_request = new PaymentRequest(
 			new Amount( 'EUR', 1000 ),
 			'YOUR_MERCHANT_ACCOUNT',
 			'Your order number',
 			'https://your-company.com/...',
-			new PaymentMethod( (object) $payment_method )
+			new PaymentMethodDetails( PaymentMethodType::IDEAL )
 		);
+
+		/*
+		 * Config.
+		 */
+		$config = new Config();
+
+		$config->merchant_order_reference = 'Test reference';
 
 		/*
 		 * Complement.
 		 */
-		PaymentRequestHelper::complement( $payment, $payment_request );
+		PaymentRequestHelper::complement( $payment, $payment_request, $config );
 
 		/*
 		 * Asserts.
 		 */
+		$this->assertEquals( 'Test reference', $payment_request->get_merchant_order_reference() );
 		$this->assertEquals( Channel::WEB, $payment_request->get_channel() );
 		$this->assertEquals( 'Test', $payment_request->get_shopper_statement() );
 		$this->assertEquals( '127.0.0.1', $payment_request->get_shopper_ip() );
